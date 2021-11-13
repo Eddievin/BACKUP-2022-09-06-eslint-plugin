@@ -1,0 +1,5 @@
+{
+  "extends": "node_modules/@skylib/config/src/typedoc",
+  "name": "ESLint plugin",
+  "out": "docs"
+}
