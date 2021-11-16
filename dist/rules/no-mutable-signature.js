@@ -1,7 +1,7 @@
 "use strict";
 const tslib_1 = require("tslib");
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const readonliness_1 = require("./utils/readonliness");
 const isRuleOptions = is.factory(is.object.of, {

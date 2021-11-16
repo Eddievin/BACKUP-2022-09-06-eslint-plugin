@@ -1,10 +1,10 @@
 "use strict";
 const tslib_1 = require("tslib");
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const a = (0, tslib_1.__importStar)(require("@typerock/functions/dist/array"));
-const fn = (0, tslib_1.__importStar)(require("@typerock/functions/dist/function"));
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
-const s = (0, tslib_1.__importStar)(require("@typerock/functions/dist/string"));
+const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
+const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const rule = utils.createRule({
     create(context) {

@@ -3,9 +3,9 @@ import minimatch from "minimatch";
 import type * as ts from "typescript";
 import type { ParserServices, TSESTree } from "@typescript-eslint/experimental-utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
-import * as is from "@typerock/functions/dist/guards";
-import * as s from "@typerock/functions/dist/string";
-import type { ReadonlyRecord } from "@typerock/functions/dist/types/core";
+import * as is from "@skylib/functions/dist/guards";
+import * as s from "@skylib/functions/dist/string";
+import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
 export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
     /**
      * Creates rule listener.

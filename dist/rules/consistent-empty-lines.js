@@ -1,11 +1,11 @@
 "use strict";
 const tslib_1 = require("tslib");
-const a = (0, tslib_1.__importStar)(require("@typerock/functions/dist/array"));
-const arrayMap = (0, tslib_1.__importStar)(require("@typerock/functions/dist/arrayMap"));
-const assert = (0, tslib_1.__importStar)(require("@typerock/functions/dist/assertions"));
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
-const num = (0, tslib_1.__importStar)(require("@typerock/functions/dist/number"));
-const s = (0, tslib_1.__importStar)(require("@typerock/functions/dist/string"));
+const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
+const arrayMap = (0, tslib_1.__importStar)(require("@skylib/functions/dist/arrayMap"));
+const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const num = (0, tslib_1.__importStar)(require("@skylib/functions/dist/number"));
+const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const isSubOptions = is.factory(is.object.of, {
     averageLinesGte: is.number,

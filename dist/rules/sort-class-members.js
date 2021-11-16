@@ -2,9 +2,9 @@
 const tslib_1 = require("tslib");
 const _ = (0, tslib_1.__importStar)(require("lodash"));
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const a = (0, tslib_1.__importStar)(require("@typerock/functions/dist/array"));
-const cast = (0, tslib_1.__importStar)(require("@typerock/functions/dist/converters"));
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
+const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
+const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const isRuleOptions = is.factory(is.object.of, { sortingOrder: is.strings }, {});
 const rule = utils.createRule({

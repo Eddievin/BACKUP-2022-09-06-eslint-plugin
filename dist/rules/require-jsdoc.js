@@ -2,8 +2,8 @@
 const tslib_1 = require("tslib");
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
-const core_1 = require("@typerock/functions/dist/types/core");
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const core_1 = require("@skylib/functions/dist/types/core");
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const InterfaceOptionVO = (0, core_1.createValidationObject)({
     callSignatures: "callSignatures",

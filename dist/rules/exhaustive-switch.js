@@ -2,7 +2,7 @@
 const tslib_1 = require("tslib");
 const _ = (0, tslib_1.__importStar)(require("lodash"));
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const type_parts_1 = require("./utils/type-parts");
 const rule = utils.createRule({

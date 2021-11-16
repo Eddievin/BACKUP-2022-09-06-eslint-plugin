@@ -3,7 +3,7 @@ const tslib_1 = require("tslib");
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
 const ts = (0, tslib_1.__importStar)(require("typescript"));
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const rule = utils.createRule({
     create(context) {

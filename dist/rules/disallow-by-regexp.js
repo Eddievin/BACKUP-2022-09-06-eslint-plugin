@@ -1,10 +1,10 @@
 "use strict";
 const tslib_1 = require("tslib");
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const a = (0, tslib_1.__importStar)(require("@typerock/functions/dist/array"));
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
-const regexp = (0, tslib_1.__importStar)(require("@typerock/functions/dist/regexp"));
-const core_1 = require("@typerock/functions/dist/types/core");
+const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const regexp = (0, tslib_1.__importStar)(require("@skylib/functions/dist/regexp"));
+const core_1 = require("@skylib/functions/dist/types/core");
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const SubOptionsContextVO = (0, core_1.createValidationObject)({
     code: "code",

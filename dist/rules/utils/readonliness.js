@@ -4,9 +4,9 @@ exports.Checker = void 0;
 const tslib_1 = require("tslib");
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
 const ts = (0, tslib_1.__importStar)(require("typescript"));
-const assert = (0, tslib_1.__importStar)(require("@typerock/functions/dist/assertions"));
-const cast = (0, tslib_1.__importStar)(require("@typerock/functions/dist/converters"));
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
+const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
+const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("."));
 class Checker {
     /**

@@ -7,13 +7,13 @@ const _ = (0, tslib_1.__importStar)(require("lodash"));
 const minimatch_1 = (0, tslib_1.__importDefault)(require("minimatch"));
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const assert = (0, tslib_1.__importStar)(require("@typerock/functions/dist/assertions"));
-const cast = (0, tslib_1.__importStar)(require("@typerock/functions/dist/converters"));
-const fn = (0, tslib_1.__importStar)(require("@typerock/functions/dist/function"));
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
-const json = (0, tslib_1.__importStar)(require("@typerock/functions/dist/json"));
-const reflect = (0, tslib_1.__importStar)(require("@typerock/functions/dist/reflect"));
-const s = (0, tslib_1.__importStar)(require("@typerock/functions/dist/string"));
+const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
+const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
+const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const json = (0, tslib_1.__importStar)(require("@skylib/functions/dist/json"));
+const reflect = (0, tslib_1.__importStar)(require("@skylib/functions/dist/reflect"));
+const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
 exports.isPackage = is.factory(is.object.of, {}, { name: is.string });
 exports.base = fn.pipe(process.cwd(), s.path.canonicalize, s.path.addTrailingSlash);
 /**
@@ -311,7 +311,7 @@ function createBetterContext(context, ruleOptionsArray, options) {
 function shouldBeLinted(options, ruleId, path, code) {
     assert.byGuard(options, isSharedOptions, "Expecting valid rule options");
     const disallowById = is.not.empty(options.subOptionsId) &&
-        code.includes(`/* typerock/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`);
+        code.includes(`/* skylib/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`);
     const disallowByPath = fn.run(() => {
         var _a, _b;
         const matcher = createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });

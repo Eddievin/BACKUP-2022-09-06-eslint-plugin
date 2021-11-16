@@ -1,5 +1,5 @@
 import type { RuleModule } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
-import * as is from "@typerock/functions/dist/guards";
+import * as is from "@skylib/functions/dist/guards";
 import type { Readonliness } from "./readonliness";
 /**
  * Creates rule.

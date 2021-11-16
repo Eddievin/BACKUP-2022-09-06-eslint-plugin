@@ -29,14 +29,14 @@ ESLint plugin / [Exports](modules.md)
 ## <a name="installation"></a>Installation
 
 ```
-npm install --save-dev @typerock/eslint-plugin
+npm install --save-dev @skylib/eslint-plugin
 ```
 
 #### eslintrc.js
 
 ```ts
 module.exports = {
-  plugins: ["@typerock/eslint-plugin"]
+  plugins: ["@skylib/eslint-plugin"]
 };
 ```
 
@@ -49,7 +49,7 @@ Requires type definition for class members without initializer.
 #### eslintrc.js
 
 ```ts
-"@typerock/class-member-typedef": "error"
+"@skylib/class-member-typedef": "error"
 ```
 
 ### <a name="consistent-empty-lines"></a>consistent-empty-lines
@@ -59,7 +59,7 @@ Requires consistent empty lines.
 #### eslintrc.js
 
 ```ts
-"@typerock/consistent-empty-lines": [
+"@skylib/consistent-empty-lines": [
   "error",
   {
     rules: [
@@ -93,7 +93,7 @@ Requires consistent import. Auto-imports provided sources.
 #### eslintrc.js
 
 ```ts
-"@typerock/consistent-import": [
+"@skylib/consistent-import": [
   "error",
   {
     sources: [
@@ -127,7 +127,7 @@ Disallows code by regular expression.
 #### eslintrc.js
 
 ```ts
-"@typerock/disallow-by-regexp": [
+"@skylib/disallow-by-regexp": [
   "error",
   {
     contexts?: Array<"code" | "comment" | "string">,
@@ -158,7 +158,7 @@ Disallows identifiers.
 #### eslintrc.js
 
 ```ts
-"@typerock/disallow-identifier": [
+"@skylib/disallow-identifier": [
   "error",
   {
     rules: [
@@ -186,7 +186,7 @@ Disallows import.
 #### eslintrc.js
 
 ```ts
-"@typerock/disallow-import": [
+"@skylib/disallow-import": [
   "error",
   {
     rules: [
@@ -214,7 +214,7 @@ Requires consistent empty lines around comments.
 #### eslintrc.js
 
 ```ts
-"@typerock/empty-lines-around-comment": "error"
+"@skylib/empty-lines-around-comment": "error"
 ```
 
 ### <a name="exhaustive-switch"></a>exhaustive-switch
@@ -224,7 +224,7 @@ Requires exhaustive switch (replaces "@typescript-eslint/switch-exhaustiveness-c
 #### eslintrc.js
 
 ```ts
-"@typerock/exhaustive-switch": "error"
+"@skylib/exhaustive-switch": "error"
 ```
 
 ### <a name="no-inferrable-types"></a>no-inferrable-types
@@ -234,7 +234,7 @@ Forbids inferrable types (complements "@typescript-eslint/no-inferrable-types" r
 #### eslintrc.js
 
 ```ts
-"@typerock/no-inferrable-types": "error"
+"@skylib/no-inferrable-types": "error"
 ```
 
 ### <a name="no-mutable-signature"></a>no-mutable-signature
@@ -244,7 +244,7 @@ Forbids mutable signatures.
 #### eslintrc.js
 
 ```ts
-"@typerock/no-mutable-signature": [
+"@skylib/no-mutable-signature": [
   "error",
   {
     ignoreClasses?: boolean,
@@ -273,7 +273,7 @@ Forbids unnecessary Readonly|DeepReadonly wrapper.
 #### eslintrc.js
 
 ```ts
-"@typerock/no-unnecessary-readonly": [
+"@skylib/no-unnecessary-readonly": [
   "error",
   {
     ignoreClasses?: boolean,
@@ -296,7 +296,7 @@ Forbids unnecessary Writable|DeepWritable wrapper.
 #### eslintrc.js
 
 ```ts
-"@typerock/no-unnecessary-writable": [
+"@skylib/no-unnecessary-writable": [
   "error",
   {
     ignoreClasses?: boolean,
@@ -321,7 +321,7 @@ Forbids:
 #### eslintrc.js
 
 ```ts
-"@typerock/no-unsafe-object-assignment": "error"
+"@skylib/no-unsafe-object-assignment": "error"
 ```
 
 ### <a name="no-unused-import"></a>no-unused-import
@@ -331,7 +331,7 @@ Removes unused import.
 #### eslintrc.js
 
 ```ts
-"@typerock/no-unused-import": "error"
+"@skylib/no-unused-import": "error"
 ```
 
 ### <a name="prefer-readonly"></a>prefer-readonly
@@ -341,7 +341,7 @@ Enforces the use of readonly properties.
 #### eslintrc.js
 
 ```ts
-"@typerock/prefer-readonly": [
+"@skylib/prefer-readonly": [
   "error",
   {
     excludeSelectors?: string[],
@@ -372,7 +372,7 @@ Requires JSDoc comments.
 #### eslintrc.js
 
 ```ts
-"@typerock/require-jsdoc": [
+"@skylib/require-jsdoc": [
   "error",
   {
     excludeSelectors?: string[],
@@ -404,7 +404,7 @@ Sorts class member.
 #### eslintrc.js
 
 ```ts
-"@typerock/sort-class-members": [
+"@skylib/sort-class-members": [
   "error",
   {
     sortingOrder: string[]
@@ -425,7 +425,7 @@ Checks template literal format.
 #### eslintrc.js
 
 ```ts
-"@typerock/template-literal-format": "error"
+"@skylib/template-literal-format": "error"
 ```
 
 ## <a name="shared-options"></a>Shared options
@@ -433,7 +433,7 @@ Checks template literal format.
 #### eslintrc.js
 
 ```ts
-"@typerock/<rule-id>": [
+"@skylib/<rule-id>": [
   "error",
   {
     filesToLint?: string[],
@@ -461,5 +461,5 @@ Checks template literal format.
 #### Configuration comment
 
 ```ts
-/* typerock/eslint-plugin disable @typerock/<rule-id>[<sub-options-id>] */
+/* skylib/eslint-plugin disable @skylib/<rule-id>[<sub-options-id>] */
 ```

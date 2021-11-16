@@ -6,9 +6,9 @@ const _ = (0, tslib_1.__importStar)(require("lodash"));
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
 const ts = (0, tslib_1.__importStar)(require("typescript"));
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
-const assert = (0, tslib_1.__importStar)(require("@typerock/functions/dist/assertions"));
-const is = (0, tslib_1.__importStar)(require("@typerock/functions/dist/guards"));
-const core_1 = require("@typerock/functions/dist/types/core");
+const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
+const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const core_1 = require("@skylib/functions/dist/types/core");
 /**
  * Gets type parts.
  *
