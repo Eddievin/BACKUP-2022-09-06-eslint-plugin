@@ -18,7 +18,7 @@ utils.testRule(
           d(): string {},
           ...{},
           c,
-          a: 2,
+          "a": 2,
           B: 1
         }
       `,
@@ -37,7 +37,7 @@ utils.testRule(
           [key]: 5,
           ...{},
           B: 1,
-          a: 2,
+          "a": 2,
           c
         }
       `

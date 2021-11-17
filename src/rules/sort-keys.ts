@@ -6,6 +6,7 @@ import type { RuleFix } from "@typescript-eslint/experimental-utils/dist/ts-esli
 import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
+import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
@@ -71,13 +72,27 @@ const rule = utils.createRule({
         for (const property of node.properties)
           if (property.type === AST_NODE_TYPES.SpreadElement) flush();
           else {
-            assertIdentifier(property.key);
+            assert.byGuard(property.key.type, isExpectedKeyType);
 
-            group.push({
-              index: group.length,
-              key: property.key.name,
-              node: property
-            });
+            switch (property.key.type) {
+              case AST_NODE_TYPES.Identifier:
+                group.push({
+                  index: group.length,
+                  key: property.key.name,
+                  node: property
+                });
+
+                break;
+
+              case AST_NODE_TYPES.Literal:
+                group.push({
+                  index: group.length,
+                  key: property.key.value,
+                  node: property
+                });
+
+                break;
+            }
           }
 
         flush();
@@ -111,17 +126,15 @@ export = rule;
 
 interface Item {
   readonly index: number;
-  readonly key: string;
+  readonly key: unknown;
   readonly node: TSESTree.MethodDefinition | TSESTree.Property;
 }
 
-/**
- * Asserts that node is identifier.
- *
- * @param node - Node.
- */
-function assertIdentifier(
-  node: TSESTree.Node
-): asserts node is TSESTree.Identifier {
-  assert.toBeTrue(node.type === AST_NODE_TYPES.Identifier);
-}
+type ExpectedKeyType = AST_NODE_TYPES.Identifier | AST_NODE_TYPES.Literal;
+
+const ExpectedKeyTypeVO = createValidationObject<ExpectedKeyType>({
+  [AST_NODE_TYPES.Identifier]: AST_NODE_TYPES.Identifier,
+  [AST_NODE_TYPES.Literal]: AST_NODE_TYPES.Literal
+});
+
+const isExpectedKeyType = is.factory(is.enumeration, ExpectedKeyTypeVO);
