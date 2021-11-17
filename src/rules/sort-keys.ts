@@ -58,8 +58,11 @@ const rule = utils.createRule({
             if (fixes.length)
               context.report({
                 fix: () => fixes,
-                messageId: "incorrectSortingOrder",
-                node: a.first(group).node
+                loc: context.getLocFromRange([
+                  a.first(group).node.range[0],
+                  a.last(group).node.range[1]
+                ]),
+                messageId: "incorrectSortingOrder"
               });
           }
       },
@@ -88,6 +91,15 @@ const rule = utils.createRule({
                 group.push({
                   index: group.length,
                   key: property.key.value,
+                  node: property
+                });
+
+                break;
+
+              case AST_NODE_TYPES.MemberExpression:
+                group.push({
+                  index: group.length,
+                  key: `\u0000${context.getText(property.key)}`,
                   node: property
                 });
 
@@ -130,11 +142,15 @@ interface Item {
   readonly node: TSESTree.MethodDefinition | TSESTree.Property;
 }
 
-type ExpectedKeyType = AST_NODE_TYPES.Identifier | AST_NODE_TYPES.Literal;
+type ExpectedKeyType =
+  | AST_NODE_TYPES.Identifier
+  | AST_NODE_TYPES.Literal
+  | AST_NODE_TYPES.MemberExpression;
 
 const ExpectedKeyTypeVO = createValidationObject<ExpectedKeyType>({
   [AST_NODE_TYPES.Identifier]: AST_NODE_TYPES.Identifier,
-  [AST_NODE_TYPES.Literal]: AST_NODE_TYPES.Literal
+  [AST_NODE_TYPES.Literal]: AST_NODE_TYPES.Literal,
+  [AST_NODE_TYPES.MemberExpression]: AST_NODE_TYPES.MemberExpression
 });
 
 const isExpectedKeyType = is.factory(is.enumeration, ExpectedKeyTypeVO);

@@ -12,14 +12,15 @@ utils.testRule(
         const key = "key";
         const c = false;
         const x = {
-          [key]: 5,
-          f: 4,
-          e: 3,
+          [key]: 6,
+          f: 5,
+          e: 4,
           d(): string {},
           ...{},
           c,
-          "a": 2,
-          B: 1
+          "a": 3,
+          B: 2,
+          [/.*/u.source]: 1
         }
       `,
       errors: [
@@ -32,12 +33,13 @@ utils.testRule(
         const c = false;
         const x = {
           d(): string {},
-          e: 3,
-          f: 4,
-          [key]: 5,
+          e: 4,
+          f: 5,
+          [key]: 6,
           ...{},
-          B: 1,
-          "a": 2,
+          [/.*/u.source]: 1,
+          B: 2,
+          "a": 3,
           c
         }
       `
