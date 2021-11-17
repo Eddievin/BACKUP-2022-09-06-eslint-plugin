@@ -34,8 +34,11 @@ const rule = utils.createRule({
                         if (fixes.length)
                             context.report({
                                 fix: () => fixes,
-                                messageId: "incorrectSortingOrder",
-                                node: a.first(group).node
+                                loc: context.getLocFromRange([
+                                    a.first(group).node.range[0],
+                                    a.last(group).node.range[1]
+                                ]),
+                                messageId: "incorrectSortingOrder"
                             });
                     }
             },
@@ -64,6 +67,13 @@ const rule = utils.createRule({
                                     node: property
                                 });
                                 break;
+                            case experimental_utils_1.AST_NODE_TYPES.MemberExpression:
+                                group.push({
+                                    index: group.length,
+                                    key: `\u0000${context.getText(property.key)}`,
+                                    node: property
+                                });
+                                break;
                         }
                     }
                 flush();
@@ -87,7 +97,8 @@ const rule = utils.createRule({
 });
 const ExpectedKeyTypeVO = (0, core_1.createValidationObject)({
     [experimental_utils_1.AST_NODE_TYPES.Identifier]: experimental_utils_1.AST_NODE_TYPES.Identifier,
-    [experimental_utils_1.AST_NODE_TYPES.Literal]: experimental_utils_1.AST_NODE_TYPES.Literal
+    [experimental_utils_1.AST_NODE_TYPES.Literal]: experimental_utils_1.AST_NODE_TYPES.Literal,
+    [experimental_utils_1.AST_NODE_TYPES.MemberExpression]: experimental_utils_1.AST_NODE_TYPES.MemberExpression
 });
 const isExpectedKeyType = is.factory(is.enumeration, ExpectedKeyTypeVO);
 module.exports = rule;
