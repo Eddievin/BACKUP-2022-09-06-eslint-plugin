@@ -15,6 +15,7 @@ import noUnusedImport from "./rules/no-unused-import";
 import preferReadonly from "./rules/prefer-readonly";
 import requireJsdoc from "./rules/require-jsdoc";
 import sortClassMembers from "./rules/sort-class-members";
+import sortKeys from "./rules/sort-keys";
 import templateLiteralFormat from "./rules/template-literal-format";
 
 export = {
@@ -36,6 +37,7 @@ export = {
     "prefer-readonly": preferReadonly,
     "require-jsdoc": requireJsdoc,
     "sort-class-members": sortClassMembers,
+    "sort-keys": sortKeys,
     "template-literal-format": templateLiteralFormat
   }
 };

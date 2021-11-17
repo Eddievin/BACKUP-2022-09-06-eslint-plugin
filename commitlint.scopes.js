@@ -17,6 +17,7 @@ module.exports = [
   "prefer-readonly",
   "require-jsdoc",
   "sort-class-members",
+  "sort-keys",
   "template-literal-format",
   "typings",
   "utils.index",
