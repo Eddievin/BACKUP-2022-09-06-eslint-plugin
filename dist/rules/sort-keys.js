@@ -5,6 +5,7 @@ const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const core_1 = require("@skylib/functions/dist/types/core");
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const isRuleOptions = is.factory(is.object.of, { ignoreDefaultExport: is.boolean }, {});
 const rule = utils.createRule({
@@ -47,12 +48,23 @@ const rule = utils.createRule({
                     if (property.type === experimental_utils_1.AST_NODE_TYPES.SpreadElement)
                         flush();
                     else {
-                        assertIdentifier(property.key);
-                        group.push({
-                            index: group.length,
-                            key: property.key.name,
-                            node: property
-                        });
+                        assert.byGuard(property.key.type, isExpectedKeyType);
+                        switch (property.key.type) {
+                            case experimental_utils_1.AST_NODE_TYPES.Identifier:
+                                group.push({
+                                    index: group.length,
+                                    key: property.key.name,
+                                    node: property
+                                });
+                                break;
+                            case experimental_utils_1.AST_NODE_TYPES.Literal:
+                                group.push({
+                                    index: group.length,
+                                    key: property.key.value,
+                                    node: property
+                                });
+                                break;
+                        }
                     }
                 flush();
                 function flush() {
@@ -73,13 +85,10 @@ const rule = utils.createRule({
         incorrectSortingOrder: "Incorrect sorting order"
     }
 });
-/**
- * Asserts that node is identifier.
- *
- * @param node - Node.
- */
-function assertIdentifier(node) {
-    assert.toBeTrue(node.type === experimental_utils_1.AST_NODE_TYPES.Identifier);
-}
+const ExpectedKeyTypeVO = (0, core_1.createValidationObject)({
+    [experimental_utils_1.AST_NODE_TYPES.Identifier]: experimental_utils_1.AST_NODE_TYPES.Identifier,
+    [experimental_utils_1.AST_NODE_TYPES.Literal]: experimental_utils_1.AST_NODE_TYPES.Literal
+});
+const isExpectedKeyType = is.factory(is.enumeration, ExpectedKeyTypeVO);
 module.exports = rule;
 //# sourceMappingURL=sort-keys.js.map

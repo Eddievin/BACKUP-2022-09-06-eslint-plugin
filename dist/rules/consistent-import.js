@@ -14,8 +14,8 @@ const TypeVO = (0, core_1.createValidationObject)({
     default: "default",
     wildcard: "wildcard"
 });
-const isTypeVO = is.factory(is.enumeration, TypeVO);
-const isSubOptions = is.factory(is.object.of, { altLocalNames: is.strings, sourcePattern: is.string, type: isTypeVO }, { autoImportSource: is.string, localName: is.string });
+const isType = is.factory(is.enumeration, TypeVO);
+const isSubOptions = is.factory(is.object.of, { altLocalNames: is.strings, sourcePattern: is.string, type: isType }, { autoImportSource: is.string, localName: is.string });
 const rule = utils.createRule({
     create(context) {
         const identifiers = new Set();
