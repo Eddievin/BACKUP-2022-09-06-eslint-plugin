@@ -19,7 +19,7 @@ const TypeVO = createValidationObject<Type>({
   wildcard: "wildcard"
 });
 
-const isTypeVO = is.factory(is.enumeration, TypeVO);
+const isType = is.factory(is.enumeration, TypeVO);
 
 interface SubOptions {
   readonly altLocalNames: readonly string[];
@@ -31,7 +31,7 @@ interface SubOptions {
 
 const isSubOptions: is.Guard<SubOptions> = is.factory(
   is.object.of,
-  { altLocalNames: is.strings, sourcePattern: is.string, type: isTypeVO },
+  { altLocalNames: is.strings, sourcePattern: is.string, type: isType },
   { autoImportSource: is.string, localName: is.string }
 );
 
