@@ -24,6 +24,7 @@
 - [rules/prefer-readonly](modules/rules_prefer_readonly.md)
 - [rules/require-jsdoc](modules/rules_require_jsdoc.md)
 - [rules/sort-class-members](modules/rules_sort_class_members.md)
+- [rules/sort-keys](modules/rules_sort_keys.md)
 - [rules/template-literal-format](modules/rules_template_literal_format.md)
 - [rules/utils](modules/rules_utils.md)
 - [rules/utils/no-unnecessary-readonliness](modules/rules_utils_no_unnecessary_readonliness.md)

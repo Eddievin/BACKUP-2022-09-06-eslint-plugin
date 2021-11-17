@@ -17,6 +17,7 @@ const no_unused_import_1 = (0, tslib_1.__importDefault)(require("./rules/no-unus
 const prefer_readonly_1 = (0, tslib_1.__importDefault)(require("./rules/prefer-readonly"));
 const require_jsdoc_1 = (0, tslib_1.__importDefault)(require("./rules/require-jsdoc"));
 const sort_class_members_1 = (0, tslib_1.__importDefault)(require("./rules/sort-class-members"));
+const sort_keys_1 = (0, tslib_1.__importDefault)(require("./rules/sort-keys"));
 const template_literal_format_1 = (0, tslib_1.__importDefault)(require("./rules/template-literal-format"));
 module.exports = {
     rules: {
@@ -37,6 +38,7 @@ module.exports = {
         "prefer-readonly": prefer_readonly_1.default,
         "require-jsdoc": require_jsdoc_1.default,
         "sort-class-members": sort_class_members_1.default,
+        "sort-keys": sort_keys_1.default,
         "template-literal-format": template_literal_format_1.default
     }
 };

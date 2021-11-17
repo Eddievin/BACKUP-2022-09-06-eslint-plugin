@@ -17,6 +17,7 @@ declare const _default: {
         "prefer-readonly": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"shouldBeReadonly", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "require-jsdoc": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"undocumented" | "undocumentedCallSignature" | "undocumentedConstructSignature", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "sort-class-members": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"incorrectSortingOrder", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
+        "sort-keys": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"incorrectSortingOrder", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "template-literal-format": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"invalidTemplateLiteralFormat", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
     };
 };

@@ -36,4 +36,5 @@
 | `rules.prefer-readonly` | `RuleModule`<``"shouldBeReadonly"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.require-jsdoc` | `RuleModule`<``"undocumented"`` \| ``"undocumentedCallSignature"`` \| ``"undocumentedConstructSignature"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.sort-class-members` | `RuleModule`<``"incorrectSortingOrder"``, readonly `unknown`[], `RuleListener`\> |
+| `rules.sort-keys` | `RuleModule`<``"incorrectSortingOrder"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.template-literal-format` | `RuleModule`<``"invalidTemplateLiteralFormat"``, readonly `unknown`[], `RuleListener`\> |

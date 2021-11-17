@@ -23,6 +23,7 @@ ESLint plugin / [Exports](modules.md)
   - [prefer-readonly](#prefer-readonly)
   - [require-jsdoc](#require-jsdoc)
   - [sort-class-members](#sort-class-members)
+  - [sort-keys](#sort-keys)
   - [template-literal-format](#template-literal-format)
 - [Shared options](#shared-options)
 
@@ -412,11 +413,26 @@ Sorts class member.
 ]
 ```
 
+### <a name="sort-keys"></a>sort-keys
+
+Sorts object properties.
+
+#### eslintrc.js
+
+```ts
+"@skylib/sort-keys": [
+  "error",
+  {
+    ignoreDefaultExport: boolean
+  }
+]
+```
+
 #### Options
 
 | Name | Description |
 | :------ | :------ |
-| `sortingOrder` | Sorting order array may contain member types (accessor, constructor, field, get, method, set, signature), accessibility modifiers (public, private, protected), dynamic/static modifiers (dynamic, static), or any combination of them (e.g. public-accessor, get-private, static-method). |
+| `ignoreDefaultExport` | Ignores default export. |
 
 ### <a name="template-literal-format"></a>template-literal-format
 
