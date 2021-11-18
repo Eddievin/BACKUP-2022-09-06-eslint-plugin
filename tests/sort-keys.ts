@@ -24,8 +24,8 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 4, messageId: "incorrectSortingOrder" },
-        { line: 9, messageId: "incorrectSortingOrder" }
+        { endLine: 7, line: 4, messageId: "incorrectSortingOrder" },
+        { endLine: 12, line: 9, messageId: "incorrectSortingOrder" }
       ],
       name: `Test at line ${getCurrentLine().line}`,
       output: `
@@ -51,12 +51,32 @@ utils.testRule(
           a: 1
         }
       `,
-      errors: [{ line: 2, messageId: "incorrectSortingOrder" }],
+      errors: [{ endLine: 3, line: 2, messageId: "incorrectSortingOrder" }],
       name: `Test at line ${getCurrentLine().line}`,
       output: `
         export default {
           a: 1,
           b: 2
+        }
+      `
+    },
+    {
+      code: `
+        export default {
+          a: 1,
+          c: 3,
+          b: 2,
+          d: 4
+        }
+      `,
+      errors: [{ endLine: 4, line: 3, messageId: "incorrectSortingOrder" }],
+      name: `Test at line ${getCurrentLine().line}`,
+      output: `
+        export default {
+          a: 1,
+          b: 2,
+          c: 3,
+          d: 4
         }
       `
     }
@@ -71,6 +91,16 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ ignoreDefaultExport: true }]
+    },
+    {
+      code: `
+        export default {
+          b: 2,
+          // @skylib/sort-keys break
+          a: 1
+        }
+      `,
+      name: `Test at line ${getCurrentLine().line}`
     }
   ]
 );

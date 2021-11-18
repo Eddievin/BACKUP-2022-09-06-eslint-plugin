@@ -6,6 +6,7 @@ import type { RuleFix } from "@typescript-eslint/experimental-utils/dist/ts-esli
 import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
+import type { numberU } from "@skylib/functions/dist/types/core";
 import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
@@ -29,42 +30,55 @@ const rule = utils.createRule({
     return {
       "Program:exit"(): void {
         for (const group of groups)
-          if (
-            context.options.ignoreDefaultExport &&
-            exportDefaultDeclarations.some(exportDefaultDeclaration =>
-              group.some(
-                item =>
-                  item.node.range[0] >= exportDefaultDeclaration.range[0] &&
-                  item.node.range[1] <= exportDefaultDeclaration.range[1]
+          if (group.length > 1)
+            if (
+              context.options.ignoreDefaultExport &&
+              exportDefaultDeclarations.some(exportDefaultDeclaration =>
+                group.some(
+                  item =>
+                    item.node.range[0] >= exportDefaultDeclaration.range[0] &&
+                    item.node.range[1] <= exportDefaultDeclaration.range[1]
+                )
               )
-            )
-          ) {
-            // Ignore default export
-          } else {
-            const sortedGroup = _.sortBy(group, item => item.key);
+            ) {
+              // Ignore default export
+            } else {
+              const sortedGroup = _.sortBy(group, item => item.key);
 
-            const fixes: RuleFix[] = [];
+              const fixes: RuleFix[] = [];
 
-            for (const [index, sortedItem] of sortedGroup.entries())
-              if (sortedItem.index !== index) {
-                const item = a.get(group, index);
+              let min: numberU = undefined;
 
-                fixes.push({
-                  range: context.getRangeWithLeadingTrivia(item.node),
-                  text: context.getTextWithLeadingTrivia(sortedItem.node)
+              let max: numberU = undefined;
+
+              for (const [index, sortedItem] of sortedGroup.entries())
+                if (sortedItem.index !== index) {
+                  const item = a.get(group, index);
+
+                  min = is.not.empty(min) ? Math.min(min, index) : index;
+                  max = is.not.empty(max) ? Math.max(max, index) : index;
+                  fixes.push({
+                    range: context.getRangeWithLeadingTrivia(item.node),
+                    text: context.getTextWithLeadingTrivia(sortedItem.node)
+                  });
+                }
+
+              if (fixes.length) {
+                assert.not.empty(min);
+                assert.not.empty(max);
+
+                const loc = context.getLocFromRange([
+                  a.get(group, min).node.range[0],
+                  a.get(group, max).node.range[1]
+                ]);
+
+                context.report({
+                  fix: () => fixes,
+                  loc,
+                  messageId: "incorrectSortingOrder"
                 });
               }
-
-            if (fixes.length)
-              context.report({
-                fix: () => fixes,
-                loc: context.getLocFromRange([
-                  a.first(group).node.range[0],
-                  a.last(group).node.range[1]
-                ]),
-                messageId: "incorrectSortingOrder"
-              });
-          }
+            }
       },
       [AST_NODE_TYPES.ExportDefaultDeclaration](node): void {
         exportDefaultDeclarations.push(node);
@@ -76,6 +90,13 @@ const rule = utils.createRule({
           if (property.type === AST_NODE_TYPES.SpreadElement) flush();
           else {
             assert.byGuard(property.key.type, isExpectedKeyType);
+
+            if (
+              context
+                .getLeadingTrivia(property)
+                .includes("@skylib/sort-keys break")
+            )
+              flush();
 
             switch (property.key.type) {
               case AST_NODE_TYPES.Identifier:
@@ -110,10 +131,8 @@ const rule = utils.createRule({
         flush();
 
         function flush(): void {
-          if (group.length) {
-            groups.push(a.clone(group));
-            group.length = 0;
-          }
+          groups.push(a.clone(group));
+          group.length = 0;
         }
       }
     };
