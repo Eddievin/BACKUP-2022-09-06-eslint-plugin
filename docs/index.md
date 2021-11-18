@@ -428,6 +428,12 @@ Sorts object properties.
 ]
 ```
 
+#### Configuration comment
+
+```ts
+// @skylib/sort-keys break
+```
+
 #### Options
 
 | Name | Description |

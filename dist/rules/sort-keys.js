@@ -15,32 +15,41 @@ const rule = utils.createRule({
         return {
             "Program:exit"() {
                 for (const group of groups)
-                    if (context.options.ignoreDefaultExport &&
-                        exportDefaultDeclarations.some(exportDefaultDeclaration => group.some(item => item.node.range[0] >= exportDefaultDeclaration.range[0] &&
-                            item.node.range[1] <= exportDefaultDeclaration.range[1]))) {
-                        // Ignore default export
-                    }
-                    else {
-                        const sortedGroup = _.sortBy(group, item => item.key);
-                        const fixes = [];
-                        for (const [index, sortedItem] of sortedGroup.entries())
-                            if (sortedItem.index !== index) {
-                                const item = a.get(group, index);
-                                fixes.push({
-                                    range: context.getRangeWithLeadingTrivia(item.node),
-                                    text: context.getTextWithLeadingTrivia(sortedItem.node)
+                    if (group.length > 1)
+                        if (context.options.ignoreDefaultExport &&
+                            exportDefaultDeclarations.some(exportDefaultDeclaration => group.some(item => item.node.range[0] >= exportDefaultDeclaration.range[0] &&
+                                item.node.range[1] <= exportDefaultDeclaration.range[1]))) {
+                            // Ignore default export
+                        }
+                        else {
+                            const sortedGroup = _.sortBy(group, item => item.key);
+                            const fixes = [];
+                            let min = undefined;
+                            let max = undefined;
+                            for (const [index, sortedItem] of sortedGroup.entries())
+                                if (sortedItem.index !== index) {
+                                    const item = a.get(group, index);
+                                    min = is.not.empty(min) ? Math.min(min, index) : index;
+                                    max = is.not.empty(max) ? Math.max(max, index) : index;
+                                    fixes.push({
+                                        range: context.getRangeWithLeadingTrivia(item.node),
+                                        text: context.getTextWithLeadingTrivia(sortedItem.node)
+                                    });
+                                }
+                            if (fixes.length) {
+                                assert.not.empty(min);
+                                assert.not.empty(max);
+                                const loc = context.getLocFromRange([
+                                    a.get(group, min).node.range[0],
+                                    a.get(group, max).node.range[1]
+                                ]);
+                                context.report({
+                                    fix: () => fixes,
+                                    loc,
+                                    messageId: "incorrectSortingOrder"
                                 });
                             }
-                        if (fixes.length)
-                            context.report({
-                                fix: () => fixes,
-                                loc: context.getLocFromRange([
-                                    a.first(group).node.range[0],
-                                    a.last(group).node.range[1]
-                                ]),
-                                messageId: "incorrectSortingOrder"
-                            });
-                    }
+                        }
             },
             [experimental_utils_1.AST_NODE_TYPES.ExportDefaultDeclaration](node) {
                 exportDefaultDeclarations.push(node);
@@ -52,6 +61,10 @@ const rule = utils.createRule({
                         flush();
                     else {
                         assert.byGuard(property.key.type, isExpectedKeyType);
+                        if (context
+                            .getLeadingTrivia(property)
+                            .includes("@skylib/sort-keys break"))
+                            flush();
                         switch (property.key.type) {
                             case experimental_utils_1.AST_NODE_TYPES.Identifier:
                                 group.push({
@@ -78,10 +91,8 @@ const rule = utils.createRule({
                     }
                 flush();
                 function flush() {
-                    if (group.length) {
-                        groups.push(a.clone(group));
-                        group.length = 0;
-                    }
+                    groups.push(a.clone(group));
+                    group.length = 0;
                 }
             }
         };
