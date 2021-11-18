@@ -123,15 +123,15 @@ const ExpectedFlagsVO = createValidationObject<ExpectedFlags>({
   [ts.TypeFlags.BigInt]: ts.TypeFlags.BigInt,
   [ts.TypeFlags.BigIntLiteral]: ts.TypeFlags.BigIntLiteral,
   [ts.TypeFlags.BooleanLiteral]: ts.TypeFlags.BooleanLiteral,
+  [ts.TypeFlags.ESSymbol]: ts.TypeFlags.ESSymbol,
+  [ts.TypeFlags.Null]: ts.TypeFlags.Null,
   [ts.TypeFlags.Number]: ts.TypeFlags.Number,
   [ts.TypeFlags.NumberLiteral]: ts.TypeFlags.NumberLiteral,
-  [ts.TypeFlags.Null]: ts.TypeFlags.Null,
   [ts.TypeFlags.Object]: ts.TypeFlags.Object,
   [ts.TypeFlags.String]: ts.TypeFlags.String,
   [ts.TypeFlags.StringLiteral]: ts.TypeFlags.StringLiteral,
-  [ts.TypeFlags.ESSymbol]: ts.TypeFlags.ESSymbol,
-  [ts.TypeFlags.UniqueESSymbol]: ts.TypeFlags.UniqueESSymbol,
   [ts.TypeFlags.Undefined]: ts.TypeFlags.Undefined,
+  [ts.TypeFlags.UniqueESSymbol]: ts.TypeFlags.UniqueESSymbol,
   [ts.TypeFlags.Void]: ts.TypeFlags.Void
 });
 

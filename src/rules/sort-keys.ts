@@ -27,6 +27,57 @@ const rule = utils.createRule({
     const groups: Array<readonly Item[]> = [];
 
     return {
+      [AST_NODE_TYPES.ExportDefaultDeclaration](node): void {
+        exportDefaultDeclarations.push(node);
+      },
+      [AST_NODE_TYPES.ObjectExpression](node): void {
+        const group: Item[] = [];
+
+        for (const property of node.properties)
+          if (property.type === AST_NODE_TYPES.SpreadElement) flush();
+          else {
+            if (
+              context
+                .getLeadingTrivia(property)
+                .includes("@skylib/sort-keys break")
+            )
+              flush();
+
+            switch (property.key.type) {
+              case AST_NODE_TYPES.Identifier:
+                group.push({
+                  index: group.length,
+                  key: property.key.name,
+                  node: property
+                });
+
+                break;
+
+              case AST_NODE_TYPES.Literal:
+                group.push({
+                  index: group.length,
+                  key: property.key.value,
+                  node: property
+                });
+
+                break;
+
+              default:
+                group.push({
+                  index: group.length,
+                  key: `\u0000${context.getText(property.key)}`,
+                  node: property
+                });
+            }
+          }
+
+        flush();
+
+        function flush(): void {
+          groups.push(a.clone(group));
+          group.length = 0;
+        }
+      },
       "Program:exit"(): void {
         for (const group of groups)
           if (group.length > 1)
@@ -78,57 +129,6 @@ const rule = utils.createRule({
                 });
               }
             }
-      },
-      [AST_NODE_TYPES.ExportDefaultDeclaration](node): void {
-        exportDefaultDeclarations.push(node);
-      },
-      [AST_NODE_TYPES.ObjectExpression](node): void {
-        const group: Item[] = [];
-
-        for (const property of node.properties)
-          if (property.type === AST_NODE_TYPES.SpreadElement) flush();
-          else {
-            if (
-              context
-                .getLeadingTrivia(property)
-                .includes("@skylib/sort-keys break")
-            )
-              flush();
-
-            switch (property.key.type) {
-              case AST_NODE_TYPES.Identifier:
-                group.push({
-                  index: group.length,
-                  key: property.key.name,
-                  node: property
-                });
-
-                break;
-
-              case AST_NODE_TYPES.Literal:
-                group.push({
-                  index: group.length,
-                  key: property.key.value,
-                  node: property
-                });
-
-                break;
-
-              default:
-                group.push({
-                  index: group.length,
-                  key: `\u0000${context.getText(property.key)}`,
-                  node: property
-                });
-            }
-          }
-
-        flush();
-
-        function flush(): void {
-          groups.push(a.clone(group));
-          group.length = 0;
-        }
       }
     };
   },
