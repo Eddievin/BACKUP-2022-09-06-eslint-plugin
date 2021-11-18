@@ -5,7 +5,6 @@ const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const core_1 = require("@skylib/functions/dist/types/core");
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const isRuleOptions = is.factory(is.object.of, { ignoreDefaultExport: is.boolean }, {});
 const rule = utils.createRule({
@@ -13,6 +12,48 @@ const rule = utils.createRule({
         const exportDefaultDeclarations = [];
         const groups = [];
         return {
+            [experimental_utils_1.AST_NODE_TYPES.ExportDefaultDeclaration](node) {
+                exportDefaultDeclarations.push(node);
+            },
+            [experimental_utils_1.AST_NODE_TYPES.ObjectExpression](node) {
+                const group = [];
+                for (const property of node.properties)
+                    if (property.type === experimental_utils_1.AST_NODE_TYPES.SpreadElement)
+                        flush();
+                    else {
+                        if (context
+                            .getLeadingTrivia(property)
+                            .includes("@skylib/sort-keys break"))
+                            flush();
+                        switch (property.key.type) {
+                            case experimental_utils_1.AST_NODE_TYPES.Identifier:
+                                group.push({
+                                    index: group.length,
+                                    key: property.key.name,
+                                    node: property
+                                });
+                                break;
+                            case experimental_utils_1.AST_NODE_TYPES.Literal:
+                                group.push({
+                                    index: group.length,
+                                    key: property.key.value,
+                                    node: property
+                                });
+                                break;
+                            default:
+                                group.push({
+                                    index: group.length,
+                                    key: `\u0000${context.getText(property.key)}`,
+                                    node: property
+                                });
+                        }
+                    }
+                flush();
+                function flush() {
+                    groups.push(a.clone(group));
+                    group.length = 0;
+                }
+            },
             "Program:exit"() {
                 for (const group of groups)
                     if (group.length > 1)
@@ -50,50 +91,6 @@ const rule = utils.createRule({
                                 });
                             }
                         }
-            },
-            [experimental_utils_1.AST_NODE_TYPES.ExportDefaultDeclaration](node) {
-                exportDefaultDeclarations.push(node);
-            },
-            [experimental_utils_1.AST_NODE_TYPES.ObjectExpression](node) {
-                const group = [];
-                for (const property of node.properties)
-                    if (property.type === experimental_utils_1.AST_NODE_TYPES.SpreadElement)
-                        flush();
-                    else {
-                        assert.byGuard(property.key.type, isExpectedKeyType);
-                        if (context
-                            .getLeadingTrivia(property)
-                            .includes("@skylib/sort-keys break"))
-                            flush();
-                        switch (property.key.type) {
-                            case experimental_utils_1.AST_NODE_TYPES.Identifier:
-                                group.push({
-                                    index: group.length,
-                                    key: property.key.name,
-                                    node: property
-                                });
-                                break;
-                            case experimental_utils_1.AST_NODE_TYPES.Literal:
-                                group.push({
-                                    index: group.length,
-                                    key: property.key.value,
-                                    node: property
-                                });
-                                break;
-                            case experimental_utils_1.AST_NODE_TYPES.MemberExpression:
-                                group.push({
-                                    index: group.length,
-                                    key: `\u0000${context.getText(property.key)}`,
-                                    node: property
-                                });
-                                break;
-                        }
-                    }
-                flush();
-                function flush() {
-                    groups.push(a.clone(group));
-                    group.length = 0;
-                }
             }
         };
     },
@@ -106,11 +103,5 @@ const rule = utils.createRule({
         incorrectSortingOrder: "Incorrect sorting order"
     }
 });
-const ExpectedKeyTypeVO = (0, core_1.createValidationObject)({
-    [experimental_utils_1.AST_NODE_TYPES.Identifier]: experimental_utils_1.AST_NODE_TYPES.Identifier,
-    [experimental_utils_1.AST_NODE_TYPES.Literal]: experimental_utils_1.AST_NODE_TYPES.Literal,
-    [experimental_utils_1.AST_NODE_TYPES.MemberExpression]: experimental_utils_1.AST_NODE_TYPES.MemberExpression
-});
-const isExpectedKeyType = is.factory(is.enumeration, ExpectedKeyTypeVO);
 module.exports = rule;
 //# sourceMappingURL=sort-keys.js.map
