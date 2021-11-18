@@ -13,9 +13,9 @@ utils.testRule(
         const c = false;
         const x = {
           [key]: 6,
-          f: 5,
-          e: 4,
+          e: 5,
           d(): string {},
+          ["f" as string]: 4,
           ...{},
           c,
           "a": 3,
@@ -32,9 +32,9 @@ utils.testRule(
         const key = "key";
         const c = false;
         const x = {
+          ["f" as string]: 4,
           d(): string {},
-          e: 4,
-          f: 5,
+          e: 5,
           [key]: 6,
           ...{},
           [/.*/u.source]: 1,

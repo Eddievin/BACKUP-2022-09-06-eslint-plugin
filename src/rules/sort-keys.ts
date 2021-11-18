@@ -7,7 +7,6 @@ import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
 import type { numberU } from "@skylib/functions/dist/types/core";
-import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
@@ -89,8 +88,6 @@ const rule = utils.createRule({
         for (const property of node.properties)
           if (property.type === AST_NODE_TYPES.SpreadElement) flush();
           else {
-            assert.byGuard(property.key.type, isExpectedKeyType);
-
             if (
               context
                 .getLeadingTrivia(property)
@@ -117,14 +114,12 @@ const rule = utils.createRule({
 
                 break;
 
-              case AST_NODE_TYPES.MemberExpression:
+              default:
                 group.push({
                   index: group.length,
                   key: `\u0000${context.getText(property.key)}`,
                   node: property
                 });
-
-                break;
             }
           }
 
@@ -160,16 +155,3 @@ interface Item {
   readonly key: unknown;
   readonly node: TSESTree.MethodDefinition | TSESTree.Property;
 }
-
-type ExpectedKeyType =
-  | AST_NODE_TYPES.Identifier
-  | AST_NODE_TYPES.Literal
-  | AST_NODE_TYPES.MemberExpression;
-
-const ExpectedKeyTypeVO = createValidationObject<ExpectedKeyType>({
-  [AST_NODE_TYPES.Identifier]: AST_NODE_TYPES.Identifier,
-  [AST_NODE_TYPES.Literal]: AST_NODE_TYPES.Literal,
-  [AST_NODE_TYPES.MemberExpression]: AST_NODE_TYPES.MemberExpression
-});
-
-const isExpectedKeyType = is.factory(is.enumeration, ExpectedKeyTypeVO);
