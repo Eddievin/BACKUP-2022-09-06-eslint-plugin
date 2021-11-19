@@ -86,16 +86,6 @@ utils.testRule(
       code: `
         export default {
           b: 2,
-          a: 1
-        }
-      `,
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ ignoreDefaultExport: true }]
-    },
-    {
-      code: `
-        export default {
-          b: 2,
           // @skylib/sort-keys break
           a: 1
         }

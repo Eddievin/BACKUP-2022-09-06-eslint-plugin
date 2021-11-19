@@ -418,12 +418,7 @@ Sorts object properties.
 #### eslintrc.js
 
 ```ts
-"@skylib/sort-keys": [
-  "error",
-  {
-    ignoreDefaultExport: boolean
-  }
-]
+"@skylib/sort-keys": "error"
 ```
 
 #### Configuration comment
@@ -431,12 +426,6 @@ Sorts object properties.
 ```ts
 // @skylib/sort-keys break
 ```
-
-#### Options
-
-| Name | Description |
-| :------ | :------ |
-| `ignoreDefaultExport` | Ignores default export. |
 
 ### <a name="template-literal-format"></a>template-literal-format
 

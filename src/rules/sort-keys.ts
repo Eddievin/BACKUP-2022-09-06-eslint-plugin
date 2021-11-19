@@ -10,26 +10,9 @@ import type { numberU } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
-interface RuleOptions {
-  readonly ignoreDefaultExport: boolean;
-}
-
-const isRuleOptions: is.Guard<RuleOptions> = is.factory(
-  is.object.of,
-  { ignoreDefaultExport: is.boolean },
-  {}
-);
-
 const rule = utils.createRule({
   create(context) {
-    const exportDefaultDeclarations: TSESTree.ExportDefaultDeclaration[] = [];
-
-    const groups: Array<readonly Item[]> = [];
-
     return {
-      [AST_NODE_TYPES.ExportDefaultDeclaration](node): void {
-        exportDefaultDeclarations.push(node);
-      },
       [AST_NODE_TYPES.ObjectExpression](node): void {
         const group: Item[] = [];
 
@@ -74,69 +57,14 @@ const rule = utils.createRule({
         flush();
 
         function flush(): void {
-          groups.push(a.clone(group));
+          lintNodes(group, context);
           group.length = 0;
         }
-      },
-      "Program:exit"(): void {
-        for (const group of groups)
-          if (group.length > 1)
-            if (
-              context.options.ignoreDefaultExport &&
-              exportDefaultDeclarations.some(exportDefaultDeclaration =>
-                group.some(
-                  item =>
-                    item.node.range[0] >= exportDefaultDeclaration.range[0] &&
-                    item.node.range[1] <= exportDefaultDeclaration.range[1]
-                )
-              )
-            ) {
-              // Ignore default export
-            } else {
-              const sortedGroup = _.sortBy(group, item => item.key);
-
-              const fixes: RuleFix[] = [];
-
-              let min: numberU = undefined;
-
-              let max: numberU = undefined;
-
-              for (const [index, sortedItem] of sortedGroup.entries())
-                if (sortedItem.index !== index) {
-                  const item = a.get(group, index);
-
-                  min = is.not.empty(min) ? Math.min(min, index) : index;
-                  max = is.not.empty(max) ? Math.max(max, index) : index;
-                  fixes.push({
-                    range: context.getRangeWithLeadingTrivia(item.node),
-                    text: context.getTextWithLeadingTrivia(sortedItem.node)
-                  });
-                }
-
-              if (fixes.length) {
-                assert.not.empty(min);
-                assert.not.empty(max);
-
-                const loc = context.getLocFromRange([
-                  a.get(group, min).node.range[0],
-                  a.get(group, max).node.range[1]
-                ]);
-
-                context.report({
-                  fix: () => fixes,
-                  loc,
-                  messageId: "incorrectSortingOrder"
-                });
-              }
-            }
       }
     };
   },
-  defaultOptions: {
-    ignoreDefaultExport: false
-  },
   fixable: "code",
-  isRuleOptions,
+  isRuleOptions: is.object,
   messages: {
     incorrectSortingOrder: "Incorrect sorting order"
   }
@@ -150,8 +78,58 @@ export = rule;
 |*******************************************************************************
 |*/
 
+type Context = utils.Context<MessageId, object, object>;
+
 interface Item {
   readonly index: number;
   readonly key: unknown;
   readonly node: TSESTree.MethodDefinition | TSESTree.Property;
+}
+
+type MessageId = utils.MessageId<typeof rule>;
+
+/**
+ * Lints group.
+ *
+ * @param group - Items.
+ * @param context - Context.
+ */
+function lintNodes(group: readonly Item[], context: Context): void {
+  if (group.length > 1) {
+    const sortedGroup = _.sortBy(group, item => item.key);
+
+    const fixes: RuleFix[] = [];
+
+    let min: numberU = undefined;
+
+    let max: numberU = undefined;
+
+    for (const [index, sortedItem] of sortedGroup.entries())
+      if (sortedItem.index !== index) {
+        const item = a.get(group, index);
+
+        min = is.not.empty(min) ? Math.min(min, index) : index;
+        max = is.not.empty(max) ? Math.max(max, index) : index;
+        fixes.push({
+          range: context.getRangeWithLeadingTrivia(item.node),
+          text: context.getTextWithLeadingTrivia(sortedItem.node)
+        });
+      }
+
+    if (fixes.length) {
+      assert.not.empty(min);
+      assert.not.empty(max);
+
+      const loc = context.getLocFromRange([
+        a.get(group, min).node.range[0],
+        a.get(group, max).node.range[1]
+      ]);
+
+      context.report({
+        fix: () => fixes,
+        loc,
+        messageId: "incorrectSortingOrder"
+      });
+    }
+  }
 }
