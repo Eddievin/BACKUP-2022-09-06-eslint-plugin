@@ -1,1 +1,1 @@
-{"version":3,"file":"consistent-empty-lines.d.ts","sourceRoot":"","sources":["../../src/rules/consistent-empty-lines.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,sDAAsD,CAAC;AA+BzF,QAAA,MAAM,IAAI,gKA2DR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"consistent-empty-lines.d.ts","sourceRoot":"","sources":["../../src/rules/consistent-empty-lines.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,sDAAsD,CAAC;AAqCzF,QAAA,MAAM,IAAI,gKAsGR,CAAC;AAEH,SAAS,IAAI,CAAC"}

@@ -2,6 +2,7 @@ declare const _default: {
     rules: {
         "class-member-typedef": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"typedefRequired", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "consistent-empty-lines": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"expectingEmptyLine" | "unexpectedEmptyLine", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
+        "consistent-group-empty-lines": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"expectingEmptyLine" | "unexpectedEmptyLine", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "consistent-import": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"autoImport" | "invalidLocalName" | "missingImport" | "wildcardImportDisallowed" | "wildcardImportRequired", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "disallow-by-regexp": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"disallowedCode", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "disallow-identifier": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"disallowedIdentifier", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
@@ -18,6 +19,7 @@ declare const _default: {
         "require-jsdoc": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"undocumented" | "undocumentedCallSignature" | "undocumentedConstructSignature", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "sort-class-members": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"incorrectSortingOrder", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "sort-keys": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"incorrectSortingOrder", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
+        "switch-case-empty-lines": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"expectingEmptyLine" | "unexpectedEmptyLine", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
         "template-literal-format": import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleModule<"invalidTemplateLiteralFormat", readonly unknown[], import("@typescript-eslint/experimental-utils/dist/ts-eslint/Rule").RuleListener>;
     };
 };

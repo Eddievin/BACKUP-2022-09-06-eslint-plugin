@@ -21,6 +21,7 @@
 | `rules` | `Object` |
 | `rules.class-member-typedef` | `RuleModule`<``"typedefRequired"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.consistent-empty-lines` | `RuleModule`<``"expectingEmptyLine"`` \| ``"unexpectedEmptyLine"``, readonly `unknown`[], `RuleListener`\> |
+| `rules.consistent-group-empty-lines` | `RuleModule`<``"expectingEmptyLine"`` \| ``"unexpectedEmptyLine"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.consistent-import` | `RuleModule`<``"autoImport"`` \| ``"invalidLocalName"`` \| ``"missingImport"`` \| ``"wildcardImportDisallowed"`` \| ``"wildcardImportRequired"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.disallow-by-regexp` | `RuleModule`<``"disallowedCode"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.disallow-identifier` | `RuleModule`<``"disallowedIdentifier"``, readonly `unknown`[], `RuleListener`\> |
@@ -37,4 +38,5 @@
 | `rules.require-jsdoc` | `RuleModule`<``"undocumented"`` \| ``"undocumentedCallSignature"`` \| ``"undocumentedConstructSignature"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.sort-class-members` | `RuleModule`<``"incorrectSortingOrder"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.sort-keys` | `RuleModule`<``"incorrectSortingOrder"``, readonly `unknown`[], `RuleListener`\> |
+| `rules.switch-case-empty-lines` | `RuleModule`<``"expectingEmptyLine"`` \| ``"unexpectedEmptyLine"``, readonly `unknown`[], `RuleListener`\> |
 | `rules.template-literal-format` | `RuleModule`<``"invalidTemplateLiteralFormat"``, readonly `unknown`[], `RuleListener`\> |

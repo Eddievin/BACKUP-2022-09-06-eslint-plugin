@@ -2,6 +2,7 @@
 const tslib_1 = require("tslib");
 const class_member_typedef_1 = (0, tslib_1.__importDefault)(require("./rules/class-member-typedef"));
 const consistent_empty_lines_1 = (0, tslib_1.__importDefault)(require("./rules/consistent-empty-lines"));
+const consistent_group_empty_lines_1 = (0, tslib_1.__importDefault)(require("./rules/consistent-group-empty-lines"));
 const consistent_import_1 = (0, tslib_1.__importDefault)(require("./rules/consistent-import"));
 const disallow_by_regexp_1 = (0, tslib_1.__importDefault)(require("./rules/disallow-by-regexp"));
 const disallow_identifier_1 = (0, tslib_1.__importDefault)(require("./rules/disallow-identifier"));
@@ -18,11 +19,13 @@ const prefer_readonly_1 = (0, tslib_1.__importDefault)(require("./rules/prefer-r
 const require_jsdoc_1 = (0, tslib_1.__importDefault)(require("./rules/require-jsdoc"));
 const sort_class_members_1 = (0, tslib_1.__importDefault)(require("./rules/sort-class-members"));
 const sort_keys_1 = (0, tslib_1.__importDefault)(require("./rules/sort-keys"));
+const switch_case_empty_lines_1 = (0, tslib_1.__importDefault)(require("./rules/switch-case-empty-lines"));
 const template_literal_format_1 = (0, tslib_1.__importDefault)(require("./rules/template-literal-format"));
 module.exports = {
     rules: {
         "class-member-typedef": class_member_typedef_1.default,
         "consistent-empty-lines": consistent_empty_lines_1.default,
+        "consistent-group-empty-lines": consistent_group_empty_lines_1.default,
         "consistent-import": consistent_import_1.default,
         "disallow-by-regexp": disallow_by_regexp_1.default,
         "disallow-identifier": disallow_identifier_1.default,
@@ -39,6 +42,7 @@ module.exports = {
         "require-jsdoc": require_jsdoc_1.default,
         "sort-class-members": sort_class_members_1.default,
         "sort-keys": sort_keys_1.default,
+        "switch-case-empty-lines": switch_case_empty_lines_1.default,
         "template-literal-format": template_literal_format_1.default
     }
 };

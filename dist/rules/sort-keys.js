@@ -6,15 +6,9 @@ const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
-const isRuleOptions = is.factory(is.object.of, { ignoreDefaultExport: is.boolean }, {});
 const rule = utils.createRule({
     create(context) {
-        const exportDefaultDeclarations = [];
-        const groups = [];
         return {
-            [experimental_utils_1.AST_NODE_TYPES.ExportDefaultDeclaration](node) {
-                exportDefaultDeclarations.push(node);
-            },
             [experimental_utils_1.AST_NODE_TYPES.ObjectExpression](node) {
                 const group = [];
                 for (const property of node.properties)
@@ -50,58 +44,54 @@ const rule = utils.createRule({
                     }
                 flush();
                 function flush() {
-                    groups.push(a.clone(group));
+                    lintNodes(group, context);
                     group.length = 0;
                 }
-            },
-            "Program:exit"() {
-                for (const group of groups)
-                    if (group.length > 1)
-                        if (context.options.ignoreDefaultExport &&
-                            exportDefaultDeclarations.some(exportDefaultDeclaration => group.some(item => item.node.range[0] >= exportDefaultDeclaration.range[0] &&
-                                item.node.range[1] <= exportDefaultDeclaration.range[1]))) {
-                            // Ignore default export
-                        }
-                        else {
-                            const sortedGroup = _.sortBy(group, item => item.key);
-                            const fixes = [];
-                            let min = undefined;
-                            let max = undefined;
-                            for (const [index, sortedItem] of sortedGroup.entries())
-                                if (sortedItem.index !== index) {
-                                    const item = a.get(group, index);
-                                    min = is.not.empty(min) ? Math.min(min, index) : index;
-                                    max = is.not.empty(max) ? Math.max(max, index) : index;
-                                    fixes.push({
-                                        range: context.getRangeWithLeadingTrivia(item.node),
-                                        text: context.getTextWithLeadingTrivia(sortedItem.node)
-                                    });
-                                }
-                            if (fixes.length) {
-                                assert.not.empty(min);
-                                assert.not.empty(max);
-                                const loc = context.getLocFromRange([
-                                    a.get(group, min).node.range[0],
-                                    a.get(group, max).node.range[1]
-                                ]);
-                                context.report({
-                                    fix: () => fixes,
-                                    loc,
-                                    messageId: "incorrectSortingOrder"
-                                });
-                            }
-                        }
             }
         };
     },
-    defaultOptions: {
-        ignoreDefaultExport: false
-    },
     fixable: "code",
-    isRuleOptions,
+    isRuleOptions: is.object,
     messages: {
         incorrectSortingOrder: "Incorrect sorting order"
     }
 });
+/**
+ * Lints group.
+ *
+ * @param group - Items.
+ * @param context - Context.
+ */
+function lintNodes(group, context) {
+    if (group.length > 1) {
+        const sortedGroup = _.sortBy(group, item => item.key);
+        const fixes = [];
+        let min = undefined;
+        let max = undefined;
+        for (const [index, sortedItem] of sortedGroup.entries())
+            if (sortedItem.index !== index) {
+                const item = a.get(group, index);
+                min = is.not.empty(min) ? Math.min(min, index) : index;
+                max = is.not.empty(max) ? Math.max(max, index) : index;
+                fixes.push({
+                    range: context.getRangeWithLeadingTrivia(item.node),
+                    text: context.getTextWithLeadingTrivia(sortedItem.node)
+                });
+            }
+        if (fixes.length) {
+            assert.not.empty(min);
+            assert.not.empty(max);
+            const loc = context.getLocFromRange([
+                a.get(group, min).node.range[0],
+                a.get(group, max).node.range[1]
+            ]);
+            context.report({
+                fix: () => fixes,
+                loc,
+                messageId: "incorrectSortingOrder"
+            });
+        }
+    }
+}
 module.exports = rule;
 //# sourceMappingURL=sort-keys.js.map

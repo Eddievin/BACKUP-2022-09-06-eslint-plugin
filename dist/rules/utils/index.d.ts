@@ -119,6 +119,13 @@ export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
 }
 export declare const base: string;
 /**
+ * Adds node to child nodes map.
+ *
+ * @param node - Node.
+ * @param mutableChildNodesMap - Child nodes map.
+ */
+export declare function buildChildNodesMap(node: TSESTree.Node, mutableChildNodesMap: Map<string, TSESTree.Node[]>): void;
+/**
  * Creates file matcher.
  *
  * @param patterns - Patterns.
@@ -159,6 +166,13 @@ export declare function getComments(program: TSESTree.Program): TSESTree.Comment
  */
 export declare function getPackage(path?: string): Package;
 /**
+ * Generates node ID.
+ *
+ * @param node - Node.
+ * @returns Node ID.
+ */
+export declare function getNodeId(node: TSESTree.Node | undefined): string;
+/**
  * Gets selectors as a string.
  *
  * @param options - Options.
@@ -180,6 +194,15 @@ export declare function getTypeName(type: ts.Type): string;
  * @returns Type names as a string.
  */
 export declare function getTypeNames(types: readonly ts.Type[]): string;
+/**
+ * Checks if two nodes are adjacent.
+ *
+ * @param node1 - Node 1.
+ * @param node2 - Node 2.
+ * @param childNodesMap - Child nodes map.
+ * @returns _True_ if two nodes are adjacent, _false_ otherwise.
+ */
+export declare function isAdjacentNodes(node1: TSESTree.Node, node2: TSESTree.Node, childNodesMap: ReadonlyMap<string, readonly TSESTree.Node[]>): boolean;
 /**
  * Strips base path.
  *

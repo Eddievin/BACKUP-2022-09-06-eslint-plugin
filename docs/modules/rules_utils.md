@@ -29,14 +29,17 @@
 
 ### Functions
 
+- [buildChildNodesMap](rules_utils.md#buildchildnodesmap)
 - [createFileMatcher](rules_utils.md#createfilematcher)
 - [createMatcher](rules_utils.md#creatematcher)
 - [createRule](rules_utils.md#createrule)
 - [getComments](rules_utils.md#getcomments)
+- [getNodeId](rules_utils.md#getnodeid)
 - [getPackage](rules_utils.md#getpackage)
 - [getSelectors](rules_utils.md#getselectors)
 - [getTypeName](rules_utils.md#gettypename)
 - [getTypeNames](rules_utils.md#gettypenames)
+- [isAdjacentNodes](rules_utils.md#isadjacentnodes)
 - [isPackage](rules_utils.md#ispackage)
 - [stripBase](rules_utils.md#stripbase)
 - [testRule](rules_utils.md#testrule)
@@ -86,6 +89,25 @@ ___
 • **base**: `string`
 
 ## Functions
+
+### buildChildNodesMap
+
+▸ **buildChildNodesMap**(`node`, `mutableChildNodesMap`): `void`
+
+Adds node to child nodes map.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `node` | `Node` | Node. |
+| `mutableChildNodesMap` | `Map`<`string`, `Node`[]\> | Child nodes map. |
+
+#### Returns
+
+`void`
+
+___
 
 ### createFileMatcher
 
@@ -177,6 +199,26 @@ Comments.
 
 ___
 
+### getNodeId
+
+▸ **getNodeId**(`node`): `string`
+
+Generates node ID.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `node` | `undefined` \| `Node` | Node. |
+
+#### Returns
+
+`string`
+
+Node ID.
+
+___
+
 ### getPackage
 
 ▸ **getPackage**(`path?`): [`Package`](../interfaces/rules_utils.Package.md)
@@ -255,6 +297,28 @@ Gets type names as a string.
 `string`
 
 Type names as a string.
+
+___
+
+### isAdjacentNodes
+
+▸ **isAdjacentNodes**(`node1`, `node2`, `childNodesMap`): `boolean`
+
+Checks if two nodes are adjacent.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `node1` | `Node` | Node 1. |
+| `node2` | `Node` | Node 2. |
+| `childNodesMap` | `ReadonlyMap`<`string`, readonly `Node`[]\> | Child nodes map. |
+
+#### Returns
+
+`boolean`
+
+_True_ if two nodes are adjacent, _false_ otherwise.
 
 ___
 

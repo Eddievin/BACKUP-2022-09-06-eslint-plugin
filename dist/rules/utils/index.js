@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testRule = exports.stripBase = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getComments = exports.createRule = exports.createMatcher = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
+exports.testRule = exports.stripBase = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getNodeId = exports.getPackage = exports.getComments = exports.createRule = exports.createMatcher = exports.createFileMatcher = exports.buildChildNodesMap = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
 const fs_1 = (0, tslib_1.__importDefault)(require("fs"));
 const _ = (0, tslib_1.__importStar)(require("lodash"));
 const minimatch_1 = (0, tslib_1.__importDefault)(require("minimatch"));
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
 const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const arrayMap = (0, tslib_1.__importStar)(require("@skylib/functions/dist/arrayMap"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
 const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
@@ -16,6 +17,16 @@ const reflect = (0, tslib_1.__importStar)(require("@skylib/functions/dist/reflec
 const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
 exports.isPackage = is.factory(is.object.of, {}, { name: is.string });
 exports.base = fn.pipe(process.cwd(), s.path.canonicalize, s.path.addTrailingSlash);
+/**
+ * Adds node to child nodes map.
+ *
+ * @param node - Node.
+ * @param mutableChildNodesMap - Child nodes map.
+ */
+function buildChildNodesMap(node, mutableChildNodesMap) {
+    arrayMap.push(getNodeId(node.parent), node, mutableChildNodesMap);
+}
+exports.buildChildNodesMap = buildChildNodesMap;
 /**
  * Creates file matcher.
  *
@@ -114,6 +125,16 @@ function getPackage(path = "package.json") {
 }
 exports.getPackage = getPackage;
 /**
+ * Generates node ID.
+ *
+ * @param node - Node.
+ * @returns Node ID.
+ */
+function getNodeId(node) {
+    return node ? node.range.join("-") : ".";
+}
+exports.getNodeId = getNodeId;
+/**
  * Gets selectors as a string.
  *
  * @param options - Options.
@@ -150,6 +171,27 @@ function getTypeNames(types) {
     return types.map(type => getTypeName(type)).join(" > ");
 }
 exports.getTypeNames = getTypeNames;
+/**
+ * Checks if two nodes are adjacent.
+ *
+ * @param node1 - Node 1.
+ * @param node2 - Node 2.
+ * @param childNodesMap - Child nodes map.
+ * @returns _True_ if two nodes are adjacent, _false_ otherwise.
+ */
+function isAdjacentNodes(node1, node2, childNodesMap) {
+    const id1 = getNodeId(node1.parent);
+    const id2 = getNodeId(node2.parent);
+    if (id1 === id2) {
+        const siblings = childNodesMap.get(id1);
+        assert.not.empty(siblings);
+        const index1 = siblings.indexOf(node1);
+        const index2 = siblings.indexOf(node2);
+        return index1 !== -1 && index2 !== -1 && index2 - index1 === 1;
+    }
+    return false;
+}
+exports.isAdjacentNodes = isAdjacentNodes;
 /**
  * Strips base path.
  *

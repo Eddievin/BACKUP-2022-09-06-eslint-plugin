@@ -8,6 +8,7 @@ ESLint plugin / [Exports](modules.md)
 - Rules
   - [class-member-typedef](#class-member-typedef)
   - [consistent-empty-lines](#consistent-empty-lines)
+  - [consistent-group-empty-lines](#consistent-group-empty-lines)
   - [consistent-import](#consistent-import)
   - [disallow-by-regexp](#disallow-by-regexp)
   - [disallow-identifier](#disallow-identifier)
@@ -24,6 +25,7 @@ ESLint plugin / [Exports](modules.md)
   - [require-jsdoc](#require-jsdoc)
   - [sort-class-members](#sort-class-members)
   - [sort-keys](#sort-keys)
+  - [switch-case-empty-lines](#switch-case-empty-lines)
   - [template-literal-format](#template-literal-format)
 - [Shared options](#shared-options)
 
@@ -61,6 +63,36 @@ Requires consistent empty lines.
 
 ```ts
 "@skylib/consistent-empty-lines": [
+  "error",
+  {
+    rules: [
+      {
+        emptyLine: "always" | "any" | "never",
+        next: string,
+        prev: string
+      },
+      ...
+    ]
+  }
+]
+```
+
+#### Options
+
+| Name | Description |
+| :------ | :------ |
+| `emptyLine` | Controls empty line between prev and next nodes. |
+| `next` | AST selector. |
+| `prev` | AST selector. |
+
+### <a name="consistent-group-empty-lines"></a>consistent-group-empty-lines
+
+Requires consistent empty lines.
+
+#### eslintrc.js
+
+```ts
+"@skylib/consistent-group-empty-lines": [
   "error",
   {
     rules: [
@@ -420,12 +452,7 @@ Sorts object properties.
 #### eslintrc.js
 
 ```ts
-"@skylib/sort-keys": [
-  "error",
-  {
-    ignoreDefaultExport: boolean
-  }
-]
+"@skylib/sort-keys": "error"
 ```
 
 #### Configuration comment
@@ -434,11 +461,15 @@ Sorts object properties.
 // @skylib/sort-keys break
 ```
 
-#### Options
+### <a name="switch-case-empty-lines"></a>switch-case-empty-lines
 
-| Name | Description |
-| :------ | :------ |
-| `ignoreDefaultExport` | Ignores default export. |
+Requires consistent empty lines between switch cases.
+
+#### eslintrc.js
+
+```ts
+"@skylib/switch-case-empty-lines": "error"
+```
 
 ### <a name="template-literal-format"></a>template-literal-format
 
