@@ -1,11 +1,11 @@
 import getCurrentLine from "get-current-line";
 
-import consistentEmptyLines from "@/rules/consistent-empty-lines";
+import consistentGroupEmptyLines from "@/rules/consistent-group-empty-lines";
 import * as utils from "@/rules/utils";
 
 utils.testRule(
-  "consistent-empty-lines",
-  consistentEmptyLines,
+  "consistent-group-empty-lines",
+  consistentGroupEmptyLines,
   [
     {
       code: `

@@ -1,6 +1,7 @@
 module.exports = [
   "class-member-typedef",
   "consistent-empty-lines",
+  "consistent-group-empty-lines",
   "consistent-import",
   "disallow-by-regexp",
   "disallow-identifier",

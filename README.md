@@ -5,7 +5,7 @@
 - [Installation](#installation)
 - Rules
   - [class-member-typedef](#class-member-typedef)
-  - [consistent-empty-lines](#consistent-empty-lines)
+  - [consistent-group-empty-lines](#consistent-group-empty-lines)
   - [consistent-import](#consistent-import)
   - [disallow-by-regexp](#disallow-by-regexp)
   - [disallow-identifier](#disallow-identifier)
@@ -52,14 +52,14 @@ Requires type definition for class members without initializer.
 "@skylib/class-member-typedef": "error"
 ```
 
-### <a name="consistent-empty-lines"></a>consistent-empty-lines
+### <a name="consistent-group-empty-lines"></a>consistent-group-empty-lines
 
 Requires consistent empty lines.
 
 #### eslintrc.js
 
 ```ts
-"@skylib/consistent-empty-lines": [
+"@skylib/consistent-group-empty-lines": [
   "error",
   {
     rules: [
