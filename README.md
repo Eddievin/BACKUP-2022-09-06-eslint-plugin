@@ -22,6 +22,7 @@
   - [require-jsdoc](#require-jsdoc)
   - [sort-class-members](#sort-class-members)
   - [sort-keys](#sort-keys)
+  - [switch-case-empty-lines](#switch-case-empty-lines)
   - [template-literal-format](#template-literal-format)
 - [Shared options](#shared-options)
 
@@ -425,6 +426,16 @@ Sorts object properties.
 
 ```ts
 // @skylib/sort-keys break
+```
+
+### <a name="switch-case-empty-lines"></a>switch-case-empty-lines
+
+Requires consistent empty lines between switch cases.
+
+#### eslintrc.js
+
+```ts
+"@skylib/switch-case-empty-lines": "error"
 ```
 
 ### <a name="template-literal-format"></a>template-literal-format

@@ -16,6 +16,7 @@ import preferReadonly from "./rules/prefer-readonly";
 import requireJsdoc from "./rules/require-jsdoc";
 import sortClassMembers from "./rules/sort-class-members";
 import sortKeys from "./rules/sort-keys";
+import switchCaseEmptyLines from "./rules/switch-case-empty-lines";
 import templateLiteralFormat from "./rules/template-literal-format";
 
 export = {
@@ -38,6 +39,7 @@ export = {
     "require-jsdoc": requireJsdoc,
     "sort-class-members": sortClassMembers,
     "sort-keys": sortKeys,
+    "switch-case-empty-lines": switchCaseEmptyLines,
     "template-literal-format": templateLiteralFormat
   }
 };

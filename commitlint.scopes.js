@@ -18,6 +18,7 @@ module.exports = [
   "require-jsdoc",
   "sort-class-members",
   "sort-keys",
+  "switch-case-empty-lines",
   "template-literal-format",
   "typings",
   "utils.index",
