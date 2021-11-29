@@ -5,6 +5,7 @@
 - [Installation](#installation)
 - Rules
   - [class-member-typedef](#class-member-typedef)
+  - [consistent-empty-lines](#consistent-empty-lines)
   - [consistent-group-empty-lines](#consistent-group-empty-lines)
   - [consistent-import](#consistent-import)
   - [disallow-by-regexp](#disallow-by-regexp)
@@ -51,6 +52,36 @@ Requires type definition for class members without initializer.
 ```ts
 "@skylib/class-member-typedef": "error"
 ```
+
+### <a name="consistent-empty-lines"></a>consistent-empty-lines
+
+Requires consistent empty lines.
+
+#### eslintrc.js
+
+```ts
+"@skylib/consistent-empty-lines": [
+  "error",
+  {
+    rules: [
+      {
+        emptyLine: "always" | "any" | "never",
+        next: string,
+        prev: string
+      },
+      ...
+    ]
+  }
+]
+```
+
+#### Options
+
+| Name | Description |
+| :------ | :------ |
+| `emptyLine` | Controls empty line between prev and next nodes. |
+| `next` | AST selector. |
+| `prev` | AST selector. |
 
 ### <a name="consistent-group-empty-lines"></a>consistent-group-empty-lines
 

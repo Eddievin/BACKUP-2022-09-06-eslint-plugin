@@ -1,4 +1,5 @@
 import classMemberTypedef from "./rules/class-member-typedef";
+import consistentEmptyLines from "./rules/consistent-empty-lines";
 import consistentGroupEmptyLines from "./rules/consistent-group-empty-lines";
 import consistentImport from "./rules/consistent-import";
 import disallowByRegexp from "./rules/disallow-by-regexp";
@@ -22,6 +23,7 @@ import templateLiteralFormat from "./rules/template-literal-format";
 export = {
   rules: {
     "class-member-typedef": classMemberTypedef,
+    "consistent-empty-lines": consistentEmptyLines,
     "consistent-group-empty-lines": consistentGroupEmptyLines,
     "consistent-import": consistentImport,
     "disallow-by-regexp": disallowByRegexp,

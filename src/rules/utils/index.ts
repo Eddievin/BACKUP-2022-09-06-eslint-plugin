@@ -19,6 +19,7 @@ import type {
   ValidTestCase as BaseValidTestCase
 } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 
+import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as cast from "@skylib/functions/dist/converters";
 import * as fn from "@skylib/functions/dist/function";
@@ -165,6 +166,19 @@ export const base = fn.pipe(
 );
 
 /**
+ * Adds node to child nodes map.
+ *
+ * @param node - Node.
+ * @param mutableChildNodesMap - Child nodes map.
+ */
+export function buildChildNodesMap(
+  node: TSESTree.Node,
+  mutableChildNodesMap: Map<string, TSESTree.Node[]>
+): void {
+  arrayMap.push(getNodeId(node.parent), node, mutableChildNodesMap);
+}
+
+/**
  * Creates file matcher.
  *
  * @param patterns - Patterns.
@@ -307,6 +321,16 @@ export function getPackage(path = "package.json"): Package {
 }
 
 /**
+ * Generates node ID.
+ *
+ * @param node - Node.
+ * @returns Node ID.
+ */
+export function getNodeId(node: TSESTree.Node | undefined): string {
+  return node ? node.range.join("-") : ".";
+}
+
+/**
  * Gets selectors as a string.
  *
  * @param options - Options.
@@ -349,6 +373,38 @@ export function getTypeName(type: ts.Type): string {
  */
 export function getTypeNames(types: readonly ts.Type[]): string {
   return types.map(type => getTypeName(type)).join(" > ");
+}
+
+/**
+ * Checks if two nodes are adjacent.
+ *
+ * @param node1 - Node 1.
+ * @param node2 - Node 2.
+ * @param childNodesMap - Child nodes map.
+ * @returns _True_ if two nodes are adjacent, _false_ otherwise.
+ */
+export function isAdjacentNodes(
+  node1: TSESTree.Node,
+  node2: TSESTree.Node,
+  childNodesMap: ReadonlyMap<string, readonly TSESTree.Node[]>
+): boolean {
+  const id1 = getNodeId(node1.parent);
+
+  const id2 = getNodeId(node2.parent);
+
+  if (id1 === id2) {
+    const siblings = childNodesMap.get(id1);
+
+    assert.not.empty(siblings);
+
+    const index1 = siblings.indexOf(node1);
+
+    const index2 = siblings.indexOf(node2);
+
+    return index1 !== -1 && index2 !== -1 && index2 - index1 === 1;
+  }
+
+  return false;
 }
 
 /**
