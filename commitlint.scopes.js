@@ -9,6 +9,7 @@ module.exports = [
   "empty-lines-around-comment",
   "exhaustive-switch",
   "fixtures",
+  "index",
   "no-inferrable-types",
   "no-mutable-signature",
   "no-unnecessary-readonly",
