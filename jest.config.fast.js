@@ -1,1 +1,4 @@
-module.exports = { maxWorkers: 4, preset: "@skylib/config/src" };
+module.exports = {
+  ...require("./jest.config"),
+  maxWorkers: 4
+};
