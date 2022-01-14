@@ -1,5 +1,5 @@
 const types1 = Object.values(
-  require("@typescript-eslint/experimental-utils").AST_NODE_TYPES
+  require("@typescript-eslint/utils").AST_NODE_TYPES
 );
 
 const types2 = (() => {

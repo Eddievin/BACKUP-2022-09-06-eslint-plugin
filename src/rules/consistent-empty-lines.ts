@@ -1,5 +1,5 @@
-import type { TSESTree } from "@typescript-eslint/experimental-utils";
-import type { RuleListener } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 import * as a from "@skylib/functions/dist/array";
 import * as arrayMap from "@skylib/functions/dist/arrayMap";

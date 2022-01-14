@@ -1,7 +1,7 @@
 import * as _ from "lodash";
-import type { TSESTree } from "@typescript-eslint/experimental-utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/experimental-utils";
-import type { RuleFix } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 
 import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";

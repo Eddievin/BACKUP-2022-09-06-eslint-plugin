@@ -1,5 +1,5 @@
 import getCurrentLine from "get-current-line";
-import { AST_NODE_TYPES } from "@typescript-eslint/experimental-utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import preferReadonly from "@/rules/prefer-readonly";
 import * as utils from "@/rules/utils";

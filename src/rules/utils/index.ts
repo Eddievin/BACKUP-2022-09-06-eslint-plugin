@@ -4,11 +4,8 @@ import * as _ from "lodash";
 import minimatch from "minimatch";
 import * as tsutils from "tsutils";
 import type * as ts from "typescript";
-import type {
-  ParserServices,
-  TSESTree
-} from "@typescript-eslint/experimental-utils";
-import { ESLintUtils, TSESLint } from "@typescript-eslint/experimental-utils";
+import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
+import { ESLintUtils, TSESLint } from "@typescript-eslint/utils";
 import type {
   InvalidTestCase as BaseInvalidTestCase,
   ReportDescriptor,
@@ -17,7 +14,7 @@ import type {
   RuleModule,
   SourceCode,
   ValidTestCase as BaseValidTestCase
-} from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as assert from "@skylib/functions/dist/assertions";

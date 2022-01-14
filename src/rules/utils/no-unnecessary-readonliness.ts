@@ -1,5 +1,5 @@
-import { AST_NODE_TYPES } from "@typescript-eslint/experimental-utils";
-import type { RuleModule } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";

@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { AST_NODE_TYPES } from "@typescript-eslint/experimental-utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as is from "@skylib/functions/dist/guards";
 

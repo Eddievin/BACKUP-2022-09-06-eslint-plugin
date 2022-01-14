@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES } from "@typescript-eslint/experimental-utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as a from "@skylib/functions/dist/array";
 import * as fn from "@skylib/functions/dist/function";

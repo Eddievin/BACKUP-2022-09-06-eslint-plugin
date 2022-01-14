@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
-import type { TSESTree } from "@typescript-eslint/experimental-utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/experimental-utils";
+import type { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
