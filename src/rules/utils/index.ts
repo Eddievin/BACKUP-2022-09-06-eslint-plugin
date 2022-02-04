@@ -668,7 +668,7 @@ function shouldBeLinted(
       `/* skylib/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`
     );
 
-  const disallowByPath = fn.run((): boolean => {
+  const disallowByPath = fn.run<boolean>(() => {
     const matcher = createFileMatcher.disallowAllow(
       options.filesToSkip ?? [],
       options.filesToLint ?? [],
