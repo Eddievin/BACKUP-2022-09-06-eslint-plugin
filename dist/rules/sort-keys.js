@@ -1,7 +1,7 @@
 "use strict";
 const tslib_1 = require("tslib");
 const _ = (0, tslib_1.__importStar)(require("lodash"));
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
@@ -9,10 +9,10 @@ const utils = (0, tslib_1.__importStar)(require("./utils"));
 const rule = utils.createRule({
     create(context) {
         return {
-            [experimental_utils_1.AST_NODE_TYPES.ObjectExpression](node) {
+            [utils_1.AST_NODE_TYPES.ObjectExpression](node) {
                 const group = [];
                 for (const property of node.properties)
-                    if (property.type === experimental_utils_1.AST_NODE_TYPES.SpreadElement)
+                    if (property.type === utils_1.AST_NODE_TYPES.SpreadElement)
                         flush();
                     else {
                         if (context
@@ -20,14 +20,14 @@ const rule = utils.createRule({
                             .includes("@skylib/sort-keys break"))
                             flush();
                         switch (property.key.type) {
-                            case experimental_utils_1.AST_NODE_TYPES.Identifier:
+                            case utils_1.AST_NODE_TYPES.Identifier:
                                 group.push({
                                     index: group.length,
                                     key: property.key.name,
                                     node: property
                                 });
                                 break;
-                            case experimental_utils_1.AST_NODE_TYPES.Literal:
+                            case utils_1.AST_NODE_TYPES.Literal:
                                 group.push({
                                     index: group.length,
                                     key: property.key.value,

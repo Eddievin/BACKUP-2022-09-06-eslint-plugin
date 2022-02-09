@@ -1,7 +1,7 @@
 "use strict";
 const tslib_1 = require("tslib");
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const core_1 = require("@skylib/functions/dist/types/core");
 const utils = (0, tslib_1.__importStar)(require("./utils"));
@@ -31,15 +31,15 @@ const rule = utils.createRule({
         return {
             [selectors](node) {
                 switch (node.type) {
-                    case experimental_utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
+                    case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
                         lintInterface(node, context);
                         break;
-                    case experimental_utils_1.AST_NODE_TYPES.MethodDefinition:
-                    case experimental_utils_1.AST_NODE_TYPES.TSMethodSignature:
+                    case utils_1.AST_NODE_TYPES.MethodDefinition:
+                    case utils_1.AST_NODE_TYPES.TSMethodSignature:
                         lintMethod(node, context);
                         break;
-                    case experimental_utils_1.AST_NODE_TYPES.PropertyDefinition:
-                    case experimental_utils_1.AST_NODE_TYPES.TSPropertySignature:
+                    case utils_1.AST_NODE_TYPES.PropertyDefinition:
+                    case utils_1.AST_NODE_TYPES.TSPropertySignature:
                         lintProperty(node, context);
                         break;
                     default:
@@ -63,16 +63,16 @@ const rule = utils.createRule({
     }
 });
 const defaultSelectors = [
-    experimental_utils_1.AST_NODE_TYPES.ClassDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.FunctionDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.MethodDefinition,
-    experimental_utils_1.AST_NODE_TYPES.PropertyDefinition,
-    experimental_utils_1.AST_NODE_TYPES.TSCallSignatureDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.TSConstructSignatureDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.TSDeclareFunction,
-    experimental_utils_1.AST_NODE_TYPES.TSInterfaceDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.TSMethodSignature,
-    experimental_utils_1.AST_NODE_TYPES.TSPropertySignature
+    utils_1.AST_NODE_TYPES.ClassDeclaration,
+    utils_1.AST_NODE_TYPES.FunctionDeclaration,
+    utils_1.AST_NODE_TYPES.MethodDefinition,
+    utils_1.AST_NODE_TYPES.PropertyDefinition,
+    utils_1.AST_NODE_TYPES.TSCallSignatureDeclaration,
+    utils_1.AST_NODE_TYPES.TSConstructSignatureDeclaration,
+    utils_1.AST_NODE_TYPES.TSDeclareFunction,
+    utils_1.AST_NODE_TYPES.TSInterfaceDeclaration,
+    utils_1.AST_NODE_TYPES.TSMethodSignature,
+    utils_1.AST_NODE_TYPES.TSPropertySignature
 ];
 /**
  * Lints interface.
@@ -117,7 +117,7 @@ function lintProperty(node, context) {
     const typeAnnotation = node.typeAnnotation;
     if (typeAnnotation) {
         const type = typeAnnotation.typeAnnotation.type;
-        if (type === experimental_utils_1.AST_NODE_TYPES.TSFunctionType
+        if (type === utils_1.AST_NODE_TYPES.TSFunctionType
             ? propertyOptions.includes("function")
             : propertyOptions.includes("nonFunction"))
             lintNodeBySymbol(node.key, context);

@@ -1,4 +1,4 @@
-import type { RuleModule } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import type { Readonliness } from "./readonliness";
 /**

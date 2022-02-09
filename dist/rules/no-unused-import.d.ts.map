@@ -1,1 +1,1 @@
-{"version":3,"file":"no-unused-import.d.ts","sourceRoot":"","sources":["../../src/rules/no-unused-import.ts"],"names":[],"mappings":"AAQA,QAAA,MAAM,IAAI,sMAoFR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"no-unused-import.d.ts","sourceRoot":"","sources":["../../src/rules/no-unused-import.ts"],"names":[],"mappings":"AAQA,QAAA,MAAM,IAAI,4KAoFR,CAAC;AAEH,SAAS,IAAI,CAAC"}

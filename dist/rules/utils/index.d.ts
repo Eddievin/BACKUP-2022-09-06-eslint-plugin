@@ -1,8 +1,8 @@
 import type * as estree from "estree";
 import minimatch from "minimatch";
 import type * as ts from "typescript";
-import type { ParserServices, TSESTree } from "@typescript-eslint/experimental-utils";
-import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
+import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
 import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";

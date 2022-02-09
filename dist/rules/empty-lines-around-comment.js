@@ -1,6 +1,6 @@
 "use strict";
 const tslib_1 = require("tslib");
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
@@ -78,9 +78,9 @@ const rule = utils.createRule({
     }
 });
 const blockLikeTypes = new Set([
-    experimental_utils_1.AST_NODE_TYPES.BlockStatement,
-    experimental_utils_1.AST_NODE_TYPES.ClassBody,
-    experimental_utils_1.AST_NODE_TYPES.Program
+    utils_1.AST_NODE_TYPES.BlockStatement,
+    utils_1.AST_NODE_TYPES.ClassBody,
+    utils_1.AST_NODE_TYPES.Program
 ]);
 /**
  * Explodes comment.
@@ -95,7 +95,7 @@ function explodeComment(comment, program, programNodes, context) {
     const range = comment.range;
     const programRange = context.getRangeWithLeadingTrivia(program);
     const node = getNodeContainingRange(range, programNodes);
-    const nodeType = node ? node.type : experimental_utils_1.AST_NODE_TYPES.Program;
+    const nodeType = node ? node.type : utils_1.AST_NODE_TYPES.Program;
     const text = context.getText(comment);
     const prefix = context.code.slice(programRange[0], range[0]);
     const prefixSpaces = s.trailingSpaces(prefix);

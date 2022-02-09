@@ -1,7 +1,7 @@
 "use strict";
 const tslib_1 = require("tslib");
 const _ = (0, tslib_1.__importStar)(require("lodash"));
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
@@ -11,7 +11,7 @@ const rule = utils.createRule({
     create(context) {
         const sortingOrders = new Map(context.options.sortingOrder.map((name, index) => [name, index]));
         return {
-            [experimental_utils_1.AST_NODE_TYPES.ClassBody](node) {
+            [utils_1.AST_NODE_TYPES.ClassBody](node) {
                 const members = node.body.map((member, index) => {
                     const x = getMemberAccessibility(member);
                     const y = getMemberDynamicStatic(member);
@@ -79,13 +79,13 @@ const rule = utils.createRule({
  */
 function getMemberAccessibility(node) {
     switch (node.type) {
-        case experimental_utils_1.AST_NODE_TYPES.MethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.PropertyDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSIndexSignature:
+        case utils_1.AST_NODE_TYPES.MethodDefinition:
+        case utils_1.AST_NODE_TYPES.PropertyDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
+        case utils_1.AST_NODE_TYPES.TSIndexSignature:
             return node.accessibility ? node.accessibility.valueOf() : "public";
-        case experimental_utils_1.AST_NODE_TYPES.StaticBlock:
+        case utils_1.AST_NODE_TYPES.StaticBlock:
             return "public";
     }
 }
@@ -97,8 +97,8 @@ function getMemberAccessibility(node) {
  */
 function getMemberAccessorType(node) {
     switch (node.type) {
-        case experimental_utils_1.AST_NODE_TYPES.MethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
+        case utils_1.AST_NODE_TYPES.MethodDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
             switch (node.kind) {
                 case "get":
                 case "set":
@@ -119,13 +119,13 @@ function getMemberAccessorType(node) {
 function getMemberDynamicStatic(node) {
     var _a;
     switch (node.type) {
-        case experimental_utils_1.AST_NODE_TYPES.MethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.PropertyDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSIndexSignature:
+        case utils_1.AST_NODE_TYPES.MethodDefinition:
+        case utils_1.AST_NODE_TYPES.PropertyDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
+        case utils_1.AST_NODE_TYPES.TSIndexSignature:
             return ((_a = node.static) !== null && _a !== void 0 ? _a : false) ? "static" : "dynamic";
-        case experimental_utils_1.AST_NODE_TYPES.StaticBlock:
+        case utils_1.AST_NODE_TYPES.StaticBlock:
             return "static";
     }
 }
@@ -138,20 +138,20 @@ function getMemberDynamicStatic(node) {
  */
 function getMemberName(node, context) {
     switch (node.type) {
-        case experimental_utils_1.AST_NODE_TYPES.MethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.PropertyDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
+        case utils_1.AST_NODE_TYPES.MethodDefinition:
+        case utils_1.AST_NODE_TYPES.PropertyDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
             switch (node.key.type) {
-                case experimental_utils_1.AST_NODE_TYPES.Identifier:
+                case utils_1.AST_NODE_TYPES.Identifier:
                     return node.key.name;
-                case experimental_utils_1.AST_NODE_TYPES.Literal:
+                case utils_1.AST_NODE_TYPES.Literal:
                     return cast.string(node.key.value);
                 default:
                     return context.getText(node.key);
             }
-        case experimental_utils_1.AST_NODE_TYPES.StaticBlock:
-        case experimental_utils_1.AST_NODE_TYPES.TSIndexSignature:
+        case utils_1.AST_NODE_TYPES.StaticBlock:
+        case utils_1.AST_NODE_TYPES.TSIndexSignature:
             return "";
     }
 }
@@ -163,8 +163,8 @@ function getMemberName(node, context) {
  */
 function getMemberTypes(node) {
     switch (node.type) {
-        case experimental_utils_1.AST_NODE_TYPES.MethodDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
+        case utils_1.AST_NODE_TYPES.MethodDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
             switch (node.kind) {
                 case "get":
                 case "set":
@@ -172,12 +172,12 @@ function getMemberTypes(node) {
                 default:
                     return [node.kind];
             }
-        case experimental_utils_1.AST_NODE_TYPES.PropertyDefinition:
-        case experimental_utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
+        case utils_1.AST_NODE_TYPES.PropertyDefinition:
+        case utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
             return ["field"];
-        case experimental_utils_1.AST_NODE_TYPES.TSIndexSignature:
+        case utils_1.AST_NODE_TYPES.TSIndexSignature:
             return ["signature"];
-        case experimental_utils_1.AST_NODE_TYPES.StaticBlock:
+        case utils_1.AST_NODE_TYPES.StaticBlock:
             return ["block"];
     }
 }

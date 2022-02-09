@@ -6,7 +6,7 @@ const fs_1 = (0, tslib_1.__importDefault)(require("fs"));
 const _ = (0, tslib_1.__importStar)(require("lodash"));
 const minimatch_1 = (0, tslib_1.__importDefault)(require("minimatch"));
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const arrayMap = (0, tslib_1.__importStar)(require("@skylib/functions/dist/arrayMap"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
@@ -81,7 +81,7 @@ exports.createMatcher = createMatcher;
  */
 function createRule(options) {
     const { create, defaultOptions, fixable, messages } = options;
-    const ruleCreator = experimental_utils_1.ESLintUtils.RuleCreator((ruleId) => `https://ilyub.github.io/eslint-plugin/#${ruleId}`);
+    const ruleCreator = utils_1.ESLintUtils.RuleCreator((ruleId) => `https://ilyub.github.io/eslint-plugin/#${ruleId}`);
     return ruleCreator({
         create(context, rawOptions) {
             const betterContext = createBetterContext(context, rawOptions, options);
@@ -213,7 +213,7 @@ exports.stripBase = stripBase;
  * @param valid - Valid tests.
  */
 function testRule(name, rule, invalid, valid = []) {
-    const tester = new experimental_utils_1.TSESLint.RuleTester({
+    const tester = new utils_1.TSESLint.RuleTester({
         parser: require.resolve("@typescript-eslint/parser"),
         parserOptions: {
             ecmaVersion: 2017,
@@ -291,7 +291,7 @@ function createBetterContext(context, ruleOptionsArray, options) {
     const path = context.getFilename();
     const source = context.getSourceCode();
     const code = source.getText();
-    const parser = experimental_utils_1.ESLintUtils.getParserServices(context);
+    const parser = utils_1.ESLintUtils.getParserServices(context);
     assert.toBeTrue(tsutils.isStrictCompilerOptionEnabled(parser.program.getCompilerOptions(), "strictNullChecks"), 'Expecting "strictNullChecks" compiler option to be enabled');
     return {
         checker: parser.program.getTypeChecker(),

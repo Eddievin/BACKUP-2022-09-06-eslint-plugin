@@ -1,6 +1,6 @@
 "use strict";
 const tslib_1 = require("tslib");
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
@@ -9,7 +9,7 @@ const rule = utils.createRule({
         const identifiers = new Set();
         const importDeclarations = [];
         return {
-            [experimental_utils_1.AST_NODE_TYPES.ImportDeclaration](node) {
+            [utils_1.AST_NODE_TYPES.ImportDeclaration](node) {
                 importDeclarations.push(node);
             },
             ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)"(node) {
@@ -21,11 +21,11 @@ const rule = utils.createRule({
                         .filter(used)
                         .map(specifier => {
                         switch (specifier.type) {
-                            case experimental_utils_1.AST_NODE_TYPES.ImportDefaultSpecifier:
+                            case utils_1.AST_NODE_TYPES.ImportDefaultSpecifier:
                                 return specifier.local.name;
-                            case experimental_utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier:
+                            case utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier:
                                 return `* as ${specifier.local.name}`;
-                            case experimental_utils_1.AST_NODE_TYPES.ImportSpecifier:
+                            case utils_1.AST_NODE_TYPES.ImportSpecifier:
                                 return specifier.imported.name === specifier.local.name
                                     ? `{ ${specifier.imported.name} }`
                                     : `{ ${specifier.imported.name} as ${specifier.local.name} }`;

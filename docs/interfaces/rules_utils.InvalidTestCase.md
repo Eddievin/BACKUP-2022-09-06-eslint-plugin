@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-- `BaseInvalidTestCase`<`M`, readonly [`object`]\>
+- `InvalidTestCase`<`M`, readonly [`object`]\>
 
   ↳ **`InvalidTestCase`**
 

@@ -1,6 +1,6 @@
 "use strict";
 const tslib_1 = require("tslib");
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const regexp = (0, tslib_1.__importStar)(require("@skylib/functions/dist/regexp"));
@@ -19,10 +19,10 @@ const rule = utils.createRule({
     create(context) {
         const strings = [];
         return {
-            [experimental_utils_1.AST_NODE_TYPES.Literal](node) {
+            [utils_1.AST_NODE_TYPES.Literal](node) {
                 strings.push(node.range);
             },
-            [experimental_utils_1.AST_NODE_TYPES.TemplateLiteral](node) {
+            [utils_1.AST_NODE_TYPES.TemplateLiteral](node) {
                 strings.push(node.range);
             },
             "Program:exit"(program) {

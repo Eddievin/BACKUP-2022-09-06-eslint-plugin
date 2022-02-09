@@ -2,7 +2,7 @@
 const tslib_1 = require("tslib");
 const minimatch_1 = (0, tslib_1.__importDefault)(require("minimatch"));
 const path_1 = (0, tslib_1.__importDefault)(require("path"));
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
@@ -21,7 +21,7 @@ const rule = utils.createRule({
         const identifiers = new Set();
         const importDeclarations = [];
         return {
-            [experimental_utils_1.AST_NODE_TYPES.ImportDeclaration](node) {
+            [utils_1.AST_NODE_TYPES.ImportDeclaration](node) {
                 importDeclarations.push(node);
             },
             ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)"(node) {
@@ -94,8 +94,8 @@ function autoImport(program, context) {
  */
 function checkImport(importDeclarations, identifiers, context) {
     for (const node of importDeclarations) {
-        const defaultSpecifier = node.specifiers.find(specifier => specifier.type === experimental_utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
-        const wildcardSpecifier = node.specifiers.find(specifier => specifier.type === experimental_utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
+        const defaultSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
+        const wildcardSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
         const source = normalizeSource(node.source.value, context);
         assert.string(source);
         const subOptions = context.subOptionsArray.find(candidate => (0, minimatch_1.default)(source, candidate.sourcePattern, { dot: true }));

@@ -1,6 +1,6 @@
 "use strict";
 const tslib_1 = require("tslib");
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const readonliness_1 = require("./utils/readonliness");
@@ -31,15 +31,15 @@ const rule = utils.createRule({
         const ignoreAnnotations = [];
         const restAnnotations = [];
         return {
-            [experimental_utils_1.AST_NODE_TYPES.Identifier](node) {
+            [utils_1.AST_NODE_TYPES.Identifier](node) {
                 if (node.typeAnnotation && ignoreIdentifiersMatcher(node.name))
                     ignoreAnnotations.push(node.typeAnnotation);
             },
-            [experimental_utils_1.AST_NODE_TYPES.RestElement](node) {
+            [utils_1.AST_NODE_TYPES.RestElement](node) {
                 if (node.typeAnnotation)
                     restAnnotations.push(node.typeAnnotation);
             },
-            [experimental_utils_1.AST_NODE_TYPES.TSTypeAnnotation](node) {
+            [utils_1.AST_NODE_TYPES.TSTypeAnnotation](node) {
                 annotations.push(node);
             },
             "Program:exit"() {

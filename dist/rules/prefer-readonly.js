@@ -1,7 +1,7 @@
 "use strict";
 const tslib_1 = require("tslib");
 const ts = (0, tslib_1.__importStar)(require("typescript"));
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const utils = (0, tslib_1.__importStar)(require("./utils"));
 const readonliness_1 = require("./utils/readonliness");
@@ -41,22 +41,22 @@ const rule = utils.createRule({
     }
 });
 const defaultSelectors = [
-    experimental_utils_1.AST_NODE_TYPES.ArrowFunctionExpression,
-    experimental_utils_1.AST_NODE_TYPES.FunctionDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.FunctionExpression,
-    experimental_utils_1.AST_NODE_TYPES.TSCallSignatureDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.TSConstructSignatureDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.TSConstructorType,
-    experimental_utils_1.AST_NODE_TYPES.TSDeclareFunction,
-    experimental_utils_1.AST_NODE_TYPES.TSEmptyBodyFunctionExpression,
-    experimental_utils_1.AST_NODE_TYPES.TSFunctionType,
-    experimental_utils_1.AST_NODE_TYPES.TSInterfaceDeclaration,
-    experimental_utils_1.AST_NODE_TYPES.TSMethodSignature,
-    experimental_utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration
+    utils_1.AST_NODE_TYPES.ArrowFunctionExpression,
+    utils_1.AST_NODE_TYPES.FunctionDeclaration,
+    utils_1.AST_NODE_TYPES.FunctionExpression,
+    utils_1.AST_NODE_TYPES.TSCallSignatureDeclaration,
+    utils_1.AST_NODE_TYPES.TSConstructSignatureDeclaration,
+    utils_1.AST_NODE_TYPES.TSConstructorType,
+    utils_1.AST_NODE_TYPES.TSDeclareFunction,
+    utils_1.AST_NODE_TYPES.TSEmptyBodyFunctionExpression,
+    utils_1.AST_NODE_TYPES.TSFunctionType,
+    utils_1.AST_NODE_TYPES.TSInterfaceDeclaration,
+    utils_1.AST_NODE_TYPES.TSMethodSignature,
+    utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration
 ];
 const restTypes = new Set([
-    experimental_utils_1.AST_NODE_TYPES.ArrayPattern,
-    experimental_utils_1.AST_NODE_TYPES.RestElement
+    utils_1.AST_NODE_TYPES.ArrayPattern,
+    utils_1.AST_NODE_TYPES.RestElement
 ]);
 /**
  * Lints node.

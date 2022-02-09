@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const _ = (0, tslib_1.__importStar)(require("lodash"));
 const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
 const ts = (0, tslib_1.__importStar)(require("typescript"));
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const core_1 = require("@skylib/functions/dist/types/core");
@@ -37,7 +37,7 @@ exports.getTypeParts = getTypeParts;
  * @returns Type parts.
  */
 function getTypePartsWithTypeofFix(node, context) {
-    return node.type === experimental_utils_1.AST_NODE_TYPES.UnaryExpression &&
+    return node.type === utils_1.AST_NODE_TYPES.UnaryExpression &&
         node.operator === "typeof"
         ? recurs(context.checker.getTypeAtLocation(context.toTsNode(node.argument)))
         : getTypeParts(node, context);

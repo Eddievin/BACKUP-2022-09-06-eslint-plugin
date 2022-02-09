@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import type { TSESTree } from "@typescript-eslint/experimental-utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import type * as utils from ".";
 export declare type TypePart = number | string | ts.Type | undefined;
 /**

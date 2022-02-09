@@ -1,6 +1,6 @@
 "use strict";
 const tslib_1 = require("tslib");
-const experimental_utils_1 = require("@typescript-eslint/experimental-utils");
+const utils_1 = require("@typescript-eslint/utils");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
@@ -8,7 +8,7 @@ const utils = (0, tslib_1.__importStar)(require("./utils"));
 const rule = utils.createRule({
     create(context) {
         return {
-            [experimental_utils_1.AST_NODE_TYPES.SwitchStatement](node) {
+            [utils_1.AST_NODE_TYPES.SwitchStatement](node) {
                 for (const [case1, case2] of a.chain(node.cases)) {
                     const spread = case1.consequent.length > 0;
                     const count = spread ? 2 : 1;

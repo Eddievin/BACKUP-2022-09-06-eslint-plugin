@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- `BaseValidTestCase`<readonly [`object`]\>
+- `ValidTestCase`<readonly [`object`]\>
 
   ↳ **`ValidTestCase`**
 
