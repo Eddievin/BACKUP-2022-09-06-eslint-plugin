@@ -247,6 +247,24 @@ utils.testRule(
         }
       ],
       name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        // eslint-disable-next-line prefer-readonly
+        function f(g: (x: string[]) => void) {}
+        f((x) => {});
+      `,
+      errors: [
+        {
+          data: {
+            definition: "string[]",
+            name: "Array"
+          },
+          line: 3,
+          messageId: "shouldBeReadonly"
+        }
+      ],
+      name: `Test at line ${getCurrentLine().line}`
     }
   ],
   [
@@ -288,6 +306,15 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ ignoreInterfaces: true }]
+    },
+    {
+      code: `
+        // eslint-disable-next-line prefer-readonly
+        function f(g: (x: string[]) => void) {}
+        f((x) => {});
+      `,
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ ignoreInferredTypes: true }]
     }
   ]
 );

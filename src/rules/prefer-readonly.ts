@@ -11,6 +11,7 @@ interface RuleOptions {
   readonly excludeSelectors: readonly string[];
   readonly ignoreClasses: boolean;
   readonly ignoreIdentifiers: readonly string[];
+  readonly ignoreInferredTypes: boolean;
   readonly ignoreInterfaces: boolean;
   readonly ignoreTypes: readonly string[];
   readonly includeSelectors: readonly string[];
@@ -23,6 +24,7 @@ const isRuleOptions: is.Guard<RuleOptions> = is.factory(
     excludeSelectors: is.strings,
     ignoreClasses: is.boolean,
     ignoreIdentifiers: is.strings,
+    ignoreInferredTypes: is.boolean,
     ignoreInterfaces: is.boolean,
     ignoreTypes: is.strings,
     includeSelectors: is.strings,
@@ -33,6 +35,8 @@ const isRuleOptions: is.Guard<RuleOptions> = is.factory(
 
 const rule = utils.createRule({
   create(context) {
+    const { ignoreInferredTypes } = context.options;
+
     const selectors = utils.getSelectors(context.options, defaultSelectors);
 
     return {
@@ -41,7 +45,10 @@ const rule = utils.createRule({
 
         if (ts.isFunctionLike(tsNode))
           for (const param of tsNode.parameters)
-            lintNode(context.toEsNode(param), param.name.getText(), context);
+            if (ignoreInferredTypes && is.empty(param.type)) {
+              // Ignore infered types
+            } else
+              lintNode(context.toEsNode(param), param.name.getText(), context);
         else lintNode(node, tsNode.getText(), context);
       }
     };
@@ -50,6 +57,7 @@ const rule = utils.createRule({
     excludeSelectors: [],
     ignoreClasses: false,
     ignoreIdentifiers: [],
+    ignoreInferredTypes: false,
     ignoreInterfaces: false,
     ignoreTypes: [],
     includeSelectors: [],

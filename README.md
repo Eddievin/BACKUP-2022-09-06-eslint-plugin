@@ -280,6 +280,7 @@ Forbids mutable signatures.
   {
     ignoreClasses?: boolean,
     ignoreIdentifiers?: string[],
+    ignoreInferredTypes?: boolean,
     ignoreInterfaces?: boolean,
     ignoreNumberSignature?: boolean,
     ignoreStringSignature?: boolean,
@@ -294,6 +295,7 @@ Forbids mutable signatures.
 | :------ | :------ |
 | `ignoreClasses` | Ignores classes. |
 | `ignoreIdentifiers` | Ignore identifiers (regular expressions). |
+| `ignoreInferredTypes` | Ignore ignore inferred types. |
 | `ignoreInterfaces` | Ignore interfaces. |
 | `ignoreNumberSignature` | Ignore number signature. |
 | `ignoreStringSignature` | Ignore string signature. |
