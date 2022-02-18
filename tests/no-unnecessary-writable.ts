@@ -24,16 +24,16 @@ utils.testRule("no-unnecessary-writable", noUnnecessaryWritable, [
   {
     code: `
       type T1<K extends string, T> = Writable<Record<K, T>>;
-      type T2<K extends string, T> = Writable<Readonly<Record<K, T>>>;
-      type T3<K extends string, T> = Writable<Readonly2<Record<K, T>>>;
-      type T4<K extends string, T> = Writable<Writable2<Record<K, T>>>;
+      type T2<K extends string, T> = Writable<Writable<Record<K, T>>>;
+      type T3<K extends string, T> = Writable<Writable2<Record<K, T>>>;
+      type T4<K extends string, T> = Writable<Readonly2<Record<K, T>>>;
 
       export type Readonly2<T> = { +readonly [K in keyof T]: T[K] };
       export type Writable2<T> = { -readonly [K in keyof T]: T[K] };
     `,
     errors: [
-      { line: 1, messageId: "unnecessaryWritable" },
-      { line: 4, messageId: "unnecessaryWritable" }
+      { line: 2, messageId: "unnecessaryWritable" },
+      { line: 3, messageId: "unnecessaryWritable" }
     ],
     name: `Test at line ${getCurrentLine().line}`
   },

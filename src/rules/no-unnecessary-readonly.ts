@@ -14,7 +14,7 @@ const isTypeToCheck = is.factory(is.enumeration, TypeToCheckVO);
 
 export = createRule(
   isTypeToCheck,
-  "allReadonly",
+  "allDefinitelyReadonly",
   "unnecessaryReadonly",
   'Unnecessary "Readonly" or "DeepReadonly"'
 );

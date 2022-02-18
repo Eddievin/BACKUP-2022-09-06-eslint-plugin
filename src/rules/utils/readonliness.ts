@@ -21,8 +21,10 @@ export interface Options<M extends string, O extends object, S extends object> {
 }
 
 export type Readonliness =
-  | "allReadonly"
-  | "allWritable"
+  | "allDefinitelyReadonly"
+  | "allDefinitelyWritable"
+  | "allMaybeReadonly"
+  | "allMaybeWritable"
   | "numberSignatureReadonly"
   | "stringSignatureReadonly";
 
@@ -94,7 +96,7 @@ export class Checker<M extends string, O extends object, S extends object> {
       const nodes = declarations.filter(tsutils.isMappedTypeNode);
 
       if (nodes.length) {
-        const readonly = nodes.every(node => readonlyMappedTypeNode(node));
+        const readonly = nodes.every(node => this.readonlyMappedTypeNode(node));
 
         if (this.invalidReadonliness(readonly, "property"))
           return { failed: true, types: [type] };
@@ -263,10 +265,12 @@ export class Checker<M extends string, O extends object, S extends object> {
     sourceType: SourceType
   ): boolean {
     switch (this.readonliness) {
-      case "allReadonly":
+      case "allDefinitelyReadonly":
+      case "allMaybeReadonly":
         return !typeIsReadonly;
 
-      case "allWritable":
+      case "allDefinitelyWritable":
+      case "allMaybeWritable":
         return typeIsReadonly;
 
       case "numberSignatureReadonly":
@@ -274,6 +278,36 @@ export class Checker<M extends string, O extends object, S extends object> {
 
       case "stringSignatureReadonly":
         return sourceType === "stringSignature" && !typeIsReadonly;
+    }
+  }
+
+  /**
+   * Checks if mapped type node is readonly.
+   *
+   * @param node - Node.
+   * @returns _True_ if mapped type node is readonly, _false_ otherwise.
+   */
+  protected readonlyMappedTypeNode(node: ts.MappedTypeNode): boolean {
+    if (is.not.empty(node.readonlyToken))
+      switch (node.readonlyToken.kind) {
+        case ts.SyntaxKind.MinusToken:
+          return false;
+
+        case ts.SyntaxKind.PlusToken:
+        case ts.SyntaxKind.ReadonlyKeyword:
+          return true;
+      }
+
+    switch (this.readonliness) {
+      case "allDefinitelyWritable":
+      case "allMaybeReadonly":
+      case "numberSignatureReadonly":
+      case "stringSignatureReadonly":
+        return true;
+
+      case "allDefinitelyReadonly":
+      case "allMaybeWritable":
+        return false;
     }
   }
 
@@ -345,25 +379,7 @@ const primitiveTypes: ReadonlySet<ts.TypeFlags> = new Set([
   ts.TypeFlags.Void
 ]);
 
-const readonlySyntaxKinds: ReadonlySet<ts.SyntaxKind> = new Set([
-  ts.SyntaxKind.PlusToken,
-  ts.SyntaxKind.ReadonlyKeyword
-]);
-
 const signatures: readonly Signature[] = [
   { indexKind: ts.IndexKind.Number, sourceType: "numberSignature" },
   { indexKind: ts.IndexKind.String, sourceType: "stringSignature" }
 ];
-
-/**
- * Checks if mapped type node is readonly.
- *
- * @param node - Node.
- * @returns _True_ if mapped type node is readonly, _false_ otherwise.
- */
-function readonlyMappedTypeNode(node: ts.MappedTypeNode): boolean {
-  return (
-    is.not.empty(node.readonlyToken) &&
-    readonlySyntaxKinds.has(node.readonlyToken.kind)
-  );
-}

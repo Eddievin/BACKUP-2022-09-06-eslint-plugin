@@ -14,7 +14,7 @@ const isTypeToCheck = is.factory(is.enumeration, TypeToCheckVO);
 
 export = createRule(
   isTypeToCheck,
-  "allWritable",
+  "allDefinitelyWritable",
   "unnecessaryWritable",
   'Unnecessary "Writable" or "DeepWritable"'
 );

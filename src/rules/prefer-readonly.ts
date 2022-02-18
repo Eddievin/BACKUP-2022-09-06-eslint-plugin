@@ -119,7 +119,7 @@ function lintNode(
       ignoreClasses,
       ignoreTypeParameters: true,
       ignoreTypes,
-      readonliness: "allReadonly"
+      readonliness: "allMaybeReadonly"
     });
 
     const result = checker.checkType(type, restTypes.has(node.type));

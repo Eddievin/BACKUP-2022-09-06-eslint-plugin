@@ -150,23 +150,6 @@ utils.testRule(
     },
     {
       code: `
-        type T1<K extends string, T> = Record<K, T>;
-        type T2<K extends string, T> = Readonly<Record<K, T>>;
-      `,
-      errors: [
-        {
-          data: {
-            definition: "T1<K, T>",
-            name: "__type"
-          },
-          line: 1,
-          messageId: "shouldBeReadonly"
-        }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: `
         interface I { value: number; }
         interface J { value: number; }
       `,
@@ -270,6 +253,17 @@ utils.testRule(
   [
     {
       code: `
+        interface I {
+          readonly x: string;
+          readonly y: string;
+        }
+
+        export type J = Pick<I, "x">;
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
         function f(x: C) {}
 
         class C {
@@ -280,9 +274,18 @@ utils.testRule(
     },
     {
       code: `
-        export interface I<T extends object> {
+        interface I<T extends object> {
           readonly value: T;
         }
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        // eslint-disable-next-line prefer-readonly
+        interface I { x: string; }
+        interface J {}
+        interface K extends Readonly<I>, J {}
       `,
       name: `Test at line ${getCurrentLine().line}`
     }
