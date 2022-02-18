@@ -24,7 +24,10 @@ import * as is from "@skylib/functions/dist/guards";
 import * as json from "@skylib/functions/dist/json";
 import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
-import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
+import type {
+  objects,
+  ReadonlyRecord
+} from "@skylib/functions/dist/types/core";
 
 export interface CreateRuleOptions<
   M extends string,
@@ -255,7 +258,7 @@ export function createRule<
   M extends string,
   O extends object,
   S extends object
->(options: CreateRuleOptions<M, O, S>): RuleModule<M, readonly unknown[]> {
+>(options: CreateRuleOptions<M, O, S>): RuleModule<M, objects> {
   const { create, defaultOptions, fixable, messages } = options;
 
   const ruleCreator = ESLintUtils.RuleCreator(
@@ -263,7 +266,7 @@ export function createRule<
   );
 
   return ruleCreator({
-    create(context: RuleContext<M, [unknown]>, rawOptions) {
+    create(context: RuleContext<M, [object]>, rawOptions) {
       const betterContext = createBetterContext(context, rawOptions, options);
 
       return shouldBeLinted(
@@ -430,7 +433,7 @@ export function stripBase(path: string, replacement = ""): string {
  */
 export function testRule<M extends string>(
   name: string,
-  rule: RuleModule<M, readonly [object]>,
+  rule: RuleModule<M, objects>,
   invalid: ReadonlyArray<InvalidTestCase<M>>,
   valid: readonly ValidTestCase[] = []
 ): void {
