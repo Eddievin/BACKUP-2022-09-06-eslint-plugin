@@ -112,6 +112,24 @@ utils.testRule(
         function f<T extends object>(x: T);
       `,
       name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        interface I {
+          [K: number]: unknown;
+        }
+      `,
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ ignoreNumberSignature: true }]
+    },
+    {
+      code: `
+        interface I {
+          [K: string]: unknown;
+        }
+      `,
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ ignoreStringSignature: true }]
     }
   ]
 );
