@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"triviallyInferrableType"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"triviallyInferrableType"``, `objects`, `RuleListener`\>

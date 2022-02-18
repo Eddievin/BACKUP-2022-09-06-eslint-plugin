@@ -8,5 +8,5 @@ const TypeToCheckVO = (0, core_1.createValidationObject)({
     Writable: "Writable"
 });
 const isTypeToCheck = is.factory(is.enumeration, TypeToCheckVO);
-module.exports = (0, no_unnecessary_readonliness_1.createRule)(isTypeToCheck, "allWritable", "unnecessaryWritable", 'Unnecessary "Writable" or "DeepWritable"');
+module.exports = (0, no_unnecessary_readonliness_1.createRule)(isTypeToCheck, "allDefinitelyWritable", "unnecessaryWritable", 'Unnecessary "Writable" or "DeepWritable"');
 //# sourceMappingURL=no-unnecessary-writable.js.map

@@ -7,11 +7,12 @@ export interface InvalidResult {
 export interface Options<M extends string, O extends object, S extends object> {
     readonly context: utils.Context<M, O, S>;
     readonly ignoreClasses: boolean;
+    readonly ignoreInterfaces: boolean;
     readonly ignoreTypeParameters?: boolean;
     readonly ignoreTypes: readonly string[];
     readonly readonliness: Readonliness;
 }
-export declare type Readonliness = "allReadonly" | "allWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";
+export declare type Readonliness = "allDefinitelyReadonly" | "allDefinitelyWritable" | "allMaybeReadonly" | "allMaybeWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";
 export declare type Result = InvalidResult | ValidResult;
 export declare type SourceType = "property" | "numberSignature" | "stringSignature";
 export interface ValidResult {
@@ -34,6 +35,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
     checkType(type: ts.Type, restElement?: boolean): Result;
     protected checker: ts.TypeChecker;
     protected ignoreClasses: boolean;
+    protected ignoreInterfaces: boolean;
     protected ignoreTypeParameters: boolean;
     protected ignoreTypes: ReadonlySet<string>;
     protected readonliness: Readonliness;
@@ -92,6 +94,13 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @returns _True_ if type readonliness is invalid, _false_ otherwise.
      */
     protected invalidReadonliness(typeIsReadonly: boolean, sourceType: SourceType): boolean;
+    /**
+     * Checks if mapped type node is readonly.
+     *
+     * @param node - Node.
+     * @returns _True_ if mapped type node is readonly, _false_ otherwise.
+     */
+    protected readonlyMappedTypeNode(node: ts.MappedTypeNode): boolean;
     /**
      * Checks type.
      *

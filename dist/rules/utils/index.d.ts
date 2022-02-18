@@ -5,7 +5,7 @@ import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
-import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
+import type { objects, ReadonlyRecord } from "@skylib/functions/dist/types/core";
 export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
     /**
      * Creates rule listener.
@@ -150,7 +150,7 @@ export declare function createMatcher(patterns: readonly string[]): Matcher;
  * @param options - Options.
  * @returns Rule listenter.
  */
-export declare function createRule<M extends string, O extends object, S extends object>(options: CreateRuleOptions<M, O, S>): RuleModule<M, readonly unknown[]>;
+export declare function createRule<M extends string, O extends object, S extends object>(options: CreateRuleOptions<M, O, S>): RuleModule<M, objects>;
 /**
  * Gets program comments.
  *
@@ -219,5 +219,5 @@ export declare function stripBase(path: string, replacement?: string): string;
  * @param invalid - Invalid tests.
  * @param valid - Valid tests.
  */
-export declare function testRule<M extends string>(name: string, rule: RuleModule<M, readonly [object]>, invalid: ReadonlyArray<InvalidTestCase<M>>, valid?: readonly ValidTestCase[]): void;
+export declare function testRule<M extends string>(name: string, rule: RuleModule<M, objects>, invalid: ReadonlyArray<InvalidTestCase<M>>, valid?: readonly ValidTestCase[]): void;
 //# sourceMappingURL=index.d.ts.map

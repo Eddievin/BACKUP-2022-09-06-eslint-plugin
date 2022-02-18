@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"noMutableNumberSignature"`` \| ``"noMutableStringSignature"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"noMutableNumberSignature"`` \| ``"noMutableStringSignature"``, `objects`, `RuleListener`\>

@@ -7,13 +7,14 @@ const readonliness_1 = require("./utils/readonliness");
 const isRuleOptions = is.factory(is.object.of, {
     ignoreClasses: is.boolean,
     ignoreIdentifiers: is.strings,
+    ignoreInterfaces: is.boolean,
     ignoreNumberSignature: is.boolean,
     ignoreStringSignature: is.boolean,
     ignoreTypes: is.strings
 }, {});
 const rule = utils.createRule({
     create(context) {
-        const { ignoreClasses, ignoreIdentifiers, ignoreNumberSignature, ignoreStringSignature, ignoreTypes } = context.options;
+        const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignoreNumberSignature, ignoreStringSignature, ignoreTypes } = context.options;
         const ignoreIdentifiersMatcher = utils.createMatcher(ignoreIdentifiers);
         const signatures = [
             {
@@ -53,6 +54,7 @@ const rule = utils.createRule({
                         const checker = new readonliness_1.Checker({
                             context,
                             ignoreClasses,
+                            ignoreInterfaces,
                             ignoreTypeParameters: true,
                             ignoreTypes,
                             readonliness
@@ -80,9 +82,10 @@ const rule = utils.createRule({
         };
     },
     defaultOptions: {
-        ignoreClasses: true,
+        ignoreClasses: false,
         ignoreIdentifiers: [],
-        ignoreNumberSignature: true,
+        ignoreInterfaces: false,
+        ignoreNumberSignature: false,
         ignoreStringSignature: false,
         ignoreTypes: []
     },

@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"disallowedIdentifier"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"disallowedIdentifier"``, `objects`, `RuleListener`\>

@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"invalidTemplateLiteralFormat"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"invalidTemplateLiteralFormat"``, `objects`, `RuleListener`\>

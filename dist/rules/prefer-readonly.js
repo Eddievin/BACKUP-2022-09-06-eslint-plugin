@@ -9,19 +9,26 @@ const isRuleOptions = is.factory(is.object.of, {
     excludeSelectors: is.strings,
     ignoreClasses: is.boolean,
     ignoreIdentifiers: is.strings,
+    ignoreInferredTypes: is.boolean,
+    ignoreInterfaces: is.boolean,
     ignoreTypes: is.strings,
     includeSelectors: is.strings,
     noDefaultSelectors: is.boolean
 }, {});
 const rule = utils.createRule({
     create(context) {
+        const { ignoreInferredTypes } = context.options;
         const selectors = utils.getSelectors(context.options, defaultSelectors);
         return {
             [selectors](node) {
                 const tsNode = context.toTsNode(node);
                 if (ts.isFunctionLike(tsNode))
                     for (const param of tsNode.parameters)
-                        lintNode(context.toEsNode(param), param.name.getText(), context);
+                        if (ignoreInferredTypes && is.empty(param.type)) {
+                            // Ignore infered types
+                        }
+                        else
+                            lintNode(context.toEsNode(param), param.name.getText(), context);
                 else
                     lintNode(node, tsNode.getText(), context);
             }
@@ -29,8 +36,10 @@ const rule = utils.createRule({
     },
     defaultOptions: {
         excludeSelectors: [],
-        ignoreClasses: true,
+        ignoreClasses: false,
         ignoreIdentifiers: [],
+        ignoreInferredTypes: false,
+        ignoreInterfaces: false,
         ignoreTypes: [],
         includeSelectors: [],
         noDefaultSelectors: false
@@ -66,7 +75,7 @@ const restTypes = new Set([
  * @param context - Context.
  */
 function lintNode(node, identifier, context) {
-    const { ignoreClasses, ignoreIdentifiers, ignoreTypes } = context.options;
+    const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignoreTypes } = context.options;
     const ignoreIdentifiersMatcher = utils.createMatcher(ignoreIdentifiers);
     if (ignoreIdentifiersMatcher(identifier)) {
         // Ignore
@@ -77,9 +86,10 @@ function lintNode(node, identifier, context) {
         const checker = new readonliness_1.Checker({
             context,
             ignoreClasses,
+            ignoreInterfaces,
             ignoreTypeParameters: true,
             ignoreTypes,
-            readonliness: "allReadonly"
+            readonliness: "allMaybeReadonly"
         });
         const result = checker.checkType(type, restTypes.has(node.type));
         if ("failed" in result)

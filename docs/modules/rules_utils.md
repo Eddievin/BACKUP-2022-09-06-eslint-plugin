@@ -153,7 +153,7 @@ ___
 
 ### createRule
 
-▸ **createRule**<`M`, `O`, `S`\>(`options`): `RuleModule`<`M`, readonly `unknown`[]\>
+▸ **createRule**<`M`, `O`, `S`\>(`options`): `RuleModule`<`M`, `objects`\>
 
 Creates rule listenter.
 
@@ -173,7 +173,7 @@ Creates rule listenter.
 
 #### Returns
 
-`RuleModule`<`M`, readonly `unknown`[]\>
+`RuleModule`<`M`, `objects`\>
 
 Rule listenter.
 
@@ -376,7 +376,7 @@ Runs test.
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `name` | `string` | `undefined` | Rule name. |
-| `rule` | `RuleModule`<`M`, readonly [`object`], `RuleListener`\> | `undefined` | Rule. |
+| `rule` | `RuleModule`<`M`, `objects`, `RuleListener`\> | `undefined` | Rule. |
 | `invalid` | readonly [`InvalidTestCase`](../interfaces/rules_utils.InvalidTestCase.md)<`M`\>[] | `undefined` | Invalid tests. |
 | `valid` | readonly [`ValidTestCase`](../interfaces/rules_utils.ValidTestCase.md)[] | `[]` | Valid tests. |
 

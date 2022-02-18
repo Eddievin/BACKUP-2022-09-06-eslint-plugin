@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"autoImport"`` \| ``"invalidLocalName"`` \| ``"missingImport"`` \| ``"wildcardImportDisallowed"`` \| ``"wildcardImportRequired"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"autoImport"`` \| ``"invalidLocalName"`` \| ``"missingImport"`` \| ``"wildcardImportDisallowed"`` \| ``"wildcardImportRequired"``, `objects`, `RuleListener`\>

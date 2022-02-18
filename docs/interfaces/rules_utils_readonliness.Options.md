@@ -18,6 +18,7 @@
 
 - [context](rules_utils_readonliness.Options.md#context)
 - [ignoreClasses](rules_utils_readonliness.Options.md#ignoreclasses)
+- [ignoreInterfaces](rules_utils_readonliness.Options.md#ignoreinterfaces)
 - [ignoreTypeParameters](rules_utils_readonliness.Options.md#ignoretypeparameters)
 - [ignoreTypes](rules_utils_readonliness.Options.md#ignoretypes)
 - [readonliness](rules_utils_readonliness.Options.md#readonliness)
@@ -33,6 +34,12 @@ ___
 ### ignoreClasses
 
 • `Readonly` **ignoreClasses**: `boolean`
+
+___
+
+### ignoreInterfaces
+
+• `Readonly` **ignoreInterfaces**: `boolean`
 
 ___
 

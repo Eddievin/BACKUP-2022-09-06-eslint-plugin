@@ -12,7 +12,7 @@
 
 ### createRule
 
-▸ **createRule**<`M`, `T`\>(`isTypeToCheck`, `readonliness`, `messageId`, `message`): `RuleModule`<`M`, readonly `unknown`[]\>
+▸ **createRule**<`M`, `T`\>(`isTypeToCheck`, `readonliness`, `messageId`, `message`): `RuleModule`<`M`, `unknowns`\>
 
 Creates rule.
 
@@ -34,6 +34,6 @@ Creates rule.
 
 #### Returns
 
-`RuleModule`<`M`, readonly `unknown`[]\>
+`RuleModule`<`M`, `unknowns`\>
 
 Rule module.

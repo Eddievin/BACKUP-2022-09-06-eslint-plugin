@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"expectingEmptyLine"`` \| ``"unexpectedEmptyLine"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"expectingEmptyLine"`` \| ``"unexpectedEmptyLine"``, `objects`, `RuleListener`\>

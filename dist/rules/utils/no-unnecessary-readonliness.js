@@ -19,14 +19,16 @@ const readonliness_1 = require("./readonliness");
 function createRule(isTypeToCheck, readonliness, messageId, message) {
     const isRuleOptions = is.factory(is.object.of, {
         ignoreClasses: is.boolean,
+        ignoreInterfaces: is.boolean,
         ignoreTypes: is.strings
     }, {});
     return utils.createRule({
         create(context) {
-            const { ignoreClasses, ignoreTypes } = context.options;
+            const { ignoreClasses, ignoreInterfaces, ignoreTypes } = context.options;
             const checker = new readonliness_1.Checker({
                 context,
                 ignoreClasses,
+                ignoreInterfaces,
                 ignoreTypes,
                 readonliness
             });
@@ -46,7 +48,8 @@ function createRule(isTypeToCheck, readonliness, messageId, message) {
             };
         },
         defaultOptions: {
-            ignoreClasses: true,
+            ignoreClasses: false,
+            ignoreInterfaces: false,
             ignoreTypes: []
         },
         isRuleOptions,

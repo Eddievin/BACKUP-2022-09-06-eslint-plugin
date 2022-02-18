@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"typedefRequired"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"typedefRequired"``, `objects`, `RuleListener`\>

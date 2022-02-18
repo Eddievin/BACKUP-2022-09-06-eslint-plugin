@@ -24,7 +24,7 @@
 
 ### Readonliness
 
-Ƭ **Readonliness**: ``"allReadonly"`` \| ``"allWritable"`` \| ``"numberSignatureReadonly"`` \| ``"stringSignatureReadonly"``
+Ƭ **Readonliness**: ``"allDefinitelyReadonly"`` \| ``"allDefinitelyWritable"`` \| ``"allMaybeReadonly"`` \| ``"allMaybeWritable"`` \| ``"numberSignatureReadonly"`` \| ``"stringSignatureReadonly"``
 
 ___
 

@@ -33,6 +33,12 @@ class Checker {
             writable: true,
             value: void 0
         });
+        Object.defineProperty(this, "ignoreInterfaces", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         Object.defineProperty(this, "ignoreTypeParameters", {
             enumerable: true,
             configurable: true,
@@ -59,6 +65,7 @@ class Checker {
         });
         this.checker = options.context.checker;
         this.ignoreClasses = options.ignoreClasses;
+        this.ignoreInterfaces = options.ignoreInterfaces;
         this.ignoreTypeParameters = (_a = options.ignoreTypeParameters) !== null && _a !== void 0 ? _a : false;
         this.ignoreTypes = new Set(options.ignoreTypes);
         this.readonliness = options.readonliness;
@@ -86,7 +93,7 @@ class Checker {
             const declarations = cast.not.empty(symbol.getDeclarations(), []);
             const nodes = declarations.filter(tsutils.isMappedTypeNode);
             if (nodes.length) {
-                const readonly = nodes.every(node => readonlyMappedTypeNode(node));
+                const readonly = nodes.every(node => this.readonlyMappedTypeNode(node));
                 if (this.invalidReadonliness(readonly, "property"))
                     return { failed: true, types: [type] };
             }
@@ -216,14 +223,42 @@ class Checker {
      */
     invalidReadonliness(typeIsReadonly, sourceType) {
         switch (this.readonliness) {
-            case "allReadonly":
+            case "allDefinitelyReadonly":
+            case "allMaybeReadonly":
                 return !typeIsReadonly;
-            case "allWritable":
+            case "allDefinitelyWritable":
+            case "allMaybeWritable":
                 return typeIsReadonly;
             case "numberSignatureReadonly":
                 return sourceType === "numberSignature" && !typeIsReadonly;
             case "stringSignatureReadonly":
                 return sourceType === "stringSignature" && !typeIsReadonly;
+        }
+    }
+    /**
+     * Checks if mapped type node is readonly.
+     *
+     * @param node - Node.
+     * @returns _True_ if mapped type node is readonly, _false_ otherwise.
+     */
+    readonlyMappedTypeNode(node) {
+        if (is.not.empty(node.readonlyToken))
+            switch (node.readonlyToken.kind) {
+                case ts.SyntaxKind.MinusToken:
+                    return false;
+                case ts.SyntaxKind.PlusToken:
+                case ts.SyntaxKind.ReadonlyKeyword:
+                    return true;
+            }
+        switch (this.readonliness) {
+            case "allDefinitelyWritable":
+            case "allMaybeReadonly":
+            case "numberSignatureReadonly":
+            case "stringSignatureReadonly":
+                return true;
+            case "allDefinitelyReadonly":
+            case "allMaybeWritable":
+                return false;
         }
     }
     /**
@@ -238,6 +273,8 @@ class Checker {
             return { passed: true };
         this.seenTypesPool.add(type);
         if (this.ignoreClasses && type.isClass())
+            return { passed: true };
+        if (this.ignoreInterfaces && type.isClassOrInterface() && !type.isClass())
             return { passed: true };
         if (this.ignoreTypes.has(utils.getTypeName(type)))
             return { passed: true };
@@ -274,22 +311,8 @@ const primitiveTypes = new Set([
     ts.TypeFlags.UniqueESSymbol,
     ts.TypeFlags.Void
 ]);
-const readonlySyntaxKinds = new Set([
-    ts.SyntaxKind.PlusToken,
-    ts.SyntaxKind.ReadonlyKeyword
-]);
 const signatures = [
     { indexKind: ts.IndexKind.Number, sourceType: "numberSignature" },
     { indexKind: ts.IndexKind.String, sourceType: "stringSignature" }
 ];
-/**
- * Checks if mapped type node is readonly.
- *
- * @param node - Node.
- * @returns _True_ if mapped type node is readonly, _false_ otherwise.
- */
-function readonlyMappedTypeNode(node) {
-    return (is.not.empty(node.readonlyToken) &&
-        readonlySyntaxKinds.has(node.readonlyToken.kind));
-}
 //# sourceMappingURL=readonliness.js.map

@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"inexhaustiveSwitch"``, readonly `unknown`[], `RuleListener`\>
+• **export=**: `RuleModule`<``"inexhaustiveSwitch"``, `objects`, `RuleListener`\>

@@ -22,6 +22,7 @@
 
 - [checker](rules_utils_readonliness.Checker.md#checker)
 - [ignoreClasses](rules_utils_readonliness.Checker.md#ignoreclasses)
+- [ignoreInterfaces](rules_utils_readonliness.Checker.md#ignoreinterfaces)
 - [ignoreTypeParameters](rules_utils_readonliness.Checker.md#ignoretypeparameters)
 - [ignoreTypes](rules_utils_readonliness.Checker.md#ignoretypes)
 - [readonliness](rules_utils_readonliness.Checker.md#readonliness)
@@ -37,6 +38,7 @@
 - [checkType](rules_utils_readonliness.Checker.md#checktype)
 - [checkTypeParameter](rules_utils_readonliness.Checker.md#checktypeparameter)
 - [invalidReadonliness](rules_utils_readonliness.Checker.md#invalidreadonliness)
+- [readonlyMappedTypeNode](rules_utils_readonliness.Checker.md#readonlymappedtypenode)
 - [recurs](rules_utils_readonliness.Checker.md#recurs)
 
 ## Constructors
@@ -72,6 +74,12 @@ ___
 ### ignoreClasses
 
 • `Protected` **ignoreClasses**: `boolean`
+
+___
+
+### ignoreInterfaces
+
+• `Protected` **ignoreInterfaces**: `boolean`
 
 ___
 
@@ -262,6 +270,26 @@ Checks if type readonliness is invalid.
 `boolean`
 
 _True_ if type readonliness is invalid, _false_ otherwise.
+
+___
+
+### readonlyMappedTypeNode
+
+▸ `Protected` **readonlyMappedTypeNode**(`node`): `boolean`
+
+Checks if mapped type node is readonly.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `node` | `MappedTypeNode` | Node. |
+
+#### Returns
+
+`boolean`
+
+_True_ if mapped type node is readonly, _false_ otherwise.
 
 ___
 
