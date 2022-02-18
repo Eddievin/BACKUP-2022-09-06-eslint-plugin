@@ -3,6 +3,7 @@ import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
+import type { unknowns } from "@skylib/functions/dist/types/core";
 
 import * as utils from ".";
 import type { Readonliness } from "./readonliness";
@@ -22,9 +23,10 @@ export function createRule<M extends string, T extends string>(
   readonliness: Readonliness,
   messageId: M,
   message: string
-): RuleModule<M, readonly unknown[]> {
+): RuleModule<M, unknowns> {
   interface RuleOptions {
     readonly ignoreClasses: boolean;
+    readonly ignoreInterfaces: boolean;
     readonly ignoreTypes: readonly string[];
   }
 
@@ -32,6 +34,7 @@ export function createRule<M extends string, T extends string>(
     is.object.of,
     {
       ignoreClasses: is.boolean,
+      ignoreInterfaces: is.boolean,
       ignoreTypes: is.strings
     },
     {}
@@ -39,11 +42,12 @@ export function createRule<M extends string, T extends string>(
 
   return utils.createRule({
     create(context) {
-      const { ignoreClasses, ignoreTypes } = context.options;
+      const { ignoreClasses, ignoreInterfaces, ignoreTypes } = context.options;
 
       const checker = new Checker({
         context,
         ignoreClasses,
+        ignoreInterfaces,
         ignoreTypes,
         readonliness
       });
@@ -69,7 +73,8 @@ export function createRule<M extends string, T extends string>(
       };
     },
     defaultOptions: {
-      ignoreClasses: true,
+      ignoreClasses: false,
+      ignoreInterfaces: false,
       ignoreTypes: []
     },
     isRuleOptions,

@@ -280,6 +280,7 @@ Forbids mutable signatures.
   {
     ignoreClasses?: boolean,
     ignoreIdentifiers?: string[],
+    ignoreInterfaces?: boolean,
     ignoreNumberSignature?: boolean,
     ignoreStringSignature?: boolean,
     ignoreTypes?: string[]
@@ -291,9 +292,10 @@ Forbids mutable signatures.
 
 | Name | Description |
 | :------ | :------ |
-| `ignoreClasses` | Ignore classes (defaults to _true_). |
+| `ignoreClasses` | Ignores classes. |
 | `ignoreIdentifiers` | Ignore identifiers (regular expressions). |
-| `ignoreNumberSignature` | Ignore number signature (defaults to _true_). |
+| `ignoreInterfaces` | Ignore interfaces. |
+| `ignoreNumberSignature` | Ignore number signature. |
 | `ignoreStringSignature` | Ignore string signature. |
 | `ignoreTypes` | Ignore types. |
 
@@ -308,6 +310,7 @@ Forbids unnecessary Readonly|DeepReadonly wrapper.
   "error",
   {
     ignoreClasses?: boolean,
+    ignoreInterfaces?: boolean,
     ignoreTypes?: string[]
   }
 ]
@@ -318,6 +321,7 @@ Forbids unnecessary Readonly|DeepReadonly wrapper.
 | Name | Description |
 | :------ | :------ |
 | `ignoreClasses` | Ignores classes. |
+| `ignoreInterfaces` | Ignore interfaces. |
 | `ignoreTypes` | Ignores types. |
 
 ### <a name="no-unnecessary-writable"></a>no-unnecessary-writable
@@ -331,6 +335,7 @@ Forbids unnecessary Writable|DeepWritable wrapper.
   "error",
   {
     ignoreClasses?: boolean,
+    ignoreInterfaces?: boolean,
     ignoreTypes?: string[]
   }
 ]
@@ -341,6 +346,7 @@ Forbids unnecessary Writable|DeepWritable wrapper.
 | Name | Description |
 | :------ | :------ |
 | `ignoreClasses` | Ignores classes. |
+| `ignoreInterfaces` | Ignore interfaces. |
 | `ignoreTypes` | Ignores types. |
 
 ### <a name="no-unsafe-object-assignment"></a>no-unsafe-object-assignment
@@ -378,6 +384,7 @@ Enforces the use of readonly properties.
     excludeSelectors?: string[],
     ignoreClasses?: boolean,
     ignoreIdentifiers?: string[],
+    ignoreInterfaces?: boolean,
     ignoreTypes?: string[],
     includeSelectors?: string[],
     noDefaultSelectors?: boolean
@@ -392,6 +399,7 @@ Enforces the use of readonly properties.
 | `excludeSelectors` | Exclude AST selectors. |
 | `ignoreClasses` | Ignore classes. |
 | `ignoreIdentifiers` | Ignore identifiers (regular expressions). |
+| `ignoreInterfaces` | Ignore interfaces. |
 | `ignoreTypes` | Ignore types. |
 | `includeSelectors` | Add AST selectors. |
 | `noDefaultSelectors` | Do not use default AST selectors. |

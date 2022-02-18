@@ -10,6 +10,7 @@ import { Checker } from "./utils/readonliness";
 interface RuleOptions {
   readonly ignoreClasses: boolean;
   readonly ignoreIdentifiers: readonly string[];
+  readonly ignoreInterfaces: boolean;
   readonly ignoreNumberSignature: boolean;
   readonly ignoreStringSignature: boolean;
   readonly ignoreTypes: readonly string[];
@@ -20,6 +21,7 @@ const isRuleOptions: is.Guard<RuleOptions> = is.factory(
   {
     ignoreClasses: is.boolean,
     ignoreIdentifiers: is.strings,
+    ignoreInterfaces: is.boolean,
     ignoreNumberSignature: is.boolean,
     ignoreStringSignature: is.boolean,
     ignoreTypes: is.strings
@@ -32,6 +34,7 @@ const rule = utils.createRule({
     const {
       ignoreClasses,
       ignoreIdentifiers,
+      ignoreInterfaces,
       ignoreNumberSignature,
       ignoreStringSignature,
       ignoreTypes
@@ -81,6 +84,7 @@ const rule = utils.createRule({
             const checker = new Checker({
               context,
               ignoreClasses,
+              ignoreInterfaces,
               ignoreTypeParameters: true,
               ignoreTypes,
               readonliness
@@ -114,9 +118,10 @@ const rule = utils.createRule({
     };
   },
   defaultOptions: {
-    ignoreClasses: true,
+    ignoreClasses: false,
     ignoreIdentifiers: [],
-    ignoreNumberSignature: true,
+    ignoreInterfaces: false,
+    ignoreNumberSignature: false,
     ignoreStringSignature: false,
     ignoreTypes: []
   },

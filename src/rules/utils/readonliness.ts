@@ -15,6 +15,7 @@ export interface InvalidResult {
 export interface Options<M extends string, O extends object, S extends object> {
   readonly context: utils.Context<M, O, S>;
   readonly ignoreClasses: boolean;
+  readonly ignoreInterfaces: boolean;
   readonly ignoreTypeParameters?: boolean;
   readonly ignoreTypes: readonly string[];
   readonly readonliness: Readonliness;
@@ -45,6 +46,7 @@ export class Checker<M extends string, O extends object, S extends object> {
   public constructor(options: Options<M, O, S>) {
     this.checker = options.context.checker;
     this.ignoreClasses = options.ignoreClasses;
+    this.ignoreInterfaces = options.ignoreInterfaces;
     this.ignoreTypeParameters = options.ignoreTypeParameters ?? false;
     this.ignoreTypes = new Set(options.ignoreTypes);
     this.readonliness = options.readonliness;
@@ -72,6 +74,8 @@ export class Checker<M extends string, O extends object, S extends object> {
   protected checker: ts.TypeChecker;
 
   protected ignoreClasses: boolean;
+
+  protected ignoreInterfaces: boolean;
 
   protected ignoreTypeParameters: boolean;
 
@@ -324,6 +328,9 @@ export class Checker<M extends string, O extends object, S extends object> {
     this.seenTypesPool.add(type);
 
     if (this.ignoreClasses && type.isClass()) return { passed: true };
+
+    if (this.ignoreInterfaces && type.isClassOrInterface() && !type.isClass())
+      return { passed: true };
 
     if (this.ignoreTypes.has(utils.getTypeName(type))) return { passed: true };
 

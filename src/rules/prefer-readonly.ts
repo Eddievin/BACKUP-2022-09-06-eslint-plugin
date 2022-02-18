@@ -11,6 +11,7 @@ interface RuleOptions {
   readonly excludeSelectors: readonly string[];
   readonly ignoreClasses: boolean;
   readonly ignoreIdentifiers: readonly string[];
+  readonly ignoreInterfaces: boolean;
   readonly ignoreTypes: readonly string[];
   readonly includeSelectors: readonly string[];
   readonly noDefaultSelectors: boolean;
@@ -22,6 +23,7 @@ const isRuleOptions: is.Guard<RuleOptions> = is.factory(
     excludeSelectors: is.strings,
     ignoreClasses: is.boolean,
     ignoreIdentifiers: is.strings,
+    ignoreInterfaces: is.boolean,
     ignoreTypes: is.strings,
     includeSelectors: is.strings,
     noDefaultSelectors: is.boolean
@@ -46,8 +48,9 @@ const rule = utils.createRule({
   },
   defaultOptions: {
     excludeSelectors: [],
-    ignoreClasses: true,
+    ignoreClasses: false,
     ignoreIdentifiers: [],
+    ignoreInterfaces: false,
     ignoreTypes: [],
     includeSelectors: [],
     noDefaultSelectors: false
@@ -103,7 +106,8 @@ function lintNode(
   identifier: string,
   context: Context
 ): void {
-  const { ignoreClasses, ignoreIdentifiers, ignoreTypes } = context.options;
+  const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignoreTypes } =
+    context.options;
 
   const ignoreIdentifiersMatcher = utils.createMatcher(ignoreIdentifiers);
 
@@ -117,6 +121,7 @@ function lintNode(
     const checker = new Checker({
       context,
       ignoreClasses,
+      ignoreInterfaces,
       ignoreTypeParameters: true,
       ignoreTypes,
       readonliness: "allMaybeReadonly"

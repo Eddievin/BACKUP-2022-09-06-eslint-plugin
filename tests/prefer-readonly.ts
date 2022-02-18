@@ -184,8 +184,7 @@ utils.testRule(
           messageId: "shouldBeReadonly"
         }
       ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ ignoreClasses: false }]
+      name: `Test at line ${getCurrentLine().line}`
     },
     {
       code: `
@@ -270,7 +269,8 @@ utils.testRule(
           value: number;
         }
       `,
-      name: `Test at line ${getCurrentLine().line}`
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ ignoreClasses: true }]
     },
     {
       code: `
@@ -284,10 +284,10 @@ utils.testRule(
       code: `
         // eslint-disable-next-line prefer-readonly
         interface I { x: string; }
-        interface J {}
-        interface K extends Readonly<I>, J {}
+        interface K extends Readonly<I> {}
       `,
-      name: `Test at line ${getCurrentLine().line}`
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ ignoreInterfaces: true }]
     }
   ]
 );

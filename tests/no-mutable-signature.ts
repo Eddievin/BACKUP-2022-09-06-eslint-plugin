@@ -52,8 +52,7 @@ utils.testRule(
           messageId: "noMutableStringSignature"
         }
       ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ ignoreNumberSignature: false }]
+      name: `Test at line ${getCurrentLine().line}`
     },
     {
       code: `
@@ -85,8 +84,7 @@ utils.testRule(
           messageId: "noMutableNumberSignature"
         }
       ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ ignoreNumberSignature: false }]
+      name: `Test at line ${getCurrentLine().line}`
     },
     {
       code: `
