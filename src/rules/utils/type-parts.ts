@@ -6,11 +6,12 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
+import type { NumStrU } from "@skylib/functions/dist/types/core";
 import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import type * as utils from ".";
 
-export type TypePart = number | string | ts.Type | undefined;
+export type TypePart = NumStrU | ts.Type;
 
 /**
  * Gets type parts.
@@ -108,15 +109,15 @@ type ExpectedFlags =
   | ts.TypeFlags.BigInt
   | ts.TypeFlags.BigIntLiteral
   | ts.TypeFlags.BooleanLiteral
+  | ts.TypeFlags.ESSymbol
+  | ts.TypeFlags.Null
   | ts.TypeFlags.Number
   | ts.TypeFlags.NumberLiteral
-  | ts.TypeFlags.Null
   | ts.TypeFlags.Object
   | ts.TypeFlags.String
   | ts.TypeFlags.StringLiteral
-  | ts.TypeFlags.ESSymbol
-  | ts.TypeFlags.UniqueESSymbol
   | ts.TypeFlags.Undefined
+  | ts.TypeFlags.UniqueESSymbol
   | ts.TypeFlags.Void;
 
 const ExpectedFlagsVO = createValidationObject<ExpectedFlags>({

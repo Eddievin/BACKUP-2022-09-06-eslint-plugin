@@ -1,5 +1,5 @@
 import index from "@/index";
 
-it("index", () => {
+test("index", () => {
   expect(index.rules).toBeInstanceOf(Object);
 });

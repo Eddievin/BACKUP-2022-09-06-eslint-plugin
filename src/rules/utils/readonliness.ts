@@ -31,7 +31,7 @@ export type Readonliness =
 
 export type Result = InvalidResult | ValidResult;
 
-export type SourceType = "property" | "numberSignature" | "stringSignature";
+export type SourceType = "numberSignature" | "property" | "stringSignature";
 
 export interface ValidResult {
   readonly passed: true;

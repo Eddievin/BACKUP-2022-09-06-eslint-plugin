@@ -113,7 +113,7 @@ export = rule;
 |*******************************************************************************
 |*/
 
-type AccessorType = "get" | "set" | "none";
+type AccessorType = "get" | "none" | "set";
 
 type Context = utils.Context<MessageId, RuleOptions, object>;
 
@@ -129,13 +129,13 @@ type MessageId = utils.MessageId<typeof rule>;
 
 type Type =
   | "accessor"
+  | "block"
   | "constructor"
   | "field"
   | "get"
   | "method"
   | "set"
-  | "signature"
-  | "block";
+  | "signature";
 
 /**
  * Gets member accessibility.

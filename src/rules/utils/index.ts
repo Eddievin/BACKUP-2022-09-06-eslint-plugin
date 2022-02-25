@@ -139,7 +139,15 @@ export interface InvalidTestCase<M extends string>
   name: string;
 }
 
-export type Matcher = (str: string) => boolean;
+export interface Matcher {
+  /**
+   * Checks if string matches condition.
+   *
+   * @param str - String.
+   * @returns _True_ if string matches condition, _false_ otherwise.
+   */
+  (str: string): boolean;
+}
 
 export type MessageId<T> = T extends RuleModule<infer I, infer _O> ? I : never;
 
@@ -238,6 +246,7 @@ createFileMatcher.disallowAllow = (
  */
 export function createMatcher(patterns: readonly string[]): Matcher {
   const matchers = patterns
+    // eslint-disable-next-line security/detect-non-literal-regexp
     .map(str => new RegExp(str, "u"))
     .map(
       re =>

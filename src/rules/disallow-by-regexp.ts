@@ -62,6 +62,7 @@ const rule = utils.createRule({
           const contexts = subOptions.contexts ?? context.options.contexts;
 
           for (const pattern of subOptions.patterns) {
+            // eslint-disable-next-line security/detect-non-literal-regexp
             const re = new RegExp(pattern, "u");
 
             for (const range of matchAll(re, context))

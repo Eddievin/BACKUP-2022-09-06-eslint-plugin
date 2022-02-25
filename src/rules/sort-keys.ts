@@ -100,9 +100,9 @@ function lintNodes(group: readonly Item[], context: Context): void {
 
     const fixes: RuleFix[] = [];
 
-    let min: numberU = undefined;
+    let min: numberU;
 
-    let max: numberU = undefined;
+    let max: numberU;
 
     for (const [index, sortedItem] of sortedGroup.entries())
       if (sortedItem.index !== index) {
