@@ -33,6 +33,7 @@ const rule = utils.createRule({
                 for (const subOptions of context.subOptionsArray) {
                     const contexts = (_a = subOptions.contexts) !== null && _a !== void 0 ? _a : context.options.contexts;
                     for (const pattern of subOptions.patterns) {
+                        // eslint-disable-next-line security/detect-non-literal-regexp
                         const re = new RegExp(pattern, "u");
                         for (const range of matchAll(re, context))
                             if (contexts.includes(getContext(range, comments, strings)))

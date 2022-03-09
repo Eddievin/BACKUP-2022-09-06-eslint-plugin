@@ -14,12 +14,12 @@
 - [CreateRuleOptions](../interfaces/rules_utils.CreateRuleOptions.md)
 - [GetSelectorsOptions](../interfaces/rules_utils.GetSelectorsOptions.md)
 - [InvalidTestCase](../interfaces/rules_utils.InvalidTestCase.md)
+- [Matcher](../interfaces/rules_utils.Matcher.md)
 - [Package](../interfaces/rules_utils.Package.md)
 - [ValidTestCase](../interfaces/rules_utils.ValidTestCase.md)
 
 ### Type aliases
 
-- [Matcher](rules_utils.md#matcher)
 - [MessageId](rules_utils.md#messageid)
 - [ReadonlyRange](rules_utils.md#readonlyrange)
 
@@ -46,26 +46,6 @@
 
 ## Type aliases
 
-### Matcher
-
-Ƭ **Matcher**: (`str`: `string`) => `boolean`
-
-#### Type declaration
-
-▸ (`str`): `boolean`
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `str` | `string` |
-
-##### Returns
-
-`boolean`
-
-___
-
 ### MessageId
 
 Ƭ **MessageId**<`T`\>: `T` extends `RuleModule`<infer I, infer \_O\> ? `I` : `never`
@@ -86,7 +66,7 @@ ___
 
 ### base
 
-• **base**: `string`
+• `Const` **base**: `string`
 
 ## Functions
 
@@ -111,7 +91,7 @@ ___
 
 ### createFileMatcher
 
-▸ **createFileMatcher**(`patterns`, `defVal`, `options`): [`Matcher`](rules_utils.md#matcher)
+▸ **createFileMatcher**(`patterns`, `defVal`, `options`): [`Matcher`](../interfaces/rules_utils.Matcher.md)
 
 Creates file matcher.
 
@@ -125,7 +105,7 @@ Creates file matcher.
 
 #### Returns
 
-[`Matcher`](rules_utils.md#matcher)
+[`Matcher`](../interfaces/rules_utils.Matcher.md)
 
 Matcher.
 
@@ -133,7 +113,7 @@ ___
 
 ### createMatcher
 
-▸ **createMatcher**(`patterns`): [`Matcher`](rules_utils.md#matcher)
+▸ **createMatcher**(`patterns`): [`Matcher`](../interfaces/rules_utils.Matcher.md)
 
 Creates matcher.
 
@@ -145,7 +125,7 @@ Creates matcher.
 
 #### Returns
 
-[`Matcher`](rules_utils.md#matcher)
+[`Matcher`](../interfaces/rules_utils.Matcher.md)
 
 Matcher.
 
@@ -324,7 +304,7 @@ ___
 
 ### isPackage
 
-▸ `Const` **isPackage**(`value`): value is Package
+▸ **isPackage**(`value`): value is Package
 
 #### Parameters
 

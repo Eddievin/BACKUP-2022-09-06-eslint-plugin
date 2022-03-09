@@ -14,7 +14,7 @@
 
 ### disallowAllow
 
-▸ **disallowAllow**(`disallow`, `allow`, `defVal`, `options`): [`Matcher`](rules_utils.md#matcher)
+▸ **disallowAllow**(`disallow`, `allow`, `defVal`, `options`): [`Matcher`](../interfaces/rules_utils.Matcher.md)
 
 Creates file matcher.
 
@@ -29,6 +29,6 @@ Creates file matcher.
 
 #### Returns
 
-[`Matcher`](rules_utils.md#matcher)
+[`Matcher`](../interfaces/rules_utils.Matcher.md)
 
 Matcher.

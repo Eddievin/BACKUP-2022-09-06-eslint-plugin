@@ -68,6 +68,7 @@ createFileMatcher.disallowAllow = (disallow, allow, defVal, options) => {
  */
 function createMatcher(patterns) {
     const matchers = patterns
+        // eslint-disable-next-line security/detect-non-literal-regexp
         .map(str => new RegExp(str, "u"))
         .map(re => (str) => re.test(str));
     return (str) => matchers.some(matcher => matcher(str));

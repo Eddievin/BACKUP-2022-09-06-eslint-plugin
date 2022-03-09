@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"typedefRequired"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"typedefRequired"``, `objects`, `RuleListener`\>

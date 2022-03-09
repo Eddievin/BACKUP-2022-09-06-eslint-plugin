@@ -1,7 +1,8 @@
 import * as ts from "typescript";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { NumStrU } from "@skylib/functions/dist/types/core";
 import type * as utils from ".";
-export declare type TypePart = number | string | ts.Type | undefined;
+export declare type TypePart = NumStrU | ts.Type;
 /**
  * Gets type parts.
  *

@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"unusedImport"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"unusedImport"``, `objects`, `RuleListener`\>

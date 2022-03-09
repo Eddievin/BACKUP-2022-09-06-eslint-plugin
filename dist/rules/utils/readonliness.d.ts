@@ -14,7 +14,7 @@ export interface Options<M extends string, O extends object, S extends object> {
 }
 export declare type Readonliness = "allDefinitelyReadonly" | "allDefinitelyWritable" | "allMaybeReadonly" | "allMaybeWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";
 export declare type Result = InvalidResult | ValidResult;
-export declare type SourceType = "property" | "numberSignature" | "stringSignature";
+export declare type SourceType = "numberSignature" | "property" | "stringSignature";
 export interface ValidResult {
     readonly passed: true;
 }

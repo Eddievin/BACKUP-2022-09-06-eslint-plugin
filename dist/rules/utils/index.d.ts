@@ -107,7 +107,15 @@ export interface GetSelectorsOptions {
 export interface InvalidTestCase<M extends string> extends BaseInvalidTestCase<M, readonly [object]> {
     name: string;
 }
-export declare type Matcher = (str: string) => boolean;
+export interface Matcher {
+    /**
+     * Checks if string matches condition.
+     *
+     * @param str - String.
+     * @returns _True_ if string matches condition, _false_ otherwise.
+     */
+    (str: string): boolean;
+}
 export declare type MessageId<T> = T extends RuleModule<infer I, infer _O> ? I : never;
 export interface Package {
     readonly name?: string;

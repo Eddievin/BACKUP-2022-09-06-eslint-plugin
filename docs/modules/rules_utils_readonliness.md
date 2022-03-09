@@ -36,4 +36,4 @@ ___
 
 ### SourceType
 
-Ƭ **SourceType**: ``"property"`` \| ``"numberSignature"`` \| ``"stringSignature"``
+Ƭ **SourceType**: ``"numberSignature"`` \| ``"property"`` \| ``"stringSignature"``

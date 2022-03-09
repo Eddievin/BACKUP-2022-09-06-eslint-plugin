@@ -21,7 +21,7 @@
 
 ### TypePart
 
-Ƭ **TypePart**: `number` \| `string` \| `ts.Type` \| `undefined`
+Ƭ **TypePart**: `NumStrU` \| `ts.Type`
 
 ## Functions
 

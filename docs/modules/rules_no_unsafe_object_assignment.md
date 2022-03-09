@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"unsafeOptionalAssignment"`` \| ``"unsafeReadonlyAssignment"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"unsafeOptionalAssignment"`` \| ``"unsafeReadonlyAssignment"``, `objects`, `RuleListener`\>

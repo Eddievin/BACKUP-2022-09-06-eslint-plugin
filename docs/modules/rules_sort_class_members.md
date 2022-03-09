@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"incorrectSortingOrder"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"incorrectSortingOrder"``, `objects`, `RuleListener`\>

@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"invalidTemplateLiteralFormat"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"invalidTemplateLiteralFormat"``, `objects`, `RuleListener`\>

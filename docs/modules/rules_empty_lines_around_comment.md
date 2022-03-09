@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"missingEmptyLineAfter"`` \| ``"missingEmptyLineBefore"`` \| ``"unexpectedEmptyLineAfter"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"missingEmptyLineAfter"`` \| ``"missingEmptyLineBefore"`` \| ``"unexpectedEmptyLineAfter"``, `objects`, `RuleListener`\>

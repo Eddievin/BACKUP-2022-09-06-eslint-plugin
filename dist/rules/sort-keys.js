@@ -66,8 +66,8 @@ function lintNodes(group, context) {
     if (group.length > 1) {
         const sortedGroup = _.sortBy(group, item => item.key);
         const fixes = [];
-        let min = undefined;
-        let max = undefined;
+        let min;
+        let max;
         for (const [index, sortedItem] of sortedGroup.entries())
             if (sortedItem.index !== index) {
                 const item = a.get(group, index);

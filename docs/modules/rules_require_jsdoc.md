@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"undocumented"`` \| ``"undocumentedCallSignature"`` \| ``"undocumentedConstructSignature"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"undocumented"`` \| ``"undocumentedCallSignature"`` \| ``"undocumentedConstructSignature"``, `objects`, `RuleListener`\>

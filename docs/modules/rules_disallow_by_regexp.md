@@ -12,4 +12,4 @@
 
 ### export&#x3D;
 
-• **export=**: `RuleModule`<``"disallowedCode"``, `objects`, `RuleListener`\>
+• `Const` **export=**: `RuleModule`<``"disallowedCode"``, `objects`, `RuleListener`\>
