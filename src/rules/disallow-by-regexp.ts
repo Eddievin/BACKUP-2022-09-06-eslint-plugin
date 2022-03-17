@@ -4,6 +4,7 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
 import * as regexp from "@skylib/functions/dist/regexp";
+import type { strings } from "@skylib/functions/dist/types/core";
 import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
@@ -32,7 +33,7 @@ const isRuleOptions: is.Guard<RuleOptions> = is.factory(
 
 interface SubOptions {
   readonly contexts?: readonly SubOptionsContext[];
-  readonly patterns: readonly string[];
+  readonly patterns: strings;
   readonly replacement?: string;
 }
 
@@ -44,17 +45,17 @@ const isSubOptions: is.Guard<SubOptions> = is.factory(
 
 const rule = utils.createRule({
   create(context) {
-    const strings: utils.ReadonlyRange[] = [];
+    const stringRanges: utils.ReadonlyRange[] = [];
 
     return {
       [AST_NODE_TYPES.Literal](node): void {
-        strings.push(node.range);
+        stringRanges.push(node.range);
       },
       [AST_NODE_TYPES.TemplateLiteral](node): void {
-        strings.push(node.range);
+        stringRanges.push(node.range);
       },
       "Program:exit"(program: TSESTree.Program): void {
-        const comments = utils
+        const commentRanges = utils
           .getComments(program)
           .map(comment => comment.range);
 
@@ -66,7 +67,11 @@ const rule = utils.createRule({
             const re = new RegExp(pattern, "u");
 
             for (const range of matchAll(re, context))
-              if (contexts.includes(getContext(range, comments, strings)))
+              if (
+                contexts.includes(
+                  getContext(range, commentRanges, stringRanges)
+                )
+              )
                 context.report({
                   fix() {
                     return is.not.empty(subOptions.replacement)
@@ -115,18 +120,18 @@ type MessageId = utils.MessageId<typeof rule>;
  * Gets suboptions context.
  *
  * @param range - Range.
- * @param comments - Comment ranges.
- * @param strings - String ranges.
+ * @param commentRanges - Comment ranges.
+ * @param stringRanges - String ranges.
  * @returns Suboptions context.
  */
 function getContext(
   range: utils.ReadonlyRange,
-  comments: readonly utils.ReadonlyRange[],
-  strings: readonly utils.ReadonlyRange[]
+  commentRanges: readonly utils.ReadonlyRange[],
+  stringRanges: readonly utils.ReadonlyRange[]
 ): SubOptionsContext {
-  if (inRanges(range, comments)) return "comment";
+  if (inRanges(range, commentRanges)) return "comment";
 
-  if (inRanges(range, strings)) return "string";
+  if (inRanges(range, stringRanges)) return "string";
 
   return "code";
 }

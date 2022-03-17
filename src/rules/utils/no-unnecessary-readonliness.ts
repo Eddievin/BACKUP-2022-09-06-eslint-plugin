@@ -3,7 +3,7 @@ import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
-import type { unknowns } from "@skylib/functions/dist/types/core";
+import type { strings, unknowns } from "@skylib/functions/dist/types/core";
 
 import * as utils from ".";
 import type { Readonliness } from "./readonliness";
@@ -27,7 +27,7 @@ export function createRule<M extends string, T extends string>(
   interface RuleOptions {
     readonly ignoreClasses: boolean;
     readonly ignoreInterfaces: boolean;
-    readonly ignoreTypes: readonly string[];
+    readonly ignoreTypes: strings;
   }
 
   const isRuleOptions: is.Guard<RuleOptions> = is.factory(

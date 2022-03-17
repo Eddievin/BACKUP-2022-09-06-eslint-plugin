@@ -6,11 +6,12 @@ import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as a from "@skylib/functions/dist/array";
 import * as cast from "@skylib/functions/dist/converters";
 import * as is from "@skylib/functions/dist/guards";
+import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
 interface RuleOptions {
-  readonly sortingOrder: readonly string[];
+  readonly sortingOrder: strings;
 }
 
 const isRuleOptions: is.Guard<RuleOptions> = is.factory(

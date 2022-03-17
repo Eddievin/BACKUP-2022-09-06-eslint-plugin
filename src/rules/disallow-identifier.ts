@@ -1,11 +1,12 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
 import * as is from "@skylib/functions/dist/guards";
+import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
 interface SubOptions {
-  readonly ids: readonly string[];
+  readonly ids: strings;
   readonly replacement?: string;
 }
 

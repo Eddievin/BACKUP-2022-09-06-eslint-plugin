@@ -4,6 +4,7 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
+import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
@@ -111,13 +112,13 @@ interface CommentInfo {
     readonly blockStart: boolean;
     readonly programStart: boolean;
     readonly range: utils.ReadonlyRange;
-    readonly spaces: readonly string[];
+    readonly spaces: strings;
   };
   readonly suffix: {
     readonly blockEnd: boolean;
     readonly programEnd: boolean;
     readonly range: utils.ReadonlyRange;
-    readonly spaces: readonly string[];
+    readonly spaces: strings;
     readonly startsWithComment: boolean;
   };
 }

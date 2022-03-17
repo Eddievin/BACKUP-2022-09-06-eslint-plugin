@@ -2,6 +2,7 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as is from "@skylib/functions/dist/guards";
+import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 import type { Readonliness } from "./utils/readonliness";
@@ -9,11 +10,11 @@ import { Checker } from "./utils/readonliness";
 
 interface RuleOptions {
   readonly ignoreClasses: boolean;
-  readonly ignoreIdentifiers: readonly string[];
+  readonly ignoreIdentifiers: strings;
   readonly ignoreInterfaces: boolean;
   readonly ignoreNumberSignature: boolean;
   readonly ignoreStringSignature: boolean;
-  readonly ignoreTypes: readonly string[];
+  readonly ignoreTypes: strings;
 }
 
 const isRuleOptions: is.Guard<RuleOptions> = is.factory(

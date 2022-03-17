@@ -4,6 +4,7 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as is from "@skylib/functions/dist/guards";
+import type { strings } from "@skylib/functions/dist/types/core";
 import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
@@ -32,8 +33,8 @@ const isPropertyOption = is.factory(is.enumeration, PropertyOptionVO);
 const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
 
 interface RuleOptions {
-  readonly excludeSelectors: readonly string[];
-  readonly includeSelectors: readonly string[];
+  readonly excludeSelectors: strings;
+  readonly includeSelectors: strings;
   readonly interfaceOptions: readonly InterfaceOption[];
   readonly noDefaultSelectors: boolean;
   readonly propertyOptions: readonly PropertyOption[];
@@ -109,7 +110,7 @@ type Context = utils.Context<MessageId, RuleOptions, object>;
 
 type MessageId = utils.MessageId<typeof rule>;
 
-const defaultSelectors: readonly string[] = [
+const defaultSelectors: strings = [
   AST_NODE_TYPES.ClassDeclaration,
   AST_NODE_TYPES.FunctionDeclaration,
   AST_NODE_TYPES.MethodDefinition,

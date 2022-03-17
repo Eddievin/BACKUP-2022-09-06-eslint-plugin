@@ -3,18 +3,19 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as is from "@skylib/functions/dist/guards";
+import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 import { Checker } from "./utils/readonliness";
 
 interface RuleOptions {
-  readonly excludeSelectors: readonly string[];
+  readonly excludeSelectors: strings;
   readonly ignoreClasses: boolean;
-  readonly ignoreIdentifiers: readonly string[];
+  readonly ignoreIdentifiers: strings;
   readonly ignoreInferredTypes: boolean;
   readonly ignoreInterfaces: boolean;
-  readonly ignoreTypes: readonly string[];
-  readonly includeSelectors: readonly string[];
+  readonly ignoreTypes: strings;
+  readonly includeSelectors: strings;
   readonly noDefaultSelectors: boolean;
 }
 
@@ -82,7 +83,7 @@ type Context = utils.Context<MessageId, RuleOptions, object>;
 
 type MessageId = utils.MessageId<typeof rule>;
 
-const defaultSelectors: readonly string[] = [
+const defaultSelectors: strings = [
   AST_NODE_TYPES.ArrowFunctionExpression,
   AST_NODE_TYPES.FunctionDeclaration,
   AST_NODE_TYPES.FunctionExpression,

@@ -8,6 +8,7 @@ import * as assert from "@skylib/functions/dist/assertions";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
+import type { strings } from "@skylib/functions/dist/types/core";
 import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
@@ -22,7 +23,7 @@ const TypeVO = createValidationObject<Type>({
 const isType = is.factory(is.enumeration, TypeVO);
 
 interface SubOptions {
-  readonly altLocalNames: readonly string[];
+  readonly altLocalNames: strings;
   readonly autoImportSource?: string;
   readonly localName?: string;
   readonly sourcePattern: string;

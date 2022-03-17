@@ -26,7 +26,9 @@ import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
 import type {
   objects,
-  ReadonlyRecord
+  ReadonlyRecord,
+  strings,
+  unknowns
 } from "@skylib/functions/dist/types/core";
 
 export interface CreateRuleOptions<
@@ -121,7 +123,7 @@ export interface Context<M extends string, O extends object, S extends object> {
    * @param descriptor - Descriptor.
    */
   readonly report: (descriptor: ReportDescriptor<M>) => void;
-  readonly scope: ReturnType<RuleContext<M, readonly unknown[]>["getScope"]>;
+  readonly scope: ReturnType<RuleContext<M, unknowns>["getScope"]>;
   readonly source: SourceCode;
   readonly subOptionsArray: readonly S[];
   readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
@@ -129,8 +131,8 @@ export interface Context<M extends string, O extends object, S extends object> {
 }
 
 export interface GetSelectorsOptions {
-  readonly excludeSelectors: readonly string[];
-  readonly includeSelectors: readonly string[];
+  readonly excludeSelectors: strings;
+  readonly includeSelectors: strings;
   readonly noDefaultSelectors: boolean;
 }
 
@@ -195,7 +197,7 @@ export function buildChildNodesMap(
  * @returns Matcher.
  */
 export function createFileMatcher(
-  patterns: readonly string[],
+  patterns: strings,
   defVal: boolean,
   options: Readonly<minimatch.IOptions>
 ): Matcher {
@@ -222,8 +224,8 @@ export function createFileMatcher(
  * @returns Matcher.
  */
 createFileMatcher.disallowAllow = (
-  disallow: readonly string[],
-  allow: readonly string[],
+  disallow: strings,
+  allow: strings,
   defVal: boolean,
   options: Readonly<minimatch.IOptions>
 ): Matcher => {
@@ -244,7 +246,7 @@ createFileMatcher.disallowAllow = (
  * @param patterns - RegExp patterns.
  * @returns Matcher.
  */
-export function createMatcher(patterns: readonly string[]): Matcher {
+export function createMatcher(patterns: strings): Matcher {
   const matchers = patterns
     // eslint-disable-next-line security/detect-non-literal-regexp
     .map(str => new RegExp(str, "u"))
@@ -348,7 +350,7 @@ export function getNodeId(node: TSESTree.Node | undefined): string {
  */
 export function getSelectors(
   options: GetSelectorsOptions,
-  defaultSelectors: readonly string[]
+  defaultSelectors: strings
 ): string {
   const { excludeSelectors, includeSelectors, noDefaultSelectors } = options;
 
@@ -481,8 +483,8 @@ export function testRule<M extends string>(
 |*/
 
 interface SharedOptions {
-  readonly filesToLint?: readonly string[];
-  readonly filesToSkip?: readonly string[];
+  readonly filesToLint?: strings;
+  readonly filesToSkip?: strings;
   readonly subOptionsId?: string;
 }
 
@@ -500,7 +502,7 @@ const isSharedOptions: is.Guard<SharedOptions> = is.factory(
  * @returns Rule options.
  */
 function getRuleOptions<M extends string, O extends object, S extends object>(
-  ruleOptionsArray: readonly unknown[],
+  ruleOptionsArray: unknowns,
   options: CreateRuleOptions<M, O, S>
 ): O {
   const { isRuleOptions } = options;
@@ -527,7 +529,7 @@ function getSubOptionsArray<
   O extends object,
   S extends object
 >(
-  ruleOptionsArray: readonly unknown[],
+  ruleOptionsArray: unknowns,
   options: CreateRuleOptions<M, O, S>,
   ruleId: string,
   path: string,
@@ -569,8 +571,8 @@ function createBetterContext<
   O extends object,
   S extends object
 >(
-  context: RuleContext<M, readonly unknown[]>,
-  ruleOptionsArray: readonly unknown[],
+  context: RuleContext<M, unknowns>,
+  ruleOptionsArray: unknowns,
   options: CreateRuleOptions<M, O, S>
 ): Context<M, O, S> {
   const id = context.id;

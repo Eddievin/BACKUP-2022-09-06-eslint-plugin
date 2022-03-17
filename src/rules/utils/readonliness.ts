@@ -4,6 +4,7 @@ import * as ts from "typescript";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as cast from "@skylib/functions/dist/converters";
 import * as is from "@skylib/functions/dist/guards";
+import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from ".";
 
@@ -17,7 +18,7 @@ export interface Options<M extends string, O extends object, S extends object> {
   readonly ignoreClasses: boolean;
   readonly ignoreInterfaces: boolean;
   readonly ignoreTypeParameters?: boolean;
-  readonly ignoreTypes: readonly string[];
+  readonly ignoreTypes: strings;
   readonly readonliness: Readonliness;
 }
 
