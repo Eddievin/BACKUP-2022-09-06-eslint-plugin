@@ -13,6 +13,7 @@ import noUnnecessaryReadonly from "./rules/no-unnecessary-readonly";
 import noUnnecessaryWritable from "./rules/no-unnecessary-writable";
 import noUnsafeObjectAssignment from "./rules/no-unsafe-object-assignment";
 import noUnusedImport from "./rules/no-unused-import";
+import objectFormat from "./rules/object-format";
 import preferReadonly from "./rules/prefer-readonly";
 import requireJsdoc from "./rules/require-jsdoc";
 import sortClassMembers from "./rules/sort-class-members";
@@ -37,6 +38,7 @@ export = {
     "no-unnecessary-writable": noUnnecessaryWritable,
     "no-unsafe-object-assignment": noUnsafeObjectAssignment,
     "no-unused-import": noUnusedImport,
+    "object-format": objectFormat,
     "prefer-readonly": preferReadonly,
     "require-jsdoc": requireJsdoc,
     "sort-class-members": sortClassMembers,

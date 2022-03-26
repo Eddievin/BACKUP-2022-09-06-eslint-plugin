@@ -16,6 +16,7 @@ module.exports = [
   "no-unnecessary-writable",
   "no-unsafe-object-assignment",
   "no-unused-import",
+  "object-format",
   "prefer-readonly",
   "require-jsdoc",
   "sort-class-members",
