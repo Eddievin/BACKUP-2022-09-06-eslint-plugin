@@ -1,5 +1,6 @@
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
+import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import * as num from "@skylib/functions/dist/number";
 
@@ -24,11 +25,28 @@ const rule = utils.createRule({
           context.getText(property)
         );
 
-        const predictedLength =
-          context.getLocFromRange(node.range).start.column +
-          num.sum(...texts.map(text => text.trim().length)) +
-          2 * texts.length +
-          3;
+        const predictedLength = fn.run(() => {
+          const headLength = context.getLocFromRange(node.range).start.column;
+
+          const tailLength = fn.run(() => {
+            const tail = context.code.slice(node.range[1]);
+
+            if (tail.startsWith(" as ")) return 1000;
+
+            if (tail.startsWith(");")) return 2;
+
+            return 1;
+          });
+
+          return (
+            headLength +
+            2 +
+            num.sum(...texts.map(text => text.trim().length)) +
+            2 * (texts.length - 1) +
+            2 +
+            tailLength
+          );
+        });
 
         const expectedMultiline = texts.length > context.options.maxObjectSize;
 
@@ -48,12 +66,7 @@ const rule = utils.createRule({
                 .map(property => context.getText(property))
                 .join(",\n");
 
-              return [
-                {
-                  range: node.range,
-                  text: `{\n${propertiesText}\n}`
-                }
-              ];
+              return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
             },
             messageId: "expectingMultiline",
             node
@@ -66,12 +79,7 @@ const rule = utils.createRule({
                 .map(property => context.getText(property))
                 .join(",");
 
-              return [
-                {
-                  range: node.range,
-                  text: `{${propertiesText}}`
-                }
-              ];
+              return [{ range: node.range, text: `{${propertiesText}}` }];
             },
             messageId: "expectingSingleLine",
             node
@@ -79,10 +87,7 @@ const rule = utils.createRule({
       }
     };
   },
-  defaultOptions: {
-    maxLineLength: 80,
-    maxObjectSize: 2
-  },
+  defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
   fixable: "code",
   isRuleOptions,
   messages: {
