@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTypePartsWithTypeofFix = exports.getTypeParts = void 0;
 const tslib_1 = require("tslib");
-const _ = (0, tslib_1.__importStar)(require("lodash"));
-const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
-const ts = (0, tslib_1.__importStar)(require("typescript"));
+const _ = tslib_1.__importStar(require("lodash"));
+const tsutils = tslib_1.__importStar(require("tsutils"));
+const ts = tslib_1.__importStar(require("typescript"));
 const utils_1 = require("@typescript-eslint/utils");
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const core_1 = require("@skylib/functions/dist/types/core");
 /**
  * Gets type parts.

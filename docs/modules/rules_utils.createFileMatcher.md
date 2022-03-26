@@ -22,8 +22,8 @@ Creates file matcher.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `disallow` | readonly `string`[] | Disallow patterns. |
-| `allow` | readonly `string`[] | Allow patterns. |
+| `disallow` | `strings` | Disallow patterns. |
+| `allow` | `strings` | Allow patterns. |
 | `defVal` | `boolean` | Default value. |
 | `options` | `Readonly`<`IOptions`\> | Minimatch options. |
 

@@ -1,10 +1,10 @@
 "use strict";
 const tslib_1 = require("tslib");
-const tsutils = (0, tslib_1.__importStar)(require("tsutils"));
+const tsutils = tslib_1.__importStar(require("tsutils"));
 const utils_1 = require("@typescript-eslint/utils");
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const core_1 = require("@skylib/functions/dist/types/core");
-const utils = (0, tslib_1.__importStar)(require("./utils"));
+const utils = tslib_1.__importStar(require("./utils"));
 const InterfaceOptionVO = (0, core_1.createValidationObject)({
     callSignatures: "callSignatures",
     constructSignatures: "constructSignatures",

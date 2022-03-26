@@ -1,11 +1,11 @@
 "use strict";
 const tslib_1 = require("tslib");
 const utils_1 = require("@typescript-eslint/utils");
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const regexp = (0, tslib_1.__importStar)(require("@skylib/functions/dist/regexp"));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const regexp = tslib_1.__importStar(require("@skylib/functions/dist/regexp"));
 const core_1 = require("@skylib/functions/dist/types/core");
-const utils = (0, tslib_1.__importStar)(require("./utils"));
+const utils = tslib_1.__importStar(require("./utils"));
 const SubOptionsContextVO = (0, core_1.createValidationObject)({
     code: "code",
     comment: "comment",
@@ -17,17 +17,17 @@ const isRuleOptions = is.factory(is.object.of, { contexts: isSubOptionsContexts 
 const isSubOptions = is.factory(is.object.of, { patterns: is.strings }, { contexts: isSubOptionsContexts, replacement: is.string });
 const rule = utils.createRule({
     create(context) {
-        const strings = [];
+        const stringRanges = [];
         return {
             [utils_1.AST_NODE_TYPES.Literal](node) {
-                strings.push(node.range);
+                stringRanges.push(node.range);
             },
             [utils_1.AST_NODE_TYPES.TemplateLiteral](node) {
-                strings.push(node.range);
+                stringRanges.push(node.range);
             },
             "Program:exit"(program) {
                 var _a;
-                const comments = utils
+                const commentRanges = utils
                     .getComments(program)
                     .map(comment => comment.range);
                 for (const subOptions of context.subOptionsArray) {
@@ -36,7 +36,7 @@ const rule = utils.createRule({
                         // eslint-disable-next-line security/detect-non-literal-regexp
                         const re = new RegExp(pattern, "u");
                         for (const range of matchAll(re, context))
-                            if (contexts.includes(getContext(range, comments, strings)))
+                            if (contexts.includes(getContext(range, commentRanges, stringRanges)))
                                 context.report({
                                     fix() {
                                         return is.not.empty(subOptions.replacement)
@@ -72,14 +72,14 @@ const rule = utils.createRule({
  * Gets suboptions context.
  *
  * @param range - Range.
- * @param comments - Comment ranges.
- * @param strings - String ranges.
+ * @param commentRanges - Comment ranges.
+ * @param stringRanges - String ranges.
  * @returns Suboptions context.
  */
-function getContext(range, comments, strings) {
-    if (inRanges(range, comments))
+function getContext(range, commentRanges, stringRanges) {
+    if (inRanges(range, commentRanges))
         return "comment";
-    if (inRanges(range, strings))
+    if (inRanges(range, stringRanges))
         return "string";
     return "code";
 }

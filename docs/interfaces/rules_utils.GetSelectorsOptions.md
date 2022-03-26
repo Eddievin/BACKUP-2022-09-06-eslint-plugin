@@ -16,13 +16,13 @@
 
 ### excludeSelectors
 
-• `Readonly` **excludeSelectors**: readonly `string`[]
+• `Readonly` **excludeSelectors**: `strings`
 
 ___
 
 ### includeSelectors
 
-• `Readonly` **includeSelectors**: readonly `string`[]
+• `Readonly` **includeSelectors**: `strings`
 
 ___
 

@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRule = void 0;
 const tslib_1 = require("tslib");
 const utils_1 = require("@typescript-eslint/utils");
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const utils = (0, tslib_1.__importStar)(require("."));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const utils = tslib_1.__importStar(require("."));
 const readonliness_1 = require("./readonliness");
 /**
  * Creates rule.

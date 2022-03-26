@@ -1,15 +1,15 @@
 "use strict";
 const tslib_1 = require("tslib");
-const minimatch_1 = (0, tslib_1.__importDefault)(require("minimatch"));
-const path_1 = (0, tslib_1.__importDefault)(require("path"));
+const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
+const path_1 = tslib_1.__importDefault(require("path"));
 const utils_1 = require("@typescript-eslint/utils");
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
 const core_1 = require("@skylib/functions/dist/types/core");
-const utils = (0, tslib_1.__importStar)(require("./utils"));
+const utils = tslib_1.__importStar(require("./utils"));
 const TypeVO = (0, core_1.createValidationObject)({
     default: "default",
     wildcard: "wildcard"

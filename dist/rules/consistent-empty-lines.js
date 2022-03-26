@@ -1,12 +1,12 @@
 "use strict";
 const tslib_1 = require("tslib");
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
-const arrayMap = (0, tslib_1.__importStar)(require("@skylib/functions/dist/arrayMap"));
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
 const core_1 = require("@skylib/functions/dist/types/core");
-const utils = (0, tslib_1.__importStar)(require("./utils"));
+const utils = tslib_1.__importStar(require("./utils"));
 const EmptyLineVO = (0, core_1.createValidationObject)({
     always: "always",
     any: "any",

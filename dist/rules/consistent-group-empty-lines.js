@@ -1,11 +1,11 @@
 "use strict";
 const tslib_1 = require("tslib");
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
-const arrayMap = (0, tslib_1.__importStar)(require("@skylib/functions/dist/arrayMap"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const num = (0, tslib_1.__importStar)(require("@skylib/functions/dist/number"));
-const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
-const utils = (0, tslib_1.__importStar)(require("./utils"));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
+const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const utils = tslib_1.__importStar(require("./utils"));
 const isSubOptions = is.factory(is.object.of, {
     averageLinesGte: is.number,
     everyLinesGte: is.number,

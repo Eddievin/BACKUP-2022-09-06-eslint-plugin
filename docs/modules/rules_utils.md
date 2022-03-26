@@ -99,7 +99,7 @@ Creates file matcher.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `patterns` | readonly `string`[] | Patterns. |
+| `patterns` | `strings` | Patterns. |
 | `defVal` | `boolean` | Default value. |
 | `options` | `Readonly`<`IOptions`\> | Minimatch options. |
 
@@ -121,7 +121,7 @@ Creates matcher.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `patterns` | readonly `string`[] | RegExp patterns. |
+| `patterns` | `strings` | RegExp patterns. |
 
 #### Returns
 
@@ -230,7 +230,7 @@ Gets selectors as a string.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `options` | [`GetSelectorsOptions`](../interfaces/rules_utils.GetSelectorsOptions.md) | Options. |
-| `defaultSelectors` | readonly `string`[] | Default selectors. |
+| `defaultSelectors` | `strings` | Default selectors. |
 
 #### Returns
 

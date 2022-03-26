@@ -21,6 +21,7 @@ ESLint plugin / [Exports](modules.md)
   - [no-unnecessary-writable](#no-unnecessary-writable)
   - [no-unsafe-object-assignment](#no-unsafe-object-assignment)
   - [no-unused-import](#no-unused-import)
+  - [object-format](#object-format)
   - [prefer-readonly](#prefer-readonly)
   - [require-jsdoc](#require-jsdoc)
   - [sort-class-members](#sort-class-members)
@@ -373,6 +374,16 @@ Removes unused import.
 
 ```ts
 "@skylib/no-unused-import": "error"
+```
+
+### <a name="object-format"></a>object-format
+
+Enforces consistent use of mutliline or single-line object literals.
+
+#### eslintrc.js
+
+```ts
+"@skylib/object-format": "error"
 ```
 
 ### <a name="prefer-readonly"></a>prefer-readonly

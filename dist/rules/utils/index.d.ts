@@ -5,7 +5,7 @@ import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
-import type { objects, ReadonlyRecord } from "@skylib/functions/dist/types/core";
+import type { objects, ReadonlyRecord, strings, unknowns } from "@skylib/functions/dist/types/core";
 export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
     /**
      * Creates rule listener.
@@ -93,15 +93,15 @@ export interface Context<M extends string, O extends object, S extends object> {
      * @param descriptor - Descriptor.
      */
     readonly report: (descriptor: ReportDescriptor<M>) => void;
-    readonly scope: ReturnType<RuleContext<M, readonly unknown[]>["getScope"]>;
+    readonly scope: ReturnType<RuleContext<M, unknowns>["getScope"]>;
     readonly source: SourceCode;
     readonly subOptionsArray: readonly S[];
     readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
     readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
 }
 export interface GetSelectorsOptions {
-    readonly excludeSelectors: readonly string[];
-    readonly includeSelectors: readonly string[];
+    readonly excludeSelectors: strings;
+    readonly includeSelectors: strings;
     readonly noDefaultSelectors: boolean;
 }
 export interface InvalidTestCase<M extends string> extends BaseInvalidTestCase<M, readonly [object]> {
@@ -141,9 +141,9 @@ export declare function buildChildNodesMap(node: TSESTree.Node, mutableChildNode
  * @param options - Minimatch options.
  * @returns Matcher.
  */
-export declare function createFileMatcher(patterns: readonly string[], defVal: boolean, options: Readonly<minimatch.IOptions>): Matcher;
+export declare function createFileMatcher(patterns: strings, defVal: boolean, options: Readonly<minimatch.IOptions>): Matcher;
 export declare namespace createFileMatcher {
-    var disallowAllow: (disallow: readonly string[], allow: readonly string[], defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher;
+    var disallowAllow: (disallow: strings, allow: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher;
 }
 /**
  * Creates matcher.
@@ -151,7 +151,7 @@ export declare namespace createFileMatcher {
  * @param patterns - RegExp patterns.
  * @returns Matcher.
  */
-export declare function createMatcher(patterns: readonly string[]): Matcher;
+export declare function createMatcher(patterns: strings): Matcher;
 /**
  * Creates rule listenter.
  *
@@ -187,7 +187,7 @@ export declare function getNodeId(node: TSESTree.Node | undefined): string;
  * @param defaultSelectors - Default selectors.
  * @returns Selectors as a string.
  */
-export declare function getSelectors(options: GetSelectorsOptions, defaultSelectors: readonly string[]): string;
+export declare function getSelectors(options: GetSelectorsOptions, defaultSelectors: strings): string;
 /**
  * Gets type name.
  *

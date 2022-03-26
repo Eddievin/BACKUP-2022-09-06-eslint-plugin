@@ -1,4 +1,5 @@
 import * as ts from "typescript";
+import type { strings } from "@skylib/functions/dist/types/core";
 import * as utils from ".";
 export interface InvalidResult {
     readonly failed: true;
@@ -9,7 +10,7 @@ export interface Options<M extends string, O extends object, S extends object> {
     readonly ignoreClasses: boolean;
     readonly ignoreInterfaces: boolean;
     readonly ignoreTypeParameters?: boolean;
-    readonly ignoreTypes: readonly string[];
+    readonly ignoreTypes: strings;
     readonly readonliness: Readonliness;
 }
 export declare type Readonliness = "allDefinitelyReadonly" | "allDefinitelyWritable" | "allMaybeReadonly" | "allMaybeWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";

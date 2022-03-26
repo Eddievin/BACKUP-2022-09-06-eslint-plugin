@@ -1,7 +1,7 @@
 "use strict";
 const tslib_1 = require("tslib");
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const utils = (0, tslib_1.__importStar)(require("./utils"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const utils = tslib_1.__importStar(require("./utils"));
 const isSubOptions = is.factory(is.object.of, { ids: is.strings }, { replacement: is.string });
 const rule = utils.createRule({
     create(context) {

@@ -51,7 +51,7 @@ ___
 
 ### ignoreTypes
 
-• `Readonly` **ignoreTypes**: readonly `string`[]
+• `Readonly` **ignoreTypes**: `strings`
 
 ___
 

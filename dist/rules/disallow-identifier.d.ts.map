@@ -1,1 +1,1 @@
-{"version":3,"file":"disallow-identifier.d.ts","sourceRoot":"","sources":["../../src/rules/disallow-identifier.ts"],"names":[],"mappings":"AAiBA,QAAA,MAAM,IAAI,qNA+BR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"disallow-identifier.d.ts","sourceRoot":"","sources":["../../src/rules/disallow-identifier.ts"],"names":[],"mappings":"AAkBA,QAAA,MAAM,IAAI,qNA+BR,CAAC;AAEH,SAAS,IAAI,CAAC"}

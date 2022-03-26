@@ -22,6 +22,7 @@
 - [rules/no-unnecessary-writable](modules/rules_no_unnecessary_writable.md)
 - [rules/no-unsafe-object-assignment](modules/rules_no_unsafe_object_assignment.md)
 - [rules/no-unused-import](modules/rules_no_unused_import.md)
+- [rules/object-format](modules/rules_object_format.md)
 - [rules/prefer-readonly](modules/rules_prefer_readonly.md)
 - [rules/require-jsdoc](modules/rules_require_jsdoc.md)
 - [rules/sort-class-members](modules/rules_sort_class_members.md)
