@@ -21,9 +21,9 @@ const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
 const isRuleOptions = is.factory(is.object.of, {
     excludeSelectors: is.strings,
     includeSelectors: is.strings,
-    interfaceOptions: isInterfaceOptions,
+    interfaces: isInterfaceOptions,
     noDefaultSelectors: is.boolean,
-    propertyOptions: isPropertyOptions
+    properties: isPropertyOptions
 }, {});
 const rule = utils.createRule({
     create(context) {
@@ -51,9 +51,9 @@ const rule = utils.createRule({
     defaultOptions: {
         excludeSelectors: [],
         includeSelectors: [],
-        interfaceOptions: ["callSignatures", "constructSignatures", "interface"],
+        interfaces: ["callSignatures", "constructSignatures", "interface"],
         noDefaultSelectors: false,
-        propertyOptions: ["function", "nonFunction"]
+        properties: ["function", "nonFunction"]
     },
     isRuleOptions,
     messages: {
@@ -67,6 +67,7 @@ const defaultSelectors = [
     utils_1.AST_NODE_TYPES.FunctionDeclaration,
     utils_1.AST_NODE_TYPES.MethodDefinition,
     utils_1.AST_NODE_TYPES.PropertyDefinition,
+    utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition,
     utils_1.AST_NODE_TYPES.TSCallSignatureDeclaration,
     utils_1.AST_NODE_TYPES.TSConstructSignatureDeclaration,
     utils_1.AST_NODE_TYPES.TSDeclareFunction,
@@ -81,14 +82,14 @@ const defaultSelectors = [
  * @param context - Context.
  */
 function lintInterface(node, context) {
-    const { interfaceOptions } = context.options;
+    const { interfaces } = context.options;
     const tsNode = context.toTsNode(node);
     const type = context.checker.getTypeAtLocation(tsNode);
-    if (interfaceOptions.includes("interface"))
+    if (interfaces.includes("interface"))
         lintNodeByTypeSymbol(node, context);
-    if (interfaceOptions.includes("callSignatures"))
+    if (interfaces.includes("callSignatures"))
         lintCallSignatures(node, type, context);
-    if (interfaceOptions.includes("constructSignatures"))
+    if (interfaces.includes("constructSignatures"))
         lintConstructSignatures(node, type, context);
 }
 /**
@@ -113,13 +114,13 @@ function lintMethod(node, context) {
  * @param context - Context.
  */
 function lintProperty(node, context) {
-    const { propertyOptions } = context.options;
+    const { properties } = context.options;
     const typeAnnotation = node.typeAnnotation;
     if (typeAnnotation) {
         const type = typeAnnotation.typeAnnotation.type;
         if (type === utils_1.AST_NODE_TYPES.TSFunctionType
-            ? propertyOptions.includes("function")
-            : propertyOptions.includes("nonFunction"))
+            ? properties.includes("function")
+            : properties.includes("nonFunction"))
             lintNodeBySymbol(node.key, context);
     }
 }
