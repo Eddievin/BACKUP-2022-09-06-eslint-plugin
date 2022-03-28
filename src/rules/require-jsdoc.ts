@@ -35,9 +35,9 @@ const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
 interface RuleOptions {
   readonly excludeSelectors: strings;
   readonly includeSelectors: strings;
-  readonly interfaceOptions: readonly InterfaceOption[];
+  readonly interfaces: readonly InterfaceOption[];
   readonly noDefaultSelectors: boolean;
-  readonly propertyOptions: readonly PropertyOption[];
+  readonly properties: readonly PropertyOption[];
 }
 
 const isRuleOptions: is.Guard<RuleOptions> = is.factory(
@@ -45,9 +45,9 @@ const isRuleOptions: is.Guard<RuleOptions> = is.factory(
   {
     excludeSelectors: is.strings,
     includeSelectors: is.strings,
-    interfaceOptions: isInterfaceOptions,
+    interfaces: isInterfaceOptions,
     noDefaultSelectors: is.boolean,
-    propertyOptions: isPropertyOptions
+    properties: isPropertyOptions
   },
   {}
 );
@@ -85,9 +85,9 @@ const rule = utils.createRule({
   defaultOptions: {
     excludeSelectors: [],
     includeSelectors: [],
-    interfaceOptions: ["callSignatures", "constructSignatures", "interface"],
+    interfaces: ["callSignatures", "constructSignatures", "interface"],
     noDefaultSelectors: false,
-    propertyOptions: ["function", "nonFunction"]
+    properties: ["function", "nonFunction"]
   },
   isRuleOptions,
   messages: {
@@ -133,19 +133,18 @@ function lintInterface(
   node: TSESTree.TSInterfaceDeclaration,
   context: Context
 ): void {
-  const { interfaceOptions } = context.options;
+  const { interfaces } = context.options;
 
   const tsNode = context.toTsNode(node);
 
   const type = context.checker.getTypeAtLocation(tsNode);
 
-  if (interfaceOptions.includes("interface"))
-    lintNodeByTypeSymbol(node, context);
+  if (interfaces.includes("interface")) lintNodeByTypeSymbol(node, context);
 
-  if (interfaceOptions.includes("callSignatures"))
+  if (interfaces.includes("callSignatures"))
     lintCallSignatures(node, type, context);
 
-  if (interfaceOptions.includes("constructSignatures"))
+  if (interfaces.includes("constructSignatures"))
     lintConstructSignatures(node, type, context);
 }
 
@@ -181,7 +180,7 @@ function lintProperty(
   node: TSESTree.PropertyDefinition | TSESTree.TSPropertySignature,
   context: Context
 ): void {
-  const { propertyOptions } = context.options;
+  const { properties } = context.options;
 
   const typeAnnotation = node.typeAnnotation;
 
@@ -190,8 +189,8 @@ function lintProperty(
 
     if (
       type === AST_NODE_TYPES.TSFunctionType
-        ? propertyOptions.includes("function")
-        : propertyOptions.includes("nonFunction")
+        ? properties.includes("function")
+        : properties.includes("nonFunction")
     )
       lintNodeBySymbol(node.key, context);
   }

@@ -23,7 +23,7 @@ utils.testRule("require-jsdoc", requireJsdoc, [
     `,
     errors: [{ line: 4, messageId: "undocumented" }],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ interfaceOptions: ["interface"] }]
+    options: [{ interfaces: ["interface"] }]
   },
   {
     code: `
@@ -38,7 +38,7 @@ utils.testRule("require-jsdoc", requireJsdoc, [
     `,
     errors: [{ line: 6, messageId: "undocumentedCallSignature" }],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ interfaceOptions: ["callSignatures"] }]
+    options: [{ interfaces: ["callSignatures"] }]
   },
   {
     code: `
@@ -53,7 +53,7 @@ utils.testRule("require-jsdoc", requireJsdoc, [
     `,
     errors: [{ line: 6, messageId: "undocumentedConstructSignature" }],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ interfaceOptions: ["constructSignatures"] }]
+    options: [{ interfaces: ["constructSignatures"] }]
   },
   {
     code: `
@@ -115,7 +115,7 @@ utils.testRule("require-jsdoc", requireJsdoc, [
       { line: 2, messageId: "undocumented" }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ propertyOptions: ["function"] }]
+    options: [{ properties: ["function"] }]
   },
   {
     code: `
@@ -135,6 +135,6 @@ utils.testRule("require-jsdoc", requireJsdoc, [
       { line: 2, messageId: "undocumented" }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ propertyOptions: ["nonFunction"] }]
+    options: [{ properties: ["nonFunction"] }]
   }
 ]);

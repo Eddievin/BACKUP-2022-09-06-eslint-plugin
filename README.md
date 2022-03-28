@@ -429,9 +429,9 @@ Requires JSDoc comments.
   {
     excludeSelectors?: string[],
     includeSelectors?: string[],
-    interfaceOptions?: Array<"callSignatures" | "constructSignatures" | "interface">,
+    interfaces?: Array<"callSignatures" | "constructSignatures" | "interface">,
     noDefaultSelectors?: string[],
-    propertyOptions?: Array<"function" | "nonFunction">
+    properties?: Array<"function" | "nonFunction">
   }
 ]
 ```
@@ -442,12 +442,12 @@ Requires JSDoc comments.
 | :------ | :------ |
 | `excludeSelectors` | Excludes AST selectors. |
 | `includeSelectors` | Adds AST selectors. |
-| `interfaceOptions.callSignatures` | Require JSDoc comment for call signatures. |
-| `interfaceOptions.constructSignatures` | Require JSDoc comment for constructor signatures. |
-| `interfaceOptions.interface` | Require JSDoc comment for interface. |
+| `interfaces.callSignatures` | Require JSDoc comment for call signatures. |
+| `interfaces.constructSignatures` | Require JSDoc comment for constructor signatures. |
+| `interfaces.interface` | Require JSDoc comment for interface. |
 | `noDefaultSelectors` | Do not use default AST selectors. |
-| `propertyOptions.function` | Require JSDoc comment for function property. |
-| `propertyOptions.nonFunction` | Require JSDoc comment for non-function property. |
+| `properties.function` | Require JSDoc comment for function property. |
+| `properties.nonFunction` | Require JSDoc comment for non-function property. |
 
 ### <a name="sort-class-members"></a>sort-class-members
 
