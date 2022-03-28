@@ -115,6 +115,7 @@ const defaultSelectors: strings = [
   AST_NODE_TYPES.FunctionDeclaration,
   AST_NODE_TYPES.MethodDefinition,
   AST_NODE_TYPES.PropertyDefinition,
+  AST_NODE_TYPES.TSAbstractMethodDefinition,
   AST_NODE_TYPES.TSCallSignatureDeclaration,
   AST_NODE_TYPES.TSConstructSignatureDeclaration,
   AST_NODE_TYPES.TSDeclareFunction,
