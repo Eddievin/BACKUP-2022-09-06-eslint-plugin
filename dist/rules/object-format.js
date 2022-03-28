@@ -1,6 +1,7 @@
 "use strict";
 const tslib_1 = require("tslib");
 const utils_1 = require("@typescript-eslint/utils");
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
 const utils = tslib_1.__importStar(require("./utils"));
@@ -10,10 +11,23 @@ const rule = utils.createRule({
         return {
             [utils_1.AST_NODE_TYPES.ObjectExpression](node) {
                 const texts = node.properties.map(property => context.getText(property));
-                const predictedLength = context.getLocFromRange(node.range).start.column +
-                    num.sum(...texts.map(text => text.trim().length)) +
-                    2 * texts.length +
-                    3;
+                const predictedLength = fn.run(() => {
+                    const headLength = context.getLocFromRange(node.range).start.column;
+                    const tailLength = fn.run(() => {
+                        const tail = context.code.slice(node.range[1]);
+                        if (tail.startsWith(" as "))
+                            return 1000;
+                        if (tail.startsWith(");"))
+                            return 2;
+                        return 1;
+                    });
+                    return (headLength +
+                        2 +
+                        num.sum(...texts.map(text => text.trim().length)) +
+                        2 * (texts.length - 1) +
+                        2 +
+                        tailLength);
+                });
                 const expectedMultiline = texts.length > context.options.maxObjectSize;
                 const gotMultiline = isMultiline(context.getText(node));
                 const expectedSingleLine = texts.length <= context.options.maxObjectSize &&
@@ -26,12 +40,7 @@ const rule = utils.createRule({
                             const propertiesText = node.properties
                                 .map(property => context.getText(property))
                                 .join(",\n");
-                            return [
-                                {
-                                    range: node.range,
-                                    text: `{\n${propertiesText}\n}`
-                                }
-                            ];
+                            return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
                         },
                         messageId: "expectingMultiline",
                         node
@@ -42,12 +51,7 @@ const rule = utils.createRule({
                             const propertiesText = node.properties
                                 .map(property => context.getText(property))
                                 .join(",");
-                            return [
-                                {
-                                    range: node.range,
-                                    text: `{${propertiesText}}`
-                                }
-                            ];
+                            return [{ range: node.range, text: `{${propertiesText}}` }];
                         },
                         messageId: "expectingSingleLine",
                         node
@@ -55,10 +59,7 @@ const rule = utils.createRule({
             }
         };
     },
-    defaultOptions: {
-        maxLineLength: 80,
-        maxObjectSize: 2
-    },
+    defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
     fixable: "code",
     isRuleOptions,
     messages: {
