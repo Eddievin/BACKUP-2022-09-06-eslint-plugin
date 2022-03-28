@@ -39,6 +39,7 @@
 - [getTextWithLeadingTrivia](rules_utils.Context.md#gettextwithleadingtrivia)
 - [getTypeDefinitions](rules_utils.Context.md#gettypedefinitions)
 - [hasLeadingDocComment](rules_utils.Context.md#hasleadingdoccomment)
+- [hasTrailingComment](rules_utils.Context.md#hastrailingcomment)
 - [missingDocComment](rules_utils.Context.md#missingdoccomment)
 - [report](rules_utils.Context.md#report)
 
@@ -299,6 +300,26 @@ Checks if node has leading doc comment.
 `boolean`
 
 _True_ if node has leading doc comment, _false_ otherwise.
+
+___
+
+### hasTrailingComment
+
+▸ `Readonly` **hasTrailingComment**(`node`): `boolean`
+
+Checks if node has trailing comment.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `node` | `Node` | Node. |
+
+#### Returns
+
+`boolean`
+
+_True_ if node has trailing comment, _false_ otherwise.
 
 ___
 

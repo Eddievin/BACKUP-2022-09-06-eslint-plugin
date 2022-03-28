@@ -10,7 +10,7 @@ const rule = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.ObjectExpression](node) {
-                const texts = node.properties.map(property => context.getText(property));
+                const texts = node.properties.map(property => context.getTextWithLeadingTrivia(property).trim());
                 const predictedLength = fn.run(() => {
                     const headLength = context.getLocFromRange(node.range).start.column;
                     const tailLength = fn.run(() => {
@@ -28,29 +28,26 @@ const rule = utils.createRule({
                         2 +
                         tailLength);
                 });
-                const expectedMultiline = texts.length > context.options.maxObjectSize;
+                const expectMultiline = texts.length > context.options.maxObjectSize;
                 const gotMultiline = isMultiline(context.getText(node));
-                const expectedSingleLine = texts.length <= context.options.maxObjectSize &&
-                    predictedLength <= context.options.maxLineLength &&
-                    texts.every(text => isSingleLine(text));
-                const gotSingle = isSingleLine(context.getText(node));
-                if (expectedMultiline && !gotMultiline)
+                const keepMultiline = predictedLength > context.options.maxLineLength ||
+                    texts.some(text => isMultiline(text)) ||
+                    node.properties.some(property => context.hasTrailingComment(property));
+                const expectSingleLine = !expectMultiline && !keepMultiline;
+                const gotSingleLine = isSingleLine(context.getText(node));
+                if (expectMultiline && !gotMultiline)
                     context.report({
                         fix() {
-                            const propertiesText = node.properties
-                                .map(property => context.getText(property))
-                                .join(",\n");
+                            const propertiesText = texts.join(",\n");
                             return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
                         },
                         messageId: "expectingMultiline",
                         node
                     });
-                if (expectedSingleLine && !gotSingle)
+                if (expectSingleLine && !gotSingleLine)
                     context.report({
                         fix() {
-                            const propertiesText = node.properties
-                                .map(property => context.getText(property))
-                                .join(",");
+                            const propertiesText = texts.join(",");
                             return [{ range: node.range, text: `{${propertiesText}}` }];
                         },
                         messageId: "expectingSingleLine",

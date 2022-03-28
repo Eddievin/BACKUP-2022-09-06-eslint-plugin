@@ -326,6 +326,9 @@ function createBetterContext(context, ruleOptionsArray, options) {
         hasLeadingDocComment(node) {
             return this.getLeadingTrivia(node).trim().startsWith("/**");
         },
+        hasTrailingComment(node) {
+            return code.slice(node.range[1]).trim().startsWith("//");
+        },
         id,
         locZero: source.getLocFromIndex(0),
         missingDocComment(mixed) {
