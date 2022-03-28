@@ -22,7 +22,7 @@ const rule = utils.createRule({
     return {
       [AST_NODE_TYPES.ObjectExpression](node): void {
         const texts = node.properties.map(property =>
-          context.getText(property)
+          context.getTextWithLeadingTrivia(property).trim()
         );
 
         const predictedLength = fn.run(() => {
@@ -48,23 +48,25 @@ const rule = utils.createRule({
           );
         });
 
-        const expectedMultiline = texts.length > context.options.maxObjectSize;
+        const expectMultiline = texts.length > context.options.maxObjectSize;
 
         const gotMultiline = isMultiline(context.getText(node));
 
-        const expectedSingleLine =
-          texts.length <= context.options.maxObjectSize &&
-          predictedLength <= context.options.maxLineLength &&
-          texts.every(text => isSingleLine(text));
+        const keepMultiline =
+          predictedLength > context.options.maxLineLength ||
+          texts.some(text => isMultiline(text)) ||
+          node.properties.some(property =>
+            context.hasTrailingComment(property)
+          );
 
-        const gotSingle = isSingleLine(context.getText(node));
+        const expectSingleLine = !expectMultiline && !keepMultiline;
 
-        if (expectedMultiline && !gotMultiline)
+        const gotSingleLine = isSingleLine(context.getText(node));
+
+        if (expectMultiline && !gotMultiline)
           context.report({
             fix() {
-              const propertiesText = node.properties
-                .map(property => context.getText(property))
-                .join(",\n");
+              const propertiesText = texts.join(",\n");
 
               return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
             },
@@ -72,12 +74,10 @@ const rule = utils.createRule({
             node
           });
 
-        if (expectedSingleLine && !gotSingle)
+        if (expectSingleLine && !gotSingleLine)
           context.report({
             fix() {
-              const propertiesText = node.properties
-                .map(property => context.getText(property))
-                .join(",");
+              const propertiesText = texts.join(",");
 
               return [{ range: node.range, text: `{${propertiesText}}` }];
             },

@@ -73,6 +73,40 @@ utils.testRule(
         } as const;
       `,
       name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        const obj = {
+        // Comment
+        x: 1
+        };
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        const obj = { // Comment
+        x: 1
+        };
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        const obj = {
+        x: 1 // Comment
+        };
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        const obj = {
+        x: 1, // Comment
+        x: 2
+        };
+      `,
+      name: `Test at line ${getCurrentLine().line}`
     }
   ]
 );

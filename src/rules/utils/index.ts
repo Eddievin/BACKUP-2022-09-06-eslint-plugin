@@ -105,6 +105,13 @@ export interface Context<M extends string, O extends object, S extends object> {
    * @returns _True_ if node has leading doc comment, _false_ otherwise.
    */
   readonly hasLeadingDocComment: (node: TSESTree.Node) => boolean;
+  /**
+   * Checks if node has trailing comment.
+   *
+   * @param node - Node.
+   * @returns _True_ if node has trailing comment, _false_ otherwise.
+   */
+  readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
   readonly id: string;
   readonly locZero: TSESTree.Position;
   /**
@@ -631,6 +638,9 @@ function createBetterContext<
     },
     hasLeadingDocComment(node): boolean {
       return this.getLeadingTrivia(node).trim().startsWith("/**");
+    },
+    hasTrailingComment(node): boolean {
+      return code.slice(node.range[1]).trim().startsWith("//");
     },
     id,
     locZero: source.getLocFromIndex(0),
