@@ -27,12 +27,7 @@ const rule = utils.createRule({
             context.report({
               fix() {
                 return is.not.empty(subOptions.replacement)
-                  ? [
-                      {
-                        range: node.range,
-                        text: subOptions.replacement
-                      }
-                    ]
+                  ? [{ range: node.range, text: subOptions.replacement }]
                   : [];
               },
               messageId: "disallowedIdentifier",
@@ -44,9 +39,7 @@ const rule = utils.createRule({
   fixable: "code",
   isRuleOptions: is.object,
   isSubOptions,
-  messages: {
-    disallowedIdentifier: "Disallowed identifier"
-  }
+  messages: { disallowedIdentifier: "Disallowed identifier" }
 });
 
 export = rule;

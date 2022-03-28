@@ -24,8 +24,16 @@ utils.testRule(
         }
       `,
       errors: [
-        { endLine: 7, line: 4, messageId: "incorrectSortingOrder" },
-        { endLine: 12, line: 9, messageId: "incorrectSortingOrder" }
+        {
+          endLine: 7,
+          line: 4,
+          messageId: "incorrectSortingOrder"
+        },
+        {
+          endLine: 12,
+          line: 9,
+          messageId: "incorrectSortingOrder"
+        }
       ],
       name: `Test at line ${getCurrentLine().line}`,
       output: `
@@ -51,7 +59,13 @@ utils.testRule(
           a: 1
         }
       `,
-      errors: [{ endLine: 3, line: 2, messageId: "incorrectSortingOrder" }],
+      errors: [
+        {
+          endLine: 3,
+          line: 2,
+          messageId: "incorrectSortingOrder"
+        }
+      ],
       name: `Test at line ${getCurrentLine().line}`,
       output: `
         export default {
@@ -69,7 +83,13 @@ utils.testRule(
           d: 4
         }
       `,
-      errors: [{ endLine: 4, line: 3, messageId: "incorrectSortingOrder" }],
+      errors: [
+        {
+          endLine: 4,
+          line: 3,
+          messageId: "incorrectSortingOrder"
+        }
+      ],
       name: `Test at line ${getCurrentLine().line}`,
       output: `
         export default {

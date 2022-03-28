@@ -209,10 +209,7 @@ function lintNodeBySymbol(node: TSESTree.Node, context: Context): void {
   const symbol = context.checker.getSymbolAtLocation(tsNode);
 
   if (symbol && context.missingDocComment(symbol))
-    context.report({
-      messageId: "undocumented",
-      node
-    });
+    context.report({ messageId: "undocumented", node });
 }
 
 /**
@@ -227,10 +224,7 @@ function lintNodeByTypeSymbol(node: TSESTree.Node, context: Context): void {
   const symbol = context.checker.getTypeAtLocation(tsNode).getSymbol();
 
   if (symbol && context.missingDocComment(symbol))
-    context.report({
-      messageId: "undocumented",
-      node
-    });
+    context.report({ messageId: "undocumented", node });
 }
 
 /**
@@ -250,10 +244,7 @@ function lintCallSignatures(
       .getCallSignatures()
       .some(signature => context.missingDocComment(signature))
   )
-    context.report({
-      messageId: "undocumentedCallSignature",
-      node
-    });
+    context.report({ messageId: "undocumentedCallSignature", node });
 }
 
 /**
@@ -273,8 +264,5 @@ function lintConstructSignatures(
       .getConstructSignatures()
       .some(signature => context.missingDocComment(signature))
   )
-    context.report({
-      messageId: "undocumentedConstructSignature",
-      node
-    });
+    context.report({ messageId: "undocumentedConstructSignature", node });
 }

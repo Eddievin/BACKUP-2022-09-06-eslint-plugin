@@ -19,11 +19,7 @@ utils.testRule(
       `,
       errors: [{ line: 3, messageId: "unexpectedEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [{ selector: "Program > ExpressionStatement" }]
-        }
-      ],
+      options: [{ rules: [{ selector: "Program > ExpressionStatement" }] }],
       output: `
         x++;
         x++;
@@ -45,10 +41,7 @@ utils.testRule(
       options: [
         {
           rules: [
-            {
-              averageLinesGte: 2,
-              selector: "Program > ExpressionStatement"
-            }
+            { averageLinesGte: 2, selector: "Program > ExpressionStatement" }
           ]
         }
       ],
@@ -72,10 +65,7 @@ utils.testRule(
       options: [
         {
           rules: [
-            {
-              everyLinesGte: 2,
-              selector: "Program > ExpressionStatement"
-            }
+            { everyLinesGte: 2, selector: "Program > ExpressionStatement" }
           ]
         }
       ],
@@ -99,10 +89,7 @@ utils.testRule(
       options: [
         {
           rules: [
-            {
-              selector: "Program > ExpressionStatement",
-              someLinesGte: 3
-            }
+            { selector: "Program > ExpressionStatement", someLinesGte: 3 }
           ]
         }
       ],
@@ -125,9 +112,7 @@ utils.testRule(
       errors: [{ line: 4, messageId: "unexpectedEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          rules: [{ selector: "BlockStatement > ExpressionStatement" }]
-        }
+        { rules: [{ selector: "BlockStatement > ExpressionStatement" }] }
       ],
       output: `
         {
@@ -146,11 +131,7 @@ utils.testRule(
       `,
       errors: [{ line: 4, messageId: "unexpectedEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [{ selector: "TSInterfaceBody > *" }]
-        }
-      ],
+      options: [{ rules: [{ selector: "TSInterfaceBody > *" }] }],
       output: `
         interface I {
           x: string;
@@ -170,12 +151,7 @@ utils.testRule(
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
-          rules: [
-            {
-              selector: "TSInterfaceBody > *",
-              someHasDocComment: true
-            }
-          ]
+          rules: [{ selector: "TSInterfaceBody > *", someHasDocComment: true }]
         }
       ],
       output: `
@@ -200,11 +176,7 @@ utils.testRule(
       `,
       errors: [{ line: 4, messageId: "unexpectedEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [{ selector: "ArrayExpression > *" }]
-        }
-      ],
+      options: [{ rules: [{ selector: "ArrayExpression > *" }] }],
       output: `
         const x = [
           1,
@@ -229,11 +201,7 @@ utils.testRule(
       `,
       errors: [{ line: 6, messageId: "unexpectedEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [{ selector: "ArrayExpression > *" }]
-        }
-      ],
+      options: [{ rules: [{ selector: "ArrayExpression > *" }] }],
       output: `
         const x = [
           {
@@ -265,9 +233,7 @@ utils.testRule(
       ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          rules: [{ selector: "BlockStatement > ExpressionStatement" }]
-        }
+        { rules: [{ selector: "BlockStatement > ExpressionStatement" }] }
       ],
       output: `
         {
@@ -288,11 +254,7 @@ utils.testRule(
         const a = 1;
       `,
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [{ selector: "Program > ExpressionStatement" }]
-        }
-      ]
+      options: [{ rules: [{ selector: "Program > ExpressionStatement" }] }]
     }
   ]
 );

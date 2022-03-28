@@ -35,22 +35,14 @@ const rule = utils.createRule({
         assert.string(source);
 
         if (matchers.some(matcher => matcher(source)))
-          context.report({
-            messageId: "disallowedSource",
-            node
-          });
+          context.report({ messageId: "disallowedSource", node });
       }
     };
   },
-  defaultSubOptions: {
-    allow: [],
-    disallow: []
-  },
+  defaultSubOptions: { allow: [], disallow: [] },
   isRuleOptions: is.object,
   isSubOptions,
-  messages: {
-    disallowedSource: "Import from this source is not allowed"
-  }
+  messages: { disallowedSource: "Import from this source is not allowed" }
 });
 
 export = rule;

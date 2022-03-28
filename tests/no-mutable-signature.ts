@@ -94,10 +94,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "Record<string, unknown>",
-            name: "__type"
-          },
+          data: { definition: "Record<string, unknown>", name: "__type" },
           line: 1,
           messageId: "noMutableStringSignature"
         }

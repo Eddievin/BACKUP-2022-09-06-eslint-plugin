@@ -18,18 +18,12 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "{ value: number; }",
-            name: "__type"
-          },
+          data: { definition: "{ value: number; }", name: "__type" },
           line: 1,
           messageId: "shouldBeReadonly"
         },
         {
-          data: {
-            definition: "I",
-            name: "I"
-          },
+          data: { definition: "I", name: "I" },
           line: 4,
           messageId: "shouldBeReadonly"
         }
@@ -43,10 +37,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "{ value: number; }",
-            name: "__type"
-          },
+          data: { definition: "{ value: number; }", name: "__type" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -66,10 +57,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "I",
-            name: "I"
-          },
+          data: { definition: "I", name: "I" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -89,10 +77,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "I > string[]",
-            name: "I > Array"
-          },
+          data: { definition: "I > string[]", name: "I > Array" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -113,10 +98,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "{ value: number; }",
-            name: "__type"
-          },
+          data: { definition: "{ value: number; }", name: "__type" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -132,10 +114,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "string[]",
-            name: "Array"
-          },
+          data: { definition: "string[]", name: "Array" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -155,10 +134,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "I",
-            name: "I"
-          },
+          data: { definition: "I", name: "I" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -176,10 +152,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "C",
-            name: "C"
-          },
+          data: { definition: "C", name: "C" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -196,34 +169,22 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "I",
-            name: "I"
-          },
+          data: { definition: "I", name: "I" },
           line: 1,
           messageId: "shouldBeReadonly"
         },
         {
-          data: {
-            definition: "J",
-            name: "J"
-          },
+          data: { definition: "J", name: "J" },
           line: 2,
           messageId: "shouldBeReadonly"
         },
         {
-          data: {
-            definition: "T1 > I",
-            name: "? > I"
-          },
+          data: { definition: "T1 > I", name: "? > I" },
           line: 4,
           messageId: "shouldBeReadonly"
         },
         {
-          data: {
-            definition: "T2 > I",
-            name: "? > I"
-          },
+          data: { definition: "T2 > I", name: "? > I" },
           line: 5,
           messageId: "shouldBeReadonly"
         }
@@ -238,10 +199,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "string[]",
-            name: "Array"
-          },
+          data: { definition: "string[]", name: "Array" },
           line: 1,
           messageId: "shouldBeReadonly"
         }
@@ -256,10 +214,7 @@ utils.testRule(
       `,
       errors: [
         {
-          data: {
-            definition: "string[]",
-            name: "Array"
-          },
+          data: { definition: "string[]", name: "Array" },
           line: 3,
           messageId: "shouldBeReadonly"
         }

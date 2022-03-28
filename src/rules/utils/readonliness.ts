@@ -229,10 +229,7 @@ export class Checker<M extends string, O extends object, S extends object> {
       const result = this.recurs(subtype);
 
       if ("failed" in result)
-        return {
-          failed: true,
-          types: [type, ...result.types]
-        };
+        return { failed: true, types: [type, ...result.types] };
     }
 
     return { passed: true };

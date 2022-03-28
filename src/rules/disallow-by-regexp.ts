@@ -93,15 +93,11 @@ const rule = utils.createRule({
       }
     };
   },
-  defaultOptions: {
-    contexts: ["code", "comment", "string"]
-  },
+  defaultOptions: { contexts: ["code", "comment", "string"] },
   fixable: "code",
   isRuleOptions,
   isSubOptions,
-  messages: {
-    disallowedCode: "Disallowed code"
-  }
+  messages: { disallowedCode: "Disallowed code" }
 });
 
 export = rule;

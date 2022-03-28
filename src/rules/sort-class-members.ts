@@ -96,14 +96,10 @@ const rule = utils.createRule({
       }
     };
   },
-  defaultOptions: {
-    sortingOrder: []
-  },
+  defaultOptions: { sortingOrder: [] },
   fixable: "code",
   isRuleOptions,
-  messages: {
-    incorrectSortingOrder: "Incorrect sorting order"
-  }
+  messages: { incorrectSortingOrder: "Incorrect sorting order" }
 });
 
 export = rule;

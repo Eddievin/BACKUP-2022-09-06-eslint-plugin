@@ -31,10 +31,7 @@ utils.testRule("disallow-by-regexp", disallowByRegexp, [
     options: [
       {
         rules: [
-          {
-            patterns: [/a(\d)/u.source],
-            replacement: "A$1"
-          },
+          { patterns: [/a(\d)/u.source], replacement: "A$1" },
           {
             contexts: ["code"],
             patterns: [/b(\d)/u.source],
@@ -74,10 +71,6 @@ utils.testRule("disallow-by-regexp", disallowByRegexp, [
     `,
     errors: [{ line: 1, messageId: "disallowedCode" }],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [
-      {
-        rules: [{ patterns: [/a(\d)/u.source] }]
-      }
-    ]
+    options: [{ rules: [{ patterns: [/a(\d)/u.source] }] }]
   }
 ]);

@@ -473,12 +473,21 @@ export function testRule<M extends string>(
 
       const output = s.unpadMultiline(invalidTest.output ?? invalidTest.code);
 
-      return { ...invalidTest, code, filename, output };
+      return {
+        ...invalidTest,
+        code,
+        filename,
+        output
+      };
     }),
     valid: valid.map(validTest => {
       const code = s.unpadMultiline(validTest.code);
 
-      return { ...validTest, code, filename };
+      return {
+        ...validTest,
+        code,
+        filename
+      };
     })
   });
 }
@@ -498,7 +507,11 @@ interface SharedOptions {
 const isSharedOptions: is.Guard<SharedOptions> = is.factory(
   is.object.of,
   {},
-  { filesToLint: is.strings, filesToSkip: is.strings, subOptionsId: is.string }
+  {
+    filesToLint: is.strings,
+    filesToSkip: is.strings,
+    subOptionsId: is.string
+  }
 );
 
 /**

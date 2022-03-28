@@ -32,7 +32,11 @@ interface SubOptions {
 
 const isSubOptions: is.Guard<SubOptions> = is.factory(
   is.object.of,
-  { altLocalNames: is.strings, sourcePattern: is.string, type: isType },
+  {
+    altLocalNames: is.strings,
+    sourcePattern: is.string,
+    type: isType
+  },
   { autoImportSource: is.string, localName: is.string }
 );
 
@@ -60,9 +64,7 @@ const rule = utils.createRule({
       }
     };
   },
-  defaultSubOptions: {
-    altLocalNames: []
-  },
+  defaultSubOptions: { altLocalNames: [] },
   fixable: "code",
   isRuleOptions: is.object,
   isSubOptions,
@@ -103,10 +105,7 @@ function autoImport(program: TSESTree.Program, context: Context): void {
     for (const ref of context.scope.through)
       if (ref.identifier.name === localName) {
         fixes.add(getFix(subOptions));
-        context.report({
-          messageId: "missingImport",
-          node: ref.identifier
-        });
+        context.report({ messageId: "missingImport", node: ref.identifier });
       }
   }
 
@@ -182,10 +181,7 @@ function checkImport(
               });
 
           if (wildcardSpecifier)
-            context.report({
-              messageId: "wildcardImportDisallowed",
-              node
-            });
+            context.report({ messageId: "wildcardImportDisallowed", node });
 
           break;
 
@@ -209,11 +205,7 @@ function checkImport(
                 messageId: "invalidLocalName",
                 node
               });
-          else
-            context.report({
-              messageId: "wildcardImportRequired",
-              node
-            });
+          else context.report({ messageId: "wildcardImportRequired", node });
       }
     } else {
       if (defaultSpecifier) {
@@ -230,10 +222,7 @@ function checkImport(
       }
 
       if (wildcardSpecifier)
-        context.report({
-          messageId: "wildcardImportDisallowed",
-          node
-        });
+        context.report({ messageId: "wildcardImportDisallowed", node });
     }
   }
 }

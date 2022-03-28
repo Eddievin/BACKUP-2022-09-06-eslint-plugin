@@ -1,3 +1,1 @@
-module.exports = {
-  preset: "@skylib/config/src"
-};
+module.exports = { preset: "@skylib/config/src" };

@@ -78,8 +78,6 @@ export function createRule<M extends string, T extends string>(
       ignoreTypes: []
     },
     isRuleOptions,
-    messages: {
-      [messageId]: message
-    }
+    messages: { [messageId]: message }
   });
 }

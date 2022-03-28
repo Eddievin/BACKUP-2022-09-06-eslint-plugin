@@ -13,16 +13,7 @@ utils.testRule(
       `,
       errors: [{ line: 1, messageId: "disallowedIdentifier" }],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [
-            {
-              ids: ["invalid"],
-              subOptionsId: "rule-id"
-            }
-          ]
-        }
-      ]
+      options: [{ rules: [{ ids: ["invalid"], subOptionsId: "rule-id" }] }]
     },
     {
       code: `
@@ -56,14 +47,7 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          rules: [
-            {
-              filesToSkip: ["./fixtures/**"],
-              ids: ["invalid"]
-            }
-          ]
-        }
+        { rules: [{ filesToSkip: ["./fixtures/**"], ids: ["invalid"] }] }
       ]
     },
     {
@@ -71,16 +55,7 @@ utils.testRule(
         invalid();
       `,
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [
-            {
-              filesToLint: ["./other/**"],
-              ids: ["invalid"]
-            }
-          ]
-        }
-      ]
+      options: [{ rules: [{ filesToLint: ["./other/**"], ids: ["invalid"] }] }]
     },
     {
       code: `
@@ -89,16 +64,7 @@ utils.testRule(
         invalid();
       `,
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          rules: [
-            {
-              ids: ["invalid"],
-              subOptionsId: "rule-id"
-            }
-          ]
-        }
-      ]
+      options: [{ rules: [{ ids: ["invalid"], subOptionsId: "rule-id" }] }]
     }
   ]
 );
