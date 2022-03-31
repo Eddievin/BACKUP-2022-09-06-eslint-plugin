@@ -99,14 +99,14 @@ export interface Context<M extends string, O extends object, S extends object> {
    */
   readonly getTypeDefinitions: (types: readonly ts.Type[]) => string;
   /**
-   * Checks if node has leading doc comment.
+   * Checks that node has leading doc comment.
    *
    * @param node - Node.
    * @returns _True_ if node has leading doc comment, _false_ otherwise.
    */
   readonly hasLeadingDocComment: (node: TSESTree.Node) => boolean;
   /**
-   * Checks if node has trailing comment.
+   * Checks that node has trailing comment.
    *
    * @param node - Node.
    * @returns _True_ if node has trailing comment, _false_ otherwise.
@@ -115,7 +115,7 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly id: string;
   readonly locZero: TSESTree.Position;
   /**
-   * Checks if signature or symbol is missing doc comment.
+   * Checks that signature or symbol is missing doc comment.
    *
    * @param mixed - Signature or symbol.
    * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
@@ -150,7 +150,7 @@ export interface InvalidTestCase<M extends string>
 
 export interface Matcher {
   /**
-   * Checks if string matches condition.
+   * Checks that string matches condition.
    *
    * @param str - String.
    * @returns _True_ if string matches condition, _false_ otherwise.
@@ -394,7 +394,7 @@ export function getTypeNames(types: readonly ts.Type[]): string {
 }
 
 /**
- * Checks if two nodes are adjacent.
+ * Checks that two nodes are adjacent.
  *
  * @param node1 - Node 1.
  * @param node2 - Node 2.

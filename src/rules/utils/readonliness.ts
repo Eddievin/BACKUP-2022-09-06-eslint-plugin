@@ -256,7 +256,7 @@ export class Checker<M extends string, O extends object, S extends object> {
   }
 
   /**
-   * Checks if type readonliness is invalid.
+   * Checks that type readonliness is invalid.
    *
    * @param typeIsReadonly - Whether type is readonly.
    * @param sourceType - Source type.
@@ -284,7 +284,7 @@ export class Checker<M extends string, O extends object, S extends object> {
   }
 
   /**
-   * Checks if mapped type node is readonly.
+   * Checks that mapped type node is readonly.
    *
    * @param node - Node.
    * @returns _True_ if mapped type node is readonly, _false_ otherwise.
