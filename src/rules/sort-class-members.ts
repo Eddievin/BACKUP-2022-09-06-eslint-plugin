@@ -14,8 +14,7 @@ interface RuleOptions {
   readonly sortingOrder: strings;
 }
 
-const isRuleOptions: is.Guard<RuleOptions> = is.factory(
-  is.object.of,
+const isRuleOptions = is.object.of.factory<RuleOptions>(
   { sortingOrder: is.strings },
   {}
 );

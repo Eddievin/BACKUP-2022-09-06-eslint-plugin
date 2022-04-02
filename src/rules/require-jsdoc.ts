@@ -4,8 +4,8 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as is from "@skylib/functions/dist/guards";
+import { createValidationObject } from "@skylib/functions/dist/helpers";
 import type { strings } from "@skylib/functions/dist/types/core";
-import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
@@ -40,8 +40,7 @@ interface RuleOptions {
   readonly properties: readonly PropertyOption[];
 }
 
-const isRuleOptions: is.Guard<RuleOptions> = is.factory(
-  is.object.of,
+const isRuleOptions = is.object.of.factory<RuleOptions>(
   {
     excludeSelectors: is.strings,
     includeSelectors: is.strings,

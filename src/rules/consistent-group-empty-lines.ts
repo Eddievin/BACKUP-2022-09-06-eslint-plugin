@@ -17,8 +17,7 @@ interface SubOptions {
   readonly someLinesGte: number;
 }
 
-const isSubOptions: is.Guard<SubOptions> = is.factory(
-  is.object.of,
+const isSubOptions = is.object.of.factory<SubOptions>(
   {
     averageLinesGte: is.number,
     everyLinesGte: is.number,

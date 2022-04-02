@@ -30,8 +30,7 @@ export function createRule<M extends string, T extends string>(
     readonly ignoreTypes: strings;
   }
 
-  const isRuleOptions: is.Guard<RuleOptions> = is.factory(
-    is.object.of,
+  const isRuleOptions = is.object.of.factory<RuleOptions>(
     {
       ignoreClasses: is.boolean,
       ignoreInterfaces: is.boolean,

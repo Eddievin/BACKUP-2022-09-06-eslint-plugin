@@ -5,8 +5,8 @@ import * as a from "@skylib/functions/dist/array";
 import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
+import { createValidationObject } from "@skylib/functions/dist/helpers";
 import * as s from "@skylib/functions/dist/string";
-import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
@@ -26,8 +26,7 @@ interface SubOptions {
   readonly prev: string;
 }
 
-const isSubOptions: is.Guard<SubOptions> = is.factory(
-  is.object.of,
+const isSubOptions = is.object.of.factory<SubOptions>(
   {
     emptyLine: isEmptyLine,
     next: is.string,

@@ -11,8 +11,7 @@ interface SubOptions {
   readonly disallow: strings;
 }
 
-const isSubOptions: is.Guard<SubOptions> = is.factory(
-  is.object.of,
+const isSubOptions = is.object.of.factory<SubOptions>(
   { allow: is.strings, disallow: is.strings },
   {}
 );

@@ -3,9 +3,9 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
+import { createValidationObject } from "@skylib/functions/dist/helpers";
 import * as regexp from "@skylib/functions/dist/regexp";
 import type { strings } from "@skylib/functions/dist/types/core";
-import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
@@ -25,8 +25,7 @@ interface RuleOptions {
   readonly contexts: readonly SubOptionsContext[];
 }
 
-const isRuleOptions: is.Guard<RuleOptions> = is.factory(
-  is.object.of,
+const isRuleOptions = is.object.of.factory<RuleOptions>(
   { contexts: isSubOptionsContexts },
   {}
 );
@@ -37,8 +36,7 @@ interface SubOptions {
   readonly replacement?: string;
 }
 
-const isSubOptions: is.Guard<SubOptions> = is.factory(
-  is.object.of,
+const isSubOptions = is.object.of.factory<SubOptions>(
   { patterns: is.strings },
   { contexts: isSubOptionsContexts, replacement: is.string }
 );

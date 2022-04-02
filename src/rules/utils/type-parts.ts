@@ -6,8 +6,8 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
+import { createValidationObject } from "@skylib/functions/dist/helpers";
 import type { NumStrU } from "@skylib/functions/dist/types/core";
-import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import type * as utils from ".";
 

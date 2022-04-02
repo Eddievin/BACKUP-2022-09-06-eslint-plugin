@@ -7,9 +7,9 @@ import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
+import { createValidationObject } from "@skylib/functions/dist/helpers";
 import * as s from "@skylib/functions/dist/string";
 import type { strings } from "@skylib/functions/dist/types/core";
-import { createValidationObject } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
@@ -30,8 +30,7 @@ interface SubOptions {
   readonly type: Type;
 }
 
-const isSubOptions: is.Guard<SubOptions> = is.factory(
-  is.object.of,
+const isSubOptions = is.object.of.factory<SubOptions>(
   {
     altLocalNames: is.strings,
     sourcePattern: is.string,
