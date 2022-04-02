@@ -3,18 +3,18 @@ const tslib_1 = require("tslib");
 const utils_1 = require("@typescript-eslint/utils");
 const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const helpers_1 = require("@skylib/functions/dist/helpers");
 const regexp = tslib_1.__importStar(require("@skylib/functions/dist/regexp"));
-const core_1 = require("@skylib/functions/dist/types/core");
 const utils = tslib_1.__importStar(require("./utils"));
-const SubOptionsContextVO = (0, core_1.createValidationObject)({
+const SubOptionsContextVO = (0, helpers_1.createValidationObject)({
     code: "code",
     comment: "comment",
     string: "string"
 });
 const isSubOptionsContext = is.factory(is.enumeration, SubOptionsContextVO);
 const isSubOptionsContexts = is.factory(is.array.of, isSubOptionsContext);
-const isRuleOptions = is.factory(is.object.of, { contexts: isSubOptionsContexts }, {});
-const isSubOptions = is.factory(is.object.of, { patterns: is.strings }, { contexts: isSubOptionsContexts, replacement: is.string });
+const isRuleOptions = is.object.of.factory({ contexts: isSubOptionsContexts }, {});
+const isSubOptions = is.object.of.factory({ patterns: is.strings }, { contexts: isSubOptionsContexts, replacement: is.string });
 const rule = utils.createRule({
     create(context) {
         const stringRanges = [];
@@ -58,15 +58,11 @@ const rule = utils.createRule({
             }
         };
     },
-    defaultOptions: {
-        contexts: ["code", "comment", "string"]
-    },
+    defaultOptions: { contexts: ["code", "comment", "string"] },
     fixable: "code",
     isRuleOptions,
     isSubOptions,
-    messages: {
-        disallowedCode: "Disallowed code"
-    }
+    messages: { disallowedCode: "Disallowed code" }
 });
 /**
  * Gets suboptions context.

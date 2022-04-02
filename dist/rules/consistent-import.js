@@ -7,15 +7,19 @@ const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const helpers_1 = require("@skylib/functions/dist/helpers");
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
-const core_1 = require("@skylib/functions/dist/types/core");
 const utils = tslib_1.__importStar(require("./utils"));
-const TypeVO = (0, core_1.createValidationObject)({
+const TypeVO = (0, helpers_1.createValidationObject)({
     default: "default",
     wildcard: "wildcard"
 });
 const isType = is.factory(is.enumeration, TypeVO);
-const isSubOptions = is.factory(is.object.of, { altLocalNames: is.strings, sourcePattern: is.string, type: isType }, { autoImportSource: is.string, localName: is.string });
+const isSubOptions = is.object.of.factory({
+    altLocalNames: is.strings,
+    sourcePattern: is.string,
+    type: isType
+}, { autoImportSource: is.string, localName: is.string });
 const rule = utils.createRule({
     create(context) {
         const identifiers = new Set();
@@ -36,9 +40,7 @@ const rule = utils.createRule({
             }
         };
     },
-    defaultSubOptions: {
-        altLocalNames: []
-    },
+    defaultSubOptions: { altLocalNames: [] },
     fixable: "code",
     isRuleOptions: is.object,
     isSubOptions,
@@ -64,10 +66,7 @@ function autoImport(program, context) {
         for (const ref of context.scope.through)
             if (ref.identifier.name === localName) {
                 fixes.add(getFix(subOptions));
-                context.report({
-                    messageId: "missingImport",
-                    node: ref.identifier
-                });
+                context.report({ messageId: "missingImport", node: ref.identifier });
             }
     }
     if (fixes.size)
@@ -120,10 +119,7 @@ function checkImport(importDeclarations, identifiers, context) {
                                 node
                             });
                     if (wildcardSpecifier)
-                        context.report({
-                            messageId: "wildcardImportDisallowed",
-                            node
-                        });
+                        context.report({ messageId: "wildcardImportDisallowed", node });
                     break;
                 case "wildcard":
                     if (wildcardSpecifier)
@@ -143,10 +139,7 @@ function checkImport(importDeclarations, identifiers, context) {
                                 node
                             });
                     else
-                        context.report({
-                            messageId: "wildcardImportRequired",
-                            node
-                        });
+                        context.report({ messageId: "wildcardImportRequired", node });
             }
         }
         else {
@@ -163,10 +156,7 @@ function checkImport(importDeclarations, identifiers, context) {
                     });
             }
             if (wildcardSpecifier)
-                context.report({
-                    messageId: "wildcardImportDisallowed",
-                    node
-                });
+                context.report({ messageId: "wildcardImportDisallowed", node });
         }
     }
 }

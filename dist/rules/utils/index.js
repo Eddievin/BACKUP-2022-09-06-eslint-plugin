@@ -173,7 +173,7 @@ function getTypeNames(types) {
 }
 exports.getTypeNames = getTypeNames;
 /**
- * Checks if two nodes are adjacent.
+ * Checks that two nodes are adjacent.
  *
  * @param node1 - Node 1.
  * @param node2 - Node 2.
@@ -229,16 +229,23 @@ function testRule(name, rule, invalid, valid = []) {
             var _a;
             const code = s.unpadMultiline(invalidTest.code);
             const output = s.unpadMultiline((_a = invalidTest.output) !== null && _a !== void 0 ? _a : invalidTest.code);
-            return Object.assign(Object.assign({}, invalidTest), { code, filename, output });
+            return Object.assign(Object.assign({}, invalidTest), { code,
+                filename,
+                output });
         }),
         valid: valid.map(validTest => {
             const code = s.unpadMultiline(validTest.code);
-            return Object.assign(Object.assign({}, validTest), { code, filename });
+            return Object.assign(Object.assign({}, validTest), { code,
+                filename });
         })
     });
 }
 exports.testRule = testRule;
-const isSharedOptions = is.factory(is.object.of, {}, { filesToLint: is.strings, filesToSkip: is.strings, subOptionsId: is.string });
+const isSharedOptions = is.factory(is.object.of, {}, {
+    filesToLint: is.strings,
+    filesToSkip: is.strings,
+    subOptionsId: is.string
+});
 /**
  * Gets rule options.
  *

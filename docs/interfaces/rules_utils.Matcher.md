@@ -10,7 +10,7 @@
 
 ▸ **Matcher**(`str`): `boolean`
 
-Checks if string matches condition.
+Checks that string matches condition.
 
 #### Parameters
 

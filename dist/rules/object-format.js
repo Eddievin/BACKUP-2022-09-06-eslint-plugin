@@ -5,7 +5,7 @@ const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
 const utils = tslib_1.__importStar(require("./utils"));
-const isRuleOptions = is.factory(is.object.of, { maxLineLength: is.number, maxObjectSize: is.number }, {});
+const isRuleOptions = is.object.of.factory({ maxLineLength: is.number, maxObjectSize: is.number }, {});
 const rule = utils.createRule({
     create(context) {
         return {

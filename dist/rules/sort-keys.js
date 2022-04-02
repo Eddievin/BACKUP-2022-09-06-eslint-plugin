@@ -52,9 +52,7 @@ const rule = utils.createRule({
     },
     fixable: "code",
     isRuleOptions: is.object,
-    messages: {
-        incorrectSortingOrder: "Incorrect sorting order"
-    }
+    messages: { incorrectSortingOrder: "Incorrect sorting order" }
 });
 /**
  * Lints group.

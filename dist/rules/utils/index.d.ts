@@ -5,7 +5,7 @@ import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
-import type { objects, ReadonlyRecord, strings, unknowns } from "@skylib/functions/dist/types/core";
+import type { objects, strings, TypedObject, unknowns } from "@skylib/functions/dist/types/core";
 export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
     /**
      * Creates rule listener.
@@ -19,7 +19,7 @@ export interface CreateRuleOptions<M extends string, O extends object, S extends
     readonly fixable?: "code" | "whitespace";
     readonly isRuleOptions: is.Guard<O>;
     readonly isSubOptions?: is.Guard<S>;
-    readonly messages: ReadonlyRecord<M, string>;
+    readonly messages: TypedObject<M, string>;
     readonly subOptionsKey?: string;
 }
 export interface Context<M extends string, O extends object, S extends object> {
@@ -69,14 +69,14 @@ export interface Context<M extends string, O extends object, S extends object> {
      */
     readonly getTypeDefinitions: (types: readonly ts.Type[]) => string;
     /**
-     * Checks if node has leading doc comment.
+     * Checks that node has leading doc comment.
      *
      * @param node - Node.
      * @returns _True_ if node has leading doc comment, _false_ otherwise.
      */
     readonly hasLeadingDocComment: (node: TSESTree.Node) => boolean;
     /**
-     * Checks if node has trailing comment.
+     * Checks that node has trailing comment.
      *
      * @param node - Node.
      * @returns _True_ if node has trailing comment, _false_ otherwise.
@@ -85,7 +85,7 @@ export interface Context<M extends string, O extends object, S extends object> {
     readonly id: string;
     readonly locZero: TSESTree.Position;
     /**
-     * Checks if signature or symbol is missing doc comment.
+     * Checks that signature or symbol is missing doc comment.
      *
      * @param mixed - Signature or symbol.
      * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
@@ -116,7 +116,7 @@ export interface InvalidTestCase<M extends string> extends BaseInvalidTestCase<M
 }
 export interface Matcher {
     /**
-     * Checks if string matches condition.
+     * Checks that string matches condition.
      *
      * @param str - String.
      * @returns _True_ if string matches condition, _false_ otherwise.
@@ -210,7 +210,7 @@ export declare function getTypeName(type: ts.Type): string;
  */
 export declare function getTypeNames(types: readonly ts.Type[]): string;
 /**
- * Checks if two nodes are adjacent.
+ * Checks that two nodes are adjacent.
  *
  * @param node1 - Node 1.
  * @param node2 - Node 2.

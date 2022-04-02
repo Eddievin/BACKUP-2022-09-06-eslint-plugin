@@ -88,7 +88,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
      */
     protected checkTypeParameter(type: ts.TypeParameter): Result;
     /**
-     * Checks if type readonliness is invalid.
+     * Checks that type readonliness is invalid.
      *
      * @param typeIsReadonly - Whether type is readonly.
      * @param sourceType - Source type.
@@ -96,7 +96,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
      */
     protected invalidReadonliness(typeIsReadonly: boolean, sourceType: SourceType): boolean;
     /**
-     * Checks if mapped type node is readonly.
+     * Checks that mapped type node is readonly.
      *
      * @param node - Node.
      * @returns _True_ if mapped type node is readonly, _false_ otherwise.

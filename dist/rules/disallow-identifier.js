@@ -2,7 +2,7 @@
 const tslib_1 = require("tslib");
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const utils = tslib_1.__importStar(require("./utils"));
-const isSubOptions = is.factory(is.object.of, { ids: is.strings }, { replacement: is.string });
+const isSubOptions = is.object.of.factory({ ids: is.strings }, { replacement: is.string });
 const rule = utils.createRule({
     create(context) {
         return {
@@ -12,12 +12,7 @@ const rule = utils.createRule({
                         context.report({
                             fix() {
                                 return is.not.empty(subOptions.replacement)
-                                    ? [
-                                        {
-                                            range: node.range,
-                                            text: subOptions.replacement
-                                        }
-                                    ]
+                                    ? [{ range: node.range, text: subOptions.replacement }]
                                     : [];
                             },
                             messageId: "disallowedIdentifier",
@@ -29,9 +24,7 @@ const rule = utils.createRule({
     fixable: "code",
     isRuleOptions: is.object,
     isSubOptions,
-    messages: {
-        disallowedIdentifier: "Disallowed identifier"
-    }
+    messages: { disallowedIdentifier: "Disallowed identifier" }
 });
 module.exports = rule;
 //# sourceMappingURL=disallow-identifier.js.map

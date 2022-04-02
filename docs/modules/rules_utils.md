@@ -284,7 +284,7 @@ ___
 
 ▸ **isAdjacentNodes**(`node1`, `node2`, `childNodesMap`): `boolean`
 
-Checks if two nodes are adjacent.
+Checks that two nodes are adjacent.
 
 #### Parameters
 

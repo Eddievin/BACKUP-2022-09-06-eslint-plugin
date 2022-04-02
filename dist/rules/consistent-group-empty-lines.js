@@ -6,7 +6,7 @@ const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
 const utils = tslib_1.__importStar(require("./utils"));
-const isSubOptions = is.factory(is.object.of, {
+const isSubOptions = is.object.of.factory({
     averageLinesGte: is.number,
     everyLinesGte: is.number,
     selector: is.string,

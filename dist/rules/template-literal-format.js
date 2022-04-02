@@ -43,19 +43,14 @@ const rule = utils.createRule({
                             });
                     }
                     else
-                        context.report({
-                            messageId: "invalidTemplateLiteralFormat",
-                            node
-                        });
+                        context.report({ messageId: "invalidTemplateLiteralFormat", node });
                 }
             }
         };
     },
     fixable: "code",
     isRuleOptions: is.object,
-    messages: {
-        invalidTemplateLiteralFormat: "Invalid template literal format"
-    }
+    messages: { invalidTemplateLiteralFormat: "Invalid template literal format" }
 });
 /*
 |*******************************************************************************

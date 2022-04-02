@@ -26,9 +26,7 @@ const rule = utils.createRule({
         };
     },
     isRuleOptions: is.object,
-    messages: {
-        inexhaustiveSwitch: "Inexhaustive switch"
-    }
+    messages: { inexhaustiveSwitch: "Inexhaustive switch" }
 });
 module.exports = rule;
 //# sourceMappingURL=exhaustive-switch.js.map

@@ -3,22 +3,22 @@ const tslib_1 = require("tslib");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const utils_1 = require("@typescript-eslint/utils");
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const core_1 = require("@skylib/functions/dist/types/core");
+const helpers_1 = require("@skylib/functions/dist/helpers");
 const utils = tslib_1.__importStar(require("./utils"));
-const InterfaceOptionVO = (0, core_1.createValidationObject)({
+const InterfaceOptionVO = (0, helpers_1.createValidationObject)({
     callSignatures: "callSignatures",
     constructSignatures: "constructSignatures",
     interface: "interface"
 });
 const isInterfaceOption = is.factory(is.enumeration, InterfaceOptionVO);
 const isInterfaceOptions = is.factory(is.array.of, isInterfaceOption);
-const PropertyOptionVO = (0, core_1.createValidationObject)({
+const PropertyOptionVO = (0, helpers_1.createValidationObject)({
     function: "function",
     nonFunction: "nonFunction"
 });
 const isPropertyOption = is.factory(is.enumeration, PropertyOptionVO);
 const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
-const isRuleOptions = is.factory(is.object.of, {
+const isRuleOptions = is.object.of.factory({
     excludeSelectors: is.strings,
     includeSelectors: is.strings,
     interfaces: isInterfaceOptions,
@@ -134,10 +134,7 @@ function lintNodeBySymbol(node, context) {
     const tsNode = context.toTsNode(node);
     const symbol = context.checker.getSymbolAtLocation(tsNode);
     if (symbol && context.missingDocComment(symbol))
-        context.report({
-            messageId: "undocumented",
-            node
-        });
+        context.report({ messageId: "undocumented", node });
 }
 /**
  * Lints node.
@@ -149,10 +146,7 @@ function lintNodeByTypeSymbol(node, context) {
     const tsNode = context.toTsNode(node);
     const symbol = context.checker.getTypeAtLocation(tsNode).getSymbol();
     if (symbol && context.missingDocComment(symbol))
-        context.report({
-            messageId: "undocumented",
-            node
-        });
+        context.report({ messageId: "undocumented", node });
 }
 /**
  * Lints call signatures.
@@ -165,10 +159,7 @@ function lintCallSignatures(node, type, context) {
     if (type
         .getCallSignatures()
         .some(signature => context.missingDocComment(signature)))
-        context.report({
-            messageId: "undocumentedCallSignature",
-            node
-        });
+        context.report({ messageId: "undocumentedCallSignature", node });
 }
 /**
  * Lints constructor signatures.
@@ -181,10 +172,7 @@ function lintConstructSignatures(node, type, context) {
     if (type
         .getConstructSignatures()
         .some(signature => context.missingDocComment(signature)))
-        context.report({
-            messageId: "undocumentedConstructSignature",
-            node
-        });
+        context.report({ messageId: "undocumentedConstructSignature", node });
 }
 module.exports = rule;
 //# sourceMappingURL=require-jsdoc.js.map

@@ -62,7 +62,7 @@ ___
 
 ### messages
 
-• `Readonly` **messages**: `Readonly`<`Record`<`M`, `string`\>\>
+• `Readonly` **messages**: `TypedObject`<`M`, `string`\>
 
 ___
 

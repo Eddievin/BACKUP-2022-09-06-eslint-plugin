@@ -6,7 +6,7 @@ const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const utils = tslib_1.__importStar(require("./utils"));
-const isRuleOptions = is.factory(is.object.of, { sortingOrder: is.strings }, {});
+const isRuleOptions = is.object.of.factory({ sortingOrder: is.strings }, {});
 const rule = utils.createRule({
     create(context) {
         const sortingOrders = new Map(context.options.sortingOrder.map((name, index) => [name, index]));
@@ -62,14 +62,10 @@ const rule = utils.createRule({
             }
         };
     },
-    defaultOptions: {
-        sortingOrder: []
-    },
+    defaultOptions: { sortingOrder: [] },
     fixable: "code",
     isRuleOptions,
-    messages: {
-        incorrectSortingOrder: "Incorrect sorting order"
-    }
+    messages: { incorrectSortingOrder: "Incorrect sorting order" }
 });
 /**
  * Gets member accessibility.

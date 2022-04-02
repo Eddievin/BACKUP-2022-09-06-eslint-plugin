@@ -287,7 +287,7 @@ ___
 
 ▸ `Readonly` **hasLeadingDocComment**(`node`): `boolean`
 
-Checks if node has leading doc comment.
+Checks that node has leading doc comment.
 
 #### Parameters
 
@@ -307,7 +307,7 @@ ___
 
 ▸ `Readonly` **hasTrailingComment**(`node`): `boolean`
 
-Checks if node has trailing comment.
+Checks that node has trailing comment.
 
 #### Parameters
 
@@ -327,7 +327,7 @@ ___
 
 ▸ `Readonly` **missingDocComment**(`mixed`): `boolean`
 
-Checks if signature or symbol is missing doc comment.
+Checks that signature or symbol is missing doc comment.
 
 #### Parameters
 

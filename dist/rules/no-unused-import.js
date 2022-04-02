@@ -55,10 +55,7 @@ const rule = utils.createRule({
                         context.report({
                             fix() {
                                 return [
-                                    {
-                                        range: context.getRangeWithLeadingTrivia(node),
-                                        text: ""
-                                    }
+                                    { range: context.getRangeWithLeadingTrivia(node), text: "" }
                                 ];
                             },
                             messageId: "unusedImport",
@@ -76,9 +73,7 @@ const rule = utils.createRule({
     },
     fixable: "code",
     isRuleOptions: is.object,
-    messages: {
-        unusedImport: "Unused import"
-    }
+    messages: { unusedImport: "Unused import" }
 });
 module.exports = rule;
 //# sourceMappingURL=no-unused-import.js.map

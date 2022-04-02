@@ -8,7 +8,7 @@ const ts = tslib_1.__importStar(require("typescript"));
 const utils_1 = require("@typescript-eslint/utils");
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const core_1 = require("@skylib/functions/dist/types/core");
+const helpers_1 = require("@skylib/functions/dist/helpers");
 /**
  * Gets type parts.
  *
@@ -75,7 +75,7 @@ function getTypePartsWithTypeofFix(node, context) {
 }
 exports.getTypePartsWithTypeofFix = getTypePartsWithTypeofFix;
 getTypeParts.typeofFix = getTypePartsWithTypeofFix;
-const ExpectedFlagsVO = (0, core_1.createValidationObject)({
+const ExpectedFlagsVO = (0, helpers_1.createValidationObject)({
     [ts.TypeFlags.BigInt]: ts.TypeFlags.BigInt,
     [ts.TypeFlags.BigIntLiteral]: ts.TypeFlags.BigIntLiteral,
     [ts.TypeFlags.BooleanLiteral]: ts.TypeFlags.BooleanLiteral,

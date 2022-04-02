@@ -4,16 +4,16 @@ const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
 const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const helpers_1 = require("@skylib/functions/dist/helpers");
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
-const core_1 = require("@skylib/functions/dist/types/core");
 const utils = tslib_1.__importStar(require("./utils"));
-const EmptyLineVO = (0, core_1.createValidationObject)({
+const EmptyLineVO = (0, helpers_1.createValidationObject)({
     always: "always",
     any: "any",
     never: "never"
 });
 const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
-const isSubOptions = is.factory(is.object.of, {
+const isSubOptions = is.object.of.factory({
     emptyLine: isEmptyLine,
     next: is.string,
     prev: is.string

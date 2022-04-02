@@ -256,7 +256,7 @@ ___
 
 ▸ `Protected` **invalidReadonliness**(`typeIsReadonly`, `sourceType`): `boolean`
 
-Checks if type readonliness is invalid.
+Checks that type readonliness is invalid.
 
 #### Parameters
 
@@ -277,7 +277,7 @@ ___
 
 ▸ `Protected` **readonlyMappedTypeNode**(`node`): `boolean`
 
-Checks if mapped type node is readonly.
+Checks that mapped type node is readonly.
 
 #### Parameters
 

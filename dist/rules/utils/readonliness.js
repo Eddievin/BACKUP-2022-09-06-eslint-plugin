@@ -187,10 +187,7 @@ class Checker {
         for (const subtype of subtypes) {
             const result = this.recurs(subtype);
             if ("failed" in result)
-                return {
-                    failed: true,
-                    types: [type, ...result.types]
-                };
+                return { failed: true, types: [type, ...result.types] };
         }
         return { passed: true };
     }
@@ -215,7 +212,7 @@ class Checker {
         return { passed: true };
     }
     /**
-     * Checks if type readonliness is invalid.
+     * Checks that type readonliness is invalid.
      *
      * @param typeIsReadonly - Whether type is readonly.
      * @param sourceType - Source type.
@@ -236,7 +233,7 @@ class Checker {
         }
     }
     /**
-     * Checks if mapped type node is readonly.
+     * Checks that mapped type node is readonly.
      *
      * @param node - Node.
      * @returns _True_ if mapped type node is readonly, _false_ otherwise.
