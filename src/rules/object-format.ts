@@ -11,7 +11,7 @@ interface RuleOptions {
   readonly maxObjectSize: number;
 }
 
-const isRuleOptions = is.object.of.factory<RuleOptions>(
+const isRuleOptions = is.object.factory<RuleOptions>(
   { maxLineLength: is.number, maxObjectSize: is.number },
   {}
 );

@@ -14,7 +14,7 @@ interface RuleOptions {
   readonly sortingOrder: strings;
 }
 
-const isRuleOptions = is.object.of.factory<RuleOptions>(
+const isRuleOptions = is.object.factory<RuleOptions>(
   { sortingOrder: is.strings },
   {}
 );

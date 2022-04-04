@@ -25,7 +25,7 @@ interface RuleOptions {
   readonly contexts: readonly SubOptionsContext[];
 }
 
-const isRuleOptions = is.object.of.factory<RuleOptions>(
+const isRuleOptions = is.object.factory<RuleOptions>(
   { contexts: isSubOptionsContexts },
   {}
 );
@@ -36,7 +36,7 @@ interface SubOptions {
   readonly replacement?: string;
 }
 
-const isSubOptions = is.object.of.factory<SubOptions>(
+const isSubOptions = is.object.factory<SubOptions>(
   { patterns: is.strings },
   { contexts: isSubOptionsContexts, replacement: is.string }
 );

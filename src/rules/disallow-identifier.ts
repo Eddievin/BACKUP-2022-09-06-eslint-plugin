@@ -10,7 +10,7 @@ interface SubOptions {
   readonly replacement?: string;
 }
 
-const isSubOptions = is.object.of.factory<SubOptions>(
+const isSubOptions = is.object.factory<SubOptions>(
   { ids: is.strings },
   { replacement: is.string }
 );

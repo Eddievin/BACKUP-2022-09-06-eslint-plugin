@@ -26,7 +26,7 @@ interface SubOptions {
   readonly prev: string;
 }
 
-const isSubOptions = is.object.of.factory<SubOptions>(
+const isSubOptions = is.object.factory<SubOptions>(
   {
     emptyLine: isEmptyLine,
     next: is.string,

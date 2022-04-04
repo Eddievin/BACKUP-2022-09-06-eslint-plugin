@@ -30,7 +30,7 @@ interface SubOptions {
   readonly type: Type;
 }
 
-const isSubOptions = is.object.of.factory<SubOptions>(
+const isSubOptions = is.object.factory<SubOptions>(
   {
     altLocalNames: is.strings,
     sourcePattern: is.string,

@@ -17,7 +17,7 @@ interface RuleOptions {
   readonly ignoreTypes: strings;
 }
 
-const isRuleOptions = is.object.of.factory<RuleOptions>(
+const isRuleOptions = is.object.factory<RuleOptions>(
   {
     ignoreClasses: is.boolean,
     ignoreIdentifiers: is.strings,

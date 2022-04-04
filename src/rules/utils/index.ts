@@ -26,8 +26,8 @@ import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
 import type {
   objects,
+  Rec,
   strings,
-  TypedObject,
   unknowns
 } from "@skylib/functions/dist/types/core";
 
@@ -48,7 +48,7 @@ export interface CreateRuleOptions<
   readonly fixable?: "code" | "whitespace";
   readonly isRuleOptions: is.Guard<O>;
   readonly isSubOptions?: is.Guard<S>;
-  readonly messages: TypedObject<M, string>;
+  readonly messages: Rec<M, string>;
   readonly subOptionsKey?: string;
 }
 

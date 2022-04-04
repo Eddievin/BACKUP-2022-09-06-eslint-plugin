@@ -40,7 +40,7 @@ interface RuleOptions {
   readonly properties: readonly PropertyOption[];
 }
 
-const isRuleOptions = is.object.of.factory<RuleOptions>(
+const isRuleOptions = is.object.factory<RuleOptions>(
   {
     excludeSelectors: is.strings,
     includeSelectors: is.strings,
@@ -92,6 +92,7 @@ const rule = utils.createRule({
   messages: {
     undocumented: "Missing documentation",
     undocumentedCallSignature: "Missing documentation for call signature",
+    // eslint-disable-next-line id-length -- Postponed
     undocumentedConstructSignature:
       "Missing documentation for constructor signature"
   }

@@ -19,7 +19,7 @@ interface RuleOptions {
   readonly noDefaultSelectors: boolean;
 }
 
-const isRuleOptions = is.object.of.factory<RuleOptions>(
+const isRuleOptions = is.object.factory<RuleOptions>(
   {
     excludeSelectors: is.strings,
     ignoreClasses: is.boolean,
