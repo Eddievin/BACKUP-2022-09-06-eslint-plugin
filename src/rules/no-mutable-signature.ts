@@ -8,15 +8,6 @@ import * as utils from "./utils";
 import type { Readonliness } from "./utils/readonliness";
 import { Checker } from "./utils/readonliness";
 
-interface RuleOptions {
-  readonly ignoreClasses: boolean;
-  readonly ignoreIdentifiers: strings;
-  readonly ignoreInterfaces: boolean;
-  readonly ignoreNumberSignature: boolean;
-  readonly ignoreStringSignature: boolean;
-  readonly ignoreTypes: strings;
-}
-
 const isRuleOptions = is.object.factory<RuleOptions>(
   {
     ignoreClasses: is.boolean,
@@ -136,13 +127,16 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
 type MessageId = utils.MessageId<typeof rule>;
+
+interface RuleOptions {
+  readonly ignoreClasses: boolean;
+  readonly ignoreIdentifiers: strings;
+  readonly ignoreInterfaces: boolean;
+  readonly ignoreNumberSignature: boolean;
+  readonly ignoreStringSignature: boolean;
+  readonly ignoreTypes: strings;
+}
 
 interface Signature {
   readonly ignore: boolean;

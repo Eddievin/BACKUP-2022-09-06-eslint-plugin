@@ -70,12 +70,6 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
 type Context = utils.Context<MessageId, object, object>;
 
 interface Item {

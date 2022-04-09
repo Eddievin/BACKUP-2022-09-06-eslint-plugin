@@ -9,14 +9,6 @@ import * as s from "@skylib/functions/dist/string";
 
 import * as utils from "./utils";
 
-interface SubOptions {
-  readonly averageLinesGte: number;
-  readonly everyLinesGte: number;
-  readonly selector: string;
-  readonly someHasDocComment: boolean;
-  readonly someLinesGte: number;
-}
-
 const isSubOptions = is.object.factory<SubOptions>(
   {
     averageLinesGte: is.number,
@@ -91,15 +83,17 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
 type Context = utils.Context<MessageId, object, SubOptions>;
 
 type MessageId = utils.MessageId<typeof rule>;
+
+interface SubOptions {
+  readonly averageLinesGte: number;
+  readonly everyLinesGte: number;
+  readonly selector: string;
+  readonly someHasDocComment: boolean;
+  readonly someLinesGte: number;
+}
 
 /**
  * Lints group.

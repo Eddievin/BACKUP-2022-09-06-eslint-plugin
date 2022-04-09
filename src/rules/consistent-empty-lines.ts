@@ -10,8 +10,6 @@ import * as s from "@skylib/functions/dist/string";
 
 import * as utils from "./utils";
 
-type EmptyLine = "always" | "any" | "never";
-
 const EmptyLineVO = createValidationObject<EmptyLine>({
   always: "always",
   any: "any",
@@ -19,12 +17,6 @@ const EmptyLineVO = createValidationObject<EmptyLine>({
 });
 
 const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
-
-interface SubOptions {
-  readonly emptyLine: EmptyLine;
-  readonly next: string;
-  readonly prev: string;
-}
 
 const isSubOptions = is.object.factory<SubOptions>(
   {
@@ -141,13 +133,15 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+type EmptyLine = "always" | "any" | "never";
 
 interface Item {
   readonly node: TSESTree.Node;
   readonly ruleIndex: number;
+}
+
+interface SubOptions {
+  readonly emptyLine: EmptyLine;
+  readonly next: string;
+  readonly prev: string;
 }

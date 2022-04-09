@@ -8,17 +8,6 @@ import type { strings } from "@skylib/functions/dist/types/core";
 import * as utils from "./utils";
 import { Checker } from "./utils/readonliness";
 
-interface RuleOptions {
-  readonly excludeSelectors: strings;
-  readonly ignoreClasses: boolean;
-  readonly ignoreIdentifiers: strings;
-  readonly ignoreInferredTypes: boolean;
-  readonly ignoreInterfaces: boolean;
-  readonly ignoreTypes: strings;
-  readonly includeSelectors: strings;
-  readonly noDefaultSelectors: boolean;
-}
-
 const isRuleOptions = is.object.factory<RuleOptions>(
   {
     excludeSelectors: is.strings,
@@ -72,16 +61,6 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
-type Context = utils.Context<MessageId, RuleOptions, object>;
-
-type MessageId = utils.MessageId<typeof rule>;
-
 const defaultSelectors: strings = [
   AST_NODE_TYPES.ArrowFunctionExpression,
   AST_NODE_TYPES.FunctionDeclaration,
@@ -101,6 +80,21 @@ const restTypes: ReadonlySet<string> = new Set([
   AST_NODE_TYPES.ArrayPattern,
   AST_NODE_TYPES.RestElement
 ]);
+
+type Context = utils.Context<MessageId, RuleOptions, object>;
+
+type MessageId = utils.MessageId<typeof rule>;
+
+interface RuleOptions {
+  readonly excludeSelectors: strings;
+  readonly ignoreClasses: boolean;
+  readonly ignoreIdentifiers: strings;
+  readonly ignoreInferredTypes: boolean;
+  readonly ignoreInterfaces: boolean;
+  readonly ignoreTypes: strings;
+  readonly includeSelectors: strings;
+  readonly noDefaultSelectors: boolean;
+}
 
 /**
  * Lints node.

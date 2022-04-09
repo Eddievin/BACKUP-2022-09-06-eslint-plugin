@@ -5,11 +5,6 @@ import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
-interface SubOptions {
-  readonly ids: strings;
-  readonly replacement?: string;
-}
-
 const isSubOptions = is.object.factory<SubOptions>(
   { ids: is.strings },
   { replacement: is.string }
@@ -42,3 +37,8 @@ const rule = utils.createRule({
 });
 
 export = rule;
+
+interface SubOptions {
+  readonly ids: strings;
+  readonly replacement?: string;
+}

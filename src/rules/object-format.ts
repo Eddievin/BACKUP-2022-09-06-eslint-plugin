@@ -6,11 +6,6 @@ import * as num from "@skylib/functions/dist/number";
 
 import * as utils from "./utils";
 
-interface RuleOptions {
-  readonly maxLineLength: number;
-  readonly maxObjectSize: number;
-}
-
 const isRuleOptions = is.object.factory<RuleOptions>(
   { maxLineLength: is.number, maxObjectSize: is.number },
   {}
@@ -96,6 +91,11 @@ const rule = utils.createRule({
 });
 
 export = rule;
+
+interface RuleOptions {
+  readonly maxLineLength: number;
+  readonly maxObjectSize: number;
+}
 
 // eslint-disable-next-line no-warning-comments
 // fixme: use @skylib/functions

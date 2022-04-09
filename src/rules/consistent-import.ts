@@ -13,22 +13,12 @@ import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
-type Type = "default" | "wildcard";
-
 const TypeVO = createValidationObject<Type>({
   default: "default",
   wildcard: "wildcard"
 });
 
 const isType = is.factory(is.enumeration, TypeVO);
-
-interface SubOptions {
-  readonly altLocalNames: strings;
-  readonly autoImportSource?: string;
-  readonly localName?: string;
-  readonly sourcePattern: string;
-  readonly type: Type;
-}
 
 const isSubOptions = is.object.factory<SubOptions>(
   {
@@ -79,15 +69,19 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
 type Context = utils.Context<MessageId, object, SubOptions>;
 
 type MessageId = utils.MessageId<typeof rule>;
+
+interface SubOptions {
+  readonly altLocalNames: strings;
+  readonly autoImportSource?: string;
+  readonly localName?: string;
+  readonly sourcePattern: string;
+  readonly type: Type;
+}
+
+type Type = "default" | "wildcard";
 
 /**
  * Adds missing import statements.

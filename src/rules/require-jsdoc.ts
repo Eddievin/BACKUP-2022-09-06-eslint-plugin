@@ -9,8 +9,6 @@ import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
-type InterfaceOption = "callSignatures" | "constructSignatures" | "interface";
-
 const InterfaceOptionVO = createValidationObject<InterfaceOption>({
   callSignatures: "callSignatures",
   constructSignatures: "constructSignatures",
@@ -21,8 +19,6 @@ const isInterfaceOption = is.factory(is.enumeration, InterfaceOptionVO);
 
 const isInterfaceOptions = is.factory(is.array.of, isInterfaceOption);
 
-type PropertyOption = "function" | "nonFunction";
-
 const PropertyOptionVO = createValidationObject<PropertyOption>({
   function: "function",
   nonFunction: "nonFunction"
@@ -31,14 +27,6 @@ const PropertyOptionVO = createValidationObject<PropertyOption>({
 const isPropertyOption = is.factory(is.enumeration, PropertyOptionVO);
 
 const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
-
-interface RuleOptions {
-  readonly excludeSelectors: strings;
-  readonly includeSelectors: strings;
-  readonly interfaces: readonly InterfaceOption[];
-  readonly noDefaultSelectors: boolean;
-  readonly properties: readonly PropertyOption[];
-}
 
 const isRuleOptions = is.object.factory<RuleOptions>(
   {
@@ -100,16 +88,6 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
-type Context = utils.Context<MessageId, RuleOptions, object>;
-
-type MessageId = utils.MessageId<typeof rule>;
-
 const defaultSelectors: strings = [
   AST_NODE_TYPES.ClassDeclaration,
   AST_NODE_TYPES.FunctionDeclaration,
@@ -123,6 +101,62 @@ const defaultSelectors: strings = [
   AST_NODE_TYPES.TSMethodSignature,
   AST_NODE_TYPES.TSPropertySignature
 ];
+
+type Context = utils.Context<MessageId, RuleOptions, object>;
+
+type InterfaceOption = "callSignatures" | "constructSignatures" | "interface";
+
+type MessageId = utils.MessageId<typeof rule>;
+
+type PropertyOption = "function" | "nonFunction";
+
+interface RuleOptions {
+  readonly excludeSelectors: strings;
+  readonly includeSelectors: strings;
+  readonly interfaces: readonly InterfaceOption[];
+  readonly noDefaultSelectors: boolean;
+  readonly properties: readonly PropertyOption[];
+}
+
+/**
+ * Lints call signatures.
+ *
+ * @param node - Node.
+ * @param type - Type.
+ * @param context - Context.
+ */
+function lintCallSignatures(
+  node: TSESTree.Node,
+  type: ts.Type,
+  context: Context
+): void {
+  if (
+    type
+      .getCallSignatures()
+      .some(signature => context.missingDocComment(signature))
+  )
+    context.report({ messageId: "undocumentedCallSignature", node });
+}
+
+/**
+ * Lints constructor signatures.
+ *
+ * @param node - Node.
+ * @param type - Type.
+ * @param context - Context.
+ */
+function lintConstructSignatures(
+  node: TSESTree.Node,
+  type: ts.Type,
+  context: Context
+): void {
+  if (
+    type
+      .getConstructSignatures()
+      .some(signature => context.missingDocComment(signature))
+  )
+    context.report({ messageId: "undocumentedConstructSignature", node });
+}
 
 /**
  * Lints interface.
@@ -172,32 +206,6 @@ function lintMethod(
 }
 
 /**
- * Lints property.
- *
- * @param node - Node.
- * @param context - Context.
- */
-function lintProperty(
-  node: TSESTree.PropertyDefinition | TSESTree.TSPropertySignature,
-  context: Context
-): void {
-  const { properties } = context.options;
-
-  const typeAnnotation = node.typeAnnotation;
-
-  if (typeAnnotation) {
-    const type = typeAnnotation.typeAnnotation.type;
-
-    if (
-      type === AST_NODE_TYPES.TSFunctionType
-        ? properties.includes("function")
-        : properties.includes("nonFunction")
-    )
-      lintNodeBySymbol(node.key, context);
-  }
-}
-
-/**
  * Lints node.
  *
  * @param node - Node.
@@ -228,41 +236,27 @@ function lintNodeByTypeSymbol(node: TSESTree.Node, context: Context): void {
 }
 
 /**
- * Lints call signatures.
+ * Lints property.
  *
  * @param node - Node.
- * @param type - Type.
  * @param context - Context.
  */
-function lintCallSignatures(
-  node: TSESTree.Node,
-  type: ts.Type,
+function lintProperty(
+  node: TSESTree.PropertyDefinition | TSESTree.TSPropertySignature,
   context: Context
 ): void {
-  if (
-    type
-      .getCallSignatures()
-      .some(signature => context.missingDocComment(signature))
-  )
-    context.report({ messageId: "undocumentedCallSignature", node });
-}
+  const { properties } = context.options;
 
-/**
- * Lints constructor signatures.
- *
- * @param node - Node.
- * @param type - Type.
- * @param context - Context.
- */
-function lintConstructSignatures(
-  node: TSESTree.Node,
-  type: ts.Type,
-  context: Context
-): void {
-  if (
-    type
-      .getConstructSignatures()
-      .some(signature => context.missingDocComment(signature))
-  )
-    context.report({ messageId: "undocumentedConstructSignature", node });
+  const typeAnnotation = node.typeAnnotation;
+
+  if (typeAnnotation) {
+    const type = typeAnnotation.typeAnnotation.type;
+
+    if (
+      type === AST_NODE_TYPES.TSFunctionType
+        ? properties.includes("function")
+        : properties.includes("nonFunction")
+    )
+      lintNodeBySymbol(node.key, context);
+  }
 }

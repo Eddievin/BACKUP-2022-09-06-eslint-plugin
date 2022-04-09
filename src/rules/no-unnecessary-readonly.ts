@@ -3,8 +3,6 @@ import { createValidationObject } from "@skylib/functions/dist/helpers";
 
 import { createRule } from "./utils/no-unnecessary-readonliness";
 
-type TypeToCheck = "DeepReadonly" | "Readonly";
-
 const TypeToCheckVO = createValidationObject<TypeToCheck>({
   DeepReadonly: "DeepReadonly",
   Readonly: "Readonly"
@@ -18,3 +16,5 @@ export = createRule(
   "unnecessaryReadonly",
   'Unnecessary "Readonly" or "DeepReadonly"'
 );
+
+type TypeToCheck = "DeepReadonly" | "Readonly";

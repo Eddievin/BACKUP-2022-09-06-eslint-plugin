@@ -98,11 +98,11 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+const blockLikeTypes: ReadonlySet<string> = new Set([
+  AST_NODE_TYPES.BlockStatement,
+  AST_NODE_TYPES.ClassBody,
+  AST_NODE_TYPES.Program
+]);
 
 interface CommentInfo {
   readonly inBlockLike: boolean;
@@ -126,12 +126,6 @@ interface CommentInfo {
 type Context = utils.Context<MessageId, object, object>;
 
 type MessageId = utils.MessageId<typeof rule>;
-
-const blockLikeTypes: ReadonlySet<string> = new Set([
-  AST_NODE_TYPES.BlockStatement,
-  AST_NODE_TYPES.ClassBody,
-  AST_NODE_TYPES.Program
-]);
 
 /**
  * Explodes comment.

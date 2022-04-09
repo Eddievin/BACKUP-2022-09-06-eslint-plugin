@@ -9,8 +9,6 @@ import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
-type SubOptionsContext = "code" | "comment" | "string";
-
 const SubOptionsContextVO = createValidationObject<SubOptionsContext>({
   code: "code",
   comment: "comment",
@@ -21,20 +19,10 @@ const isSubOptionsContext = is.factory(is.enumeration, SubOptionsContextVO);
 
 const isSubOptionsContexts = is.factory(is.array.of, isSubOptionsContext);
 
-interface RuleOptions {
-  readonly contexts: readonly SubOptionsContext[];
-}
-
 const isRuleOptions = is.object.factory<RuleOptions>(
   { contexts: isSubOptionsContexts },
   {}
 );
-
-interface SubOptions {
-  readonly contexts?: readonly SubOptionsContext[];
-  readonly patterns: strings;
-  readonly replacement?: string;
-}
 
 const isSubOptions = is.object.factory<SubOptions>(
   { patterns: is.strings },
@@ -100,15 +88,21 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
 type Context = utils.Context<MessageId, RuleOptions, SubOptions>;
 
 type MessageId = utils.MessageId<typeof rule>;
+
+interface RuleOptions {
+  readonly contexts: readonly SubOptionsContext[];
+}
+
+interface SubOptions {
+  readonly contexts?: readonly SubOptionsContext[];
+  readonly patterns: strings;
+  readonly replacement?: string;
+}
+
+type SubOptionsContext = "code" | "comment" | "string";
 
 /**
  * Gets suboptions context.

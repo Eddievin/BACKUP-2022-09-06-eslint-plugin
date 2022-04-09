@@ -10,10 +10,6 @@ import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from "./utils";
 
-interface RuleOptions {
-  readonly sortingOrder: strings;
-}
-
 const isRuleOptions = is.object.factory<RuleOptions>(
   { sortingOrder: is.strings },
   {}
@@ -68,7 +64,7 @@ const rule = utils.createRule({
           return {
             index,
             node: member,
-            sortingOrder: `${sortingOrder}-${name}-${accessorType}`
+            sortingOrder: `${sortingOrder} ${name} ${accessorType}`
           };
         });
 
@@ -103,12 +99,6 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
 type AccessorType = "get" | "none" | "set";
 
 type Context = utils.Context<MessageId, RuleOptions, object>;
@@ -122,6 +112,10 @@ interface Member {
 }
 
 type MessageId = utils.MessageId<typeof rule>;
+
+interface RuleOptions {
+  readonly sortingOrder: strings;
+}
 
 type Type =
   | "accessor"

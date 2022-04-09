@@ -24,12 +24,6 @@ export function createRule<M extends string, T extends string>(
   messageId: M,
   message: string
 ): RuleModule<M, unknowns> {
-  interface RuleOptions {
-    readonly ignoreClasses: boolean;
-    readonly ignoreInterfaces: boolean;
-    readonly ignoreTypes: strings;
-  }
-
   const isRuleOptions = is.object.factory<RuleOptions>(
     {
       ignoreClasses: is.boolean,
@@ -79,4 +73,10 @@ export function createRule<M extends string, T extends string>(
     isRuleOptions,
     messages: { [messageId]: message }
   });
+
+  interface RuleOptions {
+    readonly ignoreClasses: boolean;
+    readonly ignoreInterfaces: boolean;
+    readonly ignoreTypes: strings;
+  }
 }

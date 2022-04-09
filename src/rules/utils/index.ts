@@ -22,6 +22,7 @@ import * as cast from "@skylib/functions/dist/converters";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import * as json from "@skylib/functions/dist/json";
+import * as o from "@skylib/functions/dist/object";
 import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
 import type {
@@ -31,26 +32,74 @@ import type {
   unknowns
 } from "@skylib/functions/dist/types/core";
 
-export interface CreateRuleOptions<
-  M extends string,
-  O extends object,
-  S extends object
-> {
-  /**
-   * Creates rule listener.
-   *
-   * @param context - Context.
-   * @returns Rule listener.
-   */
-  readonly create: (context: Context<M, O, S>) => RuleListener;
-  readonly defaultOptions?: Readonly<Partial<O>>;
-  readonly defaultSubOptions?: Readonly<Partial<S>>;
-  readonly fixable?: "code" | "whitespace";
-  readonly isRuleOptions: is.Guard<O>;
-  readonly isSubOptions?: is.Guard<S>;
-  readonly messages: Rec<M, string>;
-  readonly subOptionsKey?: string;
-}
+export const isPackage: is.Guard<Package> = is.factory(
+  is.object.of,
+  {},
+  { name: is.string }
+);
+
+export const base = fn.pipe(
+  process.cwd(),
+  s.path.canonicalize,
+  s.path.addTrailingSlash
+);
+
+/**
+ * Creates file matcher.
+ *
+ * @param patterns - Patterns.
+ * @param defVal - Default value.
+ * @param options - Minimatch options.
+ * @returns Matcher.
+ */
+export const createFileMatcher = o.extend(
+  (
+    patterns: strings,
+    defVal: boolean,
+    options: Readonly<minimatch.IOptions>
+  ): Matcher => {
+    if (patterns.length) {
+      const matchers = patterns.map(
+        pattern =>
+          (str: string): boolean =>
+            minimatch(str, pattern, options)
+      );
+
+      return (str): boolean => matchers.some(matcher => matcher(str));
+    }
+
+    return (): boolean => defVal;
+  },
+  {
+    /**
+     * Creates file matcher.
+     *
+     * @param this - No this.
+     * @param disallow - Disallow patterns.
+     * @param allow - Allow patterns.
+     * @param defVal - Default value.
+     * @param options - Minimatch options.
+     * @returns Matcher.
+     */
+    disallowAllow(
+      this: void,
+      disallow: strings,
+      allow: strings,
+      defVal: boolean,
+      options: Readonly<minimatch.IOptions>
+    ): Matcher {
+      if (disallow.length || allow.length) {
+        const disallowMatcher = createFileMatcher(disallow, true, options);
+
+        const allowMatcher = createFileMatcher(allow, false, options);
+
+        return (str): boolean => disallowMatcher(str) && !allowMatcher(str);
+      }
+
+      return (): boolean => defVal;
+    }
+  }
+);
 
 export interface Context<M extends string, O extends object, S extends object> {
   readonly checker: ts.TypeChecker;
@@ -137,6 +186,27 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
 }
 
+export interface CreateRuleOptions<
+  M extends string,
+  O extends object,
+  S extends object
+> {
+  /**
+   * Creates rule listener.
+   *
+   * @param context - Context.
+   * @returns Rule listener.
+   */
+  readonly create: (context: Context<M, O, S>) => RuleListener;
+  readonly defaultOptions?: Readonly<Partial<O>>;
+  readonly defaultSubOptions?: Readonly<Partial<S>>;
+  readonly fixable?: "code" | "whitespace";
+  readonly isRuleOptions: is.Guard<O>;
+  readonly isSubOptions?: is.Guard<S>;
+  readonly messages: Rec<M, string>;
+  readonly subOptionsKey?: string;
+}
+
 export interface GetSelectorsOptions {
   readonly excludeSelectors: strings;
   readonly includeSelectors: strings;
@@ -164,23 +234,11 @@ export interface Package {
   readonly name?: string;
 }
 
-export const isPackage: is.Guard<Package> = is.factory(
-  is.object.of,
-  {},
-  { name: is.string }
-);
-
 export type ReadonlyRange = readonly [number, number];
 
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
   name: string;
 }
-
-export const base = fn.pipe(
-  process.cwd(),
-  s.path.canonicalize,
-  s.path.addTrailingSlash
-);
 
 /**
  * Adds node to child nodes map.
@@ -194,58 +252,6 @@ export function buildChildNodesMap(
 ): void {
   arrayMap.push(getNodeId(node.parent), node, mutableChildNodesMap);
 }
-
-/**
- * Creates file matcher.
- *
- * @param patterns - Patterns.
- * @param defVal - Default value.
- * @param options - Minimatch options.
- * @returns Matcher.
- */
-export function createFileMatcher(
-  patterns: strings,
-  defVal: boolean,
-  options: Readonly<minimatch.IOptions>
-): Matcher {
-  if (patterns.length) {
-    const matchers = patterns.map(
-      pattern =>
-        (str: string): boolean =>
-          minimatch(str, pattern, options)
-    );
-
-    return (str): boolean => matchers.some(matcher => matcher(str));
-  }
-
-  return (): boolean => defVal;
-}
-
-/**
- * Creates file matcher.
- *
- * @param disallow - Disallow patterns.
- * @param allow - Allow patterns.
- * @param defVal - Default value.
- * @param options - Minimatch options.
- * @returns Matcher.
- */
-createFileMatcher.disallowAllow = (
-  disallow: strings,
-  allow: strings,
-  defVal: boolean,
-  options: Readonly<minimatch.IOptions>
-): Matcher => {
-  if (disallow.length || allow.length) {
-    const disallowMatcher = createFileMatcher(disallow, true, options);
-
-    const allowMatcher = createFileMatcher(allow, false, options);
-
-    return (str): boolean => disallowMatcher(str) && !allowMatcher(str);
-  }
-
-  return (): boolean => defVal;
-};
 
 /**
  * Creates matcher.
@@ -323,6 +329,16 @@ export function getComments(program: TSESTree.Program): TSESTree.Comment[] {
 }
 
 /**
+ * Generates node ID.
+ *
+ * @param node - Node.
+ * @returns Node ID.
+ */
+export function getNodeId(node: TSESTree.Node | undefined): string {
+  return node ? node.range.join("-") : ".";
+}
+
+/**
  * Parses package file.
  *
  * @param path - Path.
@@ -336,16 +352,6 @@ export function getPackage(path = "package.json"): Package {
   }
 
   return {};
-}
-
-/**
- * Generates node ID.
- *
- * @param node - Node.
- * @returns Node ID.
- */
-export function getNodeId(node: TSESTree.Node | undefined): string {
-  return node ? node.range.join("-") : ".";
 }
 
 /**
@@ -492,18 +498,6 @@ export function testRule<M extends string>(
   });
 }
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
-interface SharedOptions {
-  readonly filesToLint?: strings;
-  readonly filesToSkip?: strings;
-  readonly subOptionsId?: string;
-}
-
 const isSharedOptions: is.Guard<SharedOptions> = is.factory(
   is.object.of,
   {},
@@ -514,68 +508,10 @@ const isSharedOptions: is.Guard<SharedOptions> = is.factory(
   }
 );
 
-/**
- * Gets rule options.
- *
- * @param ruleOptionsArray - Raw rule options array.
- * @param options - Options.
- * @returns Rule options.
- */
-function getRuleOptions<M extends string, O extends object, S extends object>(
-  ruleOptionsArray: unknowns,
-  options: CreateRuleOptions<M, O, S>
-): O {
-  const { isRuleOptions } = options;
-
-  const ruleOptions = ruleOptionsArray[0];
-
-  assert.byGuard(ruleOptions, isRuleOptions, "Expecting valid rule options");
-
-  return ruleOptions;
-}
-
-/**
- * Gets suboptions array.
- *
- * @param ruleOptionsArray - Raw rule options array.
- * @param options - Options.
- * @param ruleId - Rule id.
- * @param path - Path.
- * @param code - Code.
- * @returns Suboptions array.
- */
-function getSubOptionsArray<
-  M extends string,
-  O extends object,
-  S extends object
->(
-  ruleOptionsArray: unknowns,
-  options: CreateRuleOptions<M, O, S>,
-  ruleId: string,
-  path: string,
-  code: string
-): readonly S[] {
-  const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
-
-  if (isSubOptions) {
-    const ruleOptions = getRuleOptions(ruleOptionsArray, options);
-
-    const raw = reflect.get(ruleOptions, subOptionsKey ?? "rules") ?? [];
-
-    assert.array.of(raw, is.object, "Expecting valid rule options");
-
-    const result = raw
-      .map(subOptions => {
-        return { ...defaultSubOptions, ...subOptions };
-      })
-      .filter(subOptions => shouldBeLinted(subOptions, ruleId, path, code));
-
-    assert.array.of(result, isSubOptions, "Expecting valid rule options");
-
-    return result;
-  }
-
-  return [];
+interface SharedOptions {
+  readonly filesToLint?: strings;
+  readonly filesToSkip?: strings;
+  readonly subOptionsId?: string;
 }
 
 /**
@@ -680,6 +616,70 @@ function createBetterContext<
       parser.esTreeNodeToTSNodeMap
     )
   };
+}
+
+/**
+ * Gets rule options.
+ *
+ * @param ruleOptionsArray - Raw rule options array.
+ * @param options - Options.
+ * @returns Rule options.
+ */
+function getRuleOptions<M extends string, O extends object, S extends object>(
+  ruleOptionsArray: unknowns,
+  options: CreateRuleOptions<M, O, S>
+): O {
+  const { isRuleOptions } = options;
+
+  const ruleOptions = ruleOptionsArray[0];
+
+  assert.byGuard(ruleOptions, isRuleOptions, "Expecting valid rule options");
+
+  return ruleOptions;
+}
+
+/**
+ * Gets suboptions array.
+ *
+ * @param ruleOptionsArray - Raw rule options array.
+ * @param options - Options.
+ * @param ruleId - Rule id.
+ * @param path - Path.
+ * @param code - Code.
+ * @returns Suboptions array.
+ */
+function getSubOptionsArray<
+  M extends string,
+  O extends object,
+  S extends object
+>(
+  ruleOptionsArray: unknowns,
+  options: CreateRuleOptions<M, O, S>,
+  ruleId: string,
+  path: string,
+  code: string
+): readonly S[] {
+  const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
+
+  if (isSubOptions) {
+    const ruleOptions = getRuleOptions(ruleOptionsArray, options);
+
+    const raw = reflect.get(ruleOptions, subOptionsKey ?? "rules") ?? [];
+
+    assert.array.of(raw, is.object, "Expecting valid rule options");
+
+    const result = raw
+      .map(subOptions => {
+        return { ...defaultSubOptions, ...subOptions };
+      })
+      .filter(subOptions => shouldBeLinted(subOptions, ruleId, path, code));
+
+    assert.array.of(result, isSubOptions, "Expecting valid rule options");
+
+    return result;
+  }
+
+  return [];
 }
 
 /**

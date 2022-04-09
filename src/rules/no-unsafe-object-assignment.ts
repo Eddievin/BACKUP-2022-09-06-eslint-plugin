@@ -48,12 +48,6 @@ const rule = utils.createRule({
 
 export = rule;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
 type Context = utils.Context<MessageId, object, object>;
 
 type MessageId = utils.MessageId<typeof rule>;

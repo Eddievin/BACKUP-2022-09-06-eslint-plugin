@@ -99,27 +99,6 @@ export function getTypePartsWithTypeofFix<
 
 getTypeParts.typeofFix = getTypePartsWithTypeofFix;
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
-type ExpectedFlags =
-  | ts.TypeFlags.BigInt
-  | ts.TypeFlags.BigIntLiteral
-  | ts.TypeFlags.BooleanLiteral
-  | ts.TypeFlags.ESSymbol
-  | ts.TypeFlags.Null
-  | ts.TypeFlags.Number
-  | ts.TypeFlags.NumberLiteral
-  | ts.TypeFlags.Object
-  | ts.TypeFlags.String
-  | ts.TypeFlags.StringLiteral
-  | ts.TypeFlags.Undefined
-  | ts.TypeFlags.UniqueESSymbol
-  | ts.TypeFlags.Void;
-
 const ExpectedFlagsVO = createValidationObject<ExpectedFlags>({
   [ts.TypeFlags.BigInt]: ts.TypeFlags.BigInt,
   [ts.TypeFlags.BigIntLiteral]: ts.TypeFlags.BigIntLiteral,
@@ -140,3 +119,18 @@ const isExpectedFlags: is.Guard<ExpectedFlags> = is.factory(
   is.enumeration,
   ExpectedFlagsVO
 );
+
+type ExpectedFlags =
+  | ts.TypeFlags.BigInt
+  | ts.TypeFlags.BigIntLiteral
+  | ts.TypeFlags.BooleanLiteral
+  | ts.TypeFlags.ESSymbol
+  | ts.TypeFlags.Null
+  | ts.TypeFlags.Number
+  | ts.TypeFlags.NumberLiteral
+  | ts.TypeFlags.Object
+  | ts.TypeFlags.String
+  | ts.TypeFlags.StringLiteral
+  | ts.TypeFlags.Undefined
+  | ts.TypeFlags.UniqueESSymbol
+  | ts.TypeFlags.Void;

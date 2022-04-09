@@ -8,36 +8,6 @@ import type { strings } from "@skylib/functions/dist/types/core";
 
 import * as utils from ".";
 
-export interface InvalidResult {
-  readonly failed: true;
-  readonly types: readonly ts.Type[];
-}
-
-export interface Options<M extends string, O extends object, S extends object> {
-  readonly context: utils.Context<M, O, S>;
-  readonly ignoreClasses: boolean;
-  readonly ignoreInterfaces: boolean;
-  readonly ignoreTypeParameters?: boolean;
-  readonly ignoreTypes: strings;
-  readonly readonliness: Readonliness;
-}
-
-export type Readonliness =
-  | "allDefinitelyReadonly"
-  | "allDefinitelyWritable"
-  | "allMaybeReadonly"
-  | "allMaybeWritable"
-  | "numberSignatureReadonly"
-  | "stringSignatureReadonly";
-
-export type Result = InvalidResult | ValidResult;
-
-export type SourceType = "numberSignature" | "property" | "stringSignature";
-
-export interface ValidResult {
-  readonly passed: true;
-}
-
 export class Checker<M extends string, O extends object, S extends object> {
   /**
    * Creates class instance.
@@ -65,12 +35,6 @@ export class Checker<M extends string, O extends object, S extends object> {
 
     return this.recurs(type, restElement);
   }
-
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
 
   protected checker: ts.TypeChecker;
 
@@ -353,15 +317,34 @@ export class Checker<M extends string, O extends object, S extends object> {
   }
 }
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+export interface InvalidResult {
+  readonly failed: true;
+  readonly types: readonly ts.Type[];
+}
 
-interface Signature {
-  readonly indexKind: ts.IndexKind;
-  readonly sourceType: SourceType;
+export interface Options<M extends string, O extends object, S extends object> {
+  readonly context: utils.Context<M, O, S>;
+  readonly ignoreClasses: boolean;
+  readonly ignoreInterfaces: boolean;
+  readonly ignoreTypeParameters?: boolean;
+  readonly ignoreTypes: strings;
+  readonly readonliness: Readonliness;
+}
+
+export type Readonliness =
+  | "allDefinitelyReadonly"
+  | "allDefinitelyWritable"
+  | "allMaybeReadonly"
+  | "allMaybeWritable"
+  | "numberSignatureReadonly"
+  | "stringSignatureReadonly";
+
+export type Result = InvalidResult | ValidResult;
+
+export type SourceType = "numberSignature" | "property" | "stringSignature";
+
+export interface ValidResult {
+  readonly passed: true;
 }
 
 const arrayProperties: ReadonlySet<string> = new Set(
@@ -388,3 +371,8 @@ const signatures: readonly Signature[] = [
   { indexKind: ts.IndexKind.Number, sourceType: "numberSignature" },
   { indexKind: ts.IndexKind.String, sourceType: "stringSignature" }
 ];
+
+interface Signature {
+  readonly indexKind: ts.IndexKind;
+  readonly sourceType: SourceType;
+}
