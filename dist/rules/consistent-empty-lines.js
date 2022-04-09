@@ -13,7 +13,7 @@ const EmptyLineVO = (0, helpers_1.createValidationObject)({
     never: "never"
 });
 const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
-const isSubOptions = is.object.of.factory({
+const isSubOptions = is.object.factory({
     emptyLine: isEmptyLine,
     next: is.string,
     prev: is.string

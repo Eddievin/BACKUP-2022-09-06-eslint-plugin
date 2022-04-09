@@ -62,7 +62,7 @@ ___
 
 ### messages
 
-• `Readonly` **messages**: `TypedObject`<`M`, `string`\>
+• `Readonly` **messages**: `Rec`<`M`, `string`\>
 
 ___
 

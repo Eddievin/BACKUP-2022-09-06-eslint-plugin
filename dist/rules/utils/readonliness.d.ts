@@ -1,24 +1,6 @@
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions/dist/types/core";
 import * as utils from ".";
-export interface InvalidResult {
-    readonly failed: true;
-    readonly types: readonly ts.Type[];
-}
-export interface Options<M extends string, O extends object, S extends object> {
-    readonly context: utils.Context<M, O, S>;
-    readonly ignoreClasses: boolean;
-    readonly ignoreInterfaces: boolean;
-    readonly ignoreTypeParameters?: boolean;
-    readonly ignoreTypes: strings;
-    readonly readonliness: Readonliness;
-}
-export declare type Readonliness = "allDefinitelyReadonly" | "allDefinitelyWritable" | "allMaybeReadonly" | "allMaybeWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";
-export declare type Result = InvalidResult | ValidResult;
-export declare type SourceType = "numberSignature" | "property" | "stringSignature";
-export interface ValidResult {
-    readonly passed: true;
-}
 export declare class Checker<M extends string, O extends object, S extends object> {
     /**
      * Creates class instance.
@@ -110,5 +92,23 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @returns Validation result.
      */
     protected recurs(type: ts.Type, restElement?: boolean): Result;
+}
+export interface InvalidResult {
+    readonly failed: true;
+    readonly types: readonly ts.Type[];
+}
+export interface Options<M extends string, O extends object, S extends object> {
+    readonly context: utils.Context<M, O, S>;
+    readonly ignoreClasses: boolean;
+    readonly ignoreInterfaces: boolean;
+    readonly ignoreTypeParameters?: boolean;
+    readonly ignoreTypes: strings;
+    readonly readonliness: Readonliness;
+}
+export declare type Readonliness = "allDefinitelyReadonly" | "allDefinitelyWritable" | "allMaybeReadonly" | "allMaybeWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";
+export declare type Result = InvalidResult | ValidResult;
+export declare type SourceType = "numberSignature" | "property" | "stringSignature";
+export interface ValidResult {
+    readonly passed: true;
 }
 //# sourceMappingURL=readonliness.d.ts.map

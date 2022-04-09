@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testRule = exports.stripBase = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getNodeId = exports.getPackage = exports.getComments = exports.createRule = exports.createMatcher = exports.createFileMatcher = exports.buildChildNodesMap = exports.base = exports.isPackage = void 0;
+exports.testRule = exports.stripBase = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
 const fs_1 = tslib_1.__importDefault(require("fs"));
 const _ = tslib_1.__importStar(require("lodash"));
@@ -13,10 +13,45 @@ const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
 const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const json = tslib_1.__importStar(require("@skylib/functions/dist/json"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
 exports.isPackage = is.factory(is.object.of, {}, { name: is.string });
 exports.base = fn.pipe(process.cwd(), s.path.canonicalize, s.path.addTrailingSlash);
+/**
+ * Creates file matcher.
+ *
+ * @param patterns - Patterns.
+ * @param defVal - Default value.
+ * @param options - Minimatch options.
+ * @returns Matcher.
+ */
+exports.createFileMatcher = o.extend((patterns, defVal, options) => {
+    if (patterns.length) {
+        const matchers = patterns.map(pattern => (str) => (0, minimatch_1.default)(str, pattern, options));
+        return (str) => matchers.some(matcher => matcher(str));
+    }
+    return () => defVal;
+}, {
+    /**
+     * Creates file matcher.
+     *
+     * @param this - No this.
+     * @param disallow - Disallow patterns.
+     * @param allow - Allow patterns.
+     * @param defVal - Default value.
+     * @param options - Minimatch options.
+     * @returns Matcher.
+     */
+    disallowAllow(disallow, allow, defVal, options) {
+        if (disallow.length || allow.length) {
+            const disallowMatcher = (0, exports.createFileMatcher)(disallow, true, options);
+            const allowMatcher = (0, exports.createFileMatcher)(allow, false, options);
+            return (str) => disallowMatcher(str) && !allowMatcher(str);
+        }
+        return () => defVal;
+    }
+});
 /**
  * Adds node to child nodes map.
  *
@@ -27,39 +62,6 @@ function buildChildNodesMap(node, mutableChildNodesMap) {
     arrayMap.push(getNodeId(node.parent), node, mutableChildNodesMap);
 }
 exports.buildChildNodesMap = buildChildNodesMap;
-/**
- * Creates file matcher.
- *
- * @param patterns - Patterns.
- * @param defVal - Default value.
- * @param options - Minimatch options.
- * @returns Matcher.
- */
-function createFileMatcher(patterns, defVal, options) {
-    if (patterns.length) {
-        const matchers = patterns.map(pattern => (str) => (0, minimatch_1.default)(str, pattern, options));
-        return (str) => matchers.some(matcher => matcher(str));
-    }
-    return () => defVal;
-}
-exports.createFileMatcher = createFileMatcher;
-/**
- * Creates file matcher.
- *
- * @param disallow - Disallow patterns.
- * @param allow - Allow patterns.
- * @param defVal - Default value.
- * @param options - Minimatch options.
- * @returns Matcher.
- */
-createFileMatcher.disallowAllow = (disallow, allow, defVal, options) => {
-    if (disallow.length || allow.length) {
-        const disallowMatcher = createFileMatcher(disallow, true, options);
-        const allowMatcher = createFileMatcher(allow, false, options);
-        return (str) => disallowMatcher(str) && !allowMatcher(str);
-    }
-    return () => defVal;
-};
 /**
  * Creates matcher.
  *
@@ -111,6 +113,16 @@ function getComments(program) {
 }
 exports.getComments = getComments;
 /**
+ * Generates node ID.
+ *
+ * @param node - Node.
+ * @returns Node ID.
+ */
+function getNodeId(node) {
+    return node ? node.range.join("-") : ".";
+}
+exports.getNodeId = getNodeId;
+/**
  * Parses package file.
  *
  * @param path - Path.
@@ -125,16 +137,6 @@ function getPackage(path = "package.json") {
     return {};
 }
 exports.getPackage = getPackage;
-/**
- * Generates node ID.
- *
- * @param node - Node.
- * @returns Node ID.
- */
-function getNodeId(node) {
-    return node ? node.range.join("-") : ".";
-}
-exports.getNodeId = getNodeId;
 /**
  * Gets selectors as a string.
  *
@@ -247,46 +249,6 @@ const isSharedOptions = is.factory(is.object.of, {}, {
     subOptionsId: is.string
 });
 /**
- * Gets rule options.
- *
- * @param ruleOptionsArray - Raw rule options array.
- * @param options - Options.
- * @returns Rule options.
- */
-function getRuleOptions(ruleOptionsArray, options) {
-    const { isRuleOptions } = options;
-    const ruleOptions = ruleOptionsArray[0];
-    assert.byGuard(ruleOptions, isRuleOptions, "Expecting valid rule options");
-    return ruleOptions;
-}
-/**
- * Gets suboptions array.
- *
- * @param ruleOptionsArray - Raw rule options array.
- * @param options - Options.
- * @param ruleId - Rule id.
- * @param path - Path.
- * @param code - Code.
- * @returns Suboptions array.
- */
-function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
-    var _a;
-    const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
-    if (isSubOptions) {
-        const ruleOptions = getRuleOptions(ruleOptionsArray, options);
-        const raw = (_a = reflect.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
-        assert.array.of(raw, is.object, "Expecting valid rule options");
-        const result = raw
-            .map(subOptions => {
-            return Object.assign(Object.assign({}, defaultSubOptions), subOptions);
-        })
-            .filter(subOptions => shouldBeLinted(subOptions, ruleId, path, code));
-        assert.array.of(result, isSubOptions, "Expecting valid rule options");
-        return result;
-    }
-    return [];
-}
-/**
  * Creates better context.
  *
  * @param context - Context.
@@ -353,6 +315,46 @@ function createBetterContext(context, ruleOptionsArray, options) {
     };
 }
 /**
+ * Gets rule options.
+ *
+ * @param ruleOptionsArray - Raw rule options array.
+ * @param options - Options.
+ * @returns Rule options.
+ */
+function getRuleOptions(ruleOptionsArray, options) {
+    const { isRuleOptions } = options;
+    const ruleOptions = ruleOptionsArray[0];
+    assert.byGuard(ruleOptions, isRuleOptions, "Expecting valid rule options");
+    return ruleOptions;
+}
+/**
+ * Gets suboptions array.
+ *
+ * @param ruleOptionsArray - Raw rule options array.
+ * @param options - Options.
+ * @param ruleId - Rule id.
+ * @param path - Path.
+ * @param code - Code.
+ * @returns Suboptions array.
+ */
+function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
+    var _a;
+    const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
+    if (isSubOptions) {
+        const ruleOptions = getRuleOptions(ruleOptionsArray, options);
+        const raw = (_a = reflect.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
+        assert.array.of(raw, is.object, "Expecting valid rule options");
+        const result = raw
+            .map(subOptions => {
+            return Object.assign(Object.assign({}, defaultSubOptions), subOptions);
+        })
+            .filter(subOptions => shouldBeLinted(subOptions, ruleId, path, code));
+        assert.array.of(result, isSubOptions, "Expecting valid rule options");
+        return result;
+    }
+    return [];
+}
+/**
  * Determines if file should be linted.
  *
  * @param options - Options.
@@ -367,7 +369,7 @@ function shouldBeLinted(options, ruleId, path, code) {
         code.includes(`/* skylib/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`);
     const disallowByPath = fn.run(() => {
         var _a, _b;
-        const matcher = createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });
+        const matcher = exports.createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });
         return matcher(stripBase(s.path.canonicalize(path), "./"));
     });
     return !disallowByPath && !disallowById;

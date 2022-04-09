@@ -4,7 +4,7 @@ const utils_1 = require("@typescript-eslint/utils");
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const utils = tslib_1.__importStar(require("./utils"));
 const readonliness_1 = require("./utils/readonliness");
-const isRuleOptions = is.object.of.factory({
+const isRuleOptions = is.object.factory({
     ignoreClasses: is.boolean,
     ignoreIdentifiers: is.strings,
     ignoreInterfaces: is.boolean,

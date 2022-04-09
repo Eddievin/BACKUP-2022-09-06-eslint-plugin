@@ -4,10 +4,6 @@
 
 ## Table of contents
 
-### Namespaces
-
-- [createFileMatcher](rules_utils.createFileMatcher.md)
-
 ### Interfaces
 
 - [Context](../interfaces/rules_utils.Context.md)
@@ -26,11 +22,11 @@
 ### Variables
 
 - [base](rules_utils.md#base)
+- [createFileMatcher](rules_utils.md#createfilematcher)
 
 ### Functions
 
 - [buildChildNodesMap](rules_utils.md#buildchildnodesmap)
-- [createFileMatcher](rules_utils.md#createfilematcher)
 - [createMatcher](rules_utils.md#creatematcher)
 - [createRule](rules_utils.md#createrule)
 - [getComments](rules_utils.md#getcomments)
@@ -68,6 +64,22 @@ ___
 
 • `Const` **base**: `string`
 
+___
+
+### createFileMatcher
+
+• `Const` **createFileMatcher**: { `disallowAllow`: (`this`: `void`, `disallow`: `strings`, `allow`: `strings`, `defVal`: `boolean`, `options`: `Readonly`<`IOptions`\>) => [`Matcher`](../interfaces/rules_utils.Matcher.md)  } & (`patterns`: `strings`, `defVal`: `boolean`, `options`: `Readonly`<`IOptions`\>) => [`Matcher`](../interfaces/rules_utils.Matcher.md)
+
+Creates file matcher.
+
+**`param`** Patterns.
+
+**`param`** Default value.
+
+**`param`** Minimatch options.
+
+**`returns`** Matcher.
+
 ## Functions
 
 ### buildChildNodesMap
@@ -86,28 +98,6 @@ Adds node to child nodes map.
 #### Returns
 
 `void`
-
-___
-
-### createFileMatcher
-
-▸ **createFileMatcher**(`patterns`, `defVal`, `options`): [`Matcher`](../interfaces/rules_utils.Matcher.md)
-
-Creates file matcher.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `patterns` | `strings` | Patterns. |
-| `defVal` | `boolean` | Default value. |
-| `options` | `Readonly`<`IOptions`\> | Minimatch options. |
-
-#### Returns
-
-[`Matcher`](../interfaces/rules_utils.Matcher.md)
-
-Matcher.
 
 ___
 

@@ -15,7 +15,7 @@ const TypeVO = (0, helpers_1.createValidationObject)({
     wildcard: "wildcard"
 });
 const isType = is.factory(is.enumeration, TypeVO);
-const isSubOptions = is.object.of.factory({
+const isSubOptions = is.object.factory({
     altLocalNames: is.strings,
     sourcePattern: is.string,
     type: isType

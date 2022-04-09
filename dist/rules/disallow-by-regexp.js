@@ -13,8 +13,8 @@ const SubOptionsContextVO = (0, helpers_1.createValidationObject)({
 });
 const isSubOptionsContext = is.factory(is.enumeration, SubOptionsContextVO);
 const isSubOptionsContexts = is.factory(is.array.of, isSubOptionsContext);
-const isRuleOptions = is.object.of.factory({ contexts: isSubOptionsContexts }, {});
-const isSubOptions = is.object.of.factory({ patterns: is.strings }, { contexts: isSubOptionsContexts, replacement: is.string });
+const isRuleOptions = is.object.factory({ contexts: isSubOptionsContexts }, {});
+const isSubOptions = is.object.factory({ patterns: is.strings }, { contexts: isSubOptionsContexts, replacement: is.string });
 const rule = utils.createRule({
     create(context) {
         const stringRanges = [];

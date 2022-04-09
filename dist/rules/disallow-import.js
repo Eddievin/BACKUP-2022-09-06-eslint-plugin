@@ -4,7 +4,7 @@ const utils_1 = require("@typescript-eslint/utils");
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const utils = tslib_1.__importStar(require("./utils"));
-const isSubOptions = is.object.of.factory({ allow: is.strings, disallow: is.strings }, {});
+const isSubOptions = is.object.factory({ allow: is.strings, disallow: is.strings }, {});
 const rule = utils.createRule({
     create(context) {
         const matchers = context.subOptionsArray.map(subOptions => utils.createFileMatcher.disallowAllow(subOptions.disallow, subOptions.allow, true, { dot: true }));

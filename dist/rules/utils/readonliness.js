@@ -16,11 +16,6 @@ class Checker {
      */
     constructor(options) {
         var _a;
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "checker", {
             enumerable: true,
             configurable: true,

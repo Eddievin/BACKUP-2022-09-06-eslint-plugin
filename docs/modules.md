@@ -27,6 +27,7 @@
 - [rules/require-jsdoc](modules/rules_require_jsdoc.md)
 - [rules/sort-class-members](modules/rules_sort_class_members.md)
 - [rules/sort-keys](modules/rules_sort_keys.md)
+- [rules/statements-order](modules/rules_statements_order.md)
 - [rules/switch-case-empty-lines](modules/rules_switch_case_empty_lines.md)
 - [rules/template-literal-format](modules/rules_template_literal_format.md)
 - [rules/utils](modules/rules_utils.md)

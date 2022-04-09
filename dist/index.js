@@ -20,6 +20,7 @@ const prefer_readonly_1 = tslib_1.__importDefault(require("./rules/prefer-readon
 const require_jsdoc_1 = tslib_1.__importDefault(require("./rules/require-jsdoc"));
 const sort_class_members_1 = tslib_1.__importDefault(require("./rules/sort-class-members"));
 const sort_keys_1 = tslib_1.__importDefault(require("./rules/sort-keys"));
+const statements_order_1 = tslib_1.__importDefault(require("./rules/statements-order"));
 const switch_case_empty_lines_1 = tslib_1.__importDefault(require("./rules/switch-case-empty-lines"));
 const template_literal_format_1 = tslib_1.__importDefault(require("./rules/template-literal-format"));
 module.exports = {
@@ -44,6 +45,7 @@ module.exports = {
         "require-jsdoc": require_jsdoc_1.default,
         "sort-class-members": sort_class_members_1.default,
         "sort-keys": sort_keys_1.default,
+        "statements-order": statements_order_1.default,
         "switch-case-empty-lines": switch_case_empty_lines_1.default,
         "template-literal-format": template_literal_format_1.default
     }

@@ -5,23 +5,30 @@ import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
-import type { objects, strings, TypedObject, unknowns } from "@skylib/functions/dist/types/core";
-export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
+import type { objects, Rec, strings, unknowns } from "@skylib/functions/dist/types/core";
+export declare const isPackage: is.Guard<Package>;
+export declare const base: string;
+/**
+ * Creates file matcher.
+ *
+ * @param patterns - Patterns.
+ * @param defVal - Default value.
+ * @param options - Minimatch options.
+ * @returns Matcher.
+ */
+export declare const createFileMatcher: {
     /**
-     * Creates rule listener.
+     * Creates file matcher.
      *
-     * @param context - Context.
-     * @returns Rule listener.
+     * @param this - No this.
+     * @param disallow - Disallow patterns.
+     * @param allow - Allow patterns.
+     * @param defVal - Default value.
+     * @param options - Minimatch options.
+     * @returns Matcher.
      */
-    readonly create: (context: Context<M, O, S>) => RuleListener;
-    readonly defaultOptions?: Readonly<Partial<O>>;
-    readonly defaultSubOptions?: Readonly<Partial<S>>;
-    readonly fixable?: "code" | "whitespace";
-    readonly isRuleOptions: is.Guard<O>;
-    readonly isSubOptions?: is.Guard<S>;
-    readonly messages: TypedObject<M, string>;
-    readonly subOptionsKey?: string;
-}
+    disallowAllow(this: void, disallow: strings, allow: strings, defVal: boolean, options: Readonly<minimatch.IOptions>): Matcher;
+} & ((patterns: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher);
 export interface Context<M extends string, O extends object, S extends object> {
     readonly checker: ts.TypeChecker;
     readonly code: string;
@@ -106,6 +113,22 @@ export interface Context<M extends string, O extends object, S extends object> {
     readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
     readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
 }
+export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
+    /**
+     * Creates rule listener.
+     *
+     * @param context - Context.
+     * @returns Rule listener.
+     */
+    readonly create: (context: Context<M, O, S>) => RuleListener;
+    readonly defaultOptions?: Readonly<Partial<O>>;
+    readonly defaultSubOptions?: Readonly<Partial<S>>;
+    readonly fixable?: "code" | "whitespace";
+    readonly isRuleOptions: is.Guard<O>;
+    readonly isSubOptions?: is.Guard<S>;
+    readonly messages: Rec<M, string>;
+    readonly subOptionsKey?: string;
+}
 export interface GetSelectorsOptions {
     readonly excludeSelectors: strings;
     readonly includeSelectors: strings;
@@ -127,12 +150,10 @@ export declare type MessageId<T> = T extends RuleModule<infer I, infer _O> ? I :
 export interface Package {
     readonly name?: string;
 }
-export declare const isPackage: is.Guard<Package>;
 export declare type ReadonlyRange = readonly [number, number];
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
     name: string;
 }
-export declare const base: string;
 /**
  * Adds node to child nodes map.
  *
@@ -140,18 +161,6 @@ export declare const base: string;
  * @param mutableChildNodesMap - Child nodes map.
  */
 export declare function buildChildNodesMap(node: TSESTree.Node, mutableChildNodesMap: Map<string, TSESTree.Node[]>): void;
-/**
- * Creates file matcher.
- *
- * @param patterns - Patterns.
- * @param defVal - Default value.
- * @param options - Minimatch options.
- * @returns Matcher.
- */
-export declare function createFileMatcher(patterns: strings, defVal: boolean, options: Readonly<minimatch.IOptions>): Matcher;
-export declare namespace createFileMatcher {
-    var disallowAllow: (disallow: strings, allow: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher;
-}
 /**
  * Creates matcher.
  *
@@ -174,19 +183,19 @@ export declare function createRule<M extends string, O extends object, S extends
  */
 export declare function getComments(program: TSESTree.Program): TSESTree.Comment[];
 /**
- * Parses package file.
- *
- * @param path - Path.
- * @returns Package file data.
- */
-export declare function getPackage(path?: string): Package;
-/**
  * Generates node ID.
  *
  * @param node - Node.
  * @returns Node ID.
  */
 export declare function getNodeId(node: TSESTree.Node | undefined): string;
+/**
+ * Parses package file.
+ *
+ * @param path - Path.
+ * @returns Package file data.
+ */
+export declare function getPackage(path?: string): Package;
 /**
  * Gets selectors as a string.
  *

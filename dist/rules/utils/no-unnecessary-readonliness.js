@@ -17,7 +17,7 @@ const readonliness_1 = require("./readonliness");
  * @returns Rule module.
  */
 function createRule(isTypeToCheck, readonliness, messageId, message) {
-    const isRuleOptions = is.object.of.factory({
+    const isRuleOptions = is.object.factory({
         ignoreClasses: is.boolean,
         ignoreInterfaces: is.boolean,
         ignoreTypes: is.strings

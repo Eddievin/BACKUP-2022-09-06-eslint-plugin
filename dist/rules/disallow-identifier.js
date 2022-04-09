@@ -2,7 +2,7 @@
 const tslib_1 = require("tslib");
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const utils = tslib_1.__importStar(require("./utils"));
-const isSubOptions = is.object.of.factory({ ids: is.strings }, { replacement: is.string });
+const isSubOptions = is.object.factory({ ids: is.strings }, { replacement: is.string });
 const rule = utils.createRule({
     create(context) {
         return {

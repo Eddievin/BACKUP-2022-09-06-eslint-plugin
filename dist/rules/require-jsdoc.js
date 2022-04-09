@@ -18,7 +18,7 @@ const PropertyOptionVO = (0, helpers_1.createValidationObject)({
 });
 const isPropertyOption = is.factory(is.enumeration, PropertyOptionVO);
 const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
-const isRuleOptions = is.object.of.factory({
+const isRuleOptions = is.object.factory({
     excludeSelectors: is.strings,
     includeSelectors: is.strings,
     interfaces: isInterfaceOptions,
@@ -59,6 +59,7 @@ const rule = utils.createRule({
     messages: {
         undocumented: "Missing documentation",
         undocumentedCallSignature: "Missing documentation for call signature",
+        // eslint-disable-next-line id-length -- Postponed
         undocumentedConstructSignature: "Missing documentation for constructor signature"
     }
 });
@@ -75,6 +76,32 @@ const defaultSelectors = [
     utils_1.AST_NODE_TYPES.TSMethodSignature,
     utils_1.AST_NODE_TYPES.TSPropertySignature
 ];
+/**
+ * Lints call signatures.
+ *
+ * @param node - Node.
+ * @param type - Type.
+ * @param context - Context.
+ */
+function lintCallSignatures(node, type, context) {
+    if (type
+        .getCallSignatures()
+        .some(signature => context.missingDocComment(signature)))
+        context.report({ messageId: "undocumentedCallSignature", node });
+}
+/**
+ * Lints constructor signatures.
+ *
+ * @param node - Node.
+ * @param type - Type.
+ * @param context - Context.
+ */
+function lintConstructSignatures(node, type, context) {
+    if (type
+        .getConstructSignatures()
+        .some(signature => context.missingDocComment(signature)))
+        context.report({ messageId: "undocumentedConstructSignature", node });
+}
 /**
  * Lints interface.
  *
@@ -108,23 +135,6 @@ function lintMethod(node, context) {
         lintNodeBySymbol(node.key, context);
 }
 /**
- * Lints property.
- *
- * @param node - Node.
- * @param context - Context.
- */
-function lintProperty(node, context) {
-    const { properties } = context.options;
-    const typeAnnotation = node.typeAnnotation;
-    if (typeAnnotation) {
-        const type = typeAnnotation.typeAnnotation.type;
-        if (type === utils_1.AST_NODE_TYPES.TSFunctionType
-            ? properties.includes("function")
-            : properties.includes("nonFunction"))
-            lintNodeBySymbol(node.key, context);
-    }
-}
-/**
  * Lints node.
  *
  * @param node - Node.
@@ -149,30 +159,21 @@ function lintNodeByTypeSymbol(node, context) {
         context.report({ messageId: "undocumented", node });
 }
 /**
- * Lints call signatures.
+ * Lints property.
  *
  * @param node - Node.
- * @param type - Type.
  * @param context - Context.
  */
-function lintCallSignatures(node, type, context) {
-    if (type
-        .getCallSignatures()
-        .some(signature => context.missingDocComment(signature)))
-        context.report({ messageId: "undocumentedCallSignature", node });
-}
-/**
- * Lints constructor signatures.
- *
- * @param node - Node.
- * @param type - Type.
- * @param context - Context.
- */
-function lintConstructSignatures(node, type, context) {
-    if (type
-        .getConstructSignatures()
-        .some(signature => context.missingDocComment(signature)))
-        context.report({ messageId: "undocumentedConstructSignature", node });
+function lintProperty(node, context) {
+    const { properties } = context.options;
+    const typeAnnotation = node.typeAnnotation;
+    if (typeAnnotation) {
+        const type = typeAnnotation.typeAnnotation.type;
+        if (type === utils_1.AST_NODE_TYPES.TSFunctionType
+            ? properties.includes("function")
+            : properties.includes("nonFunction"))
+            lintNodeBySymbol(node.key, context);
+    }
 }
 module.exports = rule;
 //# sourceMappingURL=require-jsdoc.js.map
