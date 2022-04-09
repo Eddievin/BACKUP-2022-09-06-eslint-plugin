@@ -24,6 +24,7 @@
   - [require-jsdoc](#require-jsdoc)
   - [sort-class-members](#sort-class-members)
   - [sort-keys](#sort-keys)
+  - [statements-order](#statements-order)
   - [switch-case-empty-lines](#switch-case-empty-lines)
   - [template-literal-format](#template-literal-format)
 - [Shared options](#shared-options)
@@ -451,7 +452,7 @@ Requires JSDoc comments.
 
 ### <a name="sort-class-members"></a>sort-class-members
 
-Sorts class member.
+Sorts class members.
 
 #### eslintrc.js
 
@@ -479,6 +480,45 @@ Sorts object properties.
 ```ts
 // @skylib/sort-keys break
 ```
+
+### <a name="statements-order"></a>statements-order
+
+Requires consistent statements order.
+
+#### eslintrc.js
+
+```ts
+"@skylib/statements-order": [
+  "error",
+  {
+    blockOrder?: Type[],
+    moduleOrder?: Type[],
+    order?: Type[],
+    rootOrder?: Type[],
+  }
+]
+
+type Type =
+  | "ExportDeclaration"
+  | "ExportDefaultDeclaration"
+  | "ExportFunctionDeclaration"
+  | "ExportTypeDeclaration"
+  | "ExportUnknown"
+  | "FunctionDeclaration"
+  | "ImportDeclaration"
+  | "ModuleDeclaration"
+  | "TypeDeclaration"
+  | "Unknown";
+```
+
+#### Options
+
+| Name | Description |
+| :------ | :------ |
+| `blockOrder` | Statements order. |
+| `moduleOrder` | Statements order. |
+| `order` | Statements order. |
+| `rootOrder` | Statements order. |
 
 ### <a name="switch-case-empty-lines"></a>switch-case-empty-lines
 
