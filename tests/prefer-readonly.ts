@@ -140,7 +140,7 @@ utils.testRule(
         }
       ],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ ignoreTypes: ["J"] }]
+      options: [{ ignoreTypes: ["^J$"] }]
     },
     {
       code: `
@@ -270,6 +270,13 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ ignoreInferredTypes: true }]
+    },
+    {
+      code: `
+        type T = { value: number; }
+      `,
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ ignoreTypes: ["^T$"] }]
     }
   ]
 );

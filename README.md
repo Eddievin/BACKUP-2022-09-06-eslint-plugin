@@ -301,7 +301,7 @@ Forbids mutable signatures.
 | `ignoreInterfaces` | Ignore interfaces. |
 | `ignoreNumberSignature` | Ignore number signature. |
 | `ignoreStringSignature` | Ignore string signature. |
-| `ignoreTypes` | Ignore types. |
+| `ignoreTypes` | Ignore types (regular expressions). |
 
 ### <a name="no-unnecessary-readonly"></a>no-unnecessary-readonly
 
@@ -326,7 +326,7 @@ Forbids unnecessary Readonly|DeepReadonly wrapper.
 | :------ | :------ |
 | `ignoreClasses` | Ignores classes. |
 | `ignoreInterfaces` | Ignore interfaces. |
-| `ignoreTypes` | Ignores types. |
+| `ignoreTypes` | Ignores types (regular expressions). |
 
 ### <a name="no-unnecessary-writable"></a>no-unnecessary-writable
 
@@ -351,7 +351,7 @@ Forbids unnecessary Writable|DeepWritable wrapper.
 | :------ | :------ |
 | `ignoreClasses` | Ignores classes. |
 | `ignoreInterfaces` | Ignore interfaces. |
-| `ignoreTypes` | Ignores types. |
+| `ignoreTypes` | Ignores types (regular expressions). |
 
 ### <a name="no-unsafe-object-assignment"></a>no-unsafe-object-assignment
 
@@ -414,7 +414,7 @@ Enforces the use of readonly properties.
 | `ignoreClasses` | Ignore classes. |
 | `ignoreIdentifiers` | Ignore identifiers (regular expressions). |
 | `ignoreInterfaces` | Ignore interfaces. |
-| `ignoreTypes` | Ignore types. |
+| `ignoreTypes` | Ignore types (regular expressions). |
 | `includeSelectors` | Add AST selectors. |
 | `noDefaultSelectors` | Do not use default AST selectors. |
 

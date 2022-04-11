@@ -91,6 +91,7 @@ const rule = utils.createRule({
 
                 const result = checker.checkType(
                   type,
+                  node,
                   restAnnotationsSet.has(node)
                 );
 

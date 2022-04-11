@@ -1,5 +1,7 @@
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
+import type { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import * as assert from "@skylib/functions/dist/assertions";
 import * as cast from "@skylib/functions/dist/converters";
@@ -19,7 +21,7 @@ export class Checker<M extends string, O extends object, S extends object> {
     this.ignoreClasses = options.ignoreClasses;
     this.ignoreInterfaces = options.ignoreInterfaces;
     this.ignoreTypeParameters = options.ignoreTypeParameters ?? false;
-    this.ignoreTypes = new Set(options.ignoreTypes);
+    this.ignoreTypes = utils.createMatcher(options.ignoreTypes);
     this.readonliness = options.readonliness;
   }
 
@@ -27,10 +29,21 @@ export class Checker<M extends string, O extends object, S extends object> {
    * Checks type.
    *
    * @param type - Type.
+   * @param node - Node.
    * @param restElement - Rest element.
    * @returns Validation result.
    */
-  public checkType(type: ts.Type, restElement = false): Result {
+  public checkType(
+    type: ts.Type,
+    node: TSESTree.Node,
+    restElement = false
+  ): Result {
+    if (
+      node.type === AST_NODE_TYPES.TSTypeAliasDeclaration &&
+      this.ignoreTypes(node.id.name)
+    )
+      return { passed: true };
+
     this.seenTypesPool.clear();
 
     return this.recurs(type, restElement);
@@ -44,7 +57,7 @@ export class Checker<M extends string, O extends object, S extends object> {
 
   protected ignoreTypeParameters: boolean;
 
-  protected ignoreTypes: ReadonlySet<string>;
+  protected ignoreTypes: utils.Matcher;
 
   protected readonliness: Readonliness;
 
@@ -294,7 +307,7 @@ export class Checker<M extends string, O extends object, S extends object> {
     if (this.ignoreInterfaces && type.isClassOrInterface() && !type.isClass())
       return { passed: true };
 
-    if (this.ignoreTypes.has(utils.getTypeName(type))) return { passed: true };
+    if (this.ignoreTypes(utils.getTypeName(type))) return { passed: true };
 
     {
       const result = this.checkMappedTypeNodes(type);

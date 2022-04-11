@@ -129,7 +129,7 @@ function lintNode(
       readonliness: "allMaybeReadonly"
     });
 
-    const result = checker.checkType(type, restTypes.has(node.type));
+    const result = checker.checkType(type, node, restTypes.has(node.type));
 
     if ("failed" in result)
       context.report({

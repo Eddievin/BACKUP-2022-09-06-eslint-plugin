@@ -58,7 +58,7 @@ export function createRule<M extends string, T extends string>(
 
             const type = context.checker.getTypeFromTypeNode(typeArgument);
 
-            const result = checker.checkType(type);
+            const result = checker.checkType(type, node);
 
             if ("passed" in result) context.report({ messageId, node });
           }
