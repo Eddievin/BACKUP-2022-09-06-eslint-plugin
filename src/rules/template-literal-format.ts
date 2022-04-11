@@ -69,7 +69,6 @@ const rule = utils.createRule({
   },
   fixable: "code",
   isRuleOptions: is.object,
-  // eslint-disable-next-line id-length
   messages: { invalidTemplateLiteralFormat: "Invalid template literal format" }
 });
 
