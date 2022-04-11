@@ -91,7 +91,7 @@ ___
 
 ### ignoreTypes
 
-• `Protected` **ignoreTypes**: `ReadonlySet`<`string`\>
+• `Protected` **ignoreTypes**: [`Matcher`](../interfaces/rules_utils.Matcher.md)
 
 ___
 
@@ -213,7 +213,7 @@ ___
 
 ### checkType
 
-▸ **checkType**(`type`, `restElement?`): [`Result`](../modules/rules_utils_readonliness.md#result)
+▸ **checkType**(`type`, `node`, `restElement?`): [`Result`](../modules/rules_utils_readonliness.md#result)
 
 Checks type.
 
@@ -222,6 +222,7 @@ Checks type.
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `type` | `Type` | `undefined` | Type. |
+| `node` | `Node` | `undefined` | Node. |
 | `restElement` | `boolean` | `false` | Rest element. |
 
 #### Returns

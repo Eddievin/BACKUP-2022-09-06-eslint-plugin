@@ -59,7 +59,6 @@ const rule = utils.createRule({
     messages: {
         undocumented: "Missing documentation",
         undocumentedCallSignature: "Missing documentation for call signature",
-        // eslint-disable-next-line id-length -- Postponed
         undocumentedConstructSignature: "Missing documentation for constructor signature"
     }
 });

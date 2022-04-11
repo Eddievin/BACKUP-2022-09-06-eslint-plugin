@@ -4,6 +4,7 @@ exports.Checker = void 0;
 const tslib_1 = require("tslib");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
+const utils_1 = require("@typescript-eslint/utils");
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
@@ -62,17 +63,21 @@ class Checker {
         this.ignoreClasses = options.ignoreClasses;
         this.ignoreInterfaces = options.ignoreInterfaces;
         this.ignoreTypeParameters = (_a = options.ignoreTypeParameters) !== null && _a !== void 0 ? _a : false;
-        this.ignoreTypes = new Set(options.ignoreTypes);
+        this.ignoreTypes = utils.createMatcher(options.ignoreTypes);
         this.readonliness = options.readonliness;
     }
     /**
      * Checks type.
      *
      * @param type - Type.
+     * @param node - Node.
      * @param restElement - Rest element.
      * @returns Validation result.
      */
-    checkType(type, restElement = false) {
+    checkType(type, node, restElement = false) {
+        if (node.type === utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration &&
+            this.ignoreTypes(node.id.name))
+            return { passed: true };
         this.seenTypesPool.clear();
         return this.recurs(type, restElement);
     }
@@ -268,7 +273,7 @@ class Checker {
             return { passed: true };
         if (this.ignoreInterfaces && type.isClassOrInterface() && !type.isClass())
             return { passed: true };
-        if (this.ignoreTypes.has(utils.getTypeName(type)))
+        if (this.ignoreTypes(utils.getTypeName(type)))
             return { passed: true };
         {
             const result = this.checkMappedTypeNodes(type);

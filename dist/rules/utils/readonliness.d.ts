@@ -1,4 +1,5 @@
 import * as ts from "typescript";
+import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions/dist/types/core";
 import * as utils from ".";
 export declare class Checker<M extends string, O extends object, S extends object> {
@@ -12,15 +13,16 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * Checks type.
      *
      * @param type - Type.
+     * @param node - Node.
      * @param restElement - Rest element.
      * @returns Validation result.
      */
-    checkType(type: ts.Type, restElement?: boolean): Result;
+    checkType(type: ts.Type, node: TSESTree.Node, restElement?: boolean): Result;
     protected checker: ts.TypeChecker;
     protected ignoreClasses: boolean;
     protected ignoreInterfaces: boolean;
     protected ignoreTypeParameters: boolean;
-    protected ignoreTypes: ReadonlySet<string>;
+    protected ignoreTypes: utils.Matcher;
     protected readonliness: Readonliness;
     protected seenTypesPool: Set<ts.Type>;
     /**

@@ -40,7 +40,7 @@ function createRule(isTypeToCheck, readonliness, messageId, message) {
                         typeArguments.length === 1) {
                         const typeArgument = a.first(typeArguments);
                         const type = context.checker.getTypeFromTypeNode(typeArgument);
-                        const result = checker.checkType(type);
+                        const result = checker.checkType(type, node);
                         if ("passed" in result)
                             context.report({ messageId, node });
                     }

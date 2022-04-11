@@ -66,7 +66,7 @@ const rule = utils.createRule({
                             else {
                                 const tsNode = context.toTsNode(node.typeAnnotation);
                                 const type = context.checker.getTypeAtLocation(tsNode);
-                                const result = checker.checkType(type, restAnnotationsSet.has(node));
+                                const result = checker.checkType(type, node, restAnnotationsSet.has(node));
                                 if ("failed" in result)
                                     context.report({
                                         data: {
