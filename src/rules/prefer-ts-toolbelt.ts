@@ -17,7 +17,8 @@ const rule = utils.createRule({
   isRuleOptions: is.object,
   messages: {
     preferExtends: 'Use "Extends" type from "ts-toolbelt" package instead'
-  }
+  },
+  name: "prefer-ts-toolbelt"
 });
 
 export = rule;

@@ -123,7 +123,8 @@ const rule = utils.createRule({
       "Number signature should be immutable. Failed type name: {{name}}. Failed type definition: {{definition}}",
     noMutableStringSignature:
       "String signature should be immutable. Failed type name: {{name}}. Failed type definition: {{definition}}"
-  }
+  },
+  name: "no-mutable-signature"
 });
 
 export = rule;

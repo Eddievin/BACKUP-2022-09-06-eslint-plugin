@@ -64,6 +64,7 @@ const rule = utils.createRule({
     wildcardImportDisallowed: "Wildcard import disallowed",
     wildcardImportRequired: "Wildcard import required"
   },
+  name: "consistent-import",
   subOptionsKey: "sources"
 });
 

@@ -12,6 +12,7 @@ import { Checker } from "./readonliness";
 /**
  * Creates rule.
  *
+ * @param name - Name.
  * @param isTypeToCheck - Guard.
  * @param readonliness - Readonliness that triggers error.
  * @param messageId - Message ID.
@@ -19,6 +20,7 @@ import { Checker } from "./readonliness";
  * @returns Rule module.
  */
 export function createRule<M extends string, T extends string>(
+  name: string,
   isTypeToCheck: is.Guard<T>,
   readonliness: Readonliness,
   messageId: M,
@@ -71,7 +73,8 @@ export function createRule<M extends string, T extends string>(
       ignoreTypes: []
     },
     isRuleOptions,
-    messages: { [messageId]: message }
+    messages: { [messageId]: message },
+    name
   });
 
   interface RuleOptions {

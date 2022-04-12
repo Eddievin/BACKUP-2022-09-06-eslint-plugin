@@ -11,6 +11,7 @@ const TypeToCheckVO = createValidationObject<TypeToCheck>({
 const isTypeToCheck = is.factory(is.enumeration, TypeToCheckVO);
 
 export = createRule(
+  "no-unnecessary-readonly",
   isTypeToCheck,
   "allDefinitelyReadonly",
   "unnecessaryReadonly",

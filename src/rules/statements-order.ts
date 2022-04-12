@@ -142,7 +142,8 @@ const rule = utils.createRule({
   },
   fixable: "code",
   isRuleOptions,
-  messages: { incorrectStatementsOrder: "Incorrect statements order" }
+  messages: { incorrectStatementsOrder: "Incorrect statements order" },
+  name: "statements-order"
 });
 
 export = rule;

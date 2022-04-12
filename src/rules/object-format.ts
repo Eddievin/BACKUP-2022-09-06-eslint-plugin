@@ -87,7 +87,8 @@ const rule = utils.createRule({
   messages: {
     expectingMultiline: "Expecting multiline object literal",
     expectingSingleLine: "Expecting single-line object literal"
-  }
+  },
+  name: "object-format"
 });
 
 export = rule;

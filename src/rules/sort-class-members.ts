@@ -94,7 +94,8 @@ const rule = utils.createRule({
   defaultOptions: { sortingOrder: [] },
   fixable: "code",
   isRuleOptions,
-  messages: { incorrectSortingOrder: "Incorrect sorting order" }
+  messages: { incorrectSortingOrder: "Incorrect sorting order" },
+  name: "sort-class-members"
 });
 
 export = rule;

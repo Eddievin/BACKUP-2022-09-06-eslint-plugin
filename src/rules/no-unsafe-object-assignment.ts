@@ -43,7 +43,8 @@ const rule = utils.createRule({
   messages: {
     unsafeOptionalAssignment: "Unsafe optional assignment: {{name}}",
     unsafeReadonlyAssignment: "Unsafe readonly-to-mutable assignment: {{name}}"
-  }
+  },
+  name: "no-unsafe-object-assignment"
 });
 
 export = rule;

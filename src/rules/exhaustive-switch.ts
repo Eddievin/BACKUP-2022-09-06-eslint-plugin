@@ -31,7 +31,8 @@ const rule = utils.createRule({
     };
   },
   isRuleOptions: is.object,
-  messages: { inexhaustiveSwitch: "Inexhaustive switch" }
+  messages: { inexhaustiveSwitch: "Inexhaustive switch" },
+  name: "exhaustive-switch"
 });
 
 export = rule;

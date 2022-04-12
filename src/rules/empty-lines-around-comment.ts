@@ -93,7 +93,8 @@ const rule = utils.createRule({
     missingEmptyLineAfter: "Missing empty line after comment",
     missingEmptyLineBefore: "Missing empty line before comment",
     unexpectedEmptyLineAfter: "Unexpected empty line after comment"
-  }
+  },
+  name: "empty-lines-around-comment"
 });
 
 export = rule;

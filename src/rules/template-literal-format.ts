@@ -69,7 +69,8 @@ const rule = utils.createRule({
   },
   fixable: "code",
   isRuleOptions: is.object,
-  messages: { invalidTemplateLiteralFormat: "Invalid template literal format" }
+  messages: { invalidTemplateLiteralFormat: "Invalid template literal format" },
+  name: "template-literal-format"
 });
 
 export = rule;

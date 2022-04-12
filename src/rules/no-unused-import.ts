@@ -84,7 +84,8 @@ const rule = utils.createRule({
   },
   fixable: "code",
   isRuleOptions: is.object,
-  messages: { unusedImport: "Unused import" }
+  messages: { unusedImport: "Unused import" },
+  name: "no-unused-import"
 });
 
 export = rule;

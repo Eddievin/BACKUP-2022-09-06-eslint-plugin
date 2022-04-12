@@ -32,7 +32,8 @@ const rule = utils.createRule({
   isRuleOptions: is.object,
   messages: {
     triviallyInferrableType: "Type can be trivially inferred from initializer"
-  }
+  },
+  name: "no-inferrable-types"
 });
 
 export = rule;

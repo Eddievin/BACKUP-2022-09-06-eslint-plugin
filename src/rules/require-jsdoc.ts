@@ -82,7 +82,8 @@ const rule = utils.createRule({
     undocumentedCallSignature: "Missing documentation for call signature",
     undocumentedConstructSignature:
       "Missing documentation for constructor signature"
-  }
+  },
+  name: "require-jsdoc"
 });
 
 export = rule;

@@ -56,7 +56,8 @@ const rule = utils.createRule({
   messages: {
     shouldBeReadonly:
       "Parameter should be a readonly type. Failed type name: {{name}}. Failed type definition: {{definition}}"
-  }
+  },
+  name: "prefer-readonly"
 });
 
 export = rule;

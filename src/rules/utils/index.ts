@@ -204,6 +204,7 @@ export interface CreateRuleOptions<
   readonly isRuleOptions: is.Guard<O>;
   readonly isSubOptions?: is.Guard<S>;
   readonly messages: Rec<M, string>;
+  readonly name: string;
   readonly subOptionsKey?: string;
 }
 
@@ -286,7 +287,7 @@ export function createRule<
   const { create, defaultOptions, fixable, messages } = options;
 
   const ruleCreator = ESLintUtils.RuleCreator(
-    (ruleId: string) => `https://ilyub.github.io/eslint-plugin/#${ruleId}`
+    (name: string) => `https://ilyub.github.io/eslint-plugin/#${name}`
   );
 
   return ruleCreator({
@@ -314,7 +315,7 @@ export function createRule<
       type: "suggestion",
       ...(is.not.empty(fixable) ? { fixable } : {})
     },
-    name: "Rule"
+    name: options.name
   });
 }
 

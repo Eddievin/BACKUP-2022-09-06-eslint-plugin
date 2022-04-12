@@ -78,7 +78,8 @@ const rule = utils.createRule({
   messages: {
     expectingEmptyLine: "Expecting empty line before",
     unexpectedEmptyLine: "Unexpected empty line before"
-  }
+  },
+  name: "consistent-group-empty-lines"
 });
 
 export = rule;

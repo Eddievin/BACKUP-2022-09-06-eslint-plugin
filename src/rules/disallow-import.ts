@@ -36,7 +36,8 @@ const rule = utils.createRule({
   defaultSubOptions: { allow: [], disallow: [] },
   isRuleOptions: is.object,
   isSubOptions,
-  messages: { disallowedSource: "Import from this source is not allowed" }
+  messages: { disallowedSource: "Import from this source is not allowed" },
+  name: "disallow-import"
 });
 
 export = rule;

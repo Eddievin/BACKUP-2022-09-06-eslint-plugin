@@ -46,7 +46,8 @@ const rule = utils.createRule({
   messages: {
     expectingEmptyLine: "Expecting empty line before",
     unexpectedEmptyLine: "Unexpected empty line before"
-  }
+  },
+  name: "switch-case-empty-lines"
 });
 
 export = rule;
