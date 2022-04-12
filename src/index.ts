@@ -8,6 +8,7 @@ import disallowIdentifier from "./rules/disallow-identifier";
 import disallowImport from "./rules/disallow-import";
 import emptyLinesAroundComment from "./rules/empty-lines-around-comment";
 import exhaustiveSwitch from "./rules/exhaustive-switch";
+import functionPropertiesStyle from "./rules/function-properties-style";
 import noInferrableTypes from "./rules/no-inferrable-types";
 import noMutableSignature from "./rules/no-mutable-signature";
 import noUnnecessaryReadonly from "./rules/no-unnecessary-readonly";
@@ -36,6 +37,7 @@ export = {
     "disallow-import": disallowImport,
     "empty-lines-around-comment": emptyLinesAroundComment,
     "exhaustive-switch": exhaustiveSwitch,
+    "function-properties-style": functionPropertiesStyle,
     "no-inferrable-types": noInferrableTypes,
     "no-mutable-signature": noMutableSignature,
     "no-unnecessary-readonly": noUnnecessaryReadonly,
