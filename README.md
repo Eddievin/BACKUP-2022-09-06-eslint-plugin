@@ -21,6 +21,7 @@
   - [no-unused-import](#no-unused-import)
   - [object-format](#object-format)
   - [prefer-readonly](#prefer-readonly)
+  - [prefer-ts-toolbelt](#prefer-ts-toolbelt)
   - [require-jsdoc](#require-jsdoc)
   - [sort-class-members](#sort-class-members)
   - [sort-keys](#sort-keys)
@@ -417,6 +418,10 @@ Enforces the use of readonly properties.
 | `ignoreTypes` | Ignore types (regular expressions). |
 | `includeSelectors` | Add AST selectors. |
 | `noDefaultSelectors` | Do not use default AST selectors. |
+
+### <a name="prefer-ts-toolbelt"></a>prefer-ts-toolbelt
+
+Enforces the use of "ts-toolbelt" types.
 
 ### <a name="require-jsdoc"></a>require-jsdoc
 

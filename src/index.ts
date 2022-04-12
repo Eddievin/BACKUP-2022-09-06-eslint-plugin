@@ -15,6 +15,7 @@ import noUnsafeObjectAssignment from "./rules/no-unsafe-object-assignment";
 import noUnusedImport from "./rules/no-unused-import";
 import objectFormat from "./rules/object-format";
 import preferReadonly from "./rules/prefer-readonly";
+import preferTsToolbelt from "./rules/prefer-ts-toolbelt";
 import requireJsdoc from "./rules/require-jsdoc";
 import sortClassMembers from "./rules/sort-class-members";
 import sortKeys from "./rules/sort-keys";
@@ -41,6 +42,7 @@ export = {
     "no-unused-import": noUnusedImport,
     "object-format": objectFormat,
     "prefer-readonly": preferReadonly,
+    "prefer-ts-toolbelt": preferTsToolbelt,
     "require-jsdoc": requireJsdoc,
     "sort-class-members": sortClassMembers,
     "sort-keys": sortKeys,
