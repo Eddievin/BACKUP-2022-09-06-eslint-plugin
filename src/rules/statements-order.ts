@@ -18,9 +18,11 @@ const NodeTypeVO = createValidationObject<NodeType>({
   ExportDeclaration: "ExportDeclaration",
   ExportDefaultDeclaration: "ExportDefaultDeclaration",
   ExportFunctionDeclaration: "ExportFunctionDeclaration",
+  ExportModuleDeclaration: "ExportModuleDeclaration",
   ExportTypeDeclaration: "ExportTypeDeclaration",
   ExportUnknown: "ExportUnknown",
   FunctionDeclaration: "FunctionDeclaration",
+  GlobalModuleDeclaration: "GlobalModuleDeclaration",
   ImportDeclaration: "ImportDeclaration",
   JestTest: "JestTest",
   ModuleDeclaration: "ModuleDeclaration",
@@ -151,25 +153,29 @@ export = rule;
 
 const defaultOrder: Rec<NodeType, number> = {
   ExportDeclaration: 1003,
-  ExportDefaultDeclaration: 1002,
-  ExportFunctionDeclaration: 1006,
-  ExportTypeDeclaration: 1005,
-  ExportUnknown: 1004,
-  FunctionDeclaration: 1009,
-  ImportDeclaration: 1000,
-  JestTest: 1010,
-  ModuleDeclaration: 1001,
-  TypeDeclaration: 1008,
-  Unknown: 1007
+  ExportDefaultDeclaration: 1004,
+  ExportFunctionDeclaration: 1007,
+  ExportModuleDeclaration: 1008,
+  ExportTypeDeclaration: 1006,
+  ExportUnknown: 1005,
+  FunctionDeclaration: 1011,
+  GlobalModuleDeclaration: 1002,
+  ImportDeclaration: 1001,
+  JestTest: 1013,
+  ModuleDeclaration: 1012,
+  TypeDeclaration: 1010,
+  Unknown: 1009
 };
 
 const sortable: Rec<NodeType, boolean> = {
   ExportDeclaration: true,
   ExportDefaultDeclaration: false,
   ExportFunctionDeclaration: true,
+  ExportModuleDeclaration: false,
   ExportTypeDeclaration: true,
   ExportUnknown: false,
   FunctionDeclaration: true,
+  GlobalModuleDeclaration: false,
   ImportDeclaration: false,
   JestTest: true,
   ModuleDeclaration: false,
@@ -193,9 +199,11 @@ type NodeType =
   | "ExportDeclaration"
   | "ExportDefaultDeclaration"
   | "ExportFunctionDeclaration"
+  | "ExportModuleDeclaration"
   | "ExportTypeDeclaration"
   | "ExportUnknown"
   | "FunctionDeclaration"
+  | "GlobalModuleDeclaration"
   | "ImportDeclaration"
   | "JestTest"
   | "ModuleDeclaration"
@@ -262,6 +270,9 @@ function nodeInfo(
   order: Rec<NodeType, number>
 ): Item {
   switch (node.type) {
+    case AST_NODE_TYPES.ExportDefaultDeclaration:
+      return buildResult("ExportDefaultDeclaration");
+
     case AST_NODE_TYPES.ExportNamedDeclaration: {
       if (node.declaration)
         switch (node.declaration.type) {
@@ -282,7 +293,7 @@ function nodeInfo(
             );
 
           case AST_NODE_TYPES.TSModuleDeclaration:
-            return buildResult("ModuleDeclaration");
+            return buildResult("ExportModuleDeclaration");
 
           default:
             return buildResult("ExportUnknown");
@@ -290,9 +301,6 @@ function nodeInfo(
 
       return buildResult("ExportDeclaration");
     }
-
-    case AST_NODE_TYPES.ExportDefaultDeclaration:
-      return buildResult("ExportDefaultDeclaration");
 
     case AST_NODE_TYPES.ExpressionStatement:
       {
@@ -317,7 +325,9 @@ function nodeInfo(
       return buildResult("TypeDeclaration", node.id.name);
 
     case AST_NODE_TYPES.TSModuleDeclaration:
-      return buildResult("ModuleDeclaration");
+      return node.global ?? false
+        ? buildResult("GlobalModuleDeclaration")
+        : buildResult("ModuleDeclaration");
 
     default:
       return buildResult("Unknown");

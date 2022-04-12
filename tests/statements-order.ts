@@ -10,6 +10,7 @@ utils.testRule(
     {
       code: `
         import "I1";
+        namespace PN1 {}
         function PF2();
         function PF1() {}
         const PU3 = 1;
@@ -17,6 +18,7 @@ utils.testRule(
         var PU1 = 1;
         type PT2 = 1;
         interface PT1 {}
+        export namespace EN1 {}
         export function EF2();
         export function EF1() {}
         export const EU3 = 1;
@@ -35,8 +37,8 @@ utils.testRule(
         import "I1";
         import "I2";
         declare global {}
-        export default 1;
         export { PU1, PU2, PU3 };
+        export default 1;
         export const EU3 = 1;
         export class EU2 {}
         export var EU1 = 1;
@@ -44,6 +46,7 @@ utils.testRule(
         export type ET2 = 1;
         export function EF1() {}
         export function EF2();
+        export namespace EN1 {}
         const PU3 = 1;
         class PU2 {}
         var PU1 = 1;
@@ -51,6 +54,7 @@ utils.testRule(
         type PT2 = 1;
         function PF1() {}
         function PF2();
+        namespace PN1 {}
       `
     },
     {
