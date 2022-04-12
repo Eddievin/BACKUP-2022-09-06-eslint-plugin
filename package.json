@@ -21,7 +21,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --project tsconfig-build.json",
-    "build-doc": "typedoc src",
+    "build-doc": "php scripts/build-doc.php",
     "commitlint": "commitlint --edit",
     "commitlint-all": "commitlint --config commitlint-all.config.js --from=",
     "lint": "eslint --fix --max-warnings 0 --no-error-on-unmatched-pattern --report-unused-disable-directives *.{js,ts} {src,tests,__mocks__}/**/*.{js,ts,vue}",
