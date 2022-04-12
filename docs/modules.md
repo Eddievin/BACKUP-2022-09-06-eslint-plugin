@@ -24,6 +24,7 @@
 - [rules/no-unused-import](modules/rules_no_unused_import.md)
 - [rules/object-format](modules/rules_object_format.md)
 - [rules/prefer-readonly](modules/rules_prefer_readonly.md)
+- [rules/prefer-ts-toolbelt](modules/rules_prefer_ts_toolbelt.md)
 - [rules/require-jsdoc](modules/rules_require_jsdoc.md)
 - [rules/sort-class-members](modules/rules_sort_class_members.md)
 - [rules/sort-keys](modules/rules_sort_keys.md)

@@ -17,6 +17,7 @@ const no_unsafe_object_assignment_1 = tslib_1.__importDefault(require("./rules/n
 const no_unused_import_1 = tslib_1.__importDefault(require("./rules/no-unused-import"));
 const object_format_1 = tslib_1.__importDefault(require("./rules/object-format"));
 const prefer_readonly_1 = tslib_1.__importDefault(require("./rules/prefer-readonly"));
+const prefer_ts_toolbelt_1 = tslib_1.__importDefault(require("./rules/prefer-ts-toolbelt"));
 const require_jsdoc_1 = tslib_1.__importDefault(require("./rules/require-jsdoc"));
 const sort_class_members_1 = tslib_1.__importDefault(require("./rules/sort-class-members"));
 const sort_keys_1 = tslib_1.__importDefault(require("./rules/sort-keys"));
@@ -42,6 +43,7 @@ module.exports = {
         "no-unused-import": no_unused_import_1.default,
         "object-format": object_format_1.default,
         "prefer-readonly": prefer_readonly_1.default,
+        "prefer-ts-toolbelt": prefer_ts_toolbelt_1.default,
         "require-jsdoc": require_jsdoc_1.default,
         "sort-class-members": sort_class_members_1.default,
         "sort-keys": sort_keys_1.default,
