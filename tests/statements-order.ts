@@ -272,6 +272,28 @@ utils.testRule(
           var PU1 = 1;
         }
       `
+    },
+    {
+      code: `
+        import "I1";
+        test("test4", () => {});
+        test.each([])("test3", () => {});
+        test("test2", () => {});
+        test.each([])("test1", () => {});
+        console.log(1);
+        import "I2";
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
+      name: `Test at line ${getCurrentLine().line}`,
+      output: `
+        import "I1";
+        import "I2";
+        console.log(1);
+        test.each([])("test1", () => {});
+        test("test2", () => {});
+        test.each([])("test3", () => {});
+        test("test4", () => {});
+      `
     }
   ],
   [
