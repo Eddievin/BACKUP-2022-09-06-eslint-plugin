@@ -1,6 +1,6 @@
 <?php
 
-include_once 'node_modules/@skylib/config/src/php-cs-rules.php';
+include_once 'node_modules/@skylib/config/src/php-cs-config.php';
 
 $finder = PhpCsFixer\Finder::create()->in(['scripts']);
 
@@ -10,5 +10,5 @@ return $config
   ->setFinder($finder)
   ->setIndent('  ')
   ->setLineEnding("\n")
-  ->setRules($phpCsRules)
+  ->setRules(PhpCsConfig::$rules)
 ;
