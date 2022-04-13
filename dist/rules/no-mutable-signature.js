@@ -93,7 +93,8 @@ const rule = utils.createRule({
     messages: {
         noMutableNumberSignature: "Number signature should be immutable. Failed type name: {{name}}. Failed type definition: {{definition}}",
         noMutableStringSignature: "String signature should be immutable. Failed type name: {{name}}. Failed type definition: {{definition}}"
-    }
+    },
+    name: "no-mutable-signature"
 });
 module.exports = rule;
 //# sourceMappingURL=no-mutable-signature.js.map

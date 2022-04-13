@@ -127,6 +127,7 @@ export interface CreateRuleOptions<M extends string, O extends object, S extends
     readonly isRuleOptions: is.Guard<O>;
     readonly isSubOptions?: is.Guard<S>;
     readonly messages: Rec<M, string>;
+    readonly name: string;
     readonly subOptionsKey?: string;
 }
 export interface GetSelectorsOptions {

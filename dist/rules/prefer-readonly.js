@@ -47,7 +47,8 @@ const rule = utils.createRule({
     isRuleOptions,
     messages: {
         shouldBeReadonly: "Parameter should be a readonly type. Failed type name: {{name}}. Failed type definition: {{definition}}"
-    }
+    },
+    name: "prefer-readonly"
 });
 const defaultSelectors = [
     utils_1.AST_NODE_TYPES.ArrowFunctionExpression,

@@ -16,7 +16,8 @@ const rule = utils.createRule({
         };
     },
     isRuleOptions: is.object,
-    messages: { typedefRequired: "Type definition required" }
+    messages: { typedefRequired: "Type definition required" },
+    name: "class-member-typedef"
 });
 module.exports = rule;
 //# sourceMappingURL=class-member-typedef.js.map

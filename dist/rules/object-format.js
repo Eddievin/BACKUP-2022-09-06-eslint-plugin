@@ -62,7 +62,8 @@ const rule = utils.createRule({
     messages: {
         expectingMultiline: "Expecting multiline object literal",
         expectingSingleLine: "Expecting single-line object literal"
-    }
+    },
+    name: "object-format"
 });
 // eslint-disable-next-line no-warning-comments
 // fixme: use @skylib/functions

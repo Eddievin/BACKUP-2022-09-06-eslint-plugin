@@ -93,7 +93,8 @@ const rule = utils.createRule({
     messages: {
         expectingEmptyLine: "Expecting empty line before",
         unexpectedEmptyLine: "Unexpected empty line before"
-    }
+    },
+    name: "consistent-empty-lines"
 });
 module.exports = rule;
 //# sourceMappingURL=consistent-empty-lines.js.map

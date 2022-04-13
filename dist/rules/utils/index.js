@@ -84,7 +84,7 @@ exports.createMatcher = createMatcher;
  */
 function createRule(options) {
     const { create, defaultOptions, fixable, messages } = options;
-    const ruleCreator = utils_1.ESLintUtils.RuleCreator((ruleId) => `https://ilyub.github.io/eslint-plugin/#${ruleId}`);
+    const ruleCreator = utils_1.ESLintUtils.RuleCreator((name) => `https://ilyub.github.io/eslint-plugin/#${name}`);
     return ruleCreator({
         create(context, rawOptions) {
             const betterContext = createBetterContext(context, rawOptions, options);
@@ -98,7 +98,7 @@ function createRule(options) {
                 recommended: false,
                 requiresTypeChecking: true
             }, messages, schema: [{}], type: "suggestion" }, (is.not.empty(fixable) ? { fixable } : {})),
-        name: "Rule"
+        name: options.name
     });
 }
 exports.createRule = createRule;

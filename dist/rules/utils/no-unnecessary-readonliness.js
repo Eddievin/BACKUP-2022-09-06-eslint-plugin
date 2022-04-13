@@ -10,13 +10,14 @@ const readonliness_1 = require("./readonliness");
 /**
  * Creates rule.
  *
+ * @param name - Name.
  * @param isTypeToCheck - Guard.
  * @param readonliness - Readonliness that triggers error.
  * @param messageId - Message ID.
  * @param message - Message.
  * @returns Rule module.
  */
-function createRule(isTypeToCheck, readonliness, messageId, message) {
+function createRule(name, isTypeToCheck, readonliness, messageId, message) {
     const isRuleOptions = is.object.factory({
         ignoreClasses: is.boolean,
         ignoreInterfaces: is.boolean,
@@ -53,7 +54,8 @@ function createRule(isTypeToCheck, readonliness, messageId, message) {
             ignoreTypes: []
         },
         isRuleOptions,
-        messages: { [messageId]: message }
+        messages: { [messageId]: message },
+        name
     });
 }
 exports.createRule = createRule;

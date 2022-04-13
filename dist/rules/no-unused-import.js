@@ -73,7 +73,8 @@ const rule = utils.createRule({
     },
     fixable: "code",
     isRuleOptions: is.object,
-    messages: { unusedImport: "Unused import" }
+    messages: { unusedImport: "Unused import" },
+    name: "no-unused-import"
 });
 module.exports = rule;
 //# sourceMappingURL=no-unused-import.js.map

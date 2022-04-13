@@ -62,7 +62,8 @@ const rule = utils.createRule({
     fixable: "code",
     isRuleOptions,
     isSubOptions,
-    messages: { disallowedCode: "Disallowed code" }
+    messages: { disallowedCode: "Disallowed code" },
+    name: "disallow-by-regexp"
 });
 /**
  * Gets suboptions context.

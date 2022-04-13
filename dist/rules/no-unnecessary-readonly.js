@@ -8,5 +8,5 @@ const TypeToCheckVO = (0, helpers_1.createValidationObject)({
     Readonly: "Readonly"
 });
 const isTypeToCheck = is.factory(is.enumeration, TypeToCheckVO);
-module.exports = (0, no_unnecessary_readonliness_1.createRule)(isTypeToCheck, "allDefinitelyReadonly", "unnecessaryReadonly", 'Unnecessary "Readonly" or "DeepReadonly"');
+module.exports = (0, no_unnecessary_readonliness_1.createRule)("no-unnecessary-readonly", isTypeToCheck, "allDefinitelyReadonly", "unnecessaryReadonly", 'Unnecessary "Readonly" or "DeepReadonly"');
 //# sourceMappingURL=no-unnecessary-readonly.js.map

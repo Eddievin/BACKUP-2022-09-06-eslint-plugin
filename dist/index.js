@@ -1,5 +1,6 @@
 "use strict";
 const tslib_1 = require("tslib");
+const array_callback_return_type_1 = tslib_1.__importDefault(require("./rules/array-callback-return-type"));
 const class_member_typedef_1 = tslib_1.__importDefault(require("./rules/class-member-typedef"));
 const consistent_empty_lines_1 = tslib_1.__importDefault(require("./rules/consistent-empty-lines"));
 const consistent_group_empty_lines_1 = tslib_1.__importDefault(require("./rules/consistent-group-empty-lines"));
@@ -9,6 +10,8 @@ const disallow_identifier_1 = tslib_1.__importDefault(require("./rules/disallow-
 const disallow_import_1 = tslib_1.__importDefault(require("./rules/disallow-import"));
 const empty_lines_around_comment_1 = tslib_1.__importDefault(require("./rules/empty-lines-around-comment"));
 const exhaustive_switch_1 = tslib_1.__importDefault(require("./rules/exhaustive-switch"));
+const function_properties_style_1 = tslib_1.__importDefault(require("./rules/function-properties-style"));
+const no_expression_empty_line_1 = tslib_1.__importDefault(require("./rules/no-expression-empty-line"));
 const no_inferrable_types_1 = tslib_1.__importDefault(require("./rules/no-inferrable-types"));
 const no_mutable_signature_1 = tslib_1.__importDefault(require("./rules/no-mutable-signature"));
 const no_unnecessary_readonly_1 = tslib_1.__importDefault(require("./rules/no-unnecessary-readonly"));
@@ -26,6 +29,7 @@ const switch_case_empty_lines_1 = tslib_1.__importDefault(require("./rules/switc
 const template_literal_format_1 = tslib_1.__importDefault(require("./rules/template-literal-format"));
 module.exports = {
     rules: {
+        "array-callback-return-type": array_callback_return_type_1.default,
         "class-member-typedef": class_member_typedef_1.default,
         "consistent-empty-lines": consistent_empty_lines_1.default,
         "consistent-group-empty-lines": consistent_group_empty_lines_1.default,
@@ -35,6 +39,8 @@ module.exports = {
         "disallow-import": disallow_import_1.default,
         "empty-lines-around-comment": empty_lines_around_comment_1.default,
         "exhaustive-switch": exhaustive_switch_1.default,
+        "function-properties-style": function_properties_style_1.default,
+        "no-expression-empty-line": no_expression_empty_line_1.default,
         "no-inferrable-types": no_inferrable_types_1.default,
         "no-mutable-signature": no_mutable_signature_1.default,
         "no-unnecessary-readonly": no_unnecessary_readonly_1.default,

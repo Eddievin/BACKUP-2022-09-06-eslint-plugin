@@ -24,7 +24,8 @@ const rule = utils.createRule({
     fixable: "code",
     isRuleOptions: is.object,
     isSubOptions,
-    messages: { disallowedIdentifier: "Disallowed identifier" }
+    messages: { disallowedIdentifier: "Disallowed identifier" },
+    name: "disallow-identifier"
 });
 module.exports = rule;
 //# sourceMappingURL=disallow-identifier.js.map

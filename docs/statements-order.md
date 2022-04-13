@@ -17,14 +17,17 @@ Requires consistent statements order.
   }
 ]
 
-type Type =
+type NodeType =
   | "ExportDeclaration"
   | "ExportDefaultDeclaration"
   | "ExportFunctionDeclaration"
+  | "ExportModuleDeclaration"
   | "ExportTypeDeclaration"
   | "ExportUnknown"
   | "FunctionDeclaration"
+  | "GlobalModuleDeclaration"
   | "ImportDeclaration"
+  | "JestTest"
   | "ModuleDeclaration"
   | "TypeDeclaration"
   | "Unknown";

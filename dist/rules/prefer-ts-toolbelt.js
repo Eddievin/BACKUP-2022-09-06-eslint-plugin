@@ -18,7 +18,8 @@ const rule = utils.createRule({
     isRuleOptions: is.object,
     messages: {
         preferExtends: 'Use "Extends" type from "ts-toolbelt" package instead'
-    }
+    },
+    name: "prefer-ts-toolbelt"
 });
 module.exports = rule;
 //# sourceMappingURL=prefer-ts-toolbelt.js.map

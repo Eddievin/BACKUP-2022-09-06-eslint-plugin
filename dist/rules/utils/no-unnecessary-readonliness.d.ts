@@ -5,11 +5,12 @@ import type { Readonliness } from "./readonliness";
 /**
  * Creates rule.
  *
+ * @param name - Name.
  * @param isTypeToCheck - Guard.
  * @param readonliness - Readonliness that triggers error.
  * @param messageId - Message ID.
  * @param message - Message.
  * @returns Rule module.
  */
-export declare function createRule<M extends string, T extends string>(isTypeToCheck: is.Guard<T>, readonliness: Readonliness, messageId: M, message: string): RuleModule<M, unknowns>;
+export declare function createRule<M extends string, T extends string>(name: string, isTypeToCheck: is.Guard<T>, readonliness: Readonliness, messageId: M, message: string): RuleModule<M, unknowns>;
 //# sourceMappingURL=no-unnecessary-readonliness.d.ts.map

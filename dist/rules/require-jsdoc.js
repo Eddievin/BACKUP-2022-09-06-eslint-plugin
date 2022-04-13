@@ -60,7 +60,8 @@ const rule = utils.createRule({
         undocumented: "Missing documentation",
         undocumentedCallSignature: "Missing documentation for call signature",
         undocumentedConstructSignature: "Missing documentation for constructor signature"
-    }
+    },
+    name: "require-jsdoc"
 });
 const defaultSelectors = [
     utils_1.AST_NODE_TYPES.ClassDeclaration,

@@ -14,10 +14,13 @@ const NodeTypeVO = (0, helpers_1.createValidationObject)({
     ExportDeclaration: "ExportDeclaration",
     ExportDefaultDeclaration: "ExportDefaultDeclaration",
     ExportFunctionDeclaration: "ExportFunctionDeclaration",
+    ExportModuleDeclaration: "ExportModuleDeclaration",
     ExportTypeDeclaration: "ExportTypeDeclaration",
     ExportUnknown: "ExportUnknown",
     FunctionDeclaration: "FunctionDeclaration",
+    GlobalModuleDeclaration: "GlobalModuleDeclaration",
     ImportDeclaration: "ImportDeclaration",
+    JestTest: "JestTest",
     ModuleDeclaration: "ModuleDeclaration",
     TypeDeclaration: "TypeDeclaration",
     Unknown: "Unknown"
@@ -55,7 +58,7 @@ const rule = utils.createRule({
                         }
                     });
                     if (order)
-                        arrayMap.push(id, nodeInfo(node, parentNode, index, order, false), itemsMap);
+                        arrayMap.push(id, nodeInfo(node, parentNode, index, order), itemsMap);
                 }
             },
             "Program:exit"() {
@@ -88,32 +91,65 @@ const rule = utils.createRule({
     },
     fixable: "code",
     isRuleOptions,
-    messages: { incorrectStatementsOrder: "Incorrect statements order" }
+    messages: { incorrectStatementsOrder: "Incorrect statements order" },
+    name: "statements-order"
 });
 const defaultOrder = {
     ExportDeclaration: 1003,
-    ExportDefaultDeclaration: 1002,
-    ExportFunctionDeclaration: 1006,
-    ExportTypeDeclaration: 1005,
-    ExportUnknown: 1004,
-    FunctionDeclaration: 1009,
-    ImportDeclaration: 1000,
-    ModuleDeclaration: 1001,
-    TypeDeclaration: 1008,
-    Unknown: 1007
+    ExportDefaultDeclaration: 1004,
+    ExportFunctionDeclaration: 1007,
+    ExportModuleDeclaration: 1008,
+    ExportTypeDeclaration: 1006,
+    ExportUnknown: 1005,
+    FunctionDeclaration: 1011,
+    GlobalModuleDeclaration: 1002,
+    ImportDeclaration: 1001,
+    JestTest: 1013,
+    ModuleDeclaration: 1012,
+    TypeDeclaration: 1010,
+    Unknown: 1009
 };
 const sortable = {
     ExportDeclaration: true,
     ExportDefaultDeclaration: false,
     ExportFunctionDeclaration: true,
+    ExportModuleDeclaration: false,
     ExportTypeDeclaration: true,
     ExportUnknown: false,
     FunctionDeclaration: true,
+    GlobalModuleDeclaration: false,
     ImportDeclaration: false,
+    JestTest: true,
     ModuleDeclaration: false,
     TypeDeclaration: true,
     Unknown: false
 };
+/**
+ * Returns Jest test name.
+ *
+ * @param node - Node.
+ * @returns Jest test name if node is Jest test, _undefined_ otherwise.
+ */
+function getJestTestName(node) {
+    if (node.expression.type === utils_1.AST_NODE_TYPES.CallExpression) {
+        const argument = node.expression.arguments[0];
+        if (argument &&
+            argument.type === utils_1.AST_NODE_TYPES.Literal &&
+            is.string(argument.value)) {
+            const callee = node.expression.callee;
+            if (callee.type === utils_1.AST_NODE_TYPES.Identifier && callee.name === "test")
+                return argument.value;
+            if (callee.type === utils_1.AST_NODE_TYPES.CallExpression &&
+                callee.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
+                callee.callee.object.type === utils_1.AST_NODE_TYPES.Identifier &&
+                callee.callee.object.name === "test" &&
+                callee.callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
+                callee.callee.property.name === "each")
+                return argument.value;
+        }
+    }
+    return undefined;
+}
 /**
  * Returns node info.
  *
@@ -121,33 +157,52 @@ const sortable = {
  * @param parentNode - Parent node.
  * @param index - Index.
  * @param order - Order.
- * @param exportDeclaration - Inside export declaration.
  * @returns Node info.
  */
-function nodeInfo(node, parentNode, index, order, exportDeclaration) {
+function nodeInfo(node, parentNode, index, order) {
+    var _a;
     switch (node.type) {
-        case utils_1.AST_NODE_TYPES.ExportNamedDeclaration: {
-            if (node.declaration) {
-                const info = nodeInfo(node.declaration, parentNode, index, order, true);
-                return buildResult(info.type, info.id);
-            }
-            return buildResult("ExportDeclaration");
-        }
         case utils_1.AST_NODE_TYPES.ExportDefaultDeclaration:
             return buildResult("ExportDefaultDeclaration");
+        case utils_1.AST_NODE_TYPES.ExportNamedDeclaration: {
+            if (node.declaration)
+                switch (node.declaration.type) {
+                    case utils_1.AST_NODE_TYPES.FunctionDeclaration:
+                    case utils_1.AST_NODE_TYPES.TSDeclareFunction:
+                        assert.not.empty(node.declaration.id);
+                        return buildResult("ExportFunctionDeclaration", node.declaration.id.name);
+                    case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
+                    case utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration:
+                        return buildResult("ExportTypeDeclaration", node.declaration.id.name);
+                    case utils_1.AST_NODE_TYPES.TSModuleDeclaration:
+                        return buildResult("ExportModuleDeclaration");
+                    default:
+                        return buildResult("ExportUnknown");
+                }
+            return buildResult("ExportDeclaration");
+        }
+        case utils_1.AST_NODE_TYPES.ExpressionStatement:
+            {
+                const id = getJestTestName(node);
+                if (is.not.empty(id))
+                    return buildResult("JestTest", id);
+            }
+            return buildResult("Unknown");
         case utils_1.AST_NODE_TYPES.FunctionDeclaration:
         case utils_1.AST_NODE_TYPES.TSDeclareFunction:
             assert.not.empty(node.id);
-            return buildResult(exportDeclaration ? "ExportFunctionDeclaration" : "FunctionDeclaration", node.id.name);
+            return buildResult("FunctionDeclaration", node.id.name);
         case utils_1.AST_NODE_TYPES.ImportDeclaration:
             return buildResult("ImportDeclaration");
         case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
         case utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration:
-            return buildResult(exportDeclaration ? "ExportTypeDeclaration" : "TypeDeclaration", node.id.name);
+            return buildResult("TypeDeclaration", node.id.name);
         case utils_1.AST_NODE_TYPES.TSModuleDeclaration:
-            return buildResult("ModuleDeclaration");
+            return ((_a = node.global) !== null && _a !== void 0 ? _a : false)
+                ? buildResult("GlobalModuleDeclaration")
+                : buildResult("ModuleDeclaration");
         default:
-            return buildResult(exportDeclaration ? "ExportUnknown" : "Unknown");
+            return buildResult("Unknown");
     }
     function buildResult(type, id = "~") {
         const order1 = order[type];
