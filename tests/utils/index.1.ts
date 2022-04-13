@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import classMemberTypedef from "@/rules/class-member-typedef";
 import * as utils from "@/rules/utils";
 

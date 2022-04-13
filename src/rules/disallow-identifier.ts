@@ -1,8 +1,6 @@
-import type { TSESTree } from "@typescript-eslint/utils";
-
 import * as is from "@skylib/functions/dist/guards";
 import type { strings } from "@skylib/functions/dist/types/core";
-
+import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
 const isSubOptions = is.object.factory<SubOptions>(

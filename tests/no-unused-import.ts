@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import noUnusedImport from "@/rules/no-unused-import";
 import * as utils from "@/rules/utils";
 

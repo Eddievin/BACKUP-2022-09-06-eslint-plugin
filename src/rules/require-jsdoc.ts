@@ -1,12 +1,10 @@
-import * as tsutils from "tsutils";
-import type * as ts from "typescript";
-import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as is from "@skylib/functions/dist/guards";
 import { createValidationObject } from "@skylib/functions/dist/helpers";
 import type { strings } from "@skylib/functions/dist/types/core";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
+import * as tsutils from "tsutils";
+import type * as ts from "typescript";
 import * as utils from "./utils";
 
 const InterfaceOptionVO = createValidationObject<InterfaceOption>({

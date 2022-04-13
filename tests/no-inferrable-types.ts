@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import noInferrableTypes from "@/rules/no-inferrable-types";
 import * as utils from "@/rules/utils";
 

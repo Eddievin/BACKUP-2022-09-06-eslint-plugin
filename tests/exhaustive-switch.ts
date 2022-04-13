@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import exhaustiveSwitch from "@/rules/exhaustive-switch";
 import * as utils from "@/rules/utils";
 

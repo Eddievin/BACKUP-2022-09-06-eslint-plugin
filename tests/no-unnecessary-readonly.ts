@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import noUnnecessaryReadonly from "@/rules/no-unnecessary-readonly";
 import * as utils from "@/rules/utils";
 

@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import switchCaseEmptyLines from "@/rules/switch-case-empty-lines";
 import * as utils from "@/rules/utils";
 

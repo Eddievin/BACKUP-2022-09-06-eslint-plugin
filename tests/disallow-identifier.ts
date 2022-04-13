@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import disallowIdentifier from "@/rules/disallow-identifier";
 import * as utils from "@/rules/utils";
 

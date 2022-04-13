@@ -1,8 +1,3 @@
-import * as _ from "lodash";
-import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
-
 import * as a from "@skylib/functions/dist/array";
 import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as assert from "@skylib/functions/dist/assertions";
@@ -11,7 +6,10 @@ import * as is from "@skylib/functions/dist/guards";
 import { createValidationObject } from "@skylib/functions/dist/helpers";
 import * as o from "@skylib/functions/dist/object";
 import type { Rec, stringU, Writable } from "@skylib/functions/dist/types/core";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
+import * as _ from "lodash";
 import * as utils from "./utils";
 
 const NodeTypeVO = createValidationObject<NodeType>({

@@ -1,9 +1,7 @@
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import * as num from "@skylib/functions/dist/number";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
 const isRuleOptions = is.object.factory<RuleOptions>(

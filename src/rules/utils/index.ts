@@ -1,21 +1,4 @@
-import type * as estree from "estree";
 import fs from "fs";
-import * as _ from "lodash";
-import minimatch from "minimatch";
-import * as tsutils from "tsutils";
-import type * as ts from "typescript";
-import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
-import { ESLintUtils, TSESLint } from "@typescript-eslint/utils";
-import type {
-  InvalidTestCase as BaseInvalidTestCase,
-  ReportDescriptor,
-  RuleContext,
-  RuleListener,
-  RuleModule,
-  SourceCode,
-  ValidTestCase as BaseValidTestCase
-} from "@typescript-eslint/utils/dist/ts-eslint";
-
 import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as cast from "@skylib/functions/dist/converters";
@@ -31,6 +14,22 @@ import type {
   strings,
   unknowns
 } from "@skylib/functions/dist/types/core";
+import { ESLintUtils, TSESLint } from "@typescript-eslint/utils";
+import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
+import type {
+  InvalidTestCase as BaseInvalidTestCase,
+  ReportDescriptor,
+  RuleContext,
+  RuleListener,
+  RuleModule,
+  SourceCode,
+  ValidTestCase as BaseValidTestCase
+} from "@typescript-eslint/utils/dist/ts-eslint";
+import type * as estree from "estree";
+import * as _ from "lodash";
+import minimatch from "minimatch";
+import * as tsutils from "tsutils";
+import type * as ts from "typescript";
 
 export const isPackage: is.Guard<Package> = is.factory(
   is.object.of,
@@ -262,8 +261,7 @@ export function buildChildNodesMap(
  */
 export function createMatcher(patterns: strings): Matcher {
   const matchers = patterns
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    .map(str => new RegExp(str, "u"))
+    .map(pattern => new RegExp(pattern, "u")) // eslint-disable-line security/detect-non-literal-regexp
     .map(
       re =>
         (str: string): boolean =>

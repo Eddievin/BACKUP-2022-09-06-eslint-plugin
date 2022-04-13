@@ -1,13 +1,11 @@
-import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-
 import * as a from "@skylib/functions/dist/array";
 import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import { createValidationObject } from "@skylib/functions/dist/helpers";
 import * as s from "@skylib/functions/dist/string";
-
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as utils from "./utils";
 
 const EmptyLineVO = createValidationObject<EmptyLine>({

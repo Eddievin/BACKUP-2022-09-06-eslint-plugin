@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import templateLiteralFormat from "@/rules/template-literal-format";
 import * as utils from "@/rules/utils";
 

@@ -1,13 +1,11 @@
-import * as tsutils from "tsutils";
-import * as ts from "typescript";
-import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as assert from "@skylib/functions/dist/assertions";
 import * as cast from "@skylib/functions/dist/converters";
 import * as is from "@skylib/functions/dist/guards";
 import type { strings } from "@skylib/functions/dist/types/core";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
+import * as tsutils from "tsutils";
+import * as ts from "typescript";
 import * as utils from ".";
 
 export class Checker<M extends string, O extends object, S extends object> {

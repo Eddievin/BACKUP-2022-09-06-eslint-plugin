@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import arrayCallbackReturnType from "@/rules/array-callback-return-type";
 import * as utils from "@/rules/utils";
 

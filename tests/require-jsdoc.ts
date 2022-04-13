@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import requireJsdoc from "@/rules/require-jsdoc";
 import * as utils from "@/rules/utils";
 

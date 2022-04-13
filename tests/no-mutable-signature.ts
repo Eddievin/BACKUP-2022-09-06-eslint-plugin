@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import noMutableSignature from "@/rules/no-mutable-signature";
 import * as utils from "@/rules/utils";
 

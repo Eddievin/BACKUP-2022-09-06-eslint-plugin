@@ -1,10 +1,8 @@
-import * as tsutils from "tsutils";
-import * as ts from "typescript";
+import * as is from "@skylib/functions/dist/guards";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
-import * as is from "@skylib/functions/dist/guards";
-
+import * as tsutils from "tsutils";
+import * as ts from "typescript";
 import * as utils from "./utils";
 
 const rule = utils.createRule({

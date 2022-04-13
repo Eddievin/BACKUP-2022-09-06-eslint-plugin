@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import consistentImport from "@/rules/consistent-import";
 import * as utils from "@/rules/utils";
 

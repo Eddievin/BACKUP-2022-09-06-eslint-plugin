@@ -1,12 +1,10 @@
-import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
 import { createValidationObject } from "@skylib/functions/dist/helpers";
 import * as regexp from "@skylib/functions/dist/regexp";
 import type { strings } from "@skylib/functions/dist/types/core";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
 const SubOptionsContextVO = createValidationObject<SubOptionsContext>({

@@ -1,13 +1,11 @@
-import * as _ from "lodash";
-import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
-
 import * as a from "@skylib/functions/dist/array";
 import * as cast from "@skylib/functions/dist/converters";
 import * as is from "@skylib/functions/dist/guards";
 import type { strings } from "@skylib/functions/dist/types/core";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
+import * as _ from "lodash";
 import * as utils from "./utils";
 
 const isRuleOptions = is.object.factory<RuleOptions>(

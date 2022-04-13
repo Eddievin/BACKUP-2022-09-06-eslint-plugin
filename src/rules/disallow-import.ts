@@ -1,9 +1,7 @@
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
 import type { strings } from "@skylib/functions/dist/types/core";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
 const isSubOptions = is.object.factory<SubOptions>(

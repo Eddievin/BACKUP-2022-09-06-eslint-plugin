@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import emptyLinesAroundComment from "@/rules/empty-lines-around-comment";
 import * as utils from "@/rules/utils";
 

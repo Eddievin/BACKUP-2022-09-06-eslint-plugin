@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import disallowByRegexp from "@/rules/disallow-by-regexp";
 import * as utils from "@/rules/utils";
 

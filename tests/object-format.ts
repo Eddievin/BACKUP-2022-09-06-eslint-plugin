@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import objectFormat from "@/rules/object-format";
 import * as utils from "@/rules/utils";
 

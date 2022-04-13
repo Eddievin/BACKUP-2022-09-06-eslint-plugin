@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import noUnnecessaryWritable from "@/rules/no-unnecessary-writable";
 import * as utils from "@/rules/utils";
 

@@ -1,6 +1,5 @@
 import * as is from "@skylib/functions/dist/guards";
 import { createValidationObject } from "@skylib/functions/dist/helpers";
-
 import { createRule } from "./utils/no-unnecessary-readonliness";
 
 const TypeToCheckVO = createValidationObject<TypeToCheck>({

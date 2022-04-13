@@ -1,13 +1,11 @@
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
-
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
 import type { strings, unknowns } from "@skylib/functions/dist/types/core";
-
-import * as utils from ".";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { Readonliness } from "./readonliness";
 import { Checker } from "./readonliness";
+import * as utils from ".";
 
 /**
  * Creates rule.

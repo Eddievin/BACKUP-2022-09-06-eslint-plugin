@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import functionPropertiesStyle from "@/rules/function-properties-style";
 import * as utils from "@/rules/utils";
 

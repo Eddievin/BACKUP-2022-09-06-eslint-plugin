@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import sortClassMembers from "@/rules/sort-class-members";
 import * as utils from "@/rules/utils";
 

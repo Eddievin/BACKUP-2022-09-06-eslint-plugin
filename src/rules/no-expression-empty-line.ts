@@ -1,9 +1,7 @@
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as a from "@skylib/functions/dist/array";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
 const rule = utils.createRule({

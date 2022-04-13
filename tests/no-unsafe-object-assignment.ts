@@ -1,5 +1,4 @@
 import getCurrentLine from "get-current-line";
-
 import noUnsafeObjectAssignment from "@/rules/no-unsafe-object-assignment";
 import * as utils from "@/rules/utils";
 

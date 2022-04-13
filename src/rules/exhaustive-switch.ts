@@ -1,8 +1,6 @@
-import * as _ from "lodash";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as is from "@skylib/functions/dist/guards";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import * as _ from "lodash";
 import * as utils from "./utils";
 import { getTypeParts } from "./utils/type-parts";
 

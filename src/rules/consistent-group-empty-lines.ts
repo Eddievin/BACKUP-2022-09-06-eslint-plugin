@@ -1,12 +1,10 @@
-import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-
 import * as a from "@skylib/functions/dist/array";
 import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as is from "@skylib/functions/dist/guards";
 import * as num from "@skylib/functions/dist/number";
 import * as s from "@skylib/functions/dist/string";
-
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as utils from "./utils";
 
 const isSubOptions = is.object.factory<SubOptions>(

@@ -1,8 +1,4 @@
-import minimatch from "minimatch";
 import nodePath from "path";
-import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-
 import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as fn from "@skylib/functions/dist/function";
@@ -10,7 +6,9 @@ import * as is from "@skylib/functions/dist/guards";
 import { createValidationObject } from "@skylib/functions/dist/helpers";
 import * as s from "@skylib/functions/dist/string";
 import type { strings } from "@skylib/functions/dist/types/core";
-
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
+import minimatch from "minimatch";
 import * as utils from "./utils";
 
 const TypeVO = createValidationObject<Type>({
