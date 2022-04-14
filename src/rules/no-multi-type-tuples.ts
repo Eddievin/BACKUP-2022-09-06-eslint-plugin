@@ -1,9 +1,9 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as _ from "lodash";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const noMultiTypeTuples = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.TSTupleType](node): void {
@@ -16,5 +16,3 @@ const rule = utils.createRule({
   messages: { multiTypeTuplesDisallowed: "Multi-type tuples are not allowed" },
   name: "no-multi-type-tuples"
 });
-
-export = rule;

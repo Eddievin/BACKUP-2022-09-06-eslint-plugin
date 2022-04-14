@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import className from "@/rules/class-name";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "class-name",
-  className,
+  rules,
   [
     {
       code: `

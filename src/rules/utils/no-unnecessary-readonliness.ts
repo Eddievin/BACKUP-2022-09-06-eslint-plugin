@@ -1,11 +1,9 @@
-import * as a from "@skylib/functions/dist/array";
-import * as is from "@skylib/functions/dist/guards";
-import type { strings, unknowns } from "@skylib/functions/dist/types/core";
+import { a, is } from "@skylib/functions";
+import type { strings, unknowns } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { Readonliness } from "./readonliness";
-import { Checker } from "./readonliness";
-import * as utils from ".";
+import { Checker } from "./Checker";
+import * as utils from "./core";
 
 /**
  * Creates rule.
@@ -20,7 +18,7 @@ import * as utils from ".";
 export function createRule<M extends string, T extends string>(
   name: string,
   isTypeToCheck: is.Guard<T>,
-  readonliness: Readonliness,
+  readonliness: Checker.Readonliness,
   messageId: M,
   message: string
 ): RuleModule<M, unknowns> {

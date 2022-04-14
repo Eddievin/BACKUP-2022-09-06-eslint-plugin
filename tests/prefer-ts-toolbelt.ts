@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import preferTsToolbelt from "@/rules/prefer-ts-toolbelt";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "prefer-ts-toolbelt",
-  preferTsToolbelt,
+  rules,
   [
     {
       code: `

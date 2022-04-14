@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import noUnusedImport from "@/rules/no-unused-import";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "no-unused-import",
-  noUnusedImport,
+  rules,
   [
     {
       code: `

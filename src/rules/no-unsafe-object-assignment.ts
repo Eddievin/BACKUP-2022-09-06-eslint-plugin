@@ -1,11 +1,11 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const noUnsafeObjectAssignment = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.ArrowFunctionExpression](node): void {
@@ -45,11 +45,9 @@ const rule = utils.createRule({
   name: "no-unsafe-object-assignment"
 });
 
-export = rule;
-
 type Context = utils.Context<MessageId, object, object>;
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof noUnsafeObjectAssignment>;
 
 /**
  * Lints expression.
@@ -64,7 +62,7 @@ function lintExpression(tsNode: ts.Expression, context: Context): void {
 
   const node = context.toEsNode(tsNode);
 
-  if (node.type !== AST_NODE_TYPES.ObjectExpression && destType)
+  if (destType && node.type !== AST_NODE_TYPES.ObjectExpression)
     lintTypes(destType, sourceType, node, context);
 }
 
@@ -88,8 +86,9 @@ function lintNodes(
 
   const sourceType = context.checker.getTypeAtLocation(tsSource);
 
-  if (source.type !== AST_NODE_TYPES.ObjectExpression)
-    lintTypes(destType, sourceType, source, context);
+  if (source.type === AST_NODE_TYPES.ObjectExpression) {
+    // Ignore
+  } else lintTypes(destType, sourceType, source, context);
 }
 
 /**

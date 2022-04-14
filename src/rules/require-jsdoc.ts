@@ -1,43 +1,12 @@
-import * as is from "@skylib/functions/dist/guards";
-import { createValidationObject } from "@skylib/functions/dist/helpers";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { is, createValidationObject, fn } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import type * as ts from "typescript";
 import * as utils from "./utils";
 
-const InterfaceOptionVO = createValidationObject<InterfaceOption>({
-  callSignatures: "callSignatures",
-  constructSignatures: "constructSignatures",
-  interface: "interface"
-});
-
-const isInterfaceOption = is.factory(is.enumeration, InterfaceOptionVO);
-
-const isInterfaceOptions = is.factory(is.array.of, isInterfaceOption);
-
-const PropertyOptionVO = createValidationObject<PropertyOption>({
-  function: "function",
-  nonFunction: "nonFunction"
-});
-
-const isPropertyOption = is.factory(is.enumeration, PropertyOptionVO);
-
-const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
-
-const isRuleOptions = is.object.factory<RuleOptions>(
-  {
-    excludeSelectors: is.strings,
-    includeSelectors: is.strings,
-    interfaces: isInterfaceOptions,
-    noDefaultSelectors: is.boolean,
-    properties: isPropertyOptions
-  },
-  {}
-);
-
-const rule = utils.createRule({
+export const requireJsdoc = utils.createRule({
   create(context) {
     const selectors = utils.getSelectors(context.options, defaultSelectors);
 
@@ -74,7 +43,37 @@ const rule = utils.createRule({
     noDefaultSelectors: false,
     properties: ["function", "nonFunction"]
   },
-  isRuleOptions,
+  isRuleOptions: fn.run(() => {
+    const InterfaceOptionVO = createValidationObject<InterfaceOption>({
+      callSignatures: "callSignatures",
+      constructSignatures: "constructSignatures",
+      interface: "interface"
+    });
+
+    const isInterfaceOption = is.factory(is.enumeration, InterfaceOptionVO);
+
+    const isInterfaceOptions = is.factory(is.array.of, isInterfaceOption);
+
+    const PropertyOptionVO = createValidationObject<PropertyOption>({
+      function: "function",
+      nonFunction: "nonFunction"
+    });
+
+    const isPropertyOption = is.factory(is.enumeration, PropertyOptionVO);
+
+    const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
+
+    return is.object.factory<RuleOptions>(
+      {
+        excludeSelectors: is.strings,
+        includeSelectors: is.strings,
+        interfaces: isInterfaceOptions,
+        noDefaultSelectors: is.boolean,
+        properties: isPropertyOptions
+      },
+      {}
+    );
+  }),
   messages: {
     undocumented: "Missing documentation",
     undocumentedCallSignature: "Missing documentation for call signature",
@@ -83,8 +82,6 @@ const rule = utils.createRule({
   },
   name: "require-jsdoc"
 });
-
-export = rule;
 
 const defaultSelectors: strings = [
   AST_NODE_TYPES.ClassDeclaration,
@@ -104,7 +101,7 @@ type Context = utils.Context<MessageId, RuleOptions, object>;
 
 type InterfaceOption = "callSignatures" | "constructSignatures" | "interface";
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof requireJsdoc>;
 
 type PropertyOption = "function" | "nonFunction";
 

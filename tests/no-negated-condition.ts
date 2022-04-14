@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import noNegatedCondition from "@/rules/no-negated-condition";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("no-negated-condition", noNegatedCondition, [
+utils.testRule("no-negated-condition", rules, [
   {
     code: `
       if (!1) {}

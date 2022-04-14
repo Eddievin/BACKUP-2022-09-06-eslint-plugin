@@ -1,9 +1,9 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const functionPropertiesStyle = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.AssignmentExpression](node): void {
@@ -30,5 +30,3 @@ const rule = utils.createRule({
   },
   name: "function-properties-style"
 });
-
-export = rule;

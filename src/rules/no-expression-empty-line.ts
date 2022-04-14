@@ -1,11 +1,8 @@
-import * as a from "@skylib/functions/dist/array";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import * as s from "@skylib/functions/dist/string";
+import { a, fn, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const noExpressionEmptyLine = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.MemberExpression](node): void {
@@ -43,5 +40,3 @@ const rule = utils.createRule({
   messages: { unexpectedEmptyLine: "Unexpected empty line" },
   name: "no-expression-empty-line"
 });
-
-export = rule;

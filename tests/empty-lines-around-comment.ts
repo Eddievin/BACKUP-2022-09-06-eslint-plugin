@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import emptyLinesAroundComment from "@/rules/empty-lines-around-comment";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "empty-lines-around-comment",
-  emptyLinesAroundComment,
+  rules,
   [
     {
       code: `

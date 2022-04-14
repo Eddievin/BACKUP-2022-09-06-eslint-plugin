@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import disallowIdentifier from "@/rules/disallow-identifier";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "disallow-identifier",
-  disallowIdentifier,
+  rules,
   [
     {
       code: `

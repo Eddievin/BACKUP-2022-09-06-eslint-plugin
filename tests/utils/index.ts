@@ -1,4 +1,4 @@
-import * as utils from "@/rules/utils";
+import { utils } from "@";
 
 test("getPackage", () => {
   expect(utils.getPackage("fixtures/corrupted.json")).toStrictEqual({});

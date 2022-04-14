@@ -1,14 +1,11 @@
-import * as assert from "@skylib/functions/dist/assertions";
-import * as is from "@skylib/functions/dist/guards";
-import { createValidationObject } from "@skylib/functions/dist/helpers";
-import * as o from "@skylib/functions/dist/object";
-import type { NumStrU } from "@skylib/functions/dist/types/core";
+import { assert, is, createValidationObject, o } from "@skylib/functions";
+import type { NumStrU } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
-import * as _ from "lodash";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
-import type * as utils from ".";
+import type * as utils from "./core";
 
 /**
  * Gets type parts.

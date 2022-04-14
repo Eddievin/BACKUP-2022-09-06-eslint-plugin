@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import noInferrableTypes from "@/rules/no-inferrable-types";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("no-inferrable-types", noInferrableTypes, [
+utils.testRule("no-inferrable-types", rules, [
   {
     code: `
       function f<T>(): T {

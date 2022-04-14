@@ -1,10 +1,9 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as _ from "lodash";
 import * as utils from "./utils";
-import { getTypeParts } from "./utils/type-parts";
 
-const rule = utils.createRule({
+export const exhaustiveSwitch = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.SwitchStatement](node): void {
@@ -17,10 +16,13 @@ const rule = utils.createRule({
           const got = _.flatten(
             tests
               .filter(is.not.empty)
-              .map(expression => getTypeParts(expression, context))
+              .map(expression => utils.getTypeParts(expression, context))
           );
 
-          const expected = getTypeParts.typeofFix(node.discriminant, context);
+          const expected = utils.getTypeParts.typeofFix(
+            node.discriminant,
+            context
+          );
 
           if (_.difference(expected, got).length)
             context.report({ messageId: "inexhaustiveSwitch", node });
@@ -32,5 +34,3 @@ const rule = utils.createRule({
   messages: { inexhaustiveSwitch: "Inexhaustive switch" },
   name: "exhaustive-switch"
 });
-
-export = rule;

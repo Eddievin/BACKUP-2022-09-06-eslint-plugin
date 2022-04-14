@@ -1,48 +1,20 @@
-import * as a from "@skylib/functions/dist/array";
-import * as arrayMap from "@skylib/functions/dist/arrayMap";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import { createValidationObject } from "@skylib/functions/dist/helpers";
-import * as o from "@skylib/functions/dist/object";
-import type { Rec, stringU, Writable } from "@skylib/functions/dist/types/core";
+import {
+  a,
+  arrayMap,
+  assert,
+  fn,
+  is,
+  createValidationObject,
+  o
+} from "@skylib/functions";
+import type { Rec, stringU, Writable } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as _ from "lodash";
 import * as utils from "./utils";
 
-const NodeTypeVO = createValidationObject<NodeType>({
-  ExportDeclaration: "ExportDeclaration",
-  ExportDefaultDeclaration: "ExportDefaultDeclaration",
-  ExportFunctionDeclaration: "ExportFunctionDeclaration",
-  ExportModuleDeclaration: "ExportModuleDeclaration",
-  ExportTypeDeclaration: "ExportTypeDeclaration",
-  ExportUnknown: "ExportUnknown",
-  FunctionDeclaration: "FunctionDeclaration",
-  GlobalModuleDeclaration: "GlobalModuleDeclaration",
-  ImportDeclaration: "ImportDeclaration",
-  JestTest: "JestTest",
-  ModuleDeclaration: "ModuleDeclaration",
-  TypeDeclaration: "TypeDeclaration",
-  Unknown: "Unknown"
-});
-
-const isNodeType = is.factory(is.enumeration, NodeTypeVO);
-
-const isNodeTypes = is.factory(is.array.of, isNodeType);
-
-const isRuleOptions = is.object.factory<RuleOptions>(
-  {
-    blockOrder: isNodeTypes,
-    moduleOrder: isNodeTypes,
-    order: isNodeTypes,
-    rootOrder: isNodeTypes
-  },
-  {}
-);
-
-const rule = utils.createRule({
+export const statementsOrder = utils.createRule({
   create(context) {
     const blockOrder: Rec<NodeType, number> = {
       ...defaultOrder,
@@ -116,7 +88,9 @@ const rule = utils.createRule({
           const fixes: RuleFix[] = [];
 
           for (const [index, sortedItem] of sortedItems.entries())
-            if (sortedItem.index !== index) {
+            if (sortedItem.index === index) {
+              // Valid
+            } else {
               const item = a.get(items, index);
 
               fixes.push({
@@ -142,12 +116,40 @@ const rule = utils.createRule({
     rootOrder: []
   },
   fixable: "code",
-  isRuleOptions,
+  isRuleOptions: fn.run(() => {
+    const NodeTypeVO = createValidationObject<NodeType>({
+      ExportDeclaration: "ExportDeclaration",
+      ExportDefaultDeclaration: "ExportDefaultDeclaration",
+      ExportFunctionDeclaration: "ExportFunctionDeclaration",
+      ExportModuleDeclaration: "ExportModuleDeclaration",
+      ExportTypeDeclaration: "ExportTypeDeclaration",
+      ExportUnknown: "ExportUnknown",
+      FunctionDeclaration: "FunctionDeclaration",
+      GlobalModuleDeclaration: "GlobalModuleDeclaration",
+      ImportDeclaration: "ImportDeclaration",
+      JestTest: "JestTest",
+      ModuleDeclaration: "ModuleDeclaration",
+      TypeDeclaration: "TypeDeclaration",
+      Unknown: "Unknown"
+    });
+
+    const isNodeType = is.factory(is.enumeration, NodeTypeVO);
+
+    const isNodeTypes = is.factory(is.array.of, isNodeType);
+
+    return is.object.factory<RuleOptions>(
+      {
+        blockOrder: isNodeTypes,
+        moduleOrder: isNodeTypes,
+        order: isNodeTypes,
+        rootOrder: isNodeTypes
+      },
+      {}
+    );
+  }),
   messages: { incorrectStatementsOrder: "Incorrect statements order" },
   name: "statements-order"
 });
-
-export = rule;
 
 const defaultOrder: Rec<NodeType, number> = {
   ExportDeclaration: 1003,

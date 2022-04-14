@@ -1,12 +1,10 @@
-import * as assert from "@skylib/functions/dist/assertions";
-import * as cast from "@skylib/functions/dist/converters";
-import * as is from "@skylib/functions/dist/guards";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { assert, cast, is } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
-import * as utils from ".";
+import * as utils from "./core";
 
 export class Checker<M extends string, O extends object, S extends object> {
   /**
@@ -14,7 +12,7 @@ export class Checker<M extends string, O extends object, S extends object> {
    *
    * @param options - Options.
    */
-  public constructor(options: Options<M, O, S>) {
+  public constructor(options: Checker.Options<M, O, S>) {
     this.checker = options.context.checker;
     this.ignoreClasses = options.ignoreClasses;
     this.ignoreInterfaces = options.ignoreInterfaces;
@@ -35,7 +33,7 @@ export class Checker<M extends string, O extends object, S extends object> {
     type: ts.Type,
     node: TSESTree.Node,
     restElement = false
-  ): Result {
+  ): Checker.Result {
     if (
       node.type === AST_NODE_TYPES.TSTypeAliasDeclaration &&
       this.ignoreTypes(node.id.name)
@@ -57,7 +55,7 @@ export class Checker<M extends string, O extends object, S extends object> {
 
   protected ignoreTypes: utils.Matcher;
 
-  protected readonliness: Readonliness;
+  protected readonliness: Checker.Readonliness;
 
   protected seenTypesPool = new Set<ts.Type>();
 
@@ -67,7 +65,7 @@ export class Checker<M extends string, O extends object, S extends object> {
    * @param type - Type.
    * @returns Validation result.
    */
-  protected checkMappedTypeNodes(type: ts.Type): Result {
+  protected checkMappedTypeNodes(type: ts.Type): Checker.Result {
     const symbol = type.getSymbol();
 
     if (symbol) {
@@ -93,7 +91,10 @@ export class Checker<M extends string, O extends object, S extends object> {
    * @param restElement - Rest element.
    * @returns Validation result.
    */
-  protected checkObjectType(type: ts.ObjectType, restElement: boolean): Result {
+  protected checkObjectType(
+    type: ts.ObjectType,
+    restElement: boolean
+  ): Checker.Result {
     {
       const result = this.checkProperties(type, restElement);
 
@@ -119,7 +120,10 @@ export class Checker<M extends string, O extends object, S extends object> {
    * @param restElement - Rest element.
    * @returns Validation result.
    */
-  protected checkProperties(type: ts.ObjectType, restElement: boolean): Result {
+  protected checkProperties(
+    type: ts.ObjectType,
+    restElement: boolean
+  ): Checker.Result {
     const isArrayProperty =
       this.checker.isArrayType(type) || this.checker.isTupleType(type)
         ? (name: string): boolean => arrayProperties.has(name)
@@ -170,7 +174,10 @@ export class Checker<M extends string, O extends object, S extends object> {
    * @param restElement - Rest element.
    * @returns Validation result.
    */
-  protected checkSignatures(type: ts.ObjectType, restElement: boolean): Result {
+  protected checkSignatures(
+    type: ts.ObjectType,
+    restElement: boolean
+  ): Checker.Result {
     for (const { indexKind, sourceType } of signatures) {
       const indexInfo = this.checker.getIndexInfoOfType(type, indexKind);
 
@@ -199,7 +206,10 @@ export class Checker<M extends string, O extends object, S extends object> {
    * @param subtypes - Subtypes.
    * @returns Validation result.
    */
-  protected checkSubTypes(type: ts.Type, subtypes: readonly ts.Type[]): Result {
+  protected checkSubTypes(
+    type: ts.Type,
+    subtypes: readonly ts.Type[]
+  ): Checker.Result {
     for (const subtype of subtypes) {
       const result = this.recurs(subtype);
 
@@ -216,7 +226,7 @@ export class Checker<M extends string, O extends object, S extends object> {
    * @param type - Type.
    * @returns Validation result.
    */
-  protected checkTypeParameter(type: ts.TypeParameter): Result {
+  protected checkTypeParameter(type: ts.TypeParameter): Checker.Result {
     if (this.ignoreTypeParameters) {
       // Ignore
     } else {
@@ -239,7 +249,7 @@ export class Checker<M extends string, O extends object, S extends object> {
    */
   protected invalidReadonliness(
     typeIsReadonly: boolean,
-    sourceType: SourceType
+    sourceType: Checker.SourceType
   ): boolean {
     switch (this.readonliness) {
       case "allDefinitelyReadonly":
@@ -295,7 +305,7 @@ export class Checker<M extends string, O extends object, S extends object> {
    * @param restElement - Rest element.
    * @returns Validation result.
    */
-  protected recurs(type: ts.Type, restElement = false): Result {
+  protected recurs(type: ts.Type, restElement = false): Checker.Result {
     if (this.seenTypesPool.has(type)) return { passed: true };
 
     this.seenTypesPool.add(type);
@@ -328,34 +338,40 @@ export class Checker<M extends string, O extends object, S extends object> {
   }
 }
 
-export interface InvalidResult {
-  readonly failed: true;
-  readonly types: readonly ts.Type[];
-}
+export namespace Checker {
+  export interface InvalidResult {
+    readonly failed: true;
+    readonly types: readonly ts.Type[];
+  }
 
-export interface Options<M extends string, O extends object, S extends object> {
-  readonly context: utils.Context<M, O, S>;
-  readonly ignoreClasses: boolean;
-  readonly ignoreInterfaces: boolean;
-  readonly ignoreTypeParameters?: boolean;
-  readonly ignoreTypes: strings;
-  readonly readonliness: Readonliness;
-}
+  export interface Options<
+    M extends string,
+    O extends object,
+    S extends object
+  > {
+    readonly context: utils.Context<M, O, S>;
+    readonly ignoreClasses: boolean;
+    readonly ignoreInterfaces: boolean;
+    readonly ignoreTypeParameters?: boolean;
+    readonly ignoreTypes: strings;
+    readonly readonliness: Readonliness;
+  }
 
-export type Readonliness =
-  | "allDefinitelyReadonly"
-  | "allDefinitelyWritable"
-  | "allMaybeReadonly"
-  | "allMaybeWritable"
-  | "numberSignatureReadonly"
-  | "stringSignatureReadonly";
+  export type Readonliness =
+    | "allDefinitelyReadonly"
+    | "allDefinitelyWritable"
+    | "allMaybeReadonly"
+    | "allMaybeWritable"
+    | "numberSignatureReadonly"
+    | "stringSignatureReadonly";
 
-export type Result = InvalidResult | ValidResult;
+  export type Result = InvalidResult | ValidResult;
 
-export type SourceType = "numberSignature" | "property" | "stringSignature";
+  export type SourceType = "numberSignature" | "property" | "stringSignature";
 
-export interface ValidResult {
-  readonly passed: true;
+  export interface ValidResult {
+    readonly passed: true;
+  }
 }
 
 const arrayProperties: ReadonlySet<string> = new Set(
@@ -385,5 +401,5 @@ const signatures: readonly Signature[] = [
 
 interface Signature {
   readonly indexKind: ts.IndexKind;
-  readonly sourceType: SourceType;
+  readonly sourceType: Checker.SourceType;
 }

@@ -1,33 +1,10 @@
-import * as a from "@skylib/functions/dist/array";
-import * as is from "@skylib/functions/dist/guards";
-import { createValidationObject } from "@skylib/functions/dist/helpers";
-import * as regexp from "@skylib/functions/dist/regexp";
-import type { strings } from "@skylib/functions/dist/types/core";
+import type { strings } from "@skylib/functions";
+import { a, is, createValidationObject, fn, regexp } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const SubOptionsContextVO = createValidationObject<SubOptionsContext>({
-  code: "code",
-  comment: "comment",
-  string: "string"
-});
-
-const isSubOptionsContext = is.factory(is.enumeration, SubOptionsContextVO);
-
-const isSubOptionsContexts = is.factory(is.array.of, isSubOptionsContext);
-
-const isRuleOptions = is.object.factory<RuleOptions>(
-  { contexts: isSubOptionsContexts },
-  {}
-);
-
-const isSubOptions = is.object.factory<SubOptions>(
-  { patterns: is.strings },
-  { contexts: isSubOptionsContexts, replacement: is.string }
-);
-
-const rule = utils.createRule({
+export const disallowByRegexp = utils.createRule({
   create(context) {
     const stringRanges: utils.ReadonlyRange[] = [];
 
@@ -79,17 +56,45 @@ const rule = utils.createRule({
   },
   defaultOptions: { contexts: ["code", "comment", "string"] },
   fixable: "code",
-  isRuleOptions,
-  isSubOptions,
+  isRuleOptions: fn.run(() => {
+    const SubOptionsContextVO = createValidationObject<SubOptionsContext>({
+      code: "code",
+      comment: "comment",
+      string: "string"
+    });
+
+    const isSubOptionsContext = is.factory(is.enumeration, SubOptionsContextVO);
+
+    const isSubOptionsContexts = is.factory(is.array.of, isSubOptionsContext);
+
+    return is.object.factory<RuleOptions>(
+      { contexts: isSubOptionsContexts },
+      {}
+    );
+  }),
+  isSubOptions: fn.run(() => {
+    const SubOptionsContextVO = createValidationObject<SubOptionsContext>({
+      code: "code",
+      comment: "comment",
+      string: "string"
+    });
+
+    const isSubOptionsContext = is.factory(is.enumeration, SubOptionsContextVO);
+
+    const isSubOptionsContexts = is.factory(is.array.of, isSubOptionsContext);
+
+    return is.object.factory<SubOptions>(
+      { patterns: is.strings },
+      { contexts: isSubOptionsContexts, replacement: is.string }
+    );
+  }),
   messages: { disallowedCode: "Disallowed code" },
   name: "disallow-by-regexp"
 });
 
-export = rule;
-
 type Context = utils.Context<MessageId, RuleOptions, SubOptions>;
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof disallowByRegexp>;
 
 interface RuleOptions {
   readonly contexts: readonly SubOptionsContext[];

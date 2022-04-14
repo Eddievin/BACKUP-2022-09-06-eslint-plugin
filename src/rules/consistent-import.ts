@@ -1,33 +1,19 @@
 import nodePath from "path";
-import * as a from "@skylib/functions/dist/array";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import { createValidationObject } from "@skylib/functions/dist/helpers";
-import * as s from "@skylib/functions/dist/string";
-import type { strings } from "@skylib/functions/dist/types/core";
+import {
+  a,
+  assert,
+  fn,
+  is,
+  createValidationObject,
+  s
+} from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
 import * as utils from "./utils";
 
-const TypeVO = createValidationObject<Type>({
-  default: "default",
-  wildcard: "wildcard"
-});
-
-const isType = is.factory(is.enumeration, TypeVO);
-
-const isSubOptions = is.object.factory<SubOptions>(
-  {
-    altLocalNames: is.strings,
-    sourcePattern: is.string,
-    type: isType
-  },
-  { autoImportSource: is.string, localName: is.string }
-);
-
-const rule = utils.createRule({
+export const consistentImport = utils.createRule({
   create(context) {
     const identifiers = new Set<string>();
 
@@ -54,7 +40,23 @@ const rule = utils.createRule({
   defaultSubOptions: { altLocalNames: [] },
   fixable: "code",
   isRuleOptions: is.object,
-  isSubOptions,
+  isSubOptions: fn.run(() => {
+    const TypeVO = createValidationObject<Type>({
+      default: "default",
+      wildcard: "wildcard"
+    });
+
+    const isType = is.factory(is.enumeration, TypeVO);
+
+    return is.object.factory<SubOptions>(
+      {
+        altLocalNames: is.strings,
+        sourcePattern: is.string,
+        type: isType
+      },
+      { autoImportSource: is.string, localName: is.string }
+    );
+  }),
   messages: {
     autoImport: 'Run "eslint --fix" to add missing import statement(s)',
     invalidLocalName: "Expecting local name to be {{ expectedLocalName }}",
@@ -66,11 +68,9 @@ const rule = utils.createRule({
   subOptionsKey: "sources"
 });
 
-export = rule;
-
 type Context = utils.Context<MessageId, object, SubOptions>;
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof consistentImport>;
 
 interface SubOptions {
   readonly altLocalNames: strings;

@@ -1,14 +1,9 @@
-import * as is from "@skylib/functions/dist/guards";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { is } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const isSubOptions = is.object.factory<SubOptions>(
-  { ids: is.strings },
-  { replacement: is.string }
-);
-
-const rule = utils.createRule({
+export const disallowIdentifier = utils.createRule({
   create(context) {
     return {
       ":not(Property) > Identifier:not(.property)"(
@@ -30,12 +25,13 @@ const rule = utils.createRule({
   },
   fixable: "code",
   isRuleOptions: is.object,
-  isSubOptions,
+  isSubOptions: is.object.factory<SubOptions>(
+    { ids: is.strings },
+    { replacement: is.string }
+  ),
   messages: { disallowedIdentifier: "Disallowed identifier" },
   name: "disallow-identifier"
 });
-
-export = rule;
 
 interface SubOptions {
   readonly ids: strings;

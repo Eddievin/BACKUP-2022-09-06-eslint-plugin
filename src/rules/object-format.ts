@@ -1,15 +1,8 @@
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import * as num from "@skylib/functions/dist/number";
+import { fn, is, num } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const isRuleOptions = is.object.factory<RuleOptions>(
-  { maxLineLength: is.number, maxObjectSize: is.number },
-  {}
-);
-
-const rule = utils.createRule({
+export const objectFormat = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.ObjectExpression](node): void {
@@ -81,15 +74,16 @@ const rule = utils.createRule({
   },
   defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
   fixable: "code",
-  isRuleOptions,
+  isRuleOptions: is.object.factory<RuleOptions>(
+    { maxLineLength: is.number, maxObjectSize: is.number },
+    {}
+  ),
   messages: {
     expectingMultiline: "Expecting multiline object literal",
     expectingSingleLine: "Expecting single-line object literal"
   },
   name: "object-format"
 });
-
-export = rule;
 
 interface RuleOptions {
   readonly maxLineLength: number;

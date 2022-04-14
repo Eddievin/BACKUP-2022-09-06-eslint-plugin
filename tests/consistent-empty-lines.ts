@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import consistentEmptyLines from "@/rules/consistent-empty-lines";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("consistent-empty-lines", consistentEmptyLines, [
+utils.testRule("consistent-empty-lines", rules, [
   {
     code: `
       import x from "source1";

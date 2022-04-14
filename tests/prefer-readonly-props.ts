@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import preferReadonlyProps from "@/rules/prefer-readonly-props";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "prefer-readonly-props",
-  preferReadonlyProps,
+  rules,
   [
     {
       code: `

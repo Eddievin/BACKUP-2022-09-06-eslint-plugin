@@ -1,19 +1,12 @@
-import * as a from "@skylib/functions/dist/array";
-import * as cast from "@skylib/functions/dist/converters";
-import * as is from "@skylib/functions/dist/guards";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { a, cast, is } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as _ from "lodash";
 import * as utils from "./utils";
 
-const isRuleOptions = is.object.factory<RuleOptions>(
-  { sortingOrder: is.strings },
-  {}
-);
-
-const rule = utils.createRule({
+export const sortClassMembers = utils.createRule({
   create(context) {
     const sortingOrders = new Map(
       context.options.sortingOrder.map((name, index) => [name, index])
@@ -71,7 +64,9 @@ const rule = utils.createRule({
         const fixes: RuleFix[] = [];
 
         for (const [index, sortedMember] of sortedMembers.entries())
-          if (sortedMember.index !== index) {
+          if (sortedMember.index === index) {
+            // Valid
+          } else {
             const member = a.get(members, index);
 
             fixes.push({
@@ -91,12 +86,13 @@ const rule = utils.createRule({
   },
   defaultOptions: { sortingOrder: [] },
   fixable: "code",
-  isRuleOptions,
+  isRuleOptions: is.object.factory<RuleOptions>(
+    { sortingOrder: is.strings },
+    {}
+  ),
   messages: { incorrectSortingOrder: "Incorrect sorting order" },
   name: "sort-class-members"
 });
-
-export = rule;
 
 type AccessorType = "get" | "none" | "set";
 
@@ -110,7 +106,7 @@ interface Member {
   readonly sortingOrder: string;
 }
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof sortClassMembers>;
 
 interface RuleOptions {
   readonly sortingOrder: strings;

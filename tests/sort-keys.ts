@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import sortKeys from "@/rules/sort-keys";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "sort-keys",
-  sortKeys,
+  rules,
   [
     {
       code: `

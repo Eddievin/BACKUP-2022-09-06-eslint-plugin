@@ -1,11 +1,11 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const arrayCallbackReturnType = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.CallExpression](node): void {
@@ -48,8 +48,6 @@ const rule = utils.createRule({
   name: "array-callback-return-type"
 });
 
-export = rule;
-
 const methods: ReadonlySet<string> = new Set(["some", "every"]);
 
 const safeTypes: ReadonlySet<ts.TypeFlags> = new Set([
@@ -72,7 +70,7 @@ const safeTypesWithUndefined: ReadonlySet<ts.TypeFlags> = new Set([
 
 type Context = utils.Context<MessageId, object, object>;
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof arrayCallbackReturnType>;
 
 /**
  * Checks if node is an array.

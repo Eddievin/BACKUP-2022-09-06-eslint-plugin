@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import noUnsafeObjectAssignment from "@/rules/no-unsafe-object-assignment";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "no-unsafe-object-assignment",
-  noUnsafeObjectAssignment,
+  rules,
   [
     {
       code: `

@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import consistentImport from "@/rules/consistent-import";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "consistent-import",
-  consistentImport,
+  rules,
   [
     {
       code: `

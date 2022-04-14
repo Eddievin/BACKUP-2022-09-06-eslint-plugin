@@ -1,10 +1,9 @@
-import * as assert from "@skylib/functions/dist/assertions";
-import * as is from "@skylib/functions/dist/guards";
+import { assert, is } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const noUnusedImport = utils.createRule({
   create(context) {
     const identifiers = new Set<string>();
 
@@ -85,5 +84,3 @@ const rule = utils.createRule({
   messages: { unusedImport: "Unused import" },
   name: "no-unused-import"
 });
-
-export = rule;

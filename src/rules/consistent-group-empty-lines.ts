@@ -1,26 +1,11 @@
-import * as a from "@skylib/functions/dist/array";
-import * as arrayMap from "@skylib/functions/dist/arrayMap";
-import * as is from "@skylib/functions/dist/guards";
-import * as num from "@skylib/functions/dist/number";
-import * as s from "@skylib/functions/dist/string";
+import { a, arrayMap, is, s, num, Accumulator } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as utils from "./utils";
 
-const isSubOptions = is.object.factory<SubOptions>(
-  {
-    averageLinesGte: is.number,
-    everyLinesGte: is.number,
-    selector: is.string,
-    someHasDocComment: is.boolean,
-    someLinesGte: is.number
-  },
-  {}
-);
-
-const rule = utils.createRule({
+export const consistentGroupEmptyLines = utils.createRule({
   create(context) {
-    const childNodesMap = new Map<string, TSESTree.Node[]>();
+    const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
     const nodesMap2 = new Map<string, Map<string, TSESTree.Node[]>>();
 
@@ -72,7 +57,16 @@ const rule = utils.createRule({
   },
   fixable: "whitespace",
   isRuleOptions: is.object,
-  isSubOptions,
+  isSubOptions: is.object.factory<SubOptions>(
+    {
+      averageLinesGte: is.number,
+      everyLinesGte: is.number,
+      selector: is.string,
+      someHasDocComment: is.boolean,
+      someLinesGte: is.number
+    },
+    {}
+  ),
   messages: {
     expectingEmptyLine: "Expecting empty line before",
     unexpectedEmptyLine: "Unexpected empty line before"
@@ -80,11 +74,9 @@ const rule = utils.createRule({
   name: "consistent-group-empty-lines"
 });
 
-export = rule;
-
 type Context = utils.Context<MessageId, object, SubOptions>;
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof consistentGroupEmptyLines>;
 
 interface SubOptions {
   readonly averageLinesGte: number;

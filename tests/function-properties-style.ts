@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import functionPropertiesStyle from "@/rules/function-properties-style";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "function-properties-style",
-  functionPropertiesStyle,
+  rules,
   [
     {
       code: `

@@ -8,15 +8,17 @@ module.exports = {
     },
     { sourcePattern: "tsutils", type: "wildcard" },
     {
-      autoImportSource: "@/rules/utils",
+      autoImportSource: "./utils",
       sourcePattern: "@skylib/eslint-plugin/src/rules/utils",
+      type: "wildcard"
+    },
+    {
+      autoImportSource: "./core",
+      localName: "utils",
+      sourcePattern: "@skylib/eslint-plugin/src/rules/utils/core",
       type: "wildcard"
     }
   ],
-  extends: [
-    require("@skylib/functions/src/configs/eslintrc.options")(
-      "@skylib/functions/dist/"
-    )
-  ],
+  extends: ["@skylib/functions/src/configs/eslintrc.options"],
   utility: true
 };

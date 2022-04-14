@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import exhaustiveSwitch from "@/rules/exhaustive-switch";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("exhaustive-switch", exhaustiveSwitch, [
+utils.testRule("exhaustive-switch", rules, [
   {
     code: `
       const symbol = Symbol("Test");

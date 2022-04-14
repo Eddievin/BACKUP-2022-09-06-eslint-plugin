@@ -1,24 +1,10 @@
-import * as is from "@skylib/functions/dist/guards";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { is } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
-import type { Readonliness } from "./utils/readonliness";
-import { Checker } from "./utils/readonliness";
 
-const isRuleOptions = is.object.factory<RuleOptions>(
-  {
-    ignoreClasses: is.boolean,
-    ignoreIdentifiers: is.strings,
-    ignoreInterfaces: is.boolean,
-    ignoreNumberSignature: is.boolean,
-    ignoreStringSignature: is.boolean,
-    ignoreTypes: is.strings
-  },
-  {}
-);
-
-const rule = utils.createRule({
+export const noMutableSignature = utils.createRule({
   create(context) {
     const {
       ignoreClasses,
@@ -70,7 +56,7 @@ const rule = utils.createRule({
           if (ignore) {
             // Ignore
           } else {
-            const checker = new Checker({
+            const checker = new utils.Checker({
               context,
               ignoreClasses,
               ignoreInterfaces,
@@ -115,7 +101,17 @@ const rule = utils.createRule({
     ignoreStringSignature: false,
     ignoreTypes: []
   },
-  isRuleOptions,
+  isRuleOptions: is.object.factory<RuleOptions>(
+    {
+      ignoreClasses: is.boolean,
+      ignoreIdentifiers: is.strings,
+      ignoreInterfaces: is.boolean,
+      ignoreNumberSignature: is.boolean,
+      ignoreStringSignature: is.boolean,
+      ignoreTypes: is.strings
+    },
+    {}
+  ),
   messages: {
     noMutableNumberSignature:
       "Number signature should be immutable. Failed type name: {{name}}. Failed type definition: {{definition}}",
@@ -125,9 +121,7 @@ const rule = utils.createRule({
   name: "no-mutable-signature"
 });
 
-export = rule;
-
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof noMutableSignature>;
 
 interface RuleOptions {
   readonly ignoreClasses: boolean;
@@ -141,5 +135,5 @@ interface RuleOptions {
 interface Signature {
   readonly ignore: boolean;
   readonly messageId: MessageId;
-  readonly readonliness: Readonliness;
+  readonly readonliness: utils.Checker.Readonliness;
 }

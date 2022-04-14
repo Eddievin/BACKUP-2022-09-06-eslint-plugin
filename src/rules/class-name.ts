@@ -1,9 +1,9 @@
 import path from "path";
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const className = utils.createRule({
   create(context) {
     return {
       "ExportNamedDeclaration > ClassDeclaration"(
@@ -20,5 +20,3 @@ const rule = utils.createRule({
   messages: { invalidClassName: "Class name should match file name" },
   name: "class-name"
 });
-
-export = rule;

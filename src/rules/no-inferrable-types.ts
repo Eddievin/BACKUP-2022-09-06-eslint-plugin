@@ -1,8 +1,8 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const noInferrableTypes = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.VariableDeclarator](node): void {
@@ -33,5 +33,3 @@ const rule = utils.createRule({
   },
   name: "no-inferrable-types"
 });
-
-export = rule;

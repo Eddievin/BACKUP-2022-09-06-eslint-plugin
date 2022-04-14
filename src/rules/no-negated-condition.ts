@@ -1,8 +1,8 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const noNegatedCondition = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.IfStatement](node): void {
@@ -24,5 +24,3 @@ const rule = utils.createRule({
   messages: { noNegatedCondition: "Negated condition is not allowed" },
   name: "no-negated-condition"
 });
-
-export = rule;

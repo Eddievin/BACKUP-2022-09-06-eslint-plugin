@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import objectFormat from "@/rules/object-format";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "object-format",
-  objectFormat,
+  rules,
   [
     {
       code: `

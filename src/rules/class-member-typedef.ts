@@ -1,8 +1,8 @@
-import * as is from "@skylib/functions/dist/guards";
+import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const classMemberTypedef = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.PropertyDefinition](node): void {
@@ -16,5 +16,3 @@ const rule = utils.createRule({
   messages: { typedefRequired: "Type definition required" },
   name: "class-member-typedef"
 });
-
-export = rule;

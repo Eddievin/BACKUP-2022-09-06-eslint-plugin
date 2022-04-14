@@ -1,10 +1,9 @@
 import getCurrentLine from "get-current-line";
-import noExpressionEmptyLine from "@/rules/no-expression-empty-line";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
 utils.testRule(
   "no-expression-empty-line",
-  noExpressionEmptyLine,
+  rules,
   [
     {
       code: `

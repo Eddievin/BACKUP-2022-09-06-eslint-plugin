@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import noUnnecessaryReadonly from "@/rules/no-unnecessary-readonly";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("no-unnecessary-readonly", noUnnecessaryReadonly, [
+utils.testRule("no-unnecessary-readonly", rules, [
   {
     code: `
       interface I {

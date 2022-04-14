@@ -1,27 +1,12 @@
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { fn, is } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import type { Accessibility } from "@typescript-eslint/types/dist/generated/ast-spec";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as utils from "./utils";
 
-const isRuleOptions = is.object.factory<RuleOptions>(
-  {
-    ignoreClasses: is.boolean,
-    ignoreIdentifiers: is.strings,
-    ignoreInterfaces: is.boolean,
-    ignorePrivateProperties: is.boolean,
-    ignoreProtectedProperties: is.boolean,
-    ignorePublicProperties: is.boolean,
-    ignoreSelectedClasses: is.strings,
-    ignoreSelectedInterfaces: is.strings
-  },
-  {}
-);
-
-const rule = utils.createRule({
+export const preferReadonlyProps = utils.createRule({
   create(context) {
     const {
       ignoreClasses,
@@ -115,12 +100,22 @@ const rule = utils.createRule({
     ignoreSelectedClasses: [],
     ignoreSelectedInterfaces: []
   },
-  isRuleOptions,
+  isRuleOptions: is.object.factory<RuleOptions>(
+    {
+      ignoreClasses: is.boolean,
+      ignoreIdentifiers: is.strings,
+      ignoreInterfaces: is.boolean,
+      ignorePrivateProperties: is.boolean,
+      ignoreProtectedProperties: is.boolean,
+      ignorePublicProperties: is.boolean,
+      ignoreSelectedClasses: is.strings,
+      ignoreSelectedInterfaces: is.strings
+    },
+    {}
+  ),
   messages: { expectingReadonlyProperty: "Property should be readonly" },
   name: "prefer-readonly-props"
 });
-
-export = rule;
 
 interface RuleOptions {
   readonly ignoreClasses: boolean;

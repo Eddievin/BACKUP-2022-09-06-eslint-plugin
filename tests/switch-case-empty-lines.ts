@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import switchCaseEmptyLines from "@/rules/switch-case-empty-lines";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("switch-case-empty-lines", switchCaseEmptyLines, [
+utils.testRule("switch-case-empty-lines", rules, [
   {
     code: `
       switch (x) {

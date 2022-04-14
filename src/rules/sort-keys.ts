@@ -1,14 +1,12 @@
-import * as a from "@skylib/functions/dist/array";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as is from "@skylib/functions/dist/guards";
-import type { numberU } from "@skylib/functions/dist/types/core";
+import { a, assert, is } from "@skylib/functions";
+import type { numberU } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as _ from "lodash";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const sortKeys = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.ObjectExpression](node): void {
@@ -67,8 +65,6 @@ const rule = utils.createRule({
   name: "sort-keys"
 });
 
-export = rule;
-
 type Context = utils.Context<MessageId, object, object>;
 
 interface Item {
@@ -77,7 +73,7 @@ interface Item {
   readonly node: TSESTree.MethodDefinition | TSESTree.Property;
 }
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof sortKeys>;
 
 /**
  * Lints group.
@@ -96,7 +92,9 @@ function lintNodes(group: readonly Item[], context: Context): void {
     let max: numberU;
 
     for (const [index, sortedItem] of sortedGroup.entries())
-      if (sortedItem.index !== index) {
+      if (sortedItem.index === index) {
+        // Valid
+      } else {
         const item = a.get(group, index);
 
         min = is.not.empty(min) ? Math.min(min, index) : index;

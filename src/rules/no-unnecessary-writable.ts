@@ -1,20 +1,19 @@
-import * as is from "@skylib/functions/dist/guards";
-import { createValidationObject } from "@skylib/functions/dist/helpers";
-import { createRule } from "./utils/no-unnecessary-readonliness";
+import { is, createValidationObject, fn } from "@skylib/functions";
+import * as utils from "./utils";
 
-const TypeToCheckVO = createValidationObject<TypeToCheck>({
-  DeepWritable: "DeepWritable",
-  Writable: "Writable"
-});
-
-const isTypeToCheck = is.factory(is.enumeration, TypeToCheckVO);
-
-export = createRule(
+export const noUnnecessaryWritable = utils.noUnnecessaryReadonliness.createRule(
   "no-unnecessary-writable",
-  isTypeToCheck,
+  fn.run(() => {
+    const TypeToCheckVO = createValidationObject<TypeToCheck>({
+      DeepWritable: "DeepWritable",
+      Writable: "Writable"
+    });
+
+    return is.factory(is.enumeration, TypeToCheckVO);
+
+    type TypeToCheck = "DeepWritable" | "Writable";
+  }),
   "allDefinitelyWritable",
   "unnecessaryWritable",
   'Unnecessary "Writable" or "DeepWritable"'
 );
-
-type TypeToCheck = "DeepWritable" | "Writable";

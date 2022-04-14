@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import requireJsdoc from "@/rules/require-jsdoc";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("require-jsdoc", requireJsdoc, [
+utils.testRule("require-jsdoc", rules, [
   {
     code: `
       function f(): void {}

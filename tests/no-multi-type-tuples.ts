@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import noMultiTypeTuples from "@/rules/no-multi-type-tuples";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("no-multi-type-tuples", noMultiTypeTuples, [
+utils.testRule("no-multi-type-tuples", rules, [
   {
     code: `
       type T1 = [string, number];

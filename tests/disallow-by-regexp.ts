@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import disallowByRegexp from "@/rules/disallow-by-regexp";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("disallow-by-regexp", disallowByRegexp, [
+utils.testRule("disallow-by-regexp", rules, [
   {
     code: `
       const a1 = [];

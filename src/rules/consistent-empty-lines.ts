@@ -1,37 +1,22 @@
-import * as a from "@skylib/functions/dist/array";
-import * as arrayMap from "@skylib/functions/dist/arrayMap";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import { createValidationObject } from "@skylib/functions/dist/helpers";
-import * as s from "@skylib/functions/dist/string";
+import {
+  a,
+  fn,
+  is,
+  s,
+  createValidationObject,
+  Accumulator
+} from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as utils from "./utils";
 
-const EmptyLineVO = createValidationObject<EmptyLine>({
-  always: "always",
-  any: "any",
-  never: "never"
-});
-
-const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
-
-const isSubOptions = is.object.factory<SubOptions>(
-  {
-    emptyLine: isEmptyLine,
-    next: is.string,
-    prev: is.string
-  },
-  {}
-);
-
-const rule = utils.createRule({
+export const consistentEmptyLines = utils.createRule({
   create(context) {
-    const childNodesMap = new Map<string, TSESTree.Node[]>();
+    const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
-    const prevRuleIndexes = new Map<string, number[]>();
+    const prevRuleIndexes = new Accumulator<string, number>();
 
-    const nextRuleIndexes = new Map<string, number[]>();
+    const nextRuleIndexes = new Accumulator<string, number>();
 
     const prevItems: Item[] = [];
 
@@ -108,17 +93,17 @@ const rule = utils.createRule({
     };
 
     for (const [ruleIndex, subOptions] of context.subOptionsArray.entries()) {
-      arrayMap.push(subOptions.prev, ruleIndex, prevRuleIndexes);
-      arrayMap.push(subOptions.next, ruleIndex, nextRuleIndexes);
+      prevRuleIndexes.push(subOptions.prev, ruleIndex);
+      nextRuleIndexes.push(subOptions.next, ruleIndex);
     }
 
     for (const subOptions of context.subOptionsArray)
       for (const selector of [subOptions.prev, subOptions.next])
         listener[selector] = (node: TSESTree.Node): void => {
-          for (const ruleIndex of arrayMap.get(selector, prevRuleIndexes))
+          for (const ruleIndex of prevRuleIndexes.get(selector))
             prevItems.push({ node, ruleIndex });
 
-          for (const ruleIndex of arrayMap.get(selector, nextRuleIndexes))
+          for (const ruleIndex of nextRuleIndexes.get(selector))
             nextItems.push({ node, ruleIndex });
         };
 
@@ -126,15 +111,30 @@ const rule = utils.createRule({
   },
   fixable: "whitespace",
   isRuleOptions: is.object,
-  isSubOptions,
+  isSubOptions: fn.run(() => {
+    const EmptyLineVO = createValidationObject<EmptyLine>({
+      always: "always",
+      any: "any",
+      never: "never"
+    });
+
+    const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
+
+    return is.object.factory<SubOptions>(
+      {
+        emptyLine: isEmptyLine,
+        next: is.string,
+        prev: is.string
+      },
+      {}
+    );
+  }),
   messages: {
     expectingEmptyLine: "Expecting empty line before",
     unexpectedEmptyLine: "Unexpected empty line before"
   },
   name: "consistent-empty-lines"
 });
-
-export = rule;
 
 type EmptyLine = "always" | "any" | "never";
 

@@ -1,12 +1,10 @@
-import * as a from "@skylib/functions/dist/array";
-import * as is from "@skylib/functions/dist/guards";
-import * as s from "@skylib/functions/dist/string";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { a, is, s } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const rule = utils.createRule({
+export const emptyLinesAroundComment = utils.createRule({
   create(context) {
     const nodes: TSESTree.Node[] = [];
 
@@ -95,8 +93,6 @@ const rule = utils.createRule({
   name: "empty-lines-around-comment"
 });
 
-export = rule;
-
 const blockLikeTypes: ReadonlySet<string> = new Set([
   AST_NODE_TYPES.BlockStatement,
   AST_NODE_TYPES.ClassBody,
@@ -124,7 +120,7 @@ interface CommentInfo {
 
 type Context = utils.Context<MessageId, object, object>;
 
-type MessageId = utils.MessageId<typeof rule>;
+type MessageId = utils.MessageId<typeof emptyLinesAroundComment>;
 
 /**
  * Explodes comment.

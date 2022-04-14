@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import classMemberTypedef from "@/rules/class-member-typedef";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("class-member-typedef", classMemberTypedef, [
+utils.testRule("class-member-typedef", rules, [
   {
     code: `
       class C {

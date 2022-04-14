@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import sortClassMembers from "@/rules/sort-class-members";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("sort-class-members", sortClassMembers, [
+utils.testRule("sort-class-members", rules, [
   {
     code: `
       class C {

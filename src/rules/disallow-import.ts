@@ -1,15 +1,9 @@
-import * as assert from "@skylib/functions/dist/assertions";
-import * as is from "@skylib/functions/dist/guards";
-import type { strings } from "@skylib/functions/dist/types/core";
+import { assert, is } from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
-const isSubOptions = is.object.factory<SubOptions>(
-  { allow: is.strings, disallow: is.strings },
-  {}
-);
-
-const rule = utils.createRule({
+export const disallowImport = utils.createRule({
   create(context) {
     const matchers = context.subOptionsArray.map(subOptions =>
       utils.createFileMatcher.disallowAllow(
@@ -33,12 +27,13 @@ const rule = utils.createRule({
   },
   defaultSubOptions: { allow: [], disallow: [] },
   isRuleOptions: is.object,
-  isSubOptions,
+  isSubOptions: is.object.factory<SubOptions>(
+    { allow: is.strings, disallow: is.strings },
+    {}
+  ),
   messages: { disallowedSource: "Import from this source is not allowed" },
   name: "disallow-import"
 });
-
-export = rule;
 
 interface SubOptions {
   readonly allow: strings;

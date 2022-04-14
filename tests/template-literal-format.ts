@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import templateLiteralFormat from "@/rules/template-literal-format";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("template-literal-format", templateLiteralFormat, [
+utils.testRule("template-literal-format", rules, [
   {
     code: `
       const x = \`template literal\`;

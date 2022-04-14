@@ -1,8 +1,7 @@
 import getCurrentLine from "get-current-line";
-import disallowImport from "@/rules/disallow-import";
-import * as utils from "@/rules/utils";
+import { rules, utils } from "@";
 
-utils.testRule("disallow-import", disallowImport, [
+utils.testRule("disallow-import", rules, [
   {
     code: `
       import "source1";
