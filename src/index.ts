@@ -13,6 +13,7 @@ import functionPropertiesStyle from "./rules/function-properties-style";
 import noExpressionEmptyLine from "./rules/no-expression-empty-line";
 import noInferrableTypes from "./rules/no-inferrable-types";
 import noMutableSignature from "./rules/no-mutable-signature";
+import noNegatedCondition from "./rules/no-negated-condition";
 import noUnnecessaryReadonly from "./rules/no-unnecessary-readonly";
 import noUnnecessaryWritable from "./rules/no-unnecessary-writable";
 import noUnsafeObjectAssignment from "./rules/no-unsafe-object-assignment";
@@ -44,6 +45,7 @@ export = {
     "no-expression-empty-line": noExpressionEmptyLine,
     "no-inferrable-types": noInferrableTypes,
     "no-mutable-signature": noMutableSignature,
+    "no-negated-condition": noNegatedCondition,
     "no-unnecessary-readonly": noUnnecessaryReadonly,
     "no-unnecessary-writable": noUnnecessaryWritable,
     "no-unsafe-object-assignment": noUnsafeObjectAssignment,
