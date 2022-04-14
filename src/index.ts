@@ -1,5 +1,6 @@
 import arrayCallbackReturnType from "./rules/array-callback-return-type";
 import classMemberTypedef from "./rules/class-member-typedef";
+import className from "./rules/class-name";
 import consistentEmptyLines from "./rules/consistent-empty-lines";
 import consistentGroupEmptyLines from "./rules/consistent-group-empty-lines";
 import consistentImport from "./rules/consistent-import";
@@ -30,6 +31,7 @@ export = {
   rules: {
     "array-callback-return-type": arrayCallbackReturnType,
     "class-member-typedef": classMemberTypedef,
+    "class-name": className,
     "consistent-empty-lines": consistentEmptyLines,
     "consistent-group-empty-lines": consistentGroupEmptyLines,
     "consistent-import": consistentImport,

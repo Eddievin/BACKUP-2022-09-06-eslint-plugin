@@ -470,7 +470,7 @@ export function testRule<M extends string>(
     }
   });
 
-  const filename = `${base}/fixtures/file.ts`;
+  const filename = `${base}fixtures/file.ts`;
 
   tester.run(name, rule, {
     invalid: invalid.map(invalidTest => {
