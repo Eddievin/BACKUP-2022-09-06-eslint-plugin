@@ -1,21 +1,34 @@
 "use strict";
 const tslib_1 = require("tslib");
-const utils_1 = require("@typescript-eslint/utils");
 const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
 const rule = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.MemberExpression](node) {
-                const lines = s.lines(context.code.slice(node.object.range[1], node.property.range[0]));
-                if (lines.length >= 3)
+                const got = s.leadingSpaces(context.code.slice(node.object.range[1]));
+                const expected = fn.run(() => {
+                    const lines = s.lines(got);
+                    return lines.length >= 3
+                        ? `${a.first(lines)}\n${a.last(lines)}`
+                        : got;
+                });
+                if (got === expected) {
+                    // Valid
+                }
+                else
                     context.report({
                         fix() {
                             return {
-                                range: [node.object.range[1], node.property.range[0]],
-                                text: `${a.first(lines)}\n${a.last(lines)}`
+                                range: [
+                                    node.object.range[1],
+                                    node.object.range[1] + got.length
+                                ],
+                                text: expected
                             };
                         },
                         messageId: "unexpectedEmptyLine",

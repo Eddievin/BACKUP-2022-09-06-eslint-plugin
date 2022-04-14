@@ -1,6 +1,6 @@
-import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import type { unknowns } from "@skylib/functions/dist/types/core";
+import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { Readonliness } from "./readonliness";
 /**
  * Creates rule.

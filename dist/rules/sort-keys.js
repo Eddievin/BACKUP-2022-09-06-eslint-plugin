@@ -1,10 +1,10 @@
 "use strict";
 const tslib_1 = require("tslib");
-const _ = tslib_1.__importStar(require("lodash"));
-const utils_1 = require("@typescript-eslint/utils");
 const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const utils_1 = require("@typescript-eslint/utils");
+const _ = tslib_1.__importStar(require("lodash"));
 const utils = tslib_1.__importStar(require("./utils"));
 const rule = utils.createRule({
     create(context) {

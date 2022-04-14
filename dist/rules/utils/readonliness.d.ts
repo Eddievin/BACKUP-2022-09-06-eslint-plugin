@@ -1,6 +1,6 @@
-import * as ts from "typescript";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions/dist/types/core";
+import type { TSESTree } from "@typescript-eslint/utils";
+import * as ts from "typescript";
 import * as utils from ".";
 export declare class Checker<M extends string, O extends object, S extends object> {
     /**

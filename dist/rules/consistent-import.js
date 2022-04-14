@@ -1,14 +1,14 @@
 "use strict";
 const tslib_1 = require("tslib");
-const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
 const path_1 = tslib_1.__importDefault(require("path"));
-const utils_1 = require("@typescript-eslint/utils");
 const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const helpers_1 = require("@skylib/functions/dist/helpers");
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const utils_1 = require("@typescript-eslint/utils");
+const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
 const utils = tslib_1.__importStar(require("./utils"));
 const TypeVO = (0, helpers_1.createValidationObject)({
     default: "default",

@@ -1,7 +1,5 @@
 "use strict";
 const tslib_1 = require("tslib");
-const _ = tslib_1.__importStar(require("lodash"));
-const utils_1 = require("@typescript-eslint/utils");
 const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
@@ -9,6 +7,8 @@ const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const helpers_1 = require("@skylib/functions/dist/helpers");
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const utils_1 = require("@typescript-eslint/utils");
+const _ = tslib_1.__importStar(require("lodash"));
 const utils = tslib_1.__importStar(require("./utils"));
 const NodeTypeVO = (0, helpers_1.createValidationObject)({
     ExportDeclaration: "ExportDeclaration",

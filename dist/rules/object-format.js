@@ -1,9 +1,9 @@
 "use strict";
 const tslib_1 = require("tslib");
-const utils_1 = require("@typescript-eslint/utils");
 const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
+const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
 const isRuleOptions = is.object.factory({ maxLineLength: is.number, maxObjectSize: is.number }, {});
 const rule = utils.createRule({

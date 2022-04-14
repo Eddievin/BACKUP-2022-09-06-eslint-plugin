@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Checker = void 0;
 const tslib_1 = require("tslib");
-const tsutils = tslib_1.__importStar(require("tsutils"));
-const ts = tslib_1.__importStar(require("typescript"));
-const utils_1 = require("@typescript-eslint/utils");
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const utils_1 = require("@typescript-eslint/utils");
+const tsutils = tslib_1.__importStar(require("tsutils"));
+const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("."));
 class Checker {
     /**

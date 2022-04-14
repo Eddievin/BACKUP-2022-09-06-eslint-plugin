@@ -40,7 +40,10 @@ const rule = utils.createRule({
                             items.set(utils.getNodeId(nextItem.node), nextItem);
                 for (const item of items.values()) {
                     const emptyLine = a.get(context.subOptionsArray, item.ruleIndex).emptyLine;
-                    if (emptyLine !== "any") {
+                    if (emptyLine === "any") {
+                        // Skip check
+                    }
+                    else {
                         const node = item.node;
                         const spread = fn.run(() => {
                             switch (emptyLine) {
@@ -56,7 +59,10 @@ const rule = utils.createRule({
                             : "unexpectedEmptyLine";
                         const got = context.getLeadingTrivia(node);
                         const expected = context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
-                        if (got !== expected)
+                        if (got === expected) {
+                            // Valid
+                        }
+                        else
                             context.report({
                                 fix() {
                                     return [

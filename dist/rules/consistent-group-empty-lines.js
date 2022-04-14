@@ -94,7 +94,10 @@ function lintGroup(group, subOptions, context) {
             const got = context.getLeadingTrivia(node);
             if (got.includes("\n")) {
                 const expected = context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
-                if (got !== expected)
+                if (got === expected) {
+                    // Valid
+                }
+                else
                     context.report({
                         fix() {
                             return [

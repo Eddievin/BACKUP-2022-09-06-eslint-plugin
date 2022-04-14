@@ -3,10 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.testRule = exports.stripBase = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
 const fs_1 = tslib_1.__importDefault(require("fs"));
-const _ = tslib_1.__importStar(require("lodash"));
-const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
-const tsutils = tslib_1.__importStar(require("tsutils"));
-const utils_1 = require("@typescript-eslint/utils");
 const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
@@ -16,6 +12,10 @@ const json = tslib_1.__importStar(require("@skylib/functions/dist/json"));
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const utils_1 = require("@typescript-eslint/utils");
+const _ = tslib_1.__importStar(require("lodash"));
+const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
+const tsutils = tslib_1.__importStar(require("tsutils"));
 exports.isPackage = is.factory(is.object.of, {}, { name: is.string });
 exports.base = fn.pipe(process.cwd(), s.path.canonicalize, s.path.addTrailingSlash);
 /**
@@ -70,8 +70,7 @@ exports.buildChildNodesMap = buildChildNodesMap;
  */
 function createMatcher(patterns) {
     const matchers = patterns
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        .map(str => new RegExp(str, "u"))
+        .map(pattern => new RegExp(pattern, "u")) // eslint-disable-line security/detect-non-literal-regexp
         .map(re => (str) => re.test(str));
     return (str) => matchers.some(matcher => matcher(str));
 }
@@ -225,7 +224,7 @@ function testRule(name, rule, invalid, valid = []) {
             tsconfigRootDir: `${exports.base}fixtures`
         }
     });
-    const filename = `${exports.base}/fixtures/file.ts`;
+    const filename = `${exports.base}fixtures/file.ts`;
     tester.run(name, rule, {
         invalid: invalid.map(invalidTest => {
             var _a;

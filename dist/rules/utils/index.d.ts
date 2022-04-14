@@ -1,11 +1,11 @@
-import type * as estree from "estree";
-import minimatch from "minimatch";
-import type * as ts from "typescript";
-import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
-import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
 import * as is from "@skylib/functions/dist/guards";
 import * as s from "@skylib/functions/dist/string";
 import type { objects, Rec, strings, unknowns } from "@skylib/functions/dist/types/core";
+import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
+import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
+import type * as estree from "estree";
+import minimatch from "minimatch";
+import type * as ts from "typescript";
 export declare const isPackage: is.Guard<Package>;
 export declare const base: string;
 /**
