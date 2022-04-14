@@ -138,7 +138,9 @@ function lintGroup(
         const expected =
           context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
 
-        if (got !== expected)
+        if (got === expected) {
+          // Valid
+        } else
           context.report({
             fix() {
               return [

@@ -61,7 +61,9 @@ const rule = utils.createRule({
             item.ruleIndex
           ).emptyLine;
 
-          if (emptyLine !== "any") {
+          if (emptyLine === "any") {
+            // Skip check
+          } else {
             const node = item.node;
 
             const spread = fn.run(() => {
@@ -85,7 +87,9 @@ const rule = utils.createRule({
             const expected =
               context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
 
-            if (got !== expected)
+            if (got === expected) {
+              // Valid
+            } else
               context.report({
                 fix() {
                   return [

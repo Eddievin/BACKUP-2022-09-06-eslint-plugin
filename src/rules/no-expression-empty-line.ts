@@ -19,7 +19,9 @@ const rule = utils.createRule({
             : got;
         });
 
-        if (got !== expected)
+        if (got === expected) {
+          // Valid
+        } else
           context.report({
             fix() {
               return {
