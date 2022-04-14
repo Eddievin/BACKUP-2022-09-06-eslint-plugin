@@ -12,15 +12,16 @@ import exhaustiveSwitch from "./rules/exhaustive-switch";
 import functionPropertiesStyle from "./rules/function-properties-style";
 import noExpressionEmptyLine from "./rules/no-expression-empty-line";
 import noInferrableTypes from "./rules/no-inferrable-types";
+import noMultiTypeTuples from "./rules/no-multi-type-tuples";
 import noMutableSignature from "./rules/no-mutable-signature";
 import noNegatedCondition from "./rules/no-negated-condition";
-import noMultiTypeTuples from "./rules/no-multi-type-tuples";
 import noUnnecessaryReadonly from "./rules/no-unnecessary-readonly";
 import noUnnecessaryWritable from "./rules/no-unnecessary-writable";
 import noUnsafeObjectAssignment from "./rules/no-unsafe-object-assignment";
 import noUnusedImport from "./rules/no-unused-import";
 import objectFormat from "./rules/object-format";
 import preferReadonly from "./rules/prefer-readonly";
+import preferReadonlyProps from "./rules/prefer-readonly-props";
 import preferTsToolbelt from "./rules/prefer-ts-toolbelt";
 import requireJsdoc from "./rules/require-jsdoc";
 import sortClassMembers from "./rules/sort-class-members";
@@ -45,15 +46,16 @@ export = {
     "function-properties-style": functionPropertiesStyle,
     "no-expression-empty-line": noExpressionEmptyLine,
     "no-inferrable-types": noInferrableTypes,
+    "no-multi-type-tuples": noMultiTypeTuples,
     "no-mutable-signature": noMutableSignature,
     "no-negated-condition": noNegatedCondition,
-    "no-multi-type-tuples": noMultiTypeTuples,
     "no-unnecessary-readonly": noUnnecessaryReadonly,
     "no-unnecessary-writable": noUnnecessaryWritable,
     "no-unsafe-object-assignment": noUnsafeObjectAssignment,
     "no-unused-import": noUnusedImport,
     "object-format": objectFormat,
     "prefer-readonly": preferReadonly,
+    "prefer-readonly-props": preferReadonlyProps,
     "prefer-ts-toolbelt": preferTsToolbelt,
     "require-jsdoc": requireJsdoc,
     "sort-class-members": sortClassMembers,
