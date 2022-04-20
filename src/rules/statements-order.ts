@@ -53,6 +53,7 @@ export const statementsOrder = utils.createRule({
         if (node.parent) {
           const id = utils.getNodeId(node.parent);
 
+          // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
           const index = arrayMap.get(id, itemsMap).length;
 
           const parentNode = node.parent;
@@ -74,6 +75,7 @@ export const statementsOrder = utils.createRule({
           });
 
           if (order)
+            // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
             arrayMap.push(
               id,
               nodeInfo(node, parentNode, index, order),
@@ -118,6 +120,7 @@ export const statementsOrder = utils.createRule({
   fixable: "code",
   isRuleOptions: fn.run(() => {
     const NodeTypeVO = createValidationObject<NodeType>({
+      ExportAllDeclaration: "ExportAllDeclaration",
       ExportDeclaration: "ExportDeclaration",
       ExportDefaultDeclaration: "ExportDefaultDeclaration",
       ExportFunctionDeclaration: "ExportFunctionDeclaration",
@@ -152,22 +155,24 @@ export const statementsOrder = utils.createRule({
 });
 
 const defaultOrder: Rec<NodeType, number> = {
-  ExportDeclaration: 1003,
-  ExportDefaultDeclaration: 1004,
-  ExportFunctionDeclaration: 1007,
-  ExportModuleDeclaration: 1008,
-  ExportTypeDeclaration: 1006,
-  ExportUnknown: 1005,
-  FunctionDeclaration: 1011,
+  ExportAllDeclaration: 1003,
+  ExportDeclaration: 1004,
+  ExportDefaultDeclaration: 1005,
+  ExportFunctionDeclaration: 1008,
+  ExportModuleDeclaration: 1009,
+  ExportTypeDeclaration: 1007,
+  ExportUnknown: 1006,
+  FunctionDeclaration: 1012,
   GlobalModuleDeclaration: 1002,
   ImportDeclaration: 1001,
-  JestTest: 1013,
-  ModuleDeclaration: 1012,
-  TypeDeclaration: 1010,
-  Unknown: 1009
+  JestTest: 1014,
+  ModuleDeclaration: 1013,
+  TypeDeclaration: 1011,
+  Unknown: 1010
 };
 
 const sortable: Rec<NodeType, boolean> = {
+  ExportAllDeclaration: true,
   ExportDeclaration: true,
   ExportDefaultDeclaration: false,
   ExportFunctionDeclaration: true,
@@ -196,6 +201,7 @@ interface Item {
 type Items = readonly Item[];
 
 type NodeType =
+  | "ExportAllDeclaration"
   | "ExportDeclaration"
   | "ExportDefaultDeclaration"
   | "ExportFunctionDeclaration"
@@ -270,10 +276,18 @@ function nodeInfo(
   order: Rec<NodeType, number>
 ): Item {
   switch (node.type) {
+    case AST_NODE_TYPES.ExportAllDeclaration:
+      assert.not.empty(node.source);
+
+      return buildResult(
+        "ExportAllDeclaration",
+        `${node.source.value} ${node.exportKind}`
+      );
+
     case AST_NODE_TYPES.ExportDefaultDeclaration:
       return buildResult("ExportDefaultDeclaration");
 
-    case AST_NODE_TYPES.ExportNamedDeclaration: {
+    case AST_NODE_TYPES.ExportNamedDeclaration:
       if (node.declaration)
         switch (node.declaration.type) {
           case AST_NODE_TYPES.FunctionDeclaration:
@@ -299,8 +313,10 @@ function nodeInfo(
             return buildResult("ExportUnknown");
         }
 
-      return buildResult("ExportDeclaration");
-    }
+      return buildResult(
+        "ExportDeclaration",
+        node.source ? `${node.source.value} ${node.exportKind}` : "~"
+      );
 
     case AST_NODE_TYPES.ExpressionStatement:
       {
@@ -333,10 +349,10 @@ function nodeInfo(
       return buildResult("Unknown");
   }
 
-  function buildResult(type: NodeType, id = "~"): Item {
+  function buildResult(type: NodeType, id = ""): Item {
     const order1 = order[type];
 
-    const order2 = sortable[type] ? id : "~";
+    const order2 = sortable[type] ? id : "";
 
     const order3 = 1_000_000 + node.range[0];
 

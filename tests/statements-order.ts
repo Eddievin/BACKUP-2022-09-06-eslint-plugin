@@ -25,6 +25,12 @@ utils.testRule(
         export type ET2 = 1;
         export interface ET1 {}
         export { PU1, PU2, PU3 };
+        export { d } from "d";
+        export type { D } from "d";
+        export { a } from "a";
+        export type { A } from "a";
+        export * as c from "c";
+        export * from "b";
         export default 1;
         import "I2";
         declare global {}
@@ -35,6 +41,12 @@ utils.testRule(
         import "I1";
         import "I2";
         declare global {}
+        export * from "b";
+        export * as c from "c";
+        export type { A } from "a";
+        export { a } from "a";
+        export type { D } from "d";
+        export { d } from "d";
         export { PU1, PU2, PU3 };
         export default 1;
         export const EU3 = 1;
