@@ -25,6 +25,7 @@ import { onlyExportName } from "./only-export-name";
 import { preferReadonly } from "./prefer-readonly";
 import { preferReadonlyProps } from "./prefer-readonly-props";
 import { preferTsToolbelt } from "./prefer-ts-toolbelt";
+import { primaryExportOnly } from "./primary-export-only";
 import { requireJsdoc } from "./require-jsdoc";
 import { sortClassMembers } from "./sort-class-members";
 import { sortKeys } from "./sort-keys";
@@ -60,6 +61,7 @@ export const rules = {
   "prefer-readonly": preferReadonly,
   "prefer-readonly-props": preferReadonlyProps,
   "prefer-ts-toolbelt": preferTsToolbelt,
+  "primary-export-only": primaryExportOnly,
   "require-jsdoc": requireJsdoc,
   "sort-class-members": sortClassMembers,
   "sort-keys": sortKeys,
