@@ -231,6 +231,7 @@ interface RuleOptions {
  * @param node - Node.
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
+// eslint-disable-next-line complexity
 function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
   if (node.expression.type === AST_NODE_TYPES.CallExpression) {
     const argument = node.expression.arguments[0];
@@ -250,6 +251,28 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
         callee.callee.type === AST_NODE_TYPES.MemberExpression &&
         callee.callee.object.type === AST_NODE_TYPES.Identifier &&
         callee.callee.object.name === "test" &&
+        callee.callee.property.type === AST_NODE_TYPES.Identifier &&
+        callee.callee.property.name === "each"
+      )
+        return argument.value;
+
+      if (
+        callee.type === AST_NODE_TYPES.MemberExpression &&
+        callee.object.type === AST_NODE_TYPES.Identifier &&
+        callee.object.name === "test" &&
+        callee.property.type === AST_NODE_TYPES.Identifier &&
+        callee.property.name === "only"
+      )
+        return argument.value;
+
+      if (
+        callee.type === AST_NODE_TYPES.CallExpression &&
+        callee.callee.type === AST_NODE_TYPES.MemberExpression &&
+        callee.callee.object.type === AST_NODE_TYPES.MemberExpression &&
+        callee.callee.object.object.type === AST_NODE_TYPES.Identifier &&
+        callee.callee.object.object.name === "test" &&
+        callee.callee.object.property.type === AST_NODE_TYPES.Identifier &&
+        callee.callee.object.property.name === "only" &&
         callee.callee.property.type === AST_NODE_TYPES.Identifier &&
         callee.callee.property.name === "each"
       )
