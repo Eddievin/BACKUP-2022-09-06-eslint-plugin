@@ -1,6 +1,6 @@
 # export-all-name
 
-Checks that export all name matches filename.
+Checks that export all name matches file name.
 
 ## eslintrc.js
 

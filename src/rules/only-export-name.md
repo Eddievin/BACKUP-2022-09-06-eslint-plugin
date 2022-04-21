@@ -1,6 +1,6 @@
 # only-export-name
 
-Checks that only export's name matches filename.
+Checks that only export's name matches file name.
 
 ## eslintrc.js
 

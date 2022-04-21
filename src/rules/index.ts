@@ -33,6 +33,7 @@ import { sortKeys } from "./sort-keys";
 import { statementsOrder } from "./statements-order";
 import { switchCaseEmptyLines } from "./switch-case-empty-lines";
 import { templateLiteralFormat } from "./template-literal-format";
+import { vueComponentName } from "./vue-component-name";
 
 export const rules = {
   "array-callback-return-type": arrayCallbackReturnType,
@@ -69,7 +70,8 @@ export const rules = {
   "sort-keys": sortKeys,
   "statements-order": statementsOrder,
   "switch-case-empty-lines": switchCaseEmptyLines,
-  "template-literal-format": templateLiteralFormat
+  "template-literal-format": templateLiteralFormat,
+  "vue-component-name": vueComponentName
 };
 
 export * as utils from "./utils";
