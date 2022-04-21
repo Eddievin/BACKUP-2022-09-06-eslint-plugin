@@ -10,6 +10,7 @@ import { disallowIdentifier } from "./disallow-identifier";
 import { disallowImport } from "./disallow-import";
 import { emptyLinesAroundComment } from "./empty-lines-around-comment";
 import { exhaustiveSwitch } from "./exhaustive-switch";
+import { exportAllName } from "./export-all-name";
 import { functionPropertiesStyle } from "./function-properties-style";
 import { noExpressionEmptyLine } from "./no-expression-empty-line";
 import { noInferrableTypes } from "./no-inferrable-types";
@@ -46,6 +47,7 @@ export const rules = {
   "disallow-import": disallowImport,
   "empty-lines-around-comment": emptyLinesAroundComment,
   "exhaustive-switch": exhaustiveSwitch,
+  "export-all-name": exportAllName,
   "function-properties-style": functionPropertiesStyle,
   "no-expression-empty-line": noExpressionEmptyLine,
   "no-inferrable-types": noInferrableTypes,
