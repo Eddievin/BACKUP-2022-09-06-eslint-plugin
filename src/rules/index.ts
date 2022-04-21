@@ -21,6 +21,7 @@ import { noUnnecessaryWritable } from "./no-unnecessary-writable";
 import { noUnsafeObjectAssignment } from "./no-unsafe-object-assignment";
 import { noUnusedImport } from "./no-unused-import";
 import { objectFormat } from "./object-format";
+import { onlyExportName } from "./only-export-name";
 import { preferReadonly } from "./prefer-readonly";
 import { preferReadonlyProps } from "./prefer-readonly-props";
 import { preferTsToolbelt } from "./prefer-ts-toolbelt";
@@ -55,6 +56,7 @@ export const rules = {
   "no-unsafe-object-assignment": noUnsafeObjectAssignment,
   "no-unused-import": noUnusedImport,
   "object-format": objectFormat,
+  "only-export-name": onlyExportName,
   "prefer-readonly": preferReadonly,
   "prefer-readonly-props": preferReadonlyProps,
   "prefer-ts-toolbelt": preferTsToolbelt,

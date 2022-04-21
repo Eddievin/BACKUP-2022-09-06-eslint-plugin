@@ -5,31 +5,31 @@ import * as utils from "./utils";
 
 export const classOnlyExport = utils.createRule({
   create(context) {
-    const exportNodes = new Set<TSESTree.Node>();
+    const nodes = new Set<TSESTree.Node>();
 
     let hasClassExport = false;
 
     return {
       "Program > ExportAllDeclaration"(node): void {
-        exportNodes.add(node);
+        nodes.add(node);
       },
       "Program > ExportDefaultDeclaration"(
         node: TSESTree.ExportDefaultDeclaration
       ): void {
         if (node.declaration.type === AST_NODE_TYPES.ClassDeclaration)
           hasClassExport = true;
-        else exportNodes.add(node);
+        else nodes.add(node);
       },
       "Program > ExportNamedDeclaration"(
         node: TSESTree.ExportNamedDeclaration
       ): void {
         if (node.declaration?.type === AST_NODE_TYPES.ClassDeclaration)
           hasClassExport = true;
-        else exportNodes.add(node);
+        else nodes.add(node);
       },
       "Program:exit"(): void {
-        if (hasClassExport && exportNodes.size > 0)
-          for (const node of exportNodes)
+        if (hasClassExport && nodes.size > 0)
+          for (const node of nodes)
             context.report({ messageId: "exportNotAllowed", node });
       }
     };
