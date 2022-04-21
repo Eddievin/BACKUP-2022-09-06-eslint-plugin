@@ -18,7 +18,6 @@ utils.testRule(
   [
     {
       code: `
-
         class ClassName {}
         class file {}
         const x = class {};
