@@ -140,6 +140,13 @@ export interface Context<M extends string, O extends object, S extends object> {
    */
   readonly getTypeDefinitions: (types: readonly ts.Type[]) => string;
   /**
+   * Checks that node has leading comment.
+   *
+   * @param node - Node.
+   * @returns _True_ if node has leading comment, _false_ otherwise.
+   */
+  readonly hasLeadingComment: (node: TSESTree.Node) => boolean;
+  /**
    * Checks that node has leading doc comment.
    *
    * @param node - Node.
@@ -578,6 +585,12 @@ function createBetterContext<
     },
     getTypeDefinitions(types): string {
       return types.map(type => this.checker.typeToString(type)).join(" > ");
+    },
+    hasLeadingComment(node): boolean {
+      return (
+        this.getLeadingTrivia(node).trim().startsWith("/*") ||
+        this.getLeadingTrivia(node).trim().startsWith("//")
+      );
     },
     hasLeadingDocComment(node): boolean {
       return this.getLeadingTrivia(node).trim().startsWith("/**");

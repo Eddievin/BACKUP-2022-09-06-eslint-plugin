@@ -46,6 +46,16 @@ utils.testRule(
         import x1 from "source1";
         x1;
       `
+    },
+    {
+      code: `
+        import x1 from "source1";
+        // Comment
+        import x2 from "source2";
+        x1;
+      `,
+      errors: [{ line: 3, messageId: "unusedImport" }],
+      name: `Test at line ${getCurrentLine().line}`
     }
   ],
   [
