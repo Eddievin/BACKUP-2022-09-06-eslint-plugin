@@ -1,5 +1,6 @@
 import path from "path";
 import { is } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
@@ -43,7 +44,7 @@ export const onlyExportName = utils.createRule({
           // Valid
         } else
           for (const node of nodes)
-            if (node.name === path.parse(context.path).name) {
+            if (node.name === _.camelCase(path.parse(context.path).name)) {
               // Valid
             } else context.report({ messageId: "invalidName", node });
       }

@@ -44,6 +44,7 @@ export const consistentGroupEmptyLines = utils.createRule({
 
         const id = utils.getNodeId(node.parent);
 
+        // eslint-disable-next-line deprecation/deprecation -- Postponed
         arrayMap.push2(selector, id, node, nodesMap2);
       };
 
