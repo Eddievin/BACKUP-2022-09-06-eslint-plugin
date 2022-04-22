@@ -16,27 +16,32 @@ export const primaryExportOnly = utils.createRule({
       ): void {
         exportDefaultDeclarations.add(node);
       },
-      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier"(
+      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(
         node: TSESTree.Identifier
       ): void {
         identifiers.add(node);
       },
-      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier"(
+      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(
         node: TSESTree.Identifier
       ): void {
         identifiers.add(node);
       },
-      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier"(
+      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(
         node: TSESTree.Identifier
       ): void {
         identifiers.add(node);
       },
-      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier"(
+      "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(
         node: TSESTree.Identifier
       ): void {
         identifiers.add(node);
       },
-      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier"(
+      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(
+        node: TSESTree.Identifier
+      ): void {
+        identifiers.add(node);
+      },
+      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(
         node: TSESTree.Identifier
       ): void {
         identifiers.add(node);

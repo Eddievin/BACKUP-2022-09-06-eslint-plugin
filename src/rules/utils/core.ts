@@ -215,6 +215,7 @@ export interface GetSelectorsOptions {
 
 export interface InvalidTestCase<M extends string>
   extends BaseInvalidTestCase<M, readonly [object]> {
+  filename?: "camelCase.ts" | "kebab-case.ts" | "PascalCase.ts";
   name: string;
 }
 
@@ -237,6 +238,7 @@ export interface Package {
 export type ReadonlyRange = readonly [number, number];
 
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
+  filename?: "camelCase.ts" | "kebab-case.ts" | "PascalCase.ts";
   name: string;
 }
 
@@ -472,8 +474,6 @@ export function testRule<K extends string, M extends string>(
     }
   });
 
-  const filename = `${base}fixtures/file.ts`;
-
   tester.run(name, rule, {
     invalid: invalid.map(invalidTest => {
       const code = s.unpadMultiline(invalidTest.code);
@@ -483,7 +483,7 @@ export function testRule<K extends string, M extends string>(
       return {
         ...invalidTest,
         code,
-        filename,
+        filename: `${base}fixtures/${invalidTest.filename ?? "file.ts"}`,
         output
       };
     }),
@@ -493,7 +493,7 @@ export function testRule<K extends string, M extends string>(
       return {
         ...validTest,
         code,
-        filename
+        filename: `${base}fixtures/${validTest.filename ?? "file.ts"}`
       };
     })
   });

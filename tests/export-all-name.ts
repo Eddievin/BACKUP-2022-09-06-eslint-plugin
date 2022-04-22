@@ -19,6 +19,18 @@ utils.testRule(
         export * as aaaBbbCcc from "aaa-bbb-ccc";
       `,
       name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export * as AaaBbbCcc from "AaaBbbCcc";
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export * as aaaBbbCcc from "aaaBbbCcc";
+      `,
+      name: `Test at line ${getCurrentLine().line}`
     }
   ]
 );

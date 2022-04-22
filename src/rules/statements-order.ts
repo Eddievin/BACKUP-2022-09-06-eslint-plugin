@@ -231,7 +231,6 @@ interface RuleOptions {
  * @param node - Node.
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
-// eslint-disable-next-line complexity
 function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
   if (node.expression.type === AST_NODE_TYPES.CallExpression) {
     const argument = node.expression.arguments[0];

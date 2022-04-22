@@ -17,6 +17,7 @@ utils.testRule(
         export function f() {}
       `,
       errors: [{ line: 1, messageId: "invalidName" }],
+      filename: "camelCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
@@ -24,6 +25,7 @@ utils.testRule(
         export class C {}
       `,
       errors: [{ line: 1, messageId: "invalidName" }],
+      filename: "kebab-case.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
@@ -31,11 +33,19 @@ utils.testRule(
         export interface I {}
       `,
       errors: [{ line: 1, messageId: "invalidName" }],
+      filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
       code: `
         export type T = string;
+      `,
+      errors: [{ line: 1, messageId: "invalidName" }],
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export namespace N {}
       `,
       errors: [{ line: 1, messageId: "invalidName" }],
       name: `Test at line ${getCurrentLine().line}`
@@ -53,6 +63,27 @@ utils.testRule(
       code: `
         export const file = 1;
       `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export const camelCase = 1;
+      `,
+      filename: "camelCase.ts",
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export const kebabCase = 1;
+      `,
+      filename: "kebab-case.ts",
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export const PascalCase = 1;
+      `,
+      filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     }
   ]

@@ -19,6 +19,6 @@ module.exports = {
       type: "wildcard"
     }
   ],
-  extends: ["@skylib/functions/src/configs/eslintrc.options"],
+  extends: ["@skylib/functions/configs/eslintrc.options"],
   utility: true
 };

@@ -35,6 +35,9 @@ import { switchCaseEmptyLines } from "./switch-case-empty-lines";
 import { templateLiteralFormat } from "./template-literal-format";
 import { vueComponentName } from "./vue-component-name";
 
+export * as utils from "./utils";
+
+// eslint-disable-next-line @skylib/only-export-name
 export const rules = {
   "array-callback-return-type": arrayCallbackReturnType,
   "class-member-typedef": classMemberTypedef,
@@ -73,5 +76,3 @@ export const rules = {
   "template-literal-format": templateLiteralFormat,
   "vue-component-name": vueComponentName
 };
-
-export * as utils from "./utils";
