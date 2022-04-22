@@ -1,23 +1,26 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.switchCaseEmptyLines = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.switchCaseEmptyLines = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.SwitchStatement](node) {
-                for (const [case1, case2] of a.chain(node.cases)) {
+                for (const [case1, case2] of functions_1.a.chain(node.cases)) {
                     const spread = case1.consequent.length > 0;
                     const count = spread ? 2 : 1;
                     const messageId = spread
                         ? "expectingEmptyLine"
                         : "unexpectedEmptyLine";
                     const got = context.getLeadingTrivia(case2);
-                    const expected = context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
-                    if (got !== expected)
+                    const expected = context.eol.repeat(count) + functions_1.s.trimLeadingEmptyLines(got);
+                    if (got === expected) {
+                        // Valid
+                    }
+                    else
                         context.report({
                             fix() {
                                 return [
@@ -35,12 +38,11 @@ const rule = utils.createRule({
         };
     },
     fixable: "whitespace",
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: {
         expectingEmptyLine: "Expecting empty line before",
         unexpectedEmptyLine: "Unexpected empty line before"
     },
     name: "switch-case-empty-lines"
 });
-module.exports = rule;
 //# sourceMappingURL=switch-case-empty-lines.js.map

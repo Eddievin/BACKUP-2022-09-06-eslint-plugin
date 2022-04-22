@@ -1,23 +1,14 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.preferReadonlyProps = void 0;
 const tslib_1 = require("tslib");
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const isRuleOptions = is.object.factory({
-    ignoreClasses: is.boolean,
-    ignoreIdentifiers: is.strings,
-    ignoreInterfaces: is.boolean,
-    ignorePrivateProperties: is.boolean,
-    ignoreProtectedProperties: is.boolean,
-    ignorePublicProperties: is.boolean,
-    ignoreSelectedClasses: is.strings,
-    ignoreSelectedInterfaces: is.strings
-}, {});
-const rule = utils.createRule({
+exports.preferReadonlyProps = utils.createRule({
     create(context) {
         const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignorePrivateProperties, ignoreProtectedProperties, ignorePublicProperties, ignoreSelectedClasses, ignoreSelectedInterfaces } = context.options;
-        const ignoreAccessebilities = fn.run(() => {
+        const ignoreAccessebilities = functions_1.fn.run(() => {
             const result = new Set();
             if (ignorePrivateProperties)
                 result.add("private");
@@ -71,7 +62,7 @@ const rule = utils.createRule({
                 // Ignore based on property name
             }
             else if (node.key.type === utils_1.AST_NODE_TYPES.Literal &&
-                is.string(node.key.value) &&
+                functions_1.is.string(node.key.value) &&
                 ignoreIdentifiersMatcher(node.key.value)) {
                 // Ignore based on property name
             }
@@ -89,9 +80,17 @@ const rule = utils.createRule({
         ignoreSelectedClasses: [],
         ignoreSelectedInterfaces: []
     },
-    isRuleOptions,
+    isRuleOptions: functions_1.is.object.factory({
+        ignoreClasses: functions_1.is.boolean,
+        ignoreIdentifiers: functions_1.is.strings,
+        ignoreInterfaces: functions_1.is.boolean,
+        ignorePrivateProperties: functions_1.is.boolean,
+        ignoreProtectedProperties: functions_1.is.boolean,
+        ignorePublicProperties: functions_1.is.boolean,
+        ignoreSelectedClasses: functions_1.is.strings,
+        ignoreSelectedInterfaces: functions_1.is.strings
+    }, {}),
     messages: { expectingReadonlyProperty: "Property should be readonly" },
     name: "prefer-readonly-props"
 });
-module.exports = rule;
 //# sourceMappingURL=prefer-readonly-props.js.map

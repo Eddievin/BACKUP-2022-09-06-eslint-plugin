@@ -2,12 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTypeParts = void 0;
 const tslib_1 = require("tslib");
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const _ = tslib_1.__importStar(require("lodash"));
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 /**
@@ -17,7 +14,7 @@ const ts = tslib_1.__importStar(require("typescript"));
  * @param context - Context.
  * @returns Type parts.
  */
-exports.getTypeParts = o.extend((node, context) => {
+exports.getTypeParts = functions_1.o.extend((node, context) => {
     return recurs(context.checker.getTypeAtLocation(context.toTsNode(node)));
     function recurs(type) {
         if (type.isNumberLiteral())
@@ -48,7 +45,7 @@ exports.getTypeParts = o.extend((node, context) => {
                 return ["function"];
             if (type.isUnion())
                 return _.flatten(tsutils.unionTypeParts(type).map(part => recurs(part)));
-            assert.byGuard(type.flags, isExpectedFlags);
+            functions_1.assert.byGuard(type.flags, isExpectedFlags);
             switch (type.flags) {
                 case ts.TypeFlags.BigInt:
                 case ts.TypeFlags.BigIntLiteral:
@@ -74,7 +71,7 @@ exports.getTypeParts = o.extend((node, context) => {
         }
     }
 });
-const ExpectedFlagsVO = (0, helpers_1.createValidationObject)({
+const ExpectedFlagsVO = (0, functions_1.createValidationObject)({
     [ts.TypeFlags.BigInt]: ts.TypeFlags.BigInt,
     [ts.TypeFlags.BigIntLiteral]: ts.TypeFlags.BigIntLiteral,
     [ts.TypeFlags.BooleanLiteral]: ts.TypeFlags.BooleanLiteral,
@@ -89,5 +86,5 @@ const ExpectedFlagsVO = (0, helpers_1.createValidationObject)({
     [ts.TypeFlags.UniqueESSymbol]: ts.TypeFlags.UniqueESSymbol,
     [ts.TypeFlags.Void]: ts.TypeFlags.Void
 });
-const isExpectedFlags = is.factory(is.enumeration, ExpectedFlagsVO);
+const isExpectedFlags = functions_1.is.factory(functions_1.is.enumeration, ExpectedFlagsVO);
 //# sourceMappingURL=type-parts.js.map

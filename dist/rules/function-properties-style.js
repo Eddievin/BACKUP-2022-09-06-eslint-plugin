@@ -1,10 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.functionPropertiesStyle = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.functionPropertiesStyle = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.AssignmentExpression](node) {
@@ -18,11 +20,10 @@ const rule = utils.createRule({
             }
         };
     },
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: {
         noDistributedDefinition: "Use Object.assign to define function in one statement"
     },
     name: "function-properties-style"
 });
-module.exports = rule;
 //# sourceMappingURL=function-properties-style.js.map

@@ -1,26 +1,13 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.consistentImport = void 0;
 const tslib_1 = require("tslib");
 const path_1 = tslib_1.__importDefault(require("path"));
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
 const utils = tslib_1.__importStar(require("./utils"));
-const TypeVO = (0, helpers_1.createValidationObject)({
-    default: "default",
-    wildcard: "wildcard"
-});
-const isType = is.factory(is.enumeration, TypeVO);
-const isSubOptions = is.object.factory({
-    altLocalNames: is.strings,
-    sourcePattern: is.string,
-    type: isType
-}, { autoImportSource: is.string, localName: is.string });
-const rule = utils.createRule({
+exports.consistentImport = utils.createRule({
     create(context) {
         const identifiers = new Set();
         const importDeclarations = [];
@@ -42,8 +29,19 @@ const rule = utils.createRule({
     },
     defaultSubOptions: { altLocalNames: [] },
     fixable: "code",
-    isRuleOptions: is.object,
-    isSubOptions,
+    isRuleOptions: functions_1.is.object,
+    isSubOptions: functions_1.fn.run(() => {
+        const TypeVO = (0, functions_1.createValidationObject)({
+            default: "default",
+            wildcard: "wildcard"
+        });
+        const isType = functions_1.is.factory(functions_1.is.enumeration, TypeVO);
+        return functions_1.is.object.factory({
+            altLocalNames: functions_1.is.strings,
+            sourcePattern: functions_1.is.string,
+            type: isType
+        }, { autoImportSource: functions_1.is.string, localName: functions_1.is.string });
+    }),
     messages: {
         autoImport: 'Run "eslint --fix" to add missing import statement(s)',
         invalidLocalName: "Expecting local name to be {{ expectedLocalName }}",
@@ -73,7 +71,7 @@ function autoImport(program, context) {
     if (fixes.size)
         context.report({
             fix() {
-                const fix = a.fromIterable(fixes).join(context.eol);
+                const fix = functions_1.a.fromIterable(fixes).join(context.eol);
                 return [
                     {
                         range: program.range,
@@ -97,7 +95,7 @@ function checkImport(importDeclarations, identifiers, context) {
         const defaultSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
         const wildcardSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
         const source = normalizeSource(node.source.value, context);
-        assert.string(source);
+        functions_1.assert.string(source);
         const subOptions = context.subOptionsArray.find(candidate => (0, minimatch_1.default)(source, candidate.sourcePattern, { dot: true }));
         if (subOptions) {
             const localName = getLocalName(subOptions);
@@ -234,9 +232,9 @@ function identifierFromPath(path) {
  * @returns Normalized source.
  */
 function normalizeSource(source, context) {
-    source = fn.run(() => {
+    source = functions_1.fn.run(() => {
         if (source.startsWith("@/")) {
-            assert.not.empty(context.package.name, "Missing package name");
+            functions_1.assert.not.empty(context.package.name, "Missing package name");
             const path = `src/${source.slice(2)}`;
             return `${context.package.name}/${path}`;
         }
@@ -244,13 +242,12 @@ function normalizeSource(source, context) {
             source === ".." ||
             source.startsWith("./") ||
             source.startsWith("../")) {
-            assert.not.empty(context.package.name, "Missing package name");
+            functions_1.assert.not.empty(context.package.name, "Missing package name");
             const path = utils.stripBase(path_1.default.join(path_1.default.dirname(context.path), source));
             return `${context.package.name}/${path}`;
         }
         return source;
     });
-    return s.path.canonicalize(source);
+    return functions_1.s.path.canonicalize(source);
 }
-module.exports = rule;
 //# sourceMappingURL=consistent-import.js.map

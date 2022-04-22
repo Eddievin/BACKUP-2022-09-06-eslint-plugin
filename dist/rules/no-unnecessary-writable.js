@@ -1,12 +1,14 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.noUnnecessaryWritable = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
-const no_unnecessary_readonliness_1 = require("./utils/no-unnecessary-readonliness");
-const TypeToCheckVO = (0, helpers_1.createValidationObject)({
-    DeepWritable: "DeepWritable",
-    Writable: "Writable"
-});
-const isTypeToCheck = is.factory(is.enumeration, TypeToCheckVO);
-module.exports = (0, no_unnecessary_readonliness_1.createRule)("no-unnecessary-writable", isTypeToCheck, "allDefinitelyWritable", "unnecessaryWritable", 'Unnecessary "Writable" or "DeepWritable"');
+const functions_1 = require("@skylib/functions");
+const utils = tslib_1.__importStar(require("./utils"));
+exports.noUnnecessaryWritable = utils.noUnnecessaryReadonliness.createRule("no-unnecessary-writable", functions_1.fn.run(() => {
+    const TypeToCheckVO = (0, functions_1.createValidationObject)({
+        DeepWritable: "DeepWritable",
+        Writable: "Writable"
+    });
+    return functions_1.is.factory(functions_1.is.enumeration, TypeToCheckVO);
+}), "allDefinitelyWritable", "unnecessaryWritable", 'Unnecessary "Writable" or "DeepWritable"');
 //# sourceMappingURL=no-unnecessary-writable.js.map

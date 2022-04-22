@@ -1,21 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.disallowByRegexp = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
-const regexp = tslib_1.__importStar(require("@skylib/functions/dist/regexp"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const SubOptionsContextVO = (0, helpers_1.createValidationObject)({
-    code: "code",
-    comment: "comment",
-    string: "string"
-});
-const isSubOptionsContext = is.factory(is.enumeration, SubOptionsContextVO);
-const isSubOptionsContexts = is.factory(is.array.of, isSubOptionsContext);
-const isRuleOptions = is.object.factory({ contexts: isSubOptionsContexts }, {});
-const isSubOptions = is.object.factory({ patterns: is.strings }, { contexts: isSubOptionsContexts, replacement: is.string });
-const rule = utils.createRule({
+exports.disallowByRegexp = utils.createRule({
     create(context) {
         const stringRanges = [];
         return {
@@ -39,7 +29,7 @@ const rule = utils.createRule({
                             if (contexts.includes(getContext(range, commentRanges, stringRanges)))
                                 context.report({
                                     fix() {
-                                        return is.not.empty(subOptions.replacement)
+                                        return functions_1.is.not.empty(subOptions.replacement)
                                             ? [
                                                 {
                                                     range,
@@ -60,8 +50,26 @@ const rule = utils.createRule({
     },
     defaultOptions: { contexts: ["code", "comment", "string"] },
     fixable: "code",
-    isRuleOptions,
-    isSubOptions,
+    isRuleOptions: functions_1.fn.run(() => {
+        const SubOptionsContextVO = (0, functions_1.createValidationObject)({
+            code: "code",
+            comment: "comment",
+            string: "string"
+        });
+        const isSubOptionsContext = functions_1.is.factory(functions_1.is.enumeration, SubOptionsContextVO);
+        const isSubOptionsContexts = functions_1.is.factory(functions_1.is.array.of, isSubOptionsContext);
+        return functions_1.is.object.factory({ contexts: isSubOptionsContexts }, {});
+    }),
+    isSubOptions: functions_1.fn.run(() => {
+        const SubOptionsContextVO = (0, functions_1.createValidationObject)({
+            code: "code",
+            comment: "comment",
+            string: "string"
+        });
+        const isSubOptionsContext = functions_1.is.factory(functions_1.is.enumeration, SubOptionsContextVO);
+        const isSubOptionsContexts = functions_1.is.factory(functions_1.is.array.of, isSubOptionsContext);
+        return functions_1.is.object.factory({ patterns: functions_1.is.strings }, { contexts: isSubOptionsContexts, replacement: functions_1.is.string });
+    }),
     messages: { disallowedCode: "Disallowed code" },
     name: "disallow-by-regexp"
 });
@@ -98,9 +106,8 @@ function inRanges(range, ranges) {
  * @returns Ranges matching regular expression.
  */
 function matchAll(re, context) {
-    return regexp
+    return functions_1.regexp
         .matchAll(context.code, re)
-        .map(match => [match.index, match.index + a.first(match).length]);
+        .map(match => [match.index, match.index + functions_1.a.first(match).length]);
 }
-module.exports = rule;
 //# sourceMappingURL=disallow-by-regexp.js.map

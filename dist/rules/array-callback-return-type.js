@@ -1,11 +1,13 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.arrayCallbackReturnType = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.arrayCallbackReturnType = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.CallExpression](node) {
@@ -31,7 +33,7 @@ const rule = utils.createRule({
             }
         };
     },
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: { expectingBooleanReturnType: "Expecting boolean return type" },
     name: "array-callback-return-type"
 });
@@ -92,5 +94,4 @@ function isBoolean(type) {
     }
     return false;
 }
-module.exports = rule;
 //# sourceMappingURL=array-callback-return-type.js.map

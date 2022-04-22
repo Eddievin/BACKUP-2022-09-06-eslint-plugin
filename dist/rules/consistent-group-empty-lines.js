@@ -1,21 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.consistentGroupEmptyLines = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const functions_1 = require("@skylib/functions");
 const utils = tslib_1.__importStar(require("./utils"));
-const isSubOptions = is.object.factory({
-    averageLinesGte: is.number,
-    everyLinesGte: is.number,
-    selector: is.string,
-    someHasDocComment: is.boolean,
-    someLinesGte: is.number
-}, {});
-const rule = utils.createRule({
+exports.consistentGroupEmptyLines = utils.createRule({
     create(context) {
-        const childNodesMap = new Map();
+        const childNodesMap = new functions_1.Accumulator();
         const nodesMap2 = new Map();
         const listener = {
             "*"(node) {
@@ -29,11 +20,11 @@ const rule = utils.createRule({
                             const group = [];
                             for (const node of nodes)
                                 if (group.length)
-                                    if (utils.isAdjacentNodes(a.last(group), node, childNodesMap))
+                                    if (utils.isAdjacentNodes(functions_1.a.last(group), node, childNodesMap))
                                         group.push(node);
                                     else {
                                         lintGroup(group, subOptions, context);
-                                        a.truncate(group);
+                                        functions_1.a.truncate(group);
                                         group.push(node);
                                     }
                                 else
@@ -47,7 +38,8 @@ const rule = utils.createRule({
             listener[subOptions.selector] = function (node) {
                 const selector = subOptions.selector;
                 const id = utils.getNodeId(node.parent);
-                arrayMap.push2(selector, id, node, nodesMap2);
+                // eslint-disable-next-line deprecation/deprecation -- Postponed
+                functions_1.arrayMap.push2(selector, id, node, nodesMap2);
             };
         return listener;
     },
@@ -58,8 +50,14 @@ const rule = utils.createRule({
         someLinesGte: 1000000
     },
     fixable: "whitespace",
-    isRuleOptions: is.object,
-    isSubOptions,
+    isRuleOptions: functions_1.is.object,
+    isSubOptions: functions_1.is.object.factory({
+        averageLinesGte: functions_1.is.number,
+        everyLinesGte: functions_1.is.number,
+        selector: functions_1.is.string,
+        someHasDocComment: functions_1.is.boolean,
+        someLinesGte: functions_1.is.number
+    }, {}),
     messages: {
         expectingEmptyLine: "Expecting empty line before",
         unexpectedEmptyLine: "Unexpected empty line before"
@@ -80,8 +78,8 @@ function lintGroup(group, subOptions, context) {
             : false;
         const linesPerNode = group
             .map(node => context.getText(node))
-            .map(text => s.lines(text).length);
-        const averageLines = num.average(...linesPerNode);
+            .map(text => functions_1.s.lines(text).length);
+        const averageLines = functions_1.num.average(...linesPerNode);
         const minLines = Math.min(...linesPerNode);
         const maxLines = Math.max(...linesPerNode);
         const spread = hasDocComment ||
@@ -93,7 +91,7 @@ function lintGroup(group, subOptions, context) {
         for (const node of group.slice(1)) {
             const got = context.getLeadingTrivia(node);
             if (got.includes("\n")) {
-                const expected = context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
+                const expected = context.eol.repeat(count) + functions_1.s.trimLeadingEmptyLines(got);
                 if (got === expected) {
                     // Valid
                 }
@@ -114,5 +112,4 @@ function lintGroup(group, subOptions, context) {
         }
     }
 }
-module.exports = rule;
 //# sourceMappingURL=consistent-group-empty-lines.js.map

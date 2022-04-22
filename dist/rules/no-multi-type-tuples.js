@@ -1,10 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.noMultiTypeTuples = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const _ = tslib_1.__importStar(require("lodash"));
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.noMultiTypeTuples = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.TSTupleType](node) {
@@ -13,9 +15,8 @@ const rule = utils.createRule({
             }
         };
     },
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: { multiTypeTuplesDisallowed: "Multi-type tuples are not allowed" },
     name: "no-multi-type-tuples"
 });
-module.exports = rule;
 //# sourceMappingURL=no-multi-type-tuples.js.map

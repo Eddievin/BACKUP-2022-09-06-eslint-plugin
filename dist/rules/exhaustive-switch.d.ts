@@ -1,3 +1,2 @@
-declare const rule: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"inexhaustiveSwitch", import("@skylib/functions/dist/types/core").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-export = rule;
+export declare const exhaustiveSwitch: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"inexhaustiveSwitch", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=exhaustive-switch.d.ts.map

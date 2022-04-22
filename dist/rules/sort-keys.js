@@ -1,12 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sortKeys = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const _ = tslib_1.__importStar(require("lodash"));
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.sortKeys = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.ObjectExpression](node) {
@@ -51,7 +51,7 @@ const rule = utils.createRule({
         };
     },
     fixable: "code",
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: { incorrectSortingOrder: "Incorrect sorting order" },
     name: "sort-keys"
 });
@@ -68,21 +68,24 @@ function lintNodes(group, context) {
         let min;
         let max;
         for (const [index, sortedItem] of sortedGroup.entries())
-            if (sortedItem.index !== index) {
-                const item = a.get(group, index);
-                min = is.not.empty(min) ? Math.min(min, index) : index;
-                max = is.not.empty(max) ? Math.max(max, index) : index;
+            if (sortedItem.index === index) {
+                // Valid
+            }
+            else {
+                const item = functions_1.a.get(group, index);
+                min = functions_1.is.not.empty(min) ? Math.min(min, index) : index;
+                max = functions_1.is.not.empty(max) ? Math.max(max, index) : index;
                 fixes.push({
                     range: context.getRangeWithLeadingTrivia(item.node),
                     text: context.getTextWithLeadingTrivia(sortedItem.node)
                 });
             }
         if (fixes.length) {
-            assert.not.empty(min);
-            assert.not.empty(max);
+            functions_1.assert.not.empty(min);
+            functions_1.assert.not.empty(max);
             const loc = context.getLocFromRange([
-                a.get(group, min).node.range[0],
-                a.get(group, max).node.range[1]
+                functions_1.a.get(group, min).node.range[0],
+                functions_1.a.get(group, max).node.range[1]
             ]);
             context.report({
                 fix: () => fixes,
@@ -92,5 +95,4 @@ function lintNodes(group, context) {
         }
     }
 }
-module.exports = rule;
 //# sourceMappingURL=sort-keys.js.map

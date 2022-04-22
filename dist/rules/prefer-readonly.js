@@ -1,21 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.preferReadonly = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("./utils"));
-const readonliness_1 = require("./utils/readonliness");
-const isRuleOptions = is.object.factory({
-    excludeSelectors: is.strings,
-    ignoreClasses: is.boolean,
-    ignoreIdentifiers: is.strings,
-    ignoreInferredTypes: is.boolean,
-    ignoreInterfaces: is.boolean,
-    ignoreTypes: is.strings,
-    includeSelectors: is.strings,
-    noDefaultSelectors: is.boolean
-}, {});
-const rule = utils.createRule({
+exports.preferReadonly = utils.createRule({
     create(context) {
         const { ignoreInferredTypes } = context.options;
         const selectors = utils.getSelectors(context.options, defaultSelectors);
@@ -24,7 +15,7 @@ const rule = utils.createRule({
                 const tsNode = context.toTsNode(node);
                 if (ts.isFunctionLike(tsNode))
                     for (const param of tsNode.parameters)
-                        if (ignoreInferredTypes && is.empty(param.type)) {
+                        if (ignoreInferredTypes && functions_1.is.empty(param.type)) {
                             // Ignore infered types
                         }
                         else
@@ -44,7 +35,16 @@ const rule = utils.createRule({
         includeSelectors: [],
         noDefaultSelectors: false
     },
-    isRuleOptions,
+    isRuleOptions: functions_1.is.object.factory({
+        excludeSelectors: functions_1.is.strings,
+        ignoreClasses: functions_1.is.boolean,
+        ignoreIdentifiers: functions_1.is.strings,
+        ignoreInferredTypes: functions_1.is.boolean,
+        ignoreInterfaces: functions_1.is.boolean,
+        ignoreTypes: functions_1.is.strings,
+        includeSelectors: functions_1.is.strings,
+        noDefaultSelectors: functions_1.is.boolean
+    }, {}),
     messages: {
         shouldBeReadonly: "Parameter should be a readonly type. Failed type name: {{name}}. Failed type definition: {{definition}}"
     },
@@ -84,7 +84,7 @@ function lintNode(node, identifier, context) {
     else {
         const tsNode = context.toTsNode(node);
         const type = context.checker.getTypeAtLocation(tsNode);
-        const checker = new readonliness_1.Checker({
+        const checker = new utils.Checker({
             context,
             ignoreClasses,
             ignoreInterfaces,
@@ -104,5 +104,4 @@ function lintNode(node, identifier, context) {
             });
     }
 }
-module.exports = rule;
 //# sourceMappingURL=prefer-readonly.js.map

@@ -1,18 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.noMutableSignature = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const readonliness_1 = require("./utils/readonliness");
-const isRuleOptions = is.object.factory({
-    ignoreClasses: is.boolean,
-    ignoreIdentifiers: is.strings,
-    ignoreInterfaces: is.boolean,
-    ignoreNumberSignature: is.boolean,
-    ignoreStringSignature: is.boolean,
-    ignoreTypes: is.strings
-}, {});
-const rule = utils.createRule({
+exports.noMutableSignature = utils.createRule({
     create(context) {
         const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignoreNumberSignature, ignoreStringSignature, ignoreTypes } = context.options;
         const ignoreIdentifiersMatcher = utils.createMatcher(ignoreIdentifiers);
@@ -51,7 +44,7 @@ const rule = utils.createRule({
                         // Ignore
                     }
                     else {
-                        const checker = new readonliness_1.Checker({
+                        const checker = new utils.Checker({
                             context,
                             ignoreClasses,
                             ignoreInterfaces,
@@ -89,12 +82,18 @@ const rule = utils.createRule({
         ignoreStringSignature: false,
         ignoreTypes: []
     },
-    isRuleOptions,
+    isRuleOptions: functions_1.is.object.factory({
+        ignoreClasses: functions_1.is.boolean,
+        ignoreIdentifiers: functions_1.is.strings,
+        ignoreInterfaces: functions_1.is.boolean,
+        ignoreNumberSignature: functions_1.is.boolean,
+        ignoreStringSignature: functions_1.is.boolean,
+        ignoreTypes: functions_1.is.strings
+    }, {}),
     messages: {
         noMutableNumberSignature: "Number signature should be immutable. Failed type name: {{name}}. Failed type definition: {{definition}}",
         noMutableStringSignature: "String signature should be immutable. Failed type name: {{name}}. Failed type definition: {{definition}}"
     },
     name: "no-mutable-signature"
 });
-module.exports = rule;
 //# sourceMappingURL=no-mutable-signature.js.map

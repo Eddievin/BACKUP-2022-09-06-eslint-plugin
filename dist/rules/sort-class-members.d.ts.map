@@ -1,1 +1,1 @@
-{"version":3,"file":"sort-class-members.d.ts","sourceRoot":"","sources":["../../src/rules/sort-class-members.ts"],"names":[],"mappings":"AAeA,QAAA,MAAM,IAAI,sNAiFR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"sort-class-members.d.ts","sourceRoot":"","sources":["../../src/rules/sort-class-members.ts"],"names":[],"mappings":"AAQA,eAAO,MAAM,gBAAgB,sMAsF3B,CAAC"}

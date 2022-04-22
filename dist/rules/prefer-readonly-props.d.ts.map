@@ -1,1 +1,1 @@
-{"version":3,"file":"prefer-readonly-props.d.ts","sourceRoot":"","sources":["../../src/rules/prefer-readonly-props.ts"],"names":[],"mappings":"AAMA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAiB5E,QAAA,MAAM,IAAI,mKAiGR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"prefer-readonly-props.d.ts","sourceRoot":"","sources":["../../src/rules/prefer-readonly-props.ts"],"names":[],"mappings":"AAKA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAG5E,eAAO,MAAM,mBAAmB,mJA6G9B,CAAC"}

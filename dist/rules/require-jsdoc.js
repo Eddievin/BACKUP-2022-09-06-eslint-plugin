@@ -1,31 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.requireJsdoc = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const utils = tslib_1.__importStar(require("./utils"));
-const InterfaceOptionVO = (0, helpers_1.createValidationObject)({
-    callSignatures: "callSignatures",
-    constructSignatures: "constructSignatures",
-    interface: "interface"
-});
-const isInterfaceOption = is.factory(is.enumeration, InterfaceOptionVO);
-const isInterfaceOptions = is.factory(is.array.of, isInterfaceOption);
-const PropertyOptionVO = (0, helpers_1.createValidationObject)({
-    function: "function",
-    nonFunction: "nonFunction"
-});
-const isPropertyOption = is.factory(is.enumeration, PropertyOptionVO);
-const isPropertyOptions = is.factory(is.array.of, isPropertyOption);
-const isRuleOptions = is.object.factory({
-    excludeSelectors: is.strings,
-    includeSelectors: is.strings,
-    interfaces: isInterfaceOptions,
-    noDefaultSelectors: is.boolean,
-    properties: isPropertyOptions
-}, {});
-const rule = utils.createRule({
+exports.requireJsdoc = utils.createRule({
     create(context) {
         const selectors = utils.getSelectors(context.options, defaultSelectors);
         return {
@@ -55,7 +36,28 @@ const rule = utils.createRule({
         noDefaultSelectors: false,
         properties: ["function", "nonFunction"]
     },
-    isRuleOptions,
+    isRuleOptions: functions_1.fn.run(() => {
+        const InterfaceOptionVO = (0, functions_1.createValidationObject)({
+            callSignatures: "callSignatures",
+            constructSignatures: "constructSignatures",
+            interface: "interface"
+        });
+        const isInterfaceOption = functions_1.is.factory(functions_1.is.enumeration, InterfaceOptionVO);
+        const isInterfaceOptions = functions_1.is.factory(functions_1.is.array.of, isInterfaceOption);
+        const PropertyOptionVO = (0, functions_1.createValidationObject)({
+            function: "function",
+            nonFunction: "nonFunction"
+        });
+        const isPropertyOption = functions_1.is.factory(functions_1.is.enumeration, PropertyOptionVO);
+        const isPropertyOptions = functions_1.is.factory(functions_1.is.array.of, isPropertyOption);
+        return functions_1.is.object.factory({
+            excludeSelectors: functions_1.is.strings,
+            includeSelectors: functions_1.is.strings,
+            interfaces: isInterfaceOptions,
+            noDefaultSelectors: functions_1.is.boolean,
+            properties: isPropertyOptions
+        }, {});
+    }),
     messages: {
         undocumented: "Missing documentation",
         undocumentedCallSignature: "Missing documentation for call signature",
@@ -175,5 +177,4 @@ function lintProperty(node, context) {
             lintNodeBySymbol(node.key, context);
     }
 }
-module.exports = rule;
 //# sourceMappingURL=require-jsdoc.js.map

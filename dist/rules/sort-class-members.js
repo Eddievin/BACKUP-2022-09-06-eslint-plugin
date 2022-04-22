@@ -1,13 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sortClassMembers = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const _ = tslib_1.__importStar(require("lodash"));
 const utils = tslib_1.__importStar(require("./utils"));
-const isRuleOptions = is.object.factory({ sortingOrder: is.strings }, {});
-const rule = utils.createRule({
+exports.sortClassMembers = utils.createRule({
     create(context) {
         const sortingOrders = new Map(context.options.sortingOrder.map((name, index) => [name, index]));
         return {
@@ -34,7 +33,7 @@ const rule = utils.createRule({
                             sortingOrders.get(`${y}-${z}-${x}`),
                             sortingOrders.get(`${z}-${x}-${y}`),
                             sortingOrders.get(`${z}-${y}-${x}`)
-                        ].filter(is.not.empty))));
+                        ].filter(functions_1.is.not.empty))));
                     const name = getMemberName(member, context);
                     const accessorType = getMemberAccessorType(member);
                     return {
@@ -46,8 +45,11 @@ const rule = utils.createRule({
                 const sortedMembers = _.sortBy(members, member => member.sortingOrder);
                 const fixes = [];
                 for (const [index, sortedMember] of sortedMembers.entries())
-                    if (sortedMember.index !== index) {
-                        const member = a.get(members, index);
+                    if (sortedMember.index === index) {
+                        // Valid
+                    }
+                    else {
+                        const member = functions_1.a.get(members, index);
                         fixes.push({
                             range: context.getRangeWithLeadingTrivia(member.node),
                             text: context.getTextWithLeadingTrivia(sortedMember.node)
@@ -64,7 +66,7 @@ const rule = utils.createRule({
     },
     defaultOptions: { sortingOrder: [] },
     fixable: "code",
-    isRuleOptions,
+    isRuleOptions: functions_1.is.object.factory({ sortingOrder: functions_1.is.strings }, {}),
     messages: { incorrectSortingOrder: "Incorrect sorting order" },
     name: "sort-class-members"
 });
@@ -143,7 +145,7 @@ function getMemberName(node, context) {
                 case utils_1.AST_NODE_TYPES.Identifier:
                     return node.key.name;
                 case utils_1.AST_NODE_TYPES.Literal:
-                    return cast.string(node.key.value);
+                    return functions_1.cast.string(node.key.value);
                 default:
                     return context.getText(node.key);
             }
@@ -178,5 +180,4 @@ function getMemberTypes(node) {
             return ["block"];
     }
 }
-module.exports = rule;
 //# sourceMappingURL=sort-class-members.js.map

@@ -1,9 +1,10 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.disallowIdentifier = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils = tslib_1.__importStar(require("./utils"));
-const isSubOptions = is.object.factory({ ids: is.strings }, { replacement: is.string });
-const rule = utils.createRule({
+exports.disallowIdentifier = utils.createRule({
     create(context) {
         return {
             ":not(Property) > Identifier:not(.property)"(node) {
@@ -11,7 +12,7 @@ const rule = utils.createRule({
                     if (subOptions.ids.includes(node.name.valueOf()))
                         context.report({
                             fix() {
-                                return is.not.empty(subOptions.replacement)
+                                return functions_1.is.not.empty(subOptions.replacement)
                                     ? [{ range: node.range, text: subOptions.replacement }]
                                     : [];
                             },
@@ -22,10 +23,9 @@ const rule = utils.createRule({
         };
     },
     fixable: "code",
-    isRuleOptions: is.object,
-    isSubOptions,
+    isRuleOptions: functions_1.is.object,
+    isSubOptions: functions_1.is.object.factory({ ids: functions_1.is.strings }, { replacement: functions_1.is.string }),
     messages: { disallowedIdentifier: "Disallowed identifier" },
     name: "disallow-identifier"
 });
-module.exports = rule;
 //# sourceMappingURL=disallow-identifier.js.map

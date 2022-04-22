@@ -1,9 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.className = void 0;
 const tslib_1 = require("tslib");
 const path_1 = tslib_1.__importDefault(require("path"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.className = utils.createRule({
     create(context) {
         return {
             "ExportNamedDeclaration > ClassDeclaration"(node) {
@@ -16,9 +18,8 @@ const rule = utils.createRule({
             }
         };
     },
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: { invalidClassName: "Class name should match file name" },
     name: "class-name"
 });
-module.exports = rule;
 //# sourceMappingURL=class-name.js.map

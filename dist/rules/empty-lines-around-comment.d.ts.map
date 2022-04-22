@@ -1,1 +1,1 @@
-{"version":3,"file":"empty-lines-around-comment.d.ts","sourceRoot":"","sources":["../../src/rules/empty-lines-around-comment.ts"],"names":[],"mappings":"AAQA,QAAA,MAAM,IAAI,8QAuFR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"empty-lines-around-comment.d.ts","sourceRoot":"","sources":["../../src/rules/empty-lines-around-comment.ts"],"names":[],"mappings":"AAMA,eAAO,MAAM,uBAAuB,8PAuFlC,CAAC"}

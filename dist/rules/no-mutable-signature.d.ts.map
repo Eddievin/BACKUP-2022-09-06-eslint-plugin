@@ -1,1 +1,1 @@
-{"version":3,"file":"no-mutable-signature.d.ts","sourceRoot":"","sources":["../../src/rules/no-mutable-signature.ts"],"names":[],"mappings":"AAoBA,QAAA,MAAM,IAAI,sPAyGR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"no-mutable-signature.d.ts","sourceRoot":"","sources":["../../src/rules/no-mutable-signature.ts"],"names":[],"mappings":"AAMA,eAAO,MAAM,kBAAkB,sOAmH7B,CAAC"}

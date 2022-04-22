@@ -1,9 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.classMemberTypedef = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.classMemberTypedef = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.PropertyDefinition](node) {
@@ -15,9 +17,8 @@ const rule = utils.createRule({
             }
         };
     },
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: { typedefRequired: "Type definition required" },
     name: "class-member-typedef"
 });
-module.exports = rule;
 //# sourceMappingURL=class-member-typedef.js.map

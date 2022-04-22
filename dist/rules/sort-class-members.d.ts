@@ -1,3 +1,2 @@
-declare const rule: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"incorrectSortingOrder", import("@skylib/functions/dist/types/core").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-export = rule;
+export declare const sortClassMembers: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"incorrectSortingOrder", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=sort-class-members.d.ts.map

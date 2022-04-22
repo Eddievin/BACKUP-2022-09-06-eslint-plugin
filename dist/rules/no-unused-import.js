@@ -1,10 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.noUnusedImport = void 0;
 const tslib_1 = require("tslib");
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.noUnusedImport = utils.createRule({
     create(context) {
         const identifiers = new Set();
         const importDeclarations = [];
@@ -34,7 +35,7 @@ const rule = utils.createRule({
                         .join(", ")
                         .replace(/ \}, \{ /gu, ", ");
                     const source = node.source.value;
-                    assert.string(source);
+                    functions_1.assert.string(source);
                     if (node.specifiers.every(used)) {
                         // Valid
                     }
@@ -54,9 +55,14 @@ const rule = utils.createRule({
                     else
                         context.report({
                             fix() {
-                                return [
-                                    { range: context.getRangeWithLeadingTrivia(node), text: "" }
-                                ];
+                                return context.hasLeadingComment(node)
+                                    ? []
+                                    : [
+                                        {
+                                            range: context.getRangeWithLeadingTrivia(node),
+                                            text: ""
+                                        }
+                                    ];
                             },
                             messageId: "unusedImport",
                             node
@@ -72,9 +78,8 @@ const rule = utils.createRule({
         };
     },
     fixable: "code",
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: { unusedImport: "Unused import" },
     name: "no-unused-import"
 });
-module.exports = rule;
 //# sourceMappingURL=no-unused-import.js.map

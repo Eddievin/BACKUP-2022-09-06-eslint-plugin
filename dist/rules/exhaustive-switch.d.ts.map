@@ -1,1 +1,1 @@
-{"version":3,"file":"exhaustive-switch.d.ts","sourceRoot":"","sources":["../../src/rules/exhaustive-switch.ts"],"names":[],"mappings":"AAMA,QAAA,MAAM,IAAI,mNA2BR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"exhaustive-switch.d.ts","sourceRoot":"","sources":["../../src/rules/exhaustive-switch.ts"],"names":[],"mappings":"AAKA,eAAO,MAAM,gBAAgB,mMA8B3B,CAAC"}

@@ -1,14 +1,14 @@
-import type { strings } from "@skylib/functions/dist/types/core";
+import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import * as ts from "typescript";
-import * as utils from ".";
+import * as utils from "./core";
 export declare class Checker<M extends string, O extends object, S extends object> {
     /**
      * Creates class instance.
      *
      * @param options - Options.
      */
-    constructor(options: Options<M, O, S>);
+    constructor(options: Checker.Options<M, O, S>);
     /**
      * Checks type.
      *
@@ -17,13 +17,13 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param restElement - Rest element.
      * @returns Validation result.
      */
-    checkType(type: ts.Type, node: TSESTree.Node, restElement?: boolean): Result;
+    checkType(type: ts.Type, node: TSESTree.Node, restElement?: boolean): Checker.Result;
     protected checker: ts.TypeChecker;
     protected ignoreClasses: boolean;
     protected ignoreInterfaces: boolean;
     protected ignoreTypeParameters: boolean;
     protected ignoreTypes: utils.Matcher;
-    protected readonliness: Readonliness;
+    protected readonliness: Checker.Readonliness;
     protected seenTypesPool: Set<ts.Type>;
     /**
      * Checks mapped type nodes.
@@ -31,7 +31,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param type - Type.
      * @returns Validation result.
      */
-    protected checkMappedTypeNodes(type: ts.Type): Result;
+    protected checkMappedTypeNodes(type: ts.Type): Checker.Result;
     /**
      * Checks object type.
      *
@@ -39,7 +39,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param restElement - Rest element.
      * @returns Validation result.
      */
-    protected checkObjectType(type: ts.ObjectType, restElement: boolean): Result;
+    protected checkObjectType(type: ts.ObjectType, restElement: boolean): Checker.Result;
     /**
      * Checks properties.
      *
@@ -47,7 +47,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param restElement - Rest element.
      * @returns Validation result.
      */
-    protected checkProperties(type: ts.ObjectType, restElement: boolean): Result;
+    protected checkProperties(type: ts.ObjectType, restElement: boolean): Checker.Result;
     /**
      * Checks signatures.
      *
@@ -55,7 +55,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param restElement - Rest element.
      * @returns Validation result.
      */
-    protected checkSignatures(type: ts.ObjectType, restElement: boolean): Result;
+    protected checkSignatures(type: ts.ObjectType, restElement: boolean): Checker.Result;
     /**
      * Checks subtypes.
      *
@@ -63,14 +63,14 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param subtypes - Subtypes.
      * @returns Validation result.
      */
-    protected checkSubTypes(type: ts.Type, subtypes: readonly ts.Type[]): Result;
+    protected checkSubTypes(type: ts.Type, subtypes: readonly ts.Type[]): Checker.Result;
     /**
      * Checks type parameter.
      *
      * @param type - Type.
      * @returns Validation result.
      */
-    protected checkTypeParameter(type: ts.TypeParameter): Result;
+    protected checkTypeParameter(type: ts.TypeParameter): Checker.Result;
     /**
      * Checks that type readonliness is invalid.
      *
@@ -78,7 +78,7 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param sourceType - Source type.
      * @returns _True_ if type readonliness is invalid, _false_ otherwise.
      */
-    protected invalidReadonliness(typeIsReadonly: boolean, sourceType: SourceType): boolean;
+    protected invalidReadonliness(typeIsReadonly: boolean, sourceType: Checker.SourceType): boolean;
     /**
      * Checks that mapped type node is readonly.
      *
@@ -93,24 +93,26 @@ export declare class Checker<M extends string, O extends object, S extends objec
      * @param restElement - Rest element.
      * @returns Validation result.
      */
-    protected recurs(type: ts.Type, restElement?: boolean): Result;
+    protected recurs(type: ts.Type, restElement?: boolean): Checker.Result;
 }
-export interface InvalidResult {
-    readonly failed: true;
-    readonly types: readonly ts.Type[];
+export declare namespace Checker {
+    interface InvalidResult {
+        readonly failed: true;
+        readonly types: readonly ts.Type[];
+    }
+    interface Options<M extends string, O extends object, S extends object> {
+        readonly context: utils.Context<M, O, S>;
+        readonly ignoreClasses: boolean;
+        readonly ignoreInterfaces: boolean;
+        readonly ignoreTypeParameters?: boolean;
+        readonly ignoreTypes: strings;
+        readonly readonliness: Readonliness;
+    }
+    type Readonliness = "allDefinitelyReadonly" | "allDefinitelyWritable" | "allMaybeReadonly" | "allMaybeWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";
+    type Result = InvalidResult | ValidResult;
+    type SourceType = "numberSignature" | "property" | "stringSignature";
+    interface ValidResult {
+        readonly passed: true;
+    }
 }
-export interface Options<M extends string, O extends object, S extends object> {
-    readonly context: utils.Context<M, O, S>;
-    readonly ignoreClasses: boolean;
-    readonly ignoreInterfaces: boolean;
-    readonly ignoreTypeParameters?: boolean;
-    readonly ignoreTypes: strings;
-    readonly readonliness: Readonliness;
-}
-export declare type Readonliness = "allDefinitelyReadonly" | "allDefinitelyWritable" | "allMaybeReadonly" | "allMaybeWritable" | "numberSignatureReadonly" | "stringSignatureReadonly";
-export declare type Result = InvalidResult | ValidResult;
-export declare type SourceType = "numberSignature" | "property" | "stringSignature";
-export interface ValidResult {
-    readonly passed: true;
-}
-//# sourceMappingURL=readonliness.d.ts.map
+//# sourceMappingURL=Checker.d.ts.map

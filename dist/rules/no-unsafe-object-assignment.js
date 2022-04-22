@@ -1,11 +1,13 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.noUnsafeObjectAssignment = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.noUnsafeObjectAssignment = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.ArrowFunctionExpression](node) {
@@ -38,7 +40,7 @@ const rule = utils.createRule({
             }
         };
     },
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: {
         unsafeOptionalAssignment: "Unsafe optional assignment: {{name}}",
         unsafeReadonlyAssignment: "Unsafe readonly-to-mutable assignment: {{name}}"
@@ -55,7 +57,7 @@ function lintExpression(tsNode, context) {
     const destType = context.checker.getContextualType(tsNode);
     const sourceType = context.checker.getTypeAtLocation(tsNode);
     const node = context.toEsNode(tsNode);
-    if (node.type !== utils_1.AST_NODE_TYPES.ObjectExpression && destType)
+    if (destType && node.type !== utils_1.AST_NODE_TYPES.ObjectExpression)
         lintTypes(destType, sourceType, node, context);
 }
 /**
@@ -70,7 +72,10 @@ function lintNodes(dest, source, context) {
     const tsSource = context.toTsNode(source);
     const destType = context.checker.getTypeAtLocation(tsDest);
     const sourceType = context.checker.getTypeAtLocation(tsSource);
-    if (source.type !== utils_1.AST_NODE_TYPES.ObjectExpression)
+    if (source.type === utils_1.AST_NODE_TYPES.ObjectExpression) {
+        // Ignore
+    }
+    else
         lintTypes(destType, sourceType, source, context);
 }
 /**
@@ -129,5 +134,4 @@ function lintTypes(dest, source, node, context) {
         }
     }
 }
-module.exports = rule;
 //# sourceMappingURL=no-unsafe-object-assignment.js.map

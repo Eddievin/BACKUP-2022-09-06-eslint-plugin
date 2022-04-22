@@ -1,9 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.preferTsToolbelt = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.preferTsToolbelt = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.TSConditionalType](node) {
@@ -15,11 +17,10 @@ const rule = utils.createRule({
             }
         };
     },
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: {
         preferExtends: 'Use "Extends" type from "ts-toolbelt" package instead'
     },
     name: "prefer-ts-toolbelt"
 });
-module.exports = rule;
 //# sourceMappingURL=prefer-ts-toolbelt.js.map

@@ -1,11 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.emptyLinesAroundComment = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.emptyLinesAroundComment = utils.createRule({
     create(context) {
         const nodes = [];
         return {
@@ -27,8 +27,8 @@ const rule = utils.createRule({
                                 context.report({
                                     fix() {
                                         return {
-                                            range: a.clone(prefix.range),
-                                            text: `${eol}${eol}${a.last(prefix.spaces)}`
+                                            range: functions_1.a.clone(prefix.range),
+                                            text: `${eol}${eol}${functions_1.a.last(prefix.spaces)}`
                                         };
                                     },
                                     messageId: "missingEmptyLineBefore",
@@ -45,8 +45,8 @@ const rule = utils.createRule({
                                 context.report({
                                     fix() {
                                         return {
-                                            range: a.clone(suffix.range),
-                                            text: `${eol}${eol}${a.last(suffix.spaces)}`
+                                            range: functions_1.a.clone(suffix.range),
+                                            text: `${eol}${eol}${functions_1.a.last(suffix.spaces)}`
                                         };
                                     },
                                     messageId: "missingEmptyLineAfter",
@@ -56,8 +56,8 @@ const rule = utils.createRule({
                                 context.report({
                                     fix() {
                                         return {
-                                            range: a.clone(suffix.range),
-                                            text: `${context.eol}${a.last(suffix.spaces)}`
+                                            range: functions_1.a.clone(suffix.range),
+                                            text: `${context.eol}${functions_1.a.last(suffix.spaces)}`
                                         };
                                     },
                                     messageId: "unexpectedEmptyLineAfter",
@@ -70,7 +70,7 @@ const rule = utils.createRule({
         };
     },
     fixable: "whitespace",
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: {
         missingEmptyLineAfter: "Missing empty line after comment",
         missingEmptyLineBefore: "Missing empty line before comment",
@@ -99,10 +99,10 @@ function explodeComment(comment, program, programNodes, context) {
     const nodeType = node ? node.type : utils_1.AST_NODE_TYPES.Program;
     const text = context.getText(comment);
     const prefix = context.code.slice(programRange[0], range[0]);
-    const prefixSpaces = s.trailingSpaces(prefix);
+    const prefixSpaces = functions_1.s.trailingSpaces(prefix);
     const prefixText = prefix.trimEnd();
     const suffix = context.code.slice(range[1], programRange[1]);
-    const suffixSpaces = s.leadingSpaces(suffix);
+    const suffixSpaces = functions_1.s.leadingSpaces(suffix);
     const suffixText = suffix.trimStart();
     return {
         inBlockLike: blockLikeTypes.has(nodeType),
@@ -112,13 +112,13 @@ function explodeComment(comment, program, programNodes, context) {
             blockStart: prefixText.endsWith("{"),
             programStart: prefixText === "",
             range: [range[0] - prefixSpaces.length, range[0]],
-            spaces: s.lines(prefixSpaces)
+            spaces: functions_1.s.lines(prefixSpaces)
         },
         suffix: {
             blockEnd: suffixText.startsWith("}"),
             programEnd: suffixText === "",
             range: [range[1], range[1] + suffixSpaces.length],
-            spaces: s.lines(suffixSpaces),
+            spaces: functions_1.s.lines(suffixSpaces),
             startsWithComment: suffixText.startsWith("/*") || suffixText.startsWith("//")
         }
     };
@@ -140,5 +140,4 @@ function getNodeContainingRange(range, programNodes) {
     });
     return nodes[0];
 }
-module.exports = rule;
 //# sourceMappingURL=empty-lines-around-comment.js.map

@@ -1,0 +1,2 @@
+export declare const vueComponentName: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"invalidName", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=vue-component-name.d.ts.map

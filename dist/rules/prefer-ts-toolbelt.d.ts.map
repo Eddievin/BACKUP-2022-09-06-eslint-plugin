@@ -1,1 +1,1 @@
-{"version":3,"file":"prefer-ts-toolbelt.d.ts","sourceRoot":"","sources":["../../src/rules/prefer-ts-toolbelt.ts"],"names":[],"mappings":"AAIA,QAAA,MAAM,IAAI,8MAeR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"prefer-ts-toolbelt.d.ts","sourceRoot":"","sources":["../../src/rules/prefer-ts-toolbelt.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,gBAAgB,8LAe3B,CAAC"}

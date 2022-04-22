@@ -1,3 +1,2 @@
-declare const rule: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"shouldBeReadonly", import("@skylib/functions/dist/types/core").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-export = rule;
+export declare const preferReadonly: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"shouldBeReadonly", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=prefer-readonly.d.ts.map

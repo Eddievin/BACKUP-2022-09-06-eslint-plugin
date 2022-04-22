@@ -1,0 +1,2 @@
+export declare const primaryExportOnly: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"invalidExport", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=primary-export-only.d.ts.map

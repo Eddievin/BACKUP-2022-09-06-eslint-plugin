@@ -1,1 +1,1 @@
-{"version":3,"file":"disallow-by-regexp.d.ts","sourceRoot":"","sources":["../../src/rules/disallow-by-regexp.ts"],"names":[],"mappings":"AA6BA,QAAA,MAAM,IAAI,+MAwDR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"disallow-by-regexp.d.ts","sourceRoot":"","sources":["../../src/rules/disallow-by-regexp.ts"],"names":[],"mappings":"AAMA,eAAO,MAAM,gBAAgB,+LAsF3B,CAAC"}

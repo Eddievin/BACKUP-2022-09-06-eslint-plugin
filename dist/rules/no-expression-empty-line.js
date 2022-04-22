@@ -1,20 +1,19 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.noExpressionEmptyLine = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const rule = utils.createRule({
+exports.noExpressionEmptyLine = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.MemberExpression](node) {
-                const got = s.leadingSpaces(context.code.slice(node.object.range[1]));
-                const expected = fn.run(() => {
-                    const lines = s.lines(got);
+                const got = functions_1.s.leadingSpaces(context.code.slice(node.object.range[1]));
+                const expected = functions_1.fn.run(() => {
+                    const lines = functions_1.s.lines(got);
                     return lines.length >= 3
-                        ? `${a.first(lines)}\n${a.last(lines)}`
+                        ? `${functions_1.a.first(lines)}\n${functions_1.a.last(lines)}`
                         : got;
                 });
                 if (got === expected) {
@@ -38,9 +37,8 @@ const rule = utils.createRule({
         };
     },
     fixable: "whitespace",
-    isRuleOptions: is.object,
+    isRuleOptions: functions_1.is.object,
     messages: { unexpectedEmptyLine: "Unexpected empty line" },
     name: "no-expression-empty-line"
 });
-module.exports = rule;
 //# sourceMappingURL=no-expression-empty-line.js.map

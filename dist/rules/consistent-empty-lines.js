@@ -1,28 +1,14 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.consistentEmptyLines = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const functions_1 = require("@skylib/functions");
 const utils = tslib_1.__importStar(require("./utils"));
-const EmptyLineVO = (0, helpers_1.createValidationObject)({
-    always: "always",
-    any: "any",
-    never: "never"
-});
-const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
-const isSubOptions = is.object.factory({
-    emptyLine: isEmptyLine,
-    next: is.string,
-    prev: is.string
-}, {});
-const rule = utils.createRule({
+exports.consistentEmptyLines = utils.createRule({
     create(context) {
-        const childNodesMap = new Map();
-        const prevRuleIndexes = new Map();
-        const nextRuleIndexes = new Map();
+        const childNodesMap = new functions_1.Accumulator();
+        const prevRuleIndexes = new functions_1.Accumulator();
+        const nextRuleIndexes = new functions_1.Accumulator();
         const prevItems = [];
         const nextItems = [];
         const listener = {
@@ -39,13 +25,13 @@ const rule = utils.createRule({
                             utils.isAdjacentNodes(prevItem.node, nextItem.node, childNodesMap))
                             items.set(utils.getNodeId(nextItem.node), nextItem);
                 for (const item of items.values()) {
-                    const emptyLine = a.get(context.subOptionsArray, item.ruleIndex).emptyLine;
+                    const emptyLine = functions_1.a.get(context.subOptionsArray, item.ruleIndex).emptyLine;
                     if (emptyLine === "any") {
                         // Skip check
                     }
                     else {
                         const node = item.node;
-                        const spread = fn.run(() => {
+                        const spread = functions_1.fn.run(() => {
                             switch (emptyLine) {
                                 case "always":
                                     return true;
@@ -58,7 +44,7 @@ const rule = utils.createRule({
                             ? "expectingEmptyLine"
                             : "unexpectedEmptyLine";
                         const got = context.getLeadingTrivia(node);
-                        const expected = context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
+                        const expected = context.eol.repeat(count) + functions_1.s.trimLeadingEmptyLines(got);
                         if (got === expected) {
                             // Valid
                         }
@@ -80,27 +66,38 @@ const rule = utils.createRule({
             }
         };
         for (const [ruleIndex, subOptions] of context.subOptionsArray.entries()) {
-            arrayMap.push(subOptions.prev, ruleIndex, prevRuleIndexes);
-            arrayMap.push(subOptions.next, ruleIndex, nextRuleIndexes);
+            prevRuleIndexes.push(subOptions.prev, ruleIndex);
+            nextRuleIndexes.push(subOptions.next, ruleIndex);
         }
         for (const subOptions of context.subOptionsArray)
             for (const selector of [subOptions.prev, subOptions.next])
                 listener[selector] = (node) => {
-                    for (const ruleIndex of arrayMap.get(selector, prevRuleIndexes))
+                    for (const ruleIndex of prevRuleIndexes.get(selector))
                         prevItems.push({ node, ruleIndex });
-                    for (const ruleIndex of arrayMap.get(selector, nextRuleIndexes))
+                    for (const ruleIndex of nextRuleIndexes.get(selector))
                         nextItems.push({ node, ruleIndex });
                 };
         return listener;
     },
     fixable: "whitespace",
-    isRuleOptions: is.object,
-    isSubOptions,
+    isRuleOptions: functions_1.is.object,
+    isSubOptions: functions_1.fn.run(() => {
+        const EmptyLineVO = (0, functions_1.createValidationObject)({
+            always: "always",
+            any: "any",
+            never: "never"
+        });
+        const isEmptyLine = functions_1.is.factory(functions_1.is.enumeration, EmptyLineVO);
+        return functions_1.is.object.factory({
+            emptyLine: isEmptyLine,
+            next: functions_1.is.string,
+            prev: functions_1.is.string
+        }, {});
+    }),
     messages: {
         expectingEmptyLine: "Expecting empty line before",
         unexpectedEmptyLine: "Unexpected empty line before"
     },
     name: "consistent-empty-lines"
 });
-module.exports = rule;
 //# sourceMappingURL=consistent-empty-lines.js.map

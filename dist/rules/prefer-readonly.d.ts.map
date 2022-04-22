@@ -1,1 +1,1 @@
-{"version":3,"file":"prefer-readonly.d.ts","sourceRoot":"","sources":["../../src/rules/prefer-readonly.ts"],"names":[],"mappings":"AAsBA,QAAA,MAAM,IAAI,iNAoCR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"prefer-readonly.d.ts","sourceRoot":"","sources":["../../src/rules/prefer-readonly.ts"],"names":[],"mappings":"AAOA,eAAO,MAAM,cAAc,iMAgDzB,CAAC"}

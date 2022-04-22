@@ -1,19 +1,18 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.objectFormat = void 0;
 const tslib_1 = require("tslib");
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
-const isRuleOptions = is.object.factory({ maxLineLength: is.number, maxObjectSize: is.number }, {});
-const rule = utils.createRule({
+exports.objectFormat = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.ObjectExpression](node) {
                 const texts = node.properties.map(property => context.getTextWithLeadingTrivia(property).trim());
-                const predictedLength = fn.run(() => {
+                const predictedLength = functions_1.fn.run(() => {
                     const headLength = context.getLocFromRange(node.range).start.column;
-                    const tailLength = fn.run(() => {
+                    const tailLength = functions_1.fn.run(() => {
                         const tail = context.code.slice(node.range[1]);
                         if (tail.startsWith(" as "))
                             return 1000;
@@ -23,7 +22,7 @@ const rule = utils.createRule({
                     });
                     return (headLength +
                         2 +
-                        num.sum(...texts.map(text => text.trim().length)) +
+                        functions_1.num.sum(...texts.map(text => text.trim().length)) +
                         2 * (texts.length - 1) +
                         2 +
                         tailLength);
@@ -58,7 +57,7 @@ const rule = utils.createRule({
     },
     defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
     fixable: "code",
-    isRuleOptions,
+    isRuleOptions: functions_1.is.object.factory({ maxLineLength: functions_1.is.number, maxObjectSize: functions_1.is.number }, {}),
     messages: {
         expectingMultiline: "Expecting multiline object literal",
         expectingSingleLine: "Expecting single-line object literal"
@@ -77,5 +76,4 @@ function isMultiline(str) {
 function isSingleLine(str) {
     return !str.includes("\n");
 }
-module.exports = rule;
 //# sourceMappingURL=object-format.js.map

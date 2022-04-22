@@ -1,3 +1,2 @@
-declare const rule: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"multiTypeTuplesDisallowed", import("@skylib/functions/dist/types/core").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-export = rule;
+export declare const noMultiTypeTuples: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"multiTypeTuplesDisallowed", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=no-multi-type-tuples.d.ts.map

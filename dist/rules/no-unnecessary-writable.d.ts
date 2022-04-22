@@ -1,3 +1,2 @@
-declare const _default: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"unnecessaryWritable", import("@skylib/functions/dist/types/core").unknowns, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-export = _default;
+export declare const noUnnecessaryWritable: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"unnecessaryWritable", import("@skylib/functions").unknowns, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=no-unnecessary-writable.d.ts.map

@@ -2,11 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRule = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
-const readonliness_1 = require("./readonliness");
-const utils = tslib_1.__importStar(require("."));
+const Checker_1 = require("./Checker");
+const utils = tslib_1.__importStar(require("./core"));
 /**
  * Creates rule.
  *
@@ -18,15 +17,15 @@ const utils = tslib_1.__importStar(require("."));
  * @returns Rule module.
  */
 function createRule(name, isTypeToCheck, readonliness, messageId, message) {
-    const isRuleOptions = is.object.factory({
-        ignoreClasses: is.boolean,
-        ignoreInterfaces: is.boolean,
-        ignoreTypes: is.strings
+    const isRuleOptions = functions_1.is.object.factory({
+        ignoreClasses: functions_1.is.boolean,
+        ignoreInterfaces: functions_1.is.boolean,
+        ignoreTypes: functions_1.is.strings
     }, {});
     return utils.createRule({
         create(context) {
             const { ignoreClasses, ignoreInterfaces, ignoreTypes } = context.options;
-            const checker = new readonliness_1.Checker({
+            const checker = new Checker_1.Checker({
                 context,
                 ignoreClasses,
                 ignoreInterfaces,
@@ -39,7 +38,7 @@ function createRule(name, isTypeToCheck, readonliness, messageId, message) {
                     if (isTypeToCheck(typeName.getText()) &&
                         typeArguments &&
                         typeArguments.length === 1) {
-                        const typeArgument = a.first(typeArguments);
+                        const typeArgument = functions_1.a.first(typeArguments);
                         const type = context.checker.getTypeFromTypeNode(typeArgument);
                         const result = checker.checkType(type, node);
                         if ("passed" in result)

@@ -1,51 +1,25 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.statementsOrder = void 0;
 const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const _ = tslib_1.__importStar(require("lodash"));
 const utils = tslib_1.__importStar(require("./utils"));
-const NodeTypeVO = (0, helpers_1.createValidationObject)({
-    ExportDeclaration: "ExportDeclaration",
-    ExportDefaultDeclaration: "ExportDefaultDeclaration",
-    ExportFunctionDeclaration: "ExportFunctionDeclaration",
-    ExportModuleDeclaration: "ExportModuleDeclaration",
-    ExportTypeDeclaration: "ExportTypeDeclaration",
-    ExportUnknown: "ExportUnknown",
-    FunctionDeclaration: "FunctionDeclaration",
-    GlobalModuleDeclaration: "GlobalModuleDeclaration",
-    ImportDeclaration: "ImportDeclaration",
-    JestTest: "JestTest",
-    ModuleDeclaration: "ModuleDeclaration",
-    TypeDeclaration: "TypeDeclaration",
-    Unknown: "Unknown"
-});
-const isNodeType = is.factory(is.enumeration, NodeTypeVO);
-const isNodeTypes = is.factory(is.array.of, isNodeType);
-const isRuleOptions = is.object.factory({
-    blockOrder: isNodeTypes,
-    moduleOrder: isNodeTypes,
-    order: isNodeTypes,
-    rootOrder: isNodeTypes
-}, {});
-const rule = utils.createRule({
+exports.statementsOrder = utils.createRule({
     create(context) {
-        const blockOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), o.fromEntries(context.options.order.map((type, index) => [type, index]))), o.fromEntries(context.options.blockOrder.map((type, index) => [type, index])));
-        const moduleOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), o.fromEntries(context.options.order.map((type, index) => [type, index]))), o.fromEntries(context.options.moduleOrder.map((type, index) => [type, index])));
-        const rootOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), o.fromEntries(context.options.order.map((type, index) => [type, index]))), o.fromEntries(context.options.rootOrder.map((type, index) => [type, index])));
+        const blockOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.blockOrder.map((type, index) => [type, index])));
+        const moduleOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.moduleOrder.map((type, index) => [type, index])));
+        const rootOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.rootOrder.map((type, index) => [type, index])));
         const itemsMap = new Map();
         return {
             "*"(node) {
                 if (node.parent) {
                     const id = utils.getNodeId(node.parent);
-                    const index = arrayMap.get(id, itemsMap).length;
+                    // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
+                    const index = functions_1.arrayMap.get(id, itemsMap).length;
                     const parentNode = node.parent;
-                    const order = fn.run(() => {
+                    const order = functions_1.fn.run(() => {
                         switch (parentNode.type) {
                             case "BlockStatement":
                                 return blockOrder;
@@ -58,7 +32,8 @@ const rule = utils.createRule({
                         }
                     });
                     if (order)
-                        arrayMap.push(id, nodeInfo(node, parentNode, index, order), itemsMap);
+                        // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
+                        functions_1.arrayMap.push(id, nodeInfo(node, parentNode, index, order), itemsMap);
                 }
             },
             "Program:exit"() {
@@ -66,8 +41,11 @@ const rule = utils.createRule({
                     const sortedItems = _.sortBy(items, node => node.sortingOrder);
                     const fixes = [];
                     for (const [index, sortedItem] of sortedItems.entries())
-                        if (sortedItem.index !== index) {
-                            const item = a.get(items, index);
+                        if (sortedItem.index === index) {
+                            // Valid
+                        }
+                        else {
+                            const item = functions_1.a.get(items, index);
                             fixes.push({
                                 range: context.getRangeWithLeadingTrivia(item.node),
                                 text: context.getTextWithLeadingTrivia(sortedItem.node)
@@ -77,7 +55,7 @@ const rule = utils.createRule({
                         context.report({
                             fix: () => fixes,
                             messageId: "incorrectStatementsOrder",
-                            node: a.first(items).parentNode
+                            node: functions_1.a.first(items).parentNode
                         });
                 }
             }
@@ -90,26 +68,53 @@ const rule = utils.createRule({
         rootOrder: []
     },
     fixable: "code",
-    isRuleOptions,
+    isRuleOptions: functions_1.fn.run(() => {
+        const NodeTypeVO = (0, functions_1.createValidationObject)({
+            ExportAllDeclaration: "ExportAllDeclaration",
+            ExportDeclaration: "ExportDeclaration",
+            ExportDefaultDeclaration: "ExportDefaultDeclaration",
+            ExportFunctionDeclaration: "ExportFunctionDeclaration",
+            ExportModuleDeclaration: "ExportModuleDeclaration",
+            ExportTypeDeclaration: "ExportTypeDeclaration",
+            ExportUnknown: "ExportUnknown",
+            FunctionDeclaration: "FunctionDeclaration",
+            GlobalModuleDeclaration: "GlobalModuleDeclaration",
+            ImportDeclaration: "ImportDeclaration",
+            JestTest: "JestTest",
+            ModuleDeclaration: "ModuleDeclaration",
+            TypeDeclaration: "TypeDeclaration",
+            Unknown: "Unknown"
+        });
+        const isNodeType = functions_1.is.factory(functions_1.is.enumeration, NodeTypeVO);
+        const isNodeTypes = functions_1.is.factory(functions_1.is.array.of, isNodeType);
+        return functions_1.is.object.factory({
+            blockOrder: isNodeTypes,
+            moduleOrder: isNodeTypes,
+            order: isNodeTypes,
+            rootOrder: isNodeTypes
+        }, {});
+    }),
     messages: { incorrectStatementsOrder: "Incorrect statements order" },
     name: "statements-order"
 });
 const defaultOrder = {
-    ExportDeclaration: 1003,
-    ExportDefaultDeclaration: 1004,
-    ExportFunctionDeclaration: 1007,
-    ExportModuleDeclaration: 1008,
-    ExportTypeDeclaration: 1006,
-    ExportUnknown: 1005,
-    FunctionDeclaration: 1011,
+    ExportAllDeclaration: 1003,
+    ExportDeclaration: 1004,
+    ExportDefaultDeclaration: 1005,
+    ExportFunctionDeclaration: 1008,
+    ExportModuleDeclaration: 1009,
+    ExportTypeDeclaration: 1007,
+    ExportUnknown: 1006,
+    FunctionDeclaration: 1012,
     GlobalModuleDeclaration: 1002,
     ImportDeclaration: 1001,
-    JestTest: 1013,
-    ModuleDeclaration: 1012,
-    TypeDeclaration: 1010,
-    Unknown: 1009
+    JestTest: 1014,
+    ModuleDeclaration: 1013,
+    TypeDeclaration: 1011,
+    Unknown: 1010
 };
 const sortable = {
+    ExportAllDeclaration: true,
     ExportDeclaration: true,
     ExportDefaultDeclaration: false,
     ExportFunctionDeclaration: true,
@@ -130,12 +135,13 @@ const sortable = {
  * @param node - Node.
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
+// eslint-disable-next-line complexity
 function getJestTestName(node) {
     if (node.expression.type === utils_1.AST_NODE_TYPES.CallExpression) {
         const argument = node.expression.arguments[0];
         if (argument &&
             argument.type === utils_1.AST_NODE_TYPES.Literal &&
-            is.string(argument.value)) {
+            functions_1.is.string(argument.value)) {
             const callee = node.expression.callee;
             if (callee.type === utils_1.AST_NODE_TYPES.Identifier && callee.name === "test")
                 return argument.value;
@@ -143,6 +149,22 @@ function getJestTestName(node) {
                 callee.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
                 callee.callee.object.type === utils_1.AST_NODE_TYPES.Identifier &&
                 callee.callee.object.name === "test" &&
+                callee.callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
+                callee.callee.property.name === "each")
+                return argument.value;
+            if (callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
+                callee.object.type === utils_1.AST_NODE_TYPES.Identifier &&
+                callee.object.name === "test" &&
+                callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
+                callee.property.name === "only")
+                return argument.value;
+            if (callee.type === utils_1.AST_NODE_TYPES.CallExpression &&
+                callee.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
+                callee.callee.object.type === utils_1.AST_NODE_TYPES.MemberExpression &&
+                callee.callee.object.object.type === utils_1.AST_NODE_TYPES.Identifier &&
+                callee.callee.object.object.name === "test" &&
+                callee.callee.object.property.type === utils_1.AST_NODE_TYPES.Identifier &&
+                callee.callee.object.property.name === "only" &&
                 callee.callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
                 callee.callee.property.name === "each")
                 return argument.value;
@@ -162,14 +184,17 @@ function getJestTestName(node) {
 function nodeInfo(node, parentNode, index, order) {
     var _a;
     switch (node.type) {
+        case utils_1.AST_NODE_TYPES.ExportAllDeclaration:
+            functions_1.assert.not.empty(node.source);
+            return buildResult("ExportAllDeclaration", `${node.source.value} ${node.exportKind}`);
         case utils_1.AST_NODE_TYPES.ExportDefaultDeclaration:
             return buildResult("ExportDefaultDeclaration");
-        case utils_1.AST_NODE_TYPES.ExportNamedDeclaration: {
+        case utils_1.AST_NODE_TYPES.ExportNamedDeclaration:
             if (node.declaration)
                 switch (node.declaration.type) {
                     case utils_1.AST_NODE_TYPES.FunctionDeclaration:
                     case utils_1.AST_NODE_TYPES.TSDeclareFunction:
-                        assert.not.empty(node.declaration.id);
+                        functions_1.assert.not.empty(node.declaration.id);
                         return buildResult("ExportFunctionDeclaration", node.declaration.id.name);
                     case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
                     case utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration:
@@ -179,18 +204,17 @@ function nodeInfo(node, parentNode, index, order) {
                     default:
                         return buildResult("ExportUnknown");
                 }
-            return buildResult("ExportDeclaration");
-        }
+            return buildResult("ExportDeclaration", node.source ? `${node.source.value} ${node.exportKind}` : "~");
         case utils_1.AST_NODE_TYPES.ExpressionStatement:
             {
                 const id = getJestTestName(node);
-                if (is.not.empty(id))
+                if (functions_1.is.not.empty(id))
                     return buildResult("JestTest", id);
             }
             return buildResult("Unknown");
         case utils_1.AST_NODE_TYPES.FunctionDeclaration:
         case utils_1.AST_NODE_TYPES.TSDeclareFunction:
-            assert.not.empty(node.id);
+            functions_1.assert.not.empty(node.id);
             return buildResult("FunctionDeclaration", node.id.name);
         case utils_1.AST_NODE_TYPES.ImportDeclaration:
             return buildResult("ImportDeclaration");
@@ -204,9 +228,9 @@ function nodeInfo(node, parentNode, index, order) {
         default:
             return buildResult("Unknown");
     }
-    function buildResult(type, id = "~") {
+    function buildResult(type, id = "") {
         const order1 = order[type];
-        const order2 = sortable[type] ? id : "~";
+        const order2 = sortable[type] ? id : "";
         const order3 = 1000000 + node.range[0];
         return {
             id,
@@ -219,5 +243,4 @@ function nodeInfo(node, parentNode, index, order) {
         };
     }
 }
-module.exports = rule;
 //# sourceMappingURL=statements-order.js.map

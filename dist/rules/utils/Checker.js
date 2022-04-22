@@ -2,13 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Checker = void 0;
 const tslib_1 = require("tslib");
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
-const utils = tslib_1.__importStar(require("."));
+const utils = tslib_1.__importStar(require("./core"));
 class Checker {
     /**
      * Creates class instance.
@@ -90,7 +88,7 @@ class Checker {
     checkMappedTypeNodes(type) {
         const symbol = type.getSymbol();
         if (symbol) {
-            const declarations = cast.not.empty(symbol.getDeclarations(), []);
+            const declarations = functions_1.cast.not.empty(symbol.getDeclarations(), []);
             const nodes = declarations.filter(tsutils.isMappedTypeNode);
             if (nodes.length) {
                 const readonly = nodes.every(node => this.readonlyMappedTypeNode(node));
@@ -145,7 +143,7 @@ class Checker {
                     return { failed: true, types: [type] };
                 {
                     const subtype = this.checker.getTypeOfPropertyOfType(type, property.name);
-                    assert.not.empty(subtype);
+                    functions_1.assert.not.empty(subtype);
                     const result = this.checkSubTypes(type, [subtype]);
                     if ("failed" in result)
                         return result;
@@ -239,7 +237,7 @@ class Checker {
      * @returns _True_ if mapped type node is readonly, _false_ otherwise.
      */
     readonlyMappedTypeNode(node) {
-        if (is.not.empty(node.readonlyToken))
+        if (functions_1.is.not.empty(node.readonlyToken))
             switch (node.readonlyToken.kind) {
                 case ts.SyntaxKind.MinusToken:
                     return false;
@@ -312,4 +310,4 @@ const signatures = [
     { indexKind: ts.IndexKind.Number, sourceType: "numberSignature" },
     { indexKind: ts.IndexKind.String, sourceType: "stringSignature" }
 ];
-//# sourceMappingURL=readonliness.js.map
+//# sourceMappingURL=Checker.js.map

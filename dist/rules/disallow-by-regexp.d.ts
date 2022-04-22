@@ -1,3 +1,2 @@
-declare const rule: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"disallowedCode", import("@skylib/functions/dist/types/core").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-export = rule;
+export declare const disallowByRegexp: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"disallowedCode", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=disallow-by-regexp.d.ts.map

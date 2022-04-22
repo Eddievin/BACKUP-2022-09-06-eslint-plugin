@@ -1,3 +1,2 @@
-declare const rule: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"undocumented" | "undocumentedCallSignature" | "undocumentedConstructSignature", import("@skylib/functions/dist/types/core").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-export = rule;
+export declare const requireJsdoc: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"undocumented" | "undocumentedCallSignature" | "undocumentedConstructSignature", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=require-jsdoc.d.ts.map

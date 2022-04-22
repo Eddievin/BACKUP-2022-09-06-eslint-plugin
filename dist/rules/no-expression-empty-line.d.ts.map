@@ -1,1 +1,1 @@
-{"version":3,"file":"no-expression-empty-line.d.ts","sourceRoot":"","sources":["../../src/rules/no-expression-empty-line.ts"],"names":[],"mappings":"AAOA,QAAA,MAAM,IAAI,oNAqCR,CAAC;AAEH,SAAS,IAAI,CAAC"}
+{"version":3,"file":"no-expression-empty-line.d.ts","sourceRoot":"","sources":["../../src/rules/no-expression-empty-line.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,qBAAqB,oMAqChC,CAAC"}
