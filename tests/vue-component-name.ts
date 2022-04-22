@@ -11,7 +11,7 @@ utils.testRule(
           name: "name"
         });
       `,
-      errors: [{ line: 1, messageId: "invalidName" }],
+      errors: [{ line: 2, messageId: "invalidName" }],
       name: `Test at line ${getCurrentLine().line}`
     }
   ],

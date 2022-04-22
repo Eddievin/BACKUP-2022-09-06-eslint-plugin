@@ -29,7 +29,11 @@ export const vueComponentName = utils.createRule({
                   prefix + _.kebabCase(path.parse(context.path).name) + suffix
                 ) {
                   // Valid
-                } else context.report({ messageId: "invalidName", node });
+                } else
+                  context.report({
+                    messageId: "invalidName",
+                    node: property.value
+                  });
         }
       }
     };
