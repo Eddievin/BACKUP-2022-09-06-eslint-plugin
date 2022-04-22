@@ -48,14 +48,12 @@ export const noUnusedImport = utils.createRule({
           } else if (node.specifiers.some(used))
             context.report({
               fix() {
-                return context.hasLeadingComment(node)
-                  ? []
-                  : [
-                      {
-                        range: node.range,
-                        text: `import ${specifiers} from "${source}";`
-                      }
-                    ];
+                return [
+                  {
+                    range: node.range,
+                    text: `import ${specifiers} from "${source}";`
+                  }
+                ];
               },
               messageId: "unusedImport",
               node
