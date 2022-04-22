@@ -21,6 +21,11 @@ export const primaryExportOnly = utils.createRule({
       ): void {
         identifiers.add(node);
       },
+      "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(
+        node: TSESTree.Identifier
+      ): void {
+        identifiers.add(node);
+      },
       "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(
         node: TSESTree.Identifier
       ): void {

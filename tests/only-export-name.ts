@@ -61,6 +61,20 @@ utils.testRule(
     },
     {
       code: `
+        export const x = 1;
+        export { y };
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export const x = 1;
+        export { y as z };
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
         export const file = 1;
       `,
       name: `Test at line ${getCurrentLine().line}`

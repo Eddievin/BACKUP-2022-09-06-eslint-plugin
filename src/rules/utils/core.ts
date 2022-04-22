@@ -1,4 +1,5 @@
 import fs from "fs";
+import nodePath from "path";
 import type {
   Accumulator,
   objects,
@@ -327,6 +328,24 @@ export function createRule<
  */
 export function getComments(program: TSESTree.Program): TSESTree.Comment[] {
   return cast.not.empty(program.comments, []);
+}
+
+/**
+ * Creates identifier from from file name.
+ *
+ * @param path - Path.
+ * @returns Identifier.
+ */
+export function getNameFromFilename(path: string): string {
+  const name1 = nodePath.parse(path).name;
+
+  const name2 = /^index\.\w+/u.test(name1)
+    ? nodePath.parse(nodePath.parse(path).dir).name
+    : name1;
+
+  return /^[A-Z]/u.test(name2)
+    ? s.ucFirst(_.camelCase(name2))
+    : _.camelCase(name2);
 }
 
 /**

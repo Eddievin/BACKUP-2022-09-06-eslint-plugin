@@ -1,5 +1,4 @@
-import { is, s } from "@skylib/functions";
-import * as _ from "@skylib/lodash-commonjs-es";
+import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
 
@@ -8,13 +7,9 @@ export const exportAllName = utils.createRule({
     return {
       [AST_NODE_TYPES.ExportAllDeclaration](node): void {
         if (node.exported && node.source) {
-          const filename = node.source.value;
+          const expected = utils.getNameFromFilename(node.source.value);
 
-          const filename2 = /^[A-Z]/u.test(filename)
-            ? s.ucFirst(_.camelCase(filename))
-            : _.camelCase(filename);
-
-          if (node.exported.name === filename2) {
+          if (node.exported.name === expected) {
             // Valid
           } else context.report({ messageId: "invalidName", node });
         }
