@@ -47,8 +47,8 @@
     "minimatch": "^5.0.1"
   },
   "devDependencies": {
-    "@skylib/config": "^1.6.0",
-    "@skylib/eslint-plugin": "^0.1.22",
+    "@skylib/config": "^1.7.1",
+    "@skylib/eslint-plugin": "^0.1.23",
     "get-current-line": "^6.6.0"
   },
   "peerDependencies": {
