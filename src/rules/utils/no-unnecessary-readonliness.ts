@@ -15,6 +15,7 @@ import * as utils from "./core";
  * @param message - Message.
  * @returns Rule module.
  */
+// eslint-disable-next-line @skylib/only-export-name
 export function createRule<M extends string, T extends string>(
   name: string,
   isTypeToCheck: is.Guard<T>,

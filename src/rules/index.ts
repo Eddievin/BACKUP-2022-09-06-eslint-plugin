@@ -37,7 +37,6 @@ import { vueComponentName } from "./vue-component-name";
 
 export * as utils from "./utils";
 
-// eslint-disable-next-line @skylib/only-export-name
 export const rules = {
   "array-callback-return-type": arrayCallbackReturnType,
   "class-member-typedef": classMemberTypedef,

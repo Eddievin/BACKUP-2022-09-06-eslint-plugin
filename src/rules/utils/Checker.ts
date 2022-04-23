@@ -6,7 +6,6 @@ import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import * as utils from "./core";
 
-// eslint-disable-next-line @skylib/only-export-name
 export class Checker<M extends string, O extends object, S extends object> {
   /**
    * Creates class instance.
@@ -339,7 +338,6 @@ export class Checker<M extends string, O extends object, S extends object> {
   }
 }
 
-// eslint-disable-next-line @skylib/class-only-export
 export namespace Checker {
   export interface InvalidResult {
     readonly failed: true;
