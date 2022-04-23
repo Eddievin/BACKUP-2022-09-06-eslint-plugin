@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testRule = exports.stripBase = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
+exports.testRule = exports.stripBase = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getNameFromFilename = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
 const fs_1 = tslib_1.__importDefault(require("fs"));
+const path_1 = tslib_1.__importDefault(require("path"));
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
@@ -103,6 +104,20 @@ function getComments(program) {
     return functions_1.cast.not.empty(program.comments, []);
 }
 exports.getComments = getComments;
+/**
+ * Creates identifier from from file name.
+ *
+ * @param path - Path.
+ * @returns Identifier.
+ */
+function getNameFromFilename(path) {
+    const name1 = path_1.default.parse(path).name;
+    const name2 = name1 === "index" ? path_1.default.parse(path_1.default.parse(path).dir).name : name1;
+    return /^[A-Z]/u.test(name2)
+        ? functions_1.s.ucFirst(_.camelCase(name2))
+        : _.camelCase(name2);
+}
+exports.getNameFromFilename = getNameFromFilename;
 /**
  * Generates node ID.
  *
@@ -217,20 +232,17 @@ function testRule(name, rules, invalid, valid = []) {
             tsconfigRootDir: `${exports.base}fixtures`
         }
     });
-    const filename = `${exports.base}fixtures/file.ts`;
     tester.run(name, rule, {
         invalid: invalid.map(invalidTest => {
-            var _a;
+            var _a, _b;
             const code = functions_1.s.unpadMultiline(invalidTest.code);
             const output = functions_1.s.unpadMultiline((_a = invalidTest.output) !== null && _a !== void 0 ? _a : invalidTest.code);
-            return Object.assign(Object.assign({}, invalidTest), { code,
-                filename,
-                output });
+            return Object.assign(Object.assign({}, invalidTest), { code, filename: `${exports.base}fixtures/${(_b = invalidTest.filename) !== null && _b !== void 0 ? _b : "file.ts"}`, output });
         }),
         valid: valid.map(validTest => {
+            var _a;
             const code = functions_1.s.unpadMultiline(validTest.code);
-            return Object.assign(Object.assign({}, validTest), { code,
-                filename });
+            return Object.assign(Object.assign({}, validTest), { code, filename: `${exports.base}fixtures/${(_a = validTest.filename) !== null && _a !== void 0 ? _a : "file.ts"}` });
         })
     });
 }

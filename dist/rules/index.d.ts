@@ -1,3 +1,4 @@
+export * as utils from "./utils";
 export declare const rules: {
     "array-callback-return-type": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"expectingBooleanReturnType", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "class-member-typedef": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"typedefRequired", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
@@ -36,5 +37,4 @@ export declare const rules: {
     "template-literal-format": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"invalidTemplateLiteralFormat", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "vue-component-name": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"invalidName", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 };
-export * as utils from "./utils";
 //# sourceMappingURL=index.d.ts.map

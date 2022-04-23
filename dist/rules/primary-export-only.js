@@ -13,19 +13,25 @@ exports.primaryExportOnly = utils.createRule({
             "Program > ExportDefaultDeclaration"(node) {
                 exportDefaultDeclarations.add(node);
             },
-            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(node) {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(node) {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(node) {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(node) {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier"(node) {
+            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(node) {
+                identifiers.add(node);
+            },
+            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(node) {
+                identifiers.add(node);
+            },
+            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(node) {
                 identifiers.add(node);
             },
             "Program:exit"() {

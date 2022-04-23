@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.utils = exports.rules = void 0;
+exports.rules = exports.utils = void 0;
 const tslib_1 = require("tslib");
 const array_callback_return_type_1 = require("./array-callback-return-type");
 const class_member_typedef_1 = require("./class-member-typedef");
@@ -38,6 +38,8 @@ const statements_order_1 = require("./statements-order");
 const switch_case_empty_lines_1 = require("./switch-case-empty-lines");
 const template_literal_format_1 = require("./template-literal-format");
 const vue_component_name_1 = require("./vue-component-name");
+exports.utils = tslib_1.__importStar(require("./utils"));
+// eslint-disable-next-line @skylib/only-export-name
 exports.rules = {
     "array-callback-return-type": array_callback_return_type_1.arrayCallbackReturnType,
     "class-member-typedef": class_member_typedef_1.classMemberTypedef,
@@ -76,5 +78,4 @@ exports.rules = {
     "template-literal-format": template_literal_format_1.templateLiteralFormat,
     "vue-component-name": vue_component_name_1.vueComponentName
 };
-exports.utils = tslib_1.__importStar(require("./utils"));
 //# sourceMappingURL=index.js.map

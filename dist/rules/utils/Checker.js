@@ -7,6 +7,7 @@ const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("./core"));
+// eslint-disable-next-line @skylib/only-export-name
 class Checker {
     /**
      * Creates class instance.

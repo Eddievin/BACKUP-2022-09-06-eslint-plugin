@@ -2,9 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.onlyExportName = void 0;
 const tslib_1 = require("tslib");
-const path_1 = tslib_1.__importDefault(require("path"));
 const functions_1 = require("@skylib/functions");
-const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils = tslib_1.__importStar(require("./utils"));
 exports.onlyExportName = utils.createRule({
     create(context) {
@@ -14,28 +12,35 @@ exports.onlyExportName = utils.createRule({
             "Program > ExportDefaultDeclaration"() {
                 hasDefaultExport = true;
             },
-            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(node) {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(node) {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(node) {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier"(node) {
+            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(node) {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier"(node) {
+            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(node) {
+                nodes.add(node);
+            },
+            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(node) {
+                nodes.add(node);
+            },
+            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(node) {
                 nodes.add(node);
             },
             "Program:exit"() {
+                const expected = utils.getNameFromFilename(context.path);
                 if (hasDefaultExport || nodes.size > 1) {
                     // Valid
                 }
                 else
                     for (const node of nodes)
-                        if (node.name === _.camelCase(path_1.default.parse(context.path).name)) {
+                        if (node.name === expected) {
                             // Valid
                         }
                         else

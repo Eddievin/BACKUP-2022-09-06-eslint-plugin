@@ -7,29 +7,57 @@ const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
 exports.classOnlyExport = utils.createRule({
     create(context) {
-        const nodes = new Set();
-        let hasClassExport = false;
+        const exportAllDeclarations = [];
+        const exportDefaultDeclaration = [];
+        const identifiers = [];
+        let className;
         return {
             "Program > ExportAllDeclaration"(node) {
-                nodes.add(node);
+                if (functions_1.is.empty(node.exported))
+                    exportAllDeclarations.push(node);
+            },
+            "Program > ExportAllDeclaration > Identifier"(node) {
+                identifiers.push(node);
             },
             "Program > ExportDefaultDeclaration"(node) {
-                if (node.declaration.type === utils_1.AST_NODE_TYPES.ClassDeclaration)
-                    hasClassExport = true;
+                if (node.declaration.type === utils_1.AST_NODE_TYPES.ClassDeclaration &&
+                    node.declaration.id)
+                    className = node.declaration.id.name;
                 else
-                    nodes.add(node);
+                    exportDefaultDeclaration.push(node);
             },
-            "Program > ExportNamedDeclaration"(node) {
-                var _a;
-                if (((_a = node.declaration) === null || _a === void 0 ? void 0 : _a.type) === utils_1.AST_NODE_TYPES.ClassDeclaration)
-                    hasClassExport = true;
-                else
-                    nodes.add(node);
+            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(node) {
+                className = node.name;
+            },
+            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(node) {
+                identifiers.push(node);
+            },
+            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(node) {
+                identifiers.push(node);
+            },
+            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(node) {
+                identifiers.push(node);
+            },
+            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(node) {
+                identifiers.push(node);
+            },
+            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(node) {
+                identifiers.push(node);
+            },
+            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(node) {
+                identifiers.push(node);
             },
             "Program:exit"() {
-                if (hasClassExport && nodes.size > 0)
-                    for (const node of nodes)
-                        context.report({ messageId: "exportNotAllowed", node });
+                if (functions_1.is.not.empty(className)) {
+                    const nodes = [
+                        ...exportAllDeclarations,
+                        ...exportDefaultDeclaration,
+                        ...identifiers.filter(node => node.name !== className)
+                    ];
+                    if (nodes.length)
+                        for (const node of nodes)
+                            context.report({ messageId: "exportNotAllowed", node });
+                }
             }
         };
     },

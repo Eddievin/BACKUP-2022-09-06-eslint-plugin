@@ -142,6 +142,7 @@ export interface GetSelectorsOptions {
     readonly noDefaultSelectors: boolean;
 }
 export interface InvalidTestCase<M extends string> extends BaseInvalidTestCase<M, readonly [object]> {
+    filename?: SourceFile;
     name: string;
 }
 export interface Matcher {
@@ -158,7 +159,9 @@ export interface Package {
     readonly name?: string;
 }
 export declare type ReadonlyRange = readonly [number, number];
+export declare type SourceFile = "camelCase.ts" | "kebab-case.ts" | "PascalCase.ts" | "subfolder/index.ts";
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
+    filename?: SourceFile;
     name: string;
 }
 /**
@@ -189,6 +192,13 @@ export declare function createRule<M extends string, O extends object, S extends
  * @returns Comments.
  */
 export declare function getComments(program: TSESTree.Program): TSESTree.Comment[];
+/**
+ * Creates identifier from from file name.
+ *
+ * @param path - Path.
+ * @returns Identifier.
+ */
+export declare function getNameFromFilename(path: string): string;
 /**
  * Generates node ID.
  *

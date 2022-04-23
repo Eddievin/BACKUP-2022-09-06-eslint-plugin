@@ -26,7 +26,10 @@ exports.vueComponentName = utils.createRule({
                                     // Valid
                                 }
                                 else
-                                    context.report({ messageId: "invalidName", node });
+                                    context.report({
+                                        messageId: "invalidName",
+                                        node: property.value
+                                    });
                 }
             }
         };

@@ -3,19 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.exportAllName = void 0;
 const tslib_1 = require("tslib");
 const functions_1 = require("@skylib/functions");
-const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 const utils = tslib_1.__importStar(require("./utils"));
 exports.exportAllName = utils.createRule({
     create(context) {
         return {
             [utils_1.AST_NODE_TYPES.ExportAllDeclaration](node) {
-                if (node.exported && node.source)
-                    if (node.exported.name === _.camelCase(node.source.value)) {
+                if (node.exported && node.source) {
+                    const expected = utils.getNameFromFilename(node.source.value);
+                    if (node.exported.name === expected) {
                         // Valid
                     }
                     else
                         context.report({ messageId: "invalidName", node });
+                }
             }
         };
     },
