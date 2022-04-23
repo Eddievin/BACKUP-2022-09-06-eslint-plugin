@@ -15,6 +15,7 @@ utils.testRule(
         export interface I {}
         export type T = string;
         export namespace N {}
+        export { y };
       `,
       errors: [
         { line: 2, messageId: "invalidExport" },
@@ -23,7 +24,8 @@ utils.testRule(
         { line: 5, messageId: "invalidExport" },
         { line: 6, messageId: "invalidExport" },
         { line: 7, messageId: "invalidExport" },
-        { line: 8, messageId: "invalidExport" }
+        { line: 8, messageId: "invalidExport" },
+        { line: 9, messageId: "invalidExport" }
       ],
       name: `Test at line ${getCurrentLine().line}`
     }
