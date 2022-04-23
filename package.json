@@ -16,7 +16,7 @@
     "url": "git://github.com/ilyub/eslint-plugin.git"
   },
   "license": "ISC",
-  "author": "Ilya Lyubinskiy <admin.phpdev@gmail.com> (https://github.com/ilyub)",
+  "author": "Ilia Liubinskii <admin.phpdev@gmail.com> (https://github.com/ilyub)",
   "publisher": "ilyub",
   "main": "dist/index.js",
   "scripts": {
