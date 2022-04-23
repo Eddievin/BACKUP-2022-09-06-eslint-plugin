@@ -216,7 +216,7 @@ export interface GetSelectorsOptions {
 
 export interface InvalidTestCase<M extends string>
   extends BaseInvalidTestCase<M, readonly [object]> {
-  filename?: "camelCase.ts" | "kebab-case.ts" | "PascalCase.ts";
+  filename?: SourceFile;
   name: string;
 }
 
@@ -238,8 +238,14 @@ export interface Package {
 
 export type ReadonlyRange = readonly [number, number];
 
+export type SourceFile =
+  | "camelCase.ts"
+  | "kebab-case.ts"
+  | "PascalCase.ts"
+  | "subfolder/index.ts";
+
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
-  filename?: "camelCase.ts" | "kebab-case.ts" | "PascalCase.ts";
+  filename?: SourceFile;
   name: string;
 }
 
@@ -339,9 +345,8 @@ export function getComments(program: TSESTree.Program): TSESTree.Comment[] {
 export function getNameFromFilename(path: string): string {
   const name1 = nodePath.parse(path).name;
 
-  const name2 = /^index\.\w+/u.test(name1)
-    ? nodePath.parse(nodePath.parse(path).dir).name
-    : name1;
+  const name2 =
+    name1 === "index" ? nodePath.parse(nodePath.parse(path).dir).name : name1;
 
   return /^[A-Z]/u.test(name2)
     ? s.ucFirst(_.camelCase(name2))

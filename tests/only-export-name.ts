@@ -99,6 +99,13 @@ utils.testRule(
       `,
       filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        export const subfolder = 1;
+      `,
+      filename: "subfolder/index.ts",
+      name: `Test at line ${getCurrentLine().line}`
     }
   ]
 );

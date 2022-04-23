@@ -3,6 +3,6 @@
     "strictNullChecks": true
   },
   "include": [
-    "*.ts"
+    "**/*.ts"
   ]
 }
