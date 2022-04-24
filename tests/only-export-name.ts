@@ -54,6 +54,12 @@ utils.testRule(
   [
     {
       code: `
+        export { default } from "a";
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
         export const x = 1;
         export default 1;
       `,

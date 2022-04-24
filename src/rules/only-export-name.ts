@@ -54,7 +54,7 @@ export const onlyExportName = utils.createRule({
           // Valid
         } else
           for (const node of nodes)
-            if (node.name === expected) {
+            if (node.name === "default" || node.name === expected) {
               // Valid
             } else context.report({ messageId: "invalidName", node });
       }
