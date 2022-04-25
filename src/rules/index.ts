@@ -24,6 +24,7 @@ import { noUnusedImport } from "./no-unused-import";
 import { objectFormat } from "./object-format";
 import { onlyExportName } from "./only-export-name";
 import { optionalPropertyStyle } from "./optional-property-style";
+import { preferAliasForArrayTypes } from "./prefer-alias-for-array-types";
 import { preferReadonly } from "./prefer-readonly";
 import { preferReadonlyProps } from "./prefer-readonly-props";
 import { preferTsToolbelt } from "./prefer-ts-toolbelt";
@@ -65,6 +66,7 @@ export const rules = {
   "object-format": objectFormat,
   "only-export-name": onlyExportName,
   "optional-property-style": optionalPropertyStyle,
+  "prefer-alias-for-array-types": preferAliasForArrayTypes,
   "prefer-readonly": preferReadonly,
   "prefer-readonly-props": preferReadonlyProps,
   "prefer-ts-toolbelt": preferTsToolbelt,
