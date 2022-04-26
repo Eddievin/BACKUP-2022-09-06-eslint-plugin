@@ -8,8 +8,9 @@ utils.testRule(
     {
       code: `
         type Type = () => string[];
-        function f(x: string[]) {}
-        function g(x: readonly string[]) {}
+        function f(x: string[]): void {}
+        function g(x: readonly string[]): void {}
+        function h(x: Type): void {}
       `,
       errors: [
         { line: 1, messageId: "preferAlias" },
@@ -22,9 +23,10 @@ utils.testRule(
   [
     {
       code: `
-        type Type = number[];
-        function f<T>(x: T[]) {}
-        function g<T>(x: readonly T[]) {}
+        type Type = string[];
+        function f<T>(x: T[]): void {}
+        function g<T>(x: readonly T[]): void {}
+        function h(x: Type): void {}
       `,
       name: `Test at line ${getCurrentLine().line}`
     }

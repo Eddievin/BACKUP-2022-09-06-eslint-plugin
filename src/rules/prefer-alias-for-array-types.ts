@@ -6,17 +6,21 @@ export const preferAliasForArrayTypes = utils.createRule({
   create(context) {
     return {
       [AST_NODE_TYPES.TSTypeAnnotation](node): void {
-        const tsNode = context.toTsNode(node.typeAnnotation);
-
-        const type = context.checker.getTypeAtLocation(tsNode);
-
-        if (
-          context.checker.isArrayType(type) &&
-          type.typeArguments &&
-          type.typeArguments.every(subtype => subtype.isTypeParameter())
-        ) {
+        if (node.typeAnnotation.type === AST_NODE_TYPES.TSTypeReference) {
           // Valid
-        } else context.report({ messageId: "preferAlias", node });
+        } else {
+          const tsNode = context.toTsNode(node.typeAnnotation);
+
+          const type = context.checker.getTypeAtLocation(tsNode);
+
+          if (context.checker.isArrayType(type))
+            if (
+              type.typeArguments &&
+              type.typeArguments.every(subtype => subtype.isTypeParameter())
+            ) {
+              // Valid
+            } else context.report({ messageId: "preferAlias", node });
+        }
       }
     };
   },
