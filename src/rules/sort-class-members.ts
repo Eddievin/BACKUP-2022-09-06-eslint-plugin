@@ -1,4 +1,4 @@
-import { a, cast, is } from "@skylib/functions";
+import { a, is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
@@ -48,7 +48,7 @@ export const sortClassMembers = utils.createRule({
               )
             );
 
-          const name = getMemberName(member, context);
+          const name = context.getMemberName(member);
 
           const accessorType = getMemberAccessorType(member);
 
@@ -96,8 +96,6 @@ export const sortClassMembers = utils.createRule({
 
 type AccessorType = "get" | "none" | "set";
 
-type Context = utils.Context<MessageId, RuleOptions, object>;
-
 type DynamicStatic = "dynamic" | "static";
 
 interface Member {
@@ -105,8 +103,6 @@ interface Member {
   readonly node: TSESTree.ClassElement;
   readonly sortingOrder: string;
 }
-
-type MessageId = utils.MessageId<typeof sortClassMembers>;
 
 interface RuleOptions {
   readonly sortingOrder: strings;
@@ -183,36 +179,6 @@ function getMemberDynamicStatic(node: TSESTree.ClassElement): DynamicStatic {
 
     case AST_NODE_TYPES.StaticBlock:
       return "static";
-  }
-}
-
-/**
- * Gets member name.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns Member name.
- */
-function getMemberName(node: TSESTree.ClassElement, context: Context): string {
-  switch (node.type) {
-    case AST_NODE_TYPES.MethodDefinition:
-    case AST_NODE_TYPES.PropertyDefinition:
-    case AST_NODE_TYPES.TSAbstractMethodDefinition:
-    case AST_NODE_TYPES.TSAbstractPropertyDefinition:
-      switch (node.key.type) {
-        case AST_NODE_TYPES.Identifier:
-          return node.key.name;
-
-        case AST_NODE_TYPES.Literal:
-          return cast.string(node.key.value);
-
-        default:
-          return context.getText(node.key);
-      }
-
-    case AST_NODE_TYPES.StaticBlock:
-    case AST_NODE_TYPES.TSIndexSignature:
-      return "";
   }
 }
 

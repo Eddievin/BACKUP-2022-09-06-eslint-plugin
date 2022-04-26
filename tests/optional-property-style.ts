@@ -12,67 +12,197 @@ utils.testRule(
           y?: string;
           z: string | undefined;
         }
-
-        interface I {
-          x?: string | undefined;
-          y?: string;
-          z: string | undefined;
+        class D {
+          x?: any;
+          y?: unknown;
         }
       `,
       errors: [
         { line: 3, messageId: "expectingCombinedStyle" },
-        { line: 4, messageId: "expectingCombinedStyle" },
-        { line: 9, messageId: "expectingCombinedStyle" },
-        { line: 10, messageId: "expectingCombinedStyle" }
+        { line: 4, messageId: "expectingCombinedStyle" }
       ],
       name: `Test at line ${getCurrentLine().line}`
     },
     {
       code: `
-        class C {
+        export default class {
           x?: string | undefined;
           y?: string;
           z: string | undefined;
         }
-
-        interface I {
-          x?: string | undefined;
-          y?: string;
-          z: string | undefined;
+        class D {
+          x?: any;
+          y?: unknown;
         }
       `,
       errors: [
         { line: 2, messageId: "expectingOptionalStyle" },
-        { line: 4, messageId: "expectingOptionalStyle" },
-        { line: 8, messageId: "expectingOptionalStyle" },
-        { line: 10, messageId: "expectingOptionalStyle" }
+        { line: 4, messageId: "expectingOptionalStyle" }
       ],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ style: "optional" }]
+      options: [{ classes: "optional" }]
     },
     {
       code: `
-        class C {
+        const C = class {
           x?: string | undefined;
           y?: string;
           z: string | undefined;
-        }
-
-        interface I {
-          x?: string | undefined;
-          y?: string;
-          z: string | undefined;
+        };
+        class D {
+          x?: any;
+          y?: unknown;
         }
       `,
       errors: [
         { line: 2, messageId: "expectingUndefinedStyle" },
         { line: 3, messageId: "expectingUndefinedStyle" },
-        { line: 8, messageId: "expectingUndefinedStyle" },
-        { line: 9, messageId: "expectingUndefinedStyle" }
+        { line: 7, messageId: "expectingUndefinedStyle" },
+        { line: 8, messageId: "expectingUndefinedStyle" }
       ],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ style: "undefined" }]
+      options: [{ classes: "undefined" }]
+    },
+    {
+      code: `
+        class C {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+        class D {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+      `,
+      errors: [
+        { line: 2, messageId: "expectingUndefinedStyle" },
+        { line: 3, messageId: "expectingUndefinedStyle" },
+        { line: 6, messageId: "expectingUndefinedStyle" }
+      ],
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          overrides: [
+            {
+              patterns: ["^C$"],
+              style: "undefined",
+              target: "classes"
+            },
+            {
+              propertyPatterns: ["^x$"],
+              style: "undefined",
+              target: "classes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      code: `
+        interface I {
+          x?: string | undefined;
+          y?: string;
+          z: string | undefined;
+        }
+        interface I {
+          x?: any;
+          y?: unknown;
+        }
+      `,
+      errors: [
+        { line: 3, messageId: "expectingCombinedStyle" },
+        { line: 4, messageId: "expectingCombinedStyle" }
+      ],
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        interface I {
+          x?: string | undefined;
+          y?: string;
+          z: string | undefined;
+        }
+        interface I {
+          x?: any;
+          y?: unknown;
+        }
+      `,
+      errors: [
+        { line: 2, messageId: "expectingOptionalStyle" },
+        { line: 4, messageId: "expectingOptionalStyle" }
+      ],
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ interfaces: "optional" }]
+    },
+    {
+      code: `
+        interface I {
+          x?: string | undefined;
+          y?: string;
+          z: string | undefined;
+        }
+        interface I {
+          x?: any;
+          y?: unknown;
+        }
+      `,
+      errors: [
+        { line: 2, messageId: "expectingUndefinedStyle" },
+        { line: 3, messageId: "expectingUndefinedStyle" },
+        { line: 7, messageId: "expectingUndefinedStyle" },
+        { line: 8, messageId: "expectingUndefinedStyle" }
+      ],
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ interfaces: "undefined" }]
+    },
+    {
+      code: `
+        interface I {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+        interface J {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+      `,
+      errors: [
+        { line: 2, messageId: "expectingUndefinedStyle" },
+        { line: 3, messageId: "expectingUndefinedStyle" },
+        { line: 6, messageId: "expectingUndefinedStyle" }
+      ],
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          overrides: [
+            {
+              patterns: ["^I$"],
+              style: "undefined",
+              target: "interfaces"
+            },
+            {
+              propertyPatterns: ["^x$"],
+              style: "undefined",
+              target: "interfaces"
+            }
+          ]
+        }
+      ]
     }
   ],
-  []
+  [
+    {
+      code: `
+        class C {
+          x: string;
+          f() {}
+        }
+        interface I {
+          x: string;
+          f();
+        }
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    }
+  ]
 );

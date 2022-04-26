@@ -8,7 +8,8 @@ Enforces unified style for optional properties.
 "@skylib/disallow-identifier": [
   "error",
   {
-    style: "combined" | "optional" | "undefined"
+    classes: "combined" | "optional" | "undefined",
+    interfaces: "combined" | "optional" | "undefined"
   }
 ]
 ```
@@ -17,4 +18,5 @@ Enforces unified style for optional properties.
 
 | Name | Description |
 | :------ | :------ |
-| `style` | Optional property's style. |
+| `classes` | Optional property's style for classes. |
+| `interfaces` | Optional property's style for interfaces. |

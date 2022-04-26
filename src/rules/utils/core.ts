@@ -9,7 +9,11 @@ import type {
 } from "@skylib/functions";
 import { assert, cast, fn, is, o, s, json, reflect } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
-import { ESLintUtils, TSESLint } from "@typescript-eslint/utils";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESLint
+} from "@typescript-eslint/utils";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type {
   InvalidTestCase as BaseInvalidTestCase,
@@ -112,6 +116,16 @@ export interface Context<M extends string, O extends object, S extends object> {
    * @returns Location.
    */
   readonly getLocFromRange: (range: ReadonlyRange) => estree.SourceLocation;
+  /**
+   * Gets member name.
+   *
+   * @param node - Node.
+   * @param context - Context.
+   * @returns Member name.
+   */
+  readonly getMemberName: (
+    node: TSESTree.ClassElement | TSESTree.TypeElement
+  ) => string;
   /**
    * Gets range with leading trivia.
    *
@@ -591,6 +605,32 @@ function createBetterContext<
         end: source.getLocFromIndex(range[1]),
         start: source.getLocFromIndex(range[0])
       };
+    },
+    getMemberName(node: TSESTree.ClassElement | TSESTree.TypeElement): string {
+      switch (node.type) {
+        case AST_NODE_TYPES.MethodDefinition:
+        case AST_NODE_TYPES.PropertyDefinition:
+        case AST_NODE_TYPES.TSAbstractMethodDefinition:
+        case AST_NODE_TYPES.TSAbstractPropertyDefinition:
+        case AST_NODE_TYPES.TSMethodSignature:
+        case AST_NODE_TYPES.TSPropertySignature:
+          switch (node.key.type) {
+            case AST_NODE_TYPES.Identifier:
+              return node.key.name;
+
+            case AST_NODE_TYPES.Literal:
+              return cast.string(node.key.value);
+
+            default:
+              return this.getText(node.key);
+          }
+
+        case AST_NODE_TYPES.StaticBlock:
+        case AST_NODE_TYPES.TSIndexSignature:
+        case AST_NODE_TYPES.TSCallSignatureDeclaration:
+        case AST_NODE_TYPES.TSConstructSignatureDeclaration:
+          return "";
+      }
     },
     getRangeWithLeadingTrivia(node): TSESTree.Range {
       return [
