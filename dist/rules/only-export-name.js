@@ -40,7 +40,7 @@ exports.onlyExportName = utils.createRule({
                 }
                 else
                     for (const node of nodes)
-                        if (node.name === expected) {
+                        if (node.name === "default" || node.name === expected) {
                             // Valid
                         }
                         else

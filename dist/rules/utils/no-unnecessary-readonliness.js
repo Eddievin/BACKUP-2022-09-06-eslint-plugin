@@ -16,6 +16,7 @@ const utils = tslib_1.__importStar(require("./core"));
  * @param message - Message.
  * @returns Rule module.
  */
+// eslint-disable-next-line @skylib/only-export-name
 function createRule(name, isTypeToCheck, readonliness, messageId, message) {
     const isRuleOptions = functions_1.is.object.factory({
         ignoreClasses: functions_1.is.boolean,

@@ -89,7 +89,7 @@ function getContext(range, commentRanges, stringRanges) {
     return "code";
 }
 /**
- * Checks that range belongs to one of ranges.
+ * Checks if range belongs to one of ranges.
  *
  * @param range - Range.
  * @param ranges - Ranges.

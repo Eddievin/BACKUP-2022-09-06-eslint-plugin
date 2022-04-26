@@ -7,7 +7,6 @@ const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("./core"));
-// eslint-disable-next-line @skylib/only-export-name
 class Checker {
     /**
      * Creates class instance.
@@ -211,7 +210,7 @@ class Checker {
         return { passed: true };
     }
     /**
-     * Checks that type readonliness is invalid.
+     * Checks if type readonliness is invalid.
      *
      * @param typeIsReadonly - Whether type is readonly.
      * @param sourceType - Source type.
@@ -232,7 +231,7 @@ class Checker {
         }
     }
     /**
-     * Checks that mapped type node is readonly.
+     * Checks if mapped type node is readonly.
      *
      * @param node - Node.
      * @returns _True_ if mapped type node is readonly, _false_ otherwise.

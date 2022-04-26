@@ -1,0 +1,2 @@
+export declare const preferAliasForArrayTypes: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"preferAlias", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=prefer-alias-for-array-types.d.ts.map

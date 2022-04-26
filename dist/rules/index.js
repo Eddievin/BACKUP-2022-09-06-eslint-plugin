@@ -27,6 +27,8 @@ const no_unsafe_object_assignment_1 = require("./no-unsafe-object-assignment");
 const no_unused_import_1 = require("./no-unused-import");
 const object_format_1 = require("./object-format");
 const only_export_name_1 = require("./only-export-name");
+const optional_property_style_1 = require("./optional-property-style");
+const prefer_alias_for_array_types_1 = require("./prefer-alias-for-array-types");
 const prefer_readonly_1 = require("./prefer-readonly");
 const prefer_readonly_props_1 = require("./prefer-readonly-props");
 const prefer_ts_toolbelt_1 = require("./prefer-ts-toolbelt");
@@ -39,7 +41,6 @@ const switch_case_empty_lines_1 = require("./switch-case-empty-lines");
 const template_literal_format_1 = require("./template-literal-format");
 const vue_component_name_1 = require("./vue-component-name");
 exports.utils = tslib_1.__importStar(require("./utils"));
-// eslint-disable-next-line @skylib/only-export-name
 exports.rules = {
     "array-callback-return-type": array_callback_return_type_1.arrayCallbackReturnType,
     "class-member-typedef": class_member_typedef_1.classMemberTypedef,
@@ -66,6 +67,8 @@ exports.rules = {
     "no-unused-import": no_unused_import_1.noUnusedImport,
     "object-format": object_format_1.objectFormat,
     "only-export-name": only_export_name_1.onlyExportName,
+    "optional-property-style": optional_property_style_1.optionalPropertyStyle,
+    "prefer-alias-for-array-types": prefer_alias_for_array_types_1.preferAliasForArrayTypes,
     "prefer-readonly": prefer_readonly_1.preferReadonly,
     "prefer-readonly-props": prefer_readonly_props_1.preferReadonlyProps,
     "prefer-ts-toolbelt": prefer_ts_toolbelt_1.preferTsToolbelt,

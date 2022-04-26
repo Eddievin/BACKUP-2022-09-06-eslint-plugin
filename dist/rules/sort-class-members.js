@@ -34,7 +34,7 @@ exports.sortClassMembers = utils.createRule({
                             sortingOrders.get(`${z}-${x}-${y}`),
                             sortingOrders.get(`${z}-${y}-${x}`)
                         ].filter(functions_1.is.not.empty))));
-                    const name = getMemberName(member, context);
+                    const name = context.getMemberName(member);
                     const accessorType = getMemberAccessorType(member);
                     return {
                         index,
@@ -126,32 +126,6 @@ function getMemberDynamicStatic(node) {
             return ((_a = node.static) !== null && _a !== void 0 ? _a : false) ? "static" : "dynamic";
         case utils_1.AST_NODE_TYPES.StaticBlock:
             return "static";
-    }
-}
-/**
- * Gets member name.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns Member name.
- */
-function getMemberName(node, context) {
-    switch (node.type) {
-        case utils_1.AST_NODE_TYPES.MethodDefinition:
-        case utils_1.AST_NODE_TYPES.PropertyDefinition:
-        case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
-        case utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
-            switch (node.key.type) {
-                case utils_1.AST_NODE_TYPES.Identifier:
-                    return node.key.name;
-                case utils_1.AST_NODE_TYPES.Literal:
-                    return functions_1.cast.string(node.key.value);
-                default:
-                    return context.getText(node.key);
-            }
-        case utils_1.AST_NODE_TYPES.StaticBlock:
-        case utils_1.AST_NODE_TYPES.TSIndexSignature:
-            return "";
     }
 }
 /**

@@ -47,6 +47,14 @@ export interface Context<M extends string, O extends object, S extends object> {
      */
     readonly getLocFromRange: (range: ReadonlyRange) => estree.SourceLocation;
     /**
+     * Gets member name.
+     *
+     * @param node - Node.
+     * @param context - Context.
+     * @returns Member name.
+     */
+    readonly getMemberName: (node: TSESTree.ClassElement | TSESTree.TypeElement) => string;
+    /**
      * Gets range with leading trivia.
      *
      * @param node - Node.
@@ -75,21 +83,21 @@ export interface Context<M extends string, O extends object, S extends object> {
      */
     readonly getTypeDefinitions: (types: readonly ts.Type[]) => string;
     /**
-     * Checks that node has leading comment.
+     * Checks if node has leading comment.
      *
      * @param node - Node.
      * @returns _True_ if node has leading comment, _false_ otherwise.
      */
     readonly hasLeadingComment: (node: TSESTree.Node) => boolean;
     /**
-     * Checks that node has leading doc comment.
+     * Checks if node has leading doc comment.
      *
      * @param node - Node.
      * @returns _True_ if node has leading doc comment, _false_ otherwise.
      */
     readonly hasLeadingDocComment: (node: TSESTree.Node) => boolean;
     /**
-     * Checks that node has trailing comment.
+     * Checks if node has trailing comment.
      *
      * @param node - Node.
      * @returns _True_ if node has trailing comment, _false_ otherwise.
@@ -98,7 +106,7 @@ export interface Context<M extends string, O extends object, S extends object> {
     readonly id: string;
     readonly locZero: TSESTree.Position;
     /**
-     * Checks that signature or symbol is missing doc comment.
+     * Checks if signature or symbol is missing doc comment.
      *
      * @param mixed - Signature or symbol.
      * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
@@ -147,7 +155,7 @@ export interface InvalidTestCase<M extends string> extends BaseInvalidTestCase<M
 }
 export interface Matcher {
     /**
-     * Checks that string matches condition.
+     * Checks if string matches condition.
      *
      * @param str - String.
      * @returns _True_ if string matches condition, _false_ otherwise.
@@ -236,7 +244,7 @@ export declare function getTypeName(type: ts.Type): string;
  */
 export declare function getTypeNames(types: readonly ts.Type[]): string;
 /**
- * Checks that two nodes are adjacent.
+ * Checks if two nodes are adjacent.
  *
  * @param node1 - Node 1.
  * @param node2 - Node 2.

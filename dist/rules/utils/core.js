@@ -181,7 +181,7 @@ function getTypeNames(types) {
 }
 exports.getTypeNames = getTypeNames;
 /**
- * Checks that two nodes are adjacent.
+ * Checks if two nodes are adjacent.
  *
  * @param node1 - Node 1.
  * @param node2 - Node 2.
@@ -280,6 +280,29 @@ function createBetterContext(context, ruleOptionsArray, options) {
                 end: source.getLocFromIndex(range[1]),
                 start: source.getLocFromIndex(range[0])
             };
+        },
+        getMemberName(node) {
+            switch (node.type) {
+                case utils_1.AST_NODE_TYPES.MethodDefinition:
+                case utils_1.AST_NODE_TYPES.PropertyDefinition:
+                case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
+                case utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
+                case utils_1.AST_NODE_TYPES.TSMethodSignature:
+                case utils_1.AST_NODE_TYPES.TSPropertySignature:
+                    switch (node.key.type) {
+                        case utils_1.AST_NODE_TYPES.Identifier:
+                            return node.key.name;
+                        case utils_1.AST_NODE_TYPES.Literal:
+                            return functions_1.cast.string(node.key.value);
+                        default:
+                            return this.getText(node.key);
+                    }
+                case utils_1.AST_NODE_TYPES.StaticBlock:
+                case utils_1.AST_NODE_TYPES.TSIndexSignature:
+                case utils_1.AST_NODE_TYPES.TSCallSignatureDeclaration:
+                case utils_1.AST_NODE_TYPES.TSConstructSignatureDeclaration:
+                    return "";
+            }
         },
         getRangeWithLeadingTrivia(node) {
             return [

@@ -1,0 +1,2 @@
+export declare const optionalPropertyStyle: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"expectingCombinedStyle" | "expectingOptionalStyle" | "expectingUndefinedStyle", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=optional-property-style.d.ts.map
