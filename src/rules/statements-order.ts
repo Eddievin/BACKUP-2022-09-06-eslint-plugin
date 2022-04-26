@@ -1,3 +1,4 @@
+import * as utils from "./utils";
 import {
   a,
   arrayMap,
@@ -7,12 +8,11 @@ import {
   createValidationObject,
   o
 } from "@skylib/functions";
-import type { Rec, stringU, Writable } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { Rec, stringU, Writable } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as utils from "./utils";
 
 export const statementsOrder = utils.createRule({
   create(context) {

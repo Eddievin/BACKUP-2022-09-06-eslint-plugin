@@ -1,6 +1,6 @@
+import * as utils from "./utils";
 import { fn, is, num } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as utils from "./utils";
 
 export const objectFormat = utils.createRule({
   create(context) {

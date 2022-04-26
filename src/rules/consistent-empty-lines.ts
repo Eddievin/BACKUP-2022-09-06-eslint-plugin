@@ -1,3 +1,4 @@
+import * as utils from "./utils";
 import {
   a,
   fn,
@@ -8,7 +9,6 @@ import {
 } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as utils from "./utils";
 
 export const consistentEmptyLines = utils.createRule({
   create(context) {

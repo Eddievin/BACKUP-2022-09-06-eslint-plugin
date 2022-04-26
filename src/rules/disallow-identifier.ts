@@ -1,7 +1,7 @@
+import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import * as utils from "./utils";
 
 export const disallowIdentifier = utils.createRule({
   create(context) {

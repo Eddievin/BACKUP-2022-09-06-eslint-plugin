@@ -1,6 +1,6 @@
+import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import * as utils from "./utils";
 
 export const onlyExportName = utils.createRule({
   create(context) {

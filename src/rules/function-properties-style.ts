@@ -1,7 +1,7 @@
+import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
-import * as utils from "./utils";
 
 export const functionPropertiesStyle = utils.createRule({
   create(context) {

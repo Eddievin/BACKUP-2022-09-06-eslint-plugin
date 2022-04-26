@@ -1,12 +1,3 @@
-import fs from "fs";
-import nodePath from "path";
-import type {
-  Accumulator,
-  objects,
-  Rec,
-  strings,
-  unknowns
-} from "@skylib/functions";
 import { assert, cast, fn, is, o, s, json, reflect } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import {
@@ -14,6 +5,17 @@ import {
   ESLintUtils,
   TSESLint
 } from "@typescript-eslint/utils";
+import fs from "fs";
+import minimatch from "minimatch";
+import nodePath from "path";
+import * as tsutils from "tsutils";
+import type {
+  Accumulator,
+  objects,
+  Rec,
+  strings,
+  unknowns
+} from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type {
   InvalidTestCase as BaseInvalidTestCase,
@@ -25,8 +27,6 @@ import type {
   ValidTestCase as BaseValidTestCase
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
-import minimatch from "minimatch";
-import * as tsutils from "tsutils";
 import type * as ts from "typescript";
 
 export const isPackage: is.Guard<Package> = is.factory(

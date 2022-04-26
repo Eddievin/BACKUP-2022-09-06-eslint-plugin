@@ -1,8 +1,8 @@
-import path from "path";
+import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as utils from "./utils";
+import path from "path";
 
 export const vueComponentName = utils.createRule({
   create(context) {

@@ -1,7 +1,7 @@
-import path from "path";
-import { a, is } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
+import { a, is } from "@skylib/functions";
+import path from "path";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const primaryExportOnly = utils.createRule({
   create(context) {

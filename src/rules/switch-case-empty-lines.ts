@@ -1,6 +1,6 @@
+import * as utils from "./utils";
 import { a, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as utils from "./utils";
 
 export const switchCaseEmptyLines = utils.createRule({
   create(context) {

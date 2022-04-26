@@ -1,9 +1,9 @@
+import * as utils from "./utils";
 import { is } from "@skylib/functions";
-import type { strings } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
-import * as utils from "./utils";
+import type { strings } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const preferReadonly = utils.createRule({
   create(context) {

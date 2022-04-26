@@ -1,5 +1,5 @@
-import getCurrentLine from "get-current-line";
 import { rules, utils } from "@";
+import getCurrentLine from "get-current-line";
 
 utils.testRule(
   "prefer-alias-for-array-types",

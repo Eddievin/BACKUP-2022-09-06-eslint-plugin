@@ -1,10 +1,10 @@
+import * as utils from "./core";
 import { assert, cast, is } from "@skylib/functions";
-import type { strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { TSESTree } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
-import * as utils from "./core";
+import type { strings } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export class Checker<M extends string, O extends object, S extends object> {
   /**

@@ -1,9 +1,9 @@
-import { a, is } from "@skylib/functions";
-import type { strings, unknowns } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 import { Checker } from "./Checker";
 import * as utils from "./core";
+import { a, is } from "@skylib/functions";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { strings, unknowns } from "@skylib/functions";
+import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 
 /**
  * Creates rule.

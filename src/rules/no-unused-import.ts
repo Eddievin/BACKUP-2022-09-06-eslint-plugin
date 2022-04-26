@@ -1,7 +1,7 @@
-import { assert, is } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as utils from "./utils";
+import { assert, is } from "@skylib/functions";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noUnusedImport = utils.createRule({
   create(context) {

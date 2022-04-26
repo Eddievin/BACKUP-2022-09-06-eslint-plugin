@@ -1,9 +1,9 @@
-import type { strings } from "@skylib/functions";
+import * as utils from "./utils";
 import { createValidationObject, fn, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { TSESTree } from "@typescript-eslint/utils";
 import * as ts from "typescript";
-import * as utils from "./utils";
+import type { strings } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const optionalPropertyStyle = fn.run(() => {
   const StyleVO = createValidationObject<Style>({

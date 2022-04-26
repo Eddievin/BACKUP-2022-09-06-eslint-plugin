@@ -1,10 +1,10 @@
+import * as utils from "./utils";
 import { fn, is } from "@skylib/functions";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 import type { Accessibility } from "@typescript-eslint/types/dist/generated/ast-spec";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as utils from "./utils";
 
 export const preferReadonlyProps = utils.createRule({
   create(context) {

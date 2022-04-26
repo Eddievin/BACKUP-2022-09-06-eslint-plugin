@@ -1,10 +1,10 @@
+import * as utils from "./utils";
 import { a, is } from "@skylib/functions";
-import type { strings } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as utils from "./utils";
 
 export const sortClassMembers = utils.createRule({
   create(context) {

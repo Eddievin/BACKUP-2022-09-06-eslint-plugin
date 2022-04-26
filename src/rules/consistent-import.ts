@@ -1,4 +1,4 @@
-import nodePath from "path";
+import * as utils from "./utils";
 import {
   a,
   assert,
@@ -7,11 +7,11 @@ import {
   createValidationObject,
   s
 } from "@skylib/functions";
-import type { strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { TSESTree } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
-import * as utils from "./utils";
+import nodePath from "path";
+import type { strings } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const consistentImport = utils.createRule({
   create(context) {

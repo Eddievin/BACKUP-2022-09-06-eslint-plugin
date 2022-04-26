@@ -1,6 +1,6 @@
+import { rules, utils } from "@";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import getCurrentLine from "get-current-line";
-import { rules, utils } from "@";
 
 utils.testRule(
   "prefer-readonly",

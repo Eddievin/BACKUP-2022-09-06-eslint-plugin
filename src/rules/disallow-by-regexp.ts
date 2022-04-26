@@ -1,8 +1,8 @@
-import type { strings } from "@skylib/functions";
+import * as utils from "./utils";
 import { a, is, createValidationObject, fn, regexp } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import * as utils from "./utils";
 
 export const disallowByRegexp = utils.createRule({
   create(context) {

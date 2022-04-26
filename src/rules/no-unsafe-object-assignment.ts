@@ -1,9 +1,9 @@
+import * as utils from "./utils";
 import { is } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
-import * as utils from "./utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noUnsafeObjectAssignment = utils.createRule({
   create(context) {

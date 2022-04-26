@@ -1,7 +1,7 @@
+import * as utils from "./utils";
 import { a, arrayMap, is, s, num, Accumulator } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import * as utils from "./utils";
 
 export const consistentGroupEmptyLines = utils.createRule({
   create(context) {

@@ -1,8 +1,8 @@
-import { a, is, s } from "@skylib/functions";
-import type { strings } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { TSESTree } from "@typescript-eslint/utils";
 import * as utils from "./utils";
+import { a, is, s } from "@skylib/functions";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { strings } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const emptyLinesAroundComment = utils.createRule({
   create(context) {

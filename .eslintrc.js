@@ -6,6 +6,7 @@ module.exports = {
     "@skylib/no-multi-type-tuples": "off",
     "@skylib/no-mutable-signature": "off",
     "@skylib/no-unsafe-object-assignment": "off",
+    "@skylib/prefer-alias-for-array-types": "off",
     "@skylib/prefer-readonly": "off",
     "@skylib/prefer-readonly-props": "off",
     "eslint-comments/require-description": "off",
