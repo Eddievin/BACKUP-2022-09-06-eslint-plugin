@@ -308,7 +308,7 @@ export function createRule<
   const { create, defaultOptions, fixable, messages } = options;
 
   const ruleCreator = ESLintUtils.RuleCreator(
-    (name: string) => `https://ilyub.github.io/eslint-plugin/#${name}`
+    (name: string) => `https://ilyub.github.io/eslint-plugin/${name}.html`
   );
 
   return ruleCreator({
