@@ -254,9 +254,11 @@ export type ReadonlyRange = readonly [number, number];
 
 export type SourceFile =
   | "camelCase.ts"
+  | "file.extras.ts"
   | "kebab-case.ts"
   | "PascalCase.ts"
-  | "subfolder/index.ts";
+  | "subfolder/index.ts"
+  | "vue.d.ts";
 
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
   filename?: SourceFile;

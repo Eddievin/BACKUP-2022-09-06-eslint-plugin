@@ -3,6 +3,7 @@ import { classMemberTypedef } from "./class-member-typedef";
 import { className } from "./class-name";
 import { classOnlyExport } from "./class-only-export";
 import { consistentEmptyLines } from "./consistent-empty-lines";
+import { consistentFilename } from "./consistent-filename";
 import { consistentGroupEmptyLines } from "./consistent-group-empty-lines";
 import { consistentImport } from "./consistent-import";
 import { disallowByRegexp } from "./disallow-by-regexp";
@@ -45,6 +46,7 @@ export const rules = {
   "class-name": className,
   "class-only-export": classOnlyExport,
   "consistent-empty-lines": consistentEmptyLines,
+  "consistent-filename": consistentFilename,
   "consistent-group-empty-lines": consistentGroupEmptyLines,
   "consistent-import": consistentImport,
   "disallow-by-regexp": disallowByRegexp,
