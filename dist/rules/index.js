@@ -7,6 +7,7 @@ const class_member_typedef_1 = require("./class-member-typedef");
 const class_name_1 = require("./class-name");
 const class_only_export_1 = require("./class-only-export");
 const consistent_empty_lines_1 = require("./consistent-empty-lines");
+const consistent_filename_1 = require("./consistent-filename");
 const consistent_group_empty_lines_1 = require("./consistent-group-empty-lines");
 const consistent_import_1 = require("./consistent-import");
 const disallow_by_regexp_1 = require("./disallow-by-regexp");
@@ -47,6 +48,7 @@ exports.rules = {
     "class-name": class_name_1.className,
     "class-only-export": class_only_export_1.classOnlyExport,
     "consistent-empty-lines": consistent_empty_lines_1.consistentEmptyLines,
+    "consistent-filename": consistent_filename_1.consistentFilename,
     "consistent-group-empty-lines": consistent_group_empty_lines_1.consistentGroupEmptyLines,
     "consistent-import": consistent_import_1.consistentImport,
     "disallow-by-regexp": disallow_by_regexp_1.disallowByRegexp,

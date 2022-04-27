@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Checker = void 0;
 const tslib_1 = require("tslib");
+const utils = tslib_1.__importStar(require("./core"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
-const utils = tslib_1.__importStar(require("./core"));
 class Checker {
     /**
      * Creates class instance.

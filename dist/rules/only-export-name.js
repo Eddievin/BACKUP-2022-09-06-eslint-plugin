@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.onlyExportName = void 0;
 const tslib_1 = require("tslib");
-const functions_1 = require("@skylib/functions");
 const utils = tslib_1.__importStar(require("./utils"));
+const functions_1 = require("@skylib/functions");
 exports.onlyExportName = utils.createRule({
     create(context) {
         let hasDefaultExport = false;

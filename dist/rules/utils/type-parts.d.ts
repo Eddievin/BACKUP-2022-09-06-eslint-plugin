@@ -1,7 +1,7 @@
-import type { NumStrU } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import * as ts from "typescript";
 import type * as utils from "./core";
+import type { NumStrU } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
 /**
  * Gets type parts.
  *

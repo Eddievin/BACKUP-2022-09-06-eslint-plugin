@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.statementsOrder = void 0;
 const tslib_1 = require("tslib");
+const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const utils = tslib_1.__importStar(require("./utils"));
 exports.statementsOrder = utils.createRule({
     create(context) {
         const blockOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.blockOrder.map((type, index) => [type, index])));

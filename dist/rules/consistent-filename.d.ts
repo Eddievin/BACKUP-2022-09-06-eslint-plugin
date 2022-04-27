@@ -1,0 +1,2 @@
+export declare const consistentFilename: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"invalidFilename", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=consistent-filename.d.ts.map

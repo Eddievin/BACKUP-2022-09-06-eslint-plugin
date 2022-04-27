@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRule = void 0;
 const tslib_1 = require("tslib");
-const functions_1 = require("@skylib/functions");
-const utils_1 = require("@typescript-eslint/utils");
 const Checker_1 = require("./Checker");
 const utils = tslib_1.__importStar(require("./core"));
+const functions_1 = require("@skylib/functions");
+const utils_1 = require("@typescript-eslint/utils");
 /**
  * Creates rule.
  *

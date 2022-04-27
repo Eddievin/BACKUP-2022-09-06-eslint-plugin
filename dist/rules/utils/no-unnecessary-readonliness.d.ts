@@ -1,7 +1,7 @@
+import { Checker } from "./Checker";
 import { is } from "@skylib/functions";
 import type { unknowns } from "@skylib/functions";
 import type { RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
-import { Checker } from "./Checker";
 /**
  * Creates rule.
  *

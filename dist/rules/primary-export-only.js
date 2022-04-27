@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.primaryExportOnly = void 0;
 const tslib_1 = require("tslib");
-const path_1 = tslib_1.__importDefault(require("path"));
-const functions_1 = require("@skylib/functions");
 const utils = tslib_1.__importStar(require("./utils"));
+const functions_1 = require("@skylib/functions");
+const path_1 = tslib_1.__importDefault(require("path"));
 exports.primaryExportOnly = utils.createRule({
     create(context) {
         const exportDefaultDeclarations = new Set();

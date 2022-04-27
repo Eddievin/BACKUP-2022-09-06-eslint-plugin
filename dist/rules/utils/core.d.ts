@@ -1,9 +1,9 @@
-import type { Accumulator, objects, Rec, strings, unknowns } from "@skylib/functions";
 import { is, s } from "@skylib/functions";
+import minimatch from "minimatch";
+import type { Accumulator, objects, Rec, strings, unknowns } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
-import minimatch from "minimatch";
 import type * as ts from "typescript";
 export declare const isPackage: is.Guard<Package>;
 export declare const base: string;
@@ -167,7 +167,7 @@ export interface Package {
     readonly name?: string;
 }
 export declare type ReadonlyRange = readonly [number, number];
-export declare type SourceFile = "camelCase.ts" | "kebab-case.ts" | "PascalCase.ts" | "subfolder/index.ts";
+export declare type SourceFile = "camelCase.ts" | "file.extras.ts" | "kebab-case.ts" | "PascalCase.ts" | "subfolder/index.ts" | "vue.d.ts";
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
     filename?: SourceFile;
     name: string;

@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emptyLinesAroundComment = void 0;
 const tslib_1 = require("tslib");
+const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
-const utils = tslib_1.__importStar(require("./utils"));
 exports.emptyLinesAroundComment = utils.createRule({
     create(context) {
         const nodes = [];

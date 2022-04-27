@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.consistentImport = void 0;
 const tslib_1 = require("tslib");
-const path_1 = tslib_1.__importDefault(require("path"));
+const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
-const utils = tslib_1.__importStar(require("./utils"));
+const path_1 = tslib_1.__importDefault(require("path"));
 exports.consistentImport = utils.createRule({
     create(context) {
         const identifiers = new Set();
