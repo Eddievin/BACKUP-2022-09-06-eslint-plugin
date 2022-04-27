@@ -1,5 +1,6 @@
 import * as utils from "./utils";
 import { a, is } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import path from "path";
 import type { TSESTree } from "@typescript-eslint/utils";
 
@@ -52,16 +53,20 @@ export const primaryExportOnly = utils.createRule({
         identifiers.add(node);
       },
       "Program:exit"(): void {
-        if (
-          a
-            .fromIterable(identifiers.values())
-            .some(node => node.name === path.parse(context.path).name)
-        ) {
+        const primary = a
+          .fromIterable(identifiers.values())
+          .find(
+            node =>
+              _.kebabCase(node.name) ===
+              _.kebabCase(path.parse(context.path).name)
+          );
+
+        if (primary) {
           for (const node of exportDefaultDeclarations)
             context.report({ messageId: "invalidExport", node });
 
           for (const node of identifiers)
-            if (node.name === path.parse(context.path).name) {
+            if (node.name === primary.name) {
               // Valid
             } else context.report({ messageId: "invalidExport", node });
         }
