@@ -4,6 +4,7 @@ exports.primaryExportOnly = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const path_1 = tslib_1.__importDefault(require("path"));
 exports.primaryExportOnly = utils.createRule({
     create(context) {
@@ -35,13 +36,15 @@ exports.primaryExportOnly = utils.createRule({
                 identifiers.add(node);
             },
             "Program:exit"() {
-                if (functions_1.a
+                const primary = functions_1.a
                     .fromIterable(identifiers.values())
-                    .some(node => node.name === path_1.default.parse(context.path).name)) {
+                    .find(node => _.kebabCase(node.name) ===
+                    _.kebabCase(path_1.default.parse(context.path).name));
+                if (primary) {
                     for (const node of exportDefaultDeclarations)
                         context.report({ messageId: "invalidExport", node });
                     for (const node of identifiers)
-                        if (node.name === path_1.default.parse(context.path).name) {
+                        if (node.name === primary.name) {
                             // Valid
                         }
                         else
