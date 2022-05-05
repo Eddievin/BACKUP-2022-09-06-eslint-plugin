@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { a, arrayMap, is, s, num, Accumulator } from "@skylib/functions";
+import { a, is, s, num, Accumulator, Accumulator2 } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
@@ -7,7 +7,7 @@ export const consistentGroupEmptyLines = utils.createRule({
   create(context) {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
-    const nodesMap2 = new Map<string, Map<string, TSESTree.Node[]>>();
+    const nodesMap2 = new Accumulator2<string, string, TSESTree.Node>();
 
     const listener: RuleListener = {
       "*"(node: TSESTree.Node) {
@@ -17,35 +17,33 @@ export const consistentGroupEmptyLines = utils.createRule({
         for (const subOptions of context.subOptionsArray) {
           const nodesMap = nodesMap2.get(subOptions.selector);
 
-          if (nodesMap)
-            for (const nodes of nodesMap.values()) {
-              const group: TSESTree.Node[] = [];
+          for (const nodes of nodesMap.values()) {
+            const group: TSESTree.Node[] = [];
 
-              for (const node of nodes)
-                if (group.length)
-                  if (utils.isAdjacentNodes(a.last(group), node, childNodesMap))
-                    group.push(node);
-                  else {
-                    lintGroup(group, subOptions, context);
-                    a.truncate(group);
-                    group.push(node);
-                  }
-                else group.push(node);
+            for (const node of nodes)
+              if (group.length)
+                if (utils.isAdjacentNodes(a.last(group), node, childNodesMap))
+                  group.push(node);
+                else {
+                  lintGroup(group, subOptions, context);
+                  a.truncate(group);
+                  group.push(node);
+                }
+              else group.push(node);
 
-              lintGroup(group, subOptions, context);
-            }
+            lintGroup(group, subOptions, context);
+          }
         }
       }
     };
 
     for (const subOptions of context.subOptionsArray)
       listener[subOptions.selector] = function (node: TSESTree.Node): void {
-        const selector = subOptions.selector;
+        const { selector } = subOptions;
 
         const id = utils.getNodeId(node.parent);
 
-        // eslint-disable-next-line deprecation/deprecation -- Postponed
-        arrayMap.push2(selector, id, node, nodesMap2);
+        nodesMap2.push(selector, id, node);
       };
 
     return listener;

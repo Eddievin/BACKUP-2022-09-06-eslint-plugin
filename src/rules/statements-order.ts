@@ -1,16 +1,16 @@
 import * as utils from "./utils";
 import {
   a,
-  arrayMap,
   assert,
   fn,
   is,
   createValidationObject,
-  o
+  o,
+  Accumulator
 } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { Rec, stringU, Writable } from "@skylib/functions";
+import type { Rec, stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 
@@ -46,15 +46,14 @@ export const statementsOrder = utils.createRule({
       )
     };
 
-    const itemsMap = new Map<string, Writable<Items>>();
+    const itemsMap = new Accumulator<string, Item>();
 
     return {
       "*"(node: TSESTree.Node): void {
         if (node.parent) {
           const id = utils.getNodeId(node.parent);
 
-          // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
-          const index = arrayMap.get(id, itemsMap).length;
+          const index = itemsMap.get(id).length;
 
           const parentNode = node.parent;
 
@@ -75,12 +74,7 @@ export const statementsOrder = utils.createRule({
           });
 
           if (order)
-            // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
-            arrayMap.push(
-              id,
-              nodeInfo(node, parentNode, index, order),
-              itemsMap
-            );
+            itemsMap.push(id, nodeInfo(node, parentNode, index, order));
         }
       },
       "Program:exit"(): void {
@@ -198,8 +192,6 @@ interface Item {
   readonly type: NodeType;
 }
 
-type Items = readonly Item[];
-
 type NodeType =
   | "ExportAllDeclaration"
   | "ExportDeclaration"
@@ -240,7 +232,7 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
       argument.type === AST_NODE_TYPES.Literal &&
       is.string(argument.value)
     ) {
-      const callee = node.expression.callee;
+      const { callee } = node.expression;
 
       if (callee.type === AST_NODE_TYPES.Identifier && callee.name === "test")
         return argument.value;
