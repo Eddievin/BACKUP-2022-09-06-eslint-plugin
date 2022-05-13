@@ -3,9 +3,9 @@ import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const exportAllName = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.ExportAllDeclaration](node): void {
+      [AST_NODE_TYPES.ExportAllDeclaration]: (node): void => {
         if (node.exported && node.source) {
           const expected = utils.getNameFromFilename(node.source.value);
 

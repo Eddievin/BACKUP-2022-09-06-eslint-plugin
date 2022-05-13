@@ -4,9 +4,9 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
 
 export const functionPropertiesStyle = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.AssignmentExpression](node): void {
+      [AST_NODE_TYPES.AssignmentExpression]: (node): void => {
         if (node.left.type === AST_NODE_TYPES.MemberExpression) {
           const tsObject = context.toTsNode(node.left.object);
 

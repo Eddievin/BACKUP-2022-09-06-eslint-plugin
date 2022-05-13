@@ -4,21 +4,20 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noUnusedImport = utils.createRule({
-  create(context) {
+  create: context => {
     const identifiers = new Set<string>();
 
     const importDeclarations: TSESTree.ImportDeclaration[] = [];
 
     return {
-      [AST_NODE_TYPES.ImportDeclaration](node): void {
+      [AST_NODE_TYPES.ImportDeclaration]: (node): void => {
         importDeclarations.push(node);
       },
-      ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node.name);
-      },
-      "Program:exit"(): void {
+      ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node.name);
+        },
+      "Program:exit": (): void => {
         for (const node of importDeclarations) {
           const specifiers = node.specifiers
             .filter(used)
@@ -47,29 +46,26 @@ export const noUnusedImport = utils.createRule({
             // Valid
           } else if (node.specifiers.some(used))
             context.report({
-              fix() {
-                return [
-                  {
-                    range: node.range,
-                    text: `import ${specifiers} from "${source}";`
-                  }
-                ];
-              },
+              fix: () => [
+                {
+                  range: node.range,
+                  text: `import ${specifiers} from "${source}";`
+                }
+              ],
               messageId: "unusedImport",
               node
             });
           else
             context.report({
-              fix() {
-                return context.hasLeadingComment(node)
+              fix: () =>
+                context.hasLeadingComment(node)
                   ? []
                   : [
                       {
                         range: context.getRangeWithLeadingTrivia(node),
                         text: ""
                       }
-                    ];
-              },
+                    ],
               messageId: "unusedImport",
               node
             });
@@ -79,7 +75,7 @@ export const noUnusedImport = utils.createRule({
           return identifiers.has(specifier.local.name);
         }
       },
-      "Property > Identifier.value"(node: TSESTree.Identifier): void {
+      "Property > Identifier.value": (node: TSESTree.Identifier): void => {
         identifiers.add(node.name);
       }
     };

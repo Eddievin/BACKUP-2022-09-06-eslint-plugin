@@ -3,9 +3,9 @@ import { a, fn, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const templateLiteralFormat = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.TemplateLiteral](node): void {
+      [AST_NODE_TYPES.TemplateLiteral]: (node): void => {
         const lines = s.lines(context.getText(node));
 
         if (lines.length > 1) {
@@ -41,18 +41,16 @@ export const templateLiteralFormat = utils.createRule({
 
             if (delta2 || delta3)
               context.report({
-                fix() {
-                  return [
-                    {
-                      range: node.range,
-                      text: [
-                        firstLine,
-                        ...middleLines.map(line => fixLine(line, delta2)),
-                        fixLine(lastLine, delta3)
-                      ].join(context.eol)
-                    }
-                  ];
-                },
+                fix: () => [
+                  {
+                    range: node.range,
+                    text: [
+                      firstLine,
+                      ...middleLines.map(line => fixLine(line, delta2)),
+                      fixLine(lastLine, delta3)
+                    ].join(context.eol)
+                  }
+                ],
                 messageId: "invalidTemplateLiteralFormat",
                 node
               });

@@ -4,16 +4,16 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentGroupEmptyLines = utils.createRule({
-  create(context) {
+  create: context => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
     const nodesMap2 = new Accumulator2<string, string, TSESTree.Node>();
 
     const listener: RuleListener = {
-      "*"(node: TSESTree.Node) {
+      "*": (node: TSESTree.Node) => {
         utils.buildChildNodesMap(node, childNodesMap);
       },
-      "Program:exit"() {
+      "Program:exit": () => {
         for (const subOptions of context.subOptionsArray) {
           const nodesMap = nodesMap2.get(subOptions.selector);
 
@@ -133,14 +133,12 @@ function lintGroup(
           // Valid
         } else
           context.report({
-            fix() {
-              return [
-                {
-                  range: [node.range[0] - got.length, node.range[0]],
-                  text: expected
-                }
-              ];
-            },
+            fix: () => [
+              {
+                range: [node.range[0] - got.length, node.range[0]],
+                text: expected
+              }
+            ],
             messageId,
             node
           });

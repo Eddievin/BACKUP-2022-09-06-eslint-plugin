@@ -3,51 +3,45 @@ import { is } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const onlyExportName = utils.createRule({
-  create(context) {
+  create: context => {
     let hasDefaultExport = false;
 
     const nodes = new Set<TSESTree.Identifier>();
 
     return {
-      "Program > ExportDefaultDeclaration"(): void {
+      "Program > ExportDefaultDeclaration": (): void => {
         hasDefaultExport = true;
       },
-      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(
+      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id": (
         node: TSESTree.Identifier
-      ): void {
+      ): void => {
         nodes.add(node);
       },
-      "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(
-        node: TSESTree.Identifier
-      ): void {
-        nodes.add(node);
-      },
-      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        nodes.add(node);
-      },
-      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        nodes.add(node);
-      },
-      "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        nodes.add(node);
-      },
-      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        nodes.add(node);
-      },
-      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        nodes.add(node);
-      },
-      "Program:exit"(): void {
+      "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported":
+        (node: TSESTree.Identifier): void => {
+          nodes.add(node);
+        },
+      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          nodes.add(node);
+        },
+      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          nodes.add(node);
+        },
+      "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          nodes.add(node);
+        },
+      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          nodes.add(node);
+        },
+      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          nodes.add(node);
+        },
+      "Program:exit": (): void => {
         const expected = utils.getNameFromFilename(context.path);
 
         if (hasDefaultExport || nodes.size > 1) {

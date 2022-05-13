@@ -4,9 +4,9 @@ import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const noMultiTypeTuples = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.TSTupleType](node): void {
+      [AST_NODE_TYPES.TSTupleType]: (node): void => {
         if (_.uniq(node.elementTypes.map(context.getText)).length > 1)
           context.report({ messageId: "multiTypeTuplesDisallowed", node });
       }

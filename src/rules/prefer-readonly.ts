@@ -6,13 +6,13 @@ import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const preferReadonly = utils.createRule({
-  create(context) {
+  create: context => {
     const { ignoreInferredTypes } = context.options;
 
     const selectors = utils.getSelectors(context.options, defaultSelectors);
 
     return {
-      [selectors](node: TSESTree.Node): void {
+      [selectors]: (node: TSESTree.Node): void => {
         const tsNode = context.toTsNode(node);
 
         if (ts.isFunctionLike(tsNode))

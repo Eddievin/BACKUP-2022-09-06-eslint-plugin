@@ -7,11 +7,11 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 export const requireJsdoc = utils.createRule({
-  create(context) {
+  create: context => {
     const selectors = utils.getSelectors(context.options, defaultSelectors);
 
     return {
-      [selectors](node: TSESTree.Node): void {
+      [selectors]: (node: TSESTree.Node): void => {
         switch (node.type) {
           case AST_NODE_TYPES.TSInterfaceDeclaration:
             lintInterface(node, context);

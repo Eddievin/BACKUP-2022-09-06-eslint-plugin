@@ -23,14 +23,14 @@ export const optionalPropertyStyle = fn.run(() => {
 
   return utils.createRule({
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    create(context) {
+    create: context => {
       return {
-        "ClassDeclaration, ClassExpression, TSInterfaceDeclaration"(
+        "ClassDeclaration, ClassExpression, TSInterfaceDeclaration": (
           node:
             | TSESTree.ClassDeclaration
             | TSESTree.ClassExpression
             | TSESTree.TSInterfaceDeclaration
-        ): void {
+        ): void => {
           const name = node.id?.name;
 
           const target = fn.run<Target>(() => {

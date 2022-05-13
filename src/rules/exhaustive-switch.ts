@@ -4,9 +4,9 @@ import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const exhaustiveSwitch = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.SwitchStatement](node): void {
+      [AST_NODE_TYPES.SwitchStatement]: (node): void => {
         const tests = node.cases.map(switchCase => switchCase.test);
 
         // eslint-disable-next-line unicorn/no-null

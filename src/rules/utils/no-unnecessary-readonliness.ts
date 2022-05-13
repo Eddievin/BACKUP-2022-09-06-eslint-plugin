@@ -33,7 +33,7 @@ export function createRule<M extends string, T extends string>(
   );
 
   return utils.createRule({
-    create(context) {
+    create: context => {
       const { ignoreClasses, ignoreInterfaces, ignoreTypes } = context.options;
 
       const checker = new Checker({
@@ -45,7 +45,7 @@ export function createRule<M extends string, T extends string>(
       });
 
       return {
-        [AST_NODE_TYPES.TSTypeReference](node): void {
+        [AST_NODE_TYPES.TSTypeReference]: (node): void => {
           const { typeArguments, typeName } = context.toTsNode(node);
 
           if (

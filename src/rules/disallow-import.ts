@@ -4,7 +4,7 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
 export const disallowImport = utils.createRule({
-  create(context) {
+  create: context => {
     const matchers = context.subOptionsArray.map(subOptions =>
       utils.createFileMatcher.disallowAllow(
         subOptions.disallow,
@@ -15,7 +15,7 @@ export const disallowImport = utils.createRule({
     );
 
     return {
-      [AST_NODE_TYPES.ImportDeclaration](node): void {
+      [AST_NODE_TYPES.ImportDeclaration]: (node): void => {
         const source = node.source.value;
 
         assert.string(source);

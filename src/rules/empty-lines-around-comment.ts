@@ -5,14 +5,14 @@ import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const emptyLinesAroundComment = utils.createRule({
-  create(context) {
+  create: context => {
     const nodes: TSESTree.Node[] = [];
 
     return {
-      "*"(node: TSESTree.Node): void {
+      "*": (node: TSESTree.Node): void => {
         nodes.push(node);
       },
-      "Program:exit"(program: TSESTree.Program): void {
+      "Program:exit": (program: TSESTree.Program): void => {
         const eol = context.eol;
 
         for (const comment of utils.getComments(program)) {
@@ -35,7 +35,7 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (expected && !got)
                 context.report({
-                  fix() {
+                  fix: () => {
                     return {
                       range: a.clone(prefix.range),
                       text: `${eol}${eol}${a.last(prefix.spaces)}`
@@ -56,7 +56,7 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (expected && !got)
                 context.report({
-                  fix() {
+                  fix: () => {
                     return {
                       range: a.clone(suffix.range),
                       text: `${eol}${eol}${a.last(suffix.spaces)}`
@@ -68,7 +68,7 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (got && !expected)
                 context.report({
-                  fix() {
+                  fix: () => {
                     return {
                       range: a.clone(suffix.range),
                       text: `${context.eol}${a.last(suffix.spaces)}`

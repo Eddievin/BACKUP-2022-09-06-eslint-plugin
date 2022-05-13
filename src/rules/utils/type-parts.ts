@@ -42,10 +42,10 @@ export const getTypeParts = o.extend(
      * @param context - Context.
      * @returns Type parts.
      */
-    typeofFix<M extends string, O extends object, S extends object>(
+    typeofFix: <M extends string, O extends object, S extends object>(
       node: TSESTree.Node,
       context: utils.Context<M, O, S>
-    ): readonly TypePart[] {
+    ) => {
       return node.type === AST_NODE_TYPES.UnaryExpression &&
         node.operator === "typeof"
         ? recurs(

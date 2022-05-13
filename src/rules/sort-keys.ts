@@ -7,9 +7,9 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const sortKeys = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.ObjectExpression](node): void {
+      [AST_NODE_TYPES.ObjectExpression]: (node): void => {
         const group: Item[] = [];
 
         for (const property of node.properties)

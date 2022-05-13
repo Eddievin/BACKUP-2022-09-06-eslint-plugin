@@ -7,13 +7,13 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const sortClassMembers = utils.createRule({
-  create(context) {
+  create: context => {
     const sortingOrders = new Map(
       context.options.sortingOrder.map((name, index) => [name, index])
     );
 
     return {
-      [AST_NODE_TYPES.ClassBody](node): void {
+      [AST_NODE_TYPES.ClassBody]: (node): void => {
         const members = node.body.map((member, index): Member => {
           const x = getMemberAccessibility(member);
 

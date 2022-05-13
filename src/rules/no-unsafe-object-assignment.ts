@@ -6,9 +6,9 @@ import * as ts from "typescript";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noUnsafeObjectAssignment = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.ArrowFunctionExpression](node): void {
+      [AST_NODE_TYPES.ArrowFunctionExpression]: (node): void => {
         if (node.body.type === AST_NODE_TYPES.BlockStatement) {
           // Should be checked by ReturnStatement
         } else if (node.returnType)
@@ -17,20 +17,20 @@ export const noUnsafeObjectAssignment = utils.createRule({
           // No return type to check
         }
       },
-      [AST_NODE_TYPES.AssignmentExpression](node): void {
+      [AST_NODE_TYPES.AssignmentExpression]: (node): void => {
         lintNodes(node.left, node.right, context);
       },
-      [AST_NODE_TYPES.CallExpression](node): void {
+      [AST_NODE_TYPES.CallExpression]: (node): void => {
         const tsNode = context.toTsNode(node);
 
         for (const arg of tsNode.arguments) lintExpression(arg, context);
       },
-      [AST_NODE_TYPES.ReturnStatement](node): void {
+      [AST_NODE_TYPES.ReturnStatement]: (node): void => {
         const tsNode = context.toTsNode(node);
 
         if (tsNode.expression) lintExpression(tsNode.expression, context);
       },
-      [AST_NODE_TYPES.VariableDeclaration](node): void {
+      [AST_NODE_TYPES.VariableDeclaration]: (node): void => {
         for (const declaration of node.declarations)
           if (declaration.init)
             lintNodes(declaration.id, declaration.init, context);

@@ -3,9 +3,9 @@ import { a, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const switchCaseEmptyLines = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.SwitchStatement](node): void {
+      [AST_NODE_TYPES.SwitchStatement]: (node): void => {
         for (const [case1, case2] of a.chain(node.cases)) {
           const spread = case1.consequent.length > 0;
 
@@ -24,14 +24,12 @@ export const switchCaseEmptyLines = utils.createRule({
             // Valid
           } else
             context.report({
-              fix() {
-                return [
-                  {
-                    range: [case2.range[0] - got.length, case2.range[0]],
-                    text: expected
-                  }
-                ];
-              },
+              fix: () => [
+                {
+                  range: [case2.range[0] - got.length, case2.range[0]],
+                  text: expected
+                }
+              ],
               messageId,
               node: case2
             });

@@ -5,54 +5,48 @@ import path from "path";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const primaryExportOnly = utils.createRule({
-  create(context) {
+  create: context => {
     const exportDefaultDeclarations =
       new Set<TSESTree.ExportDefaultDeclaration>();
 
     const identifiers = new Set<TSESTree.Identifier>();
 
     return {
-      "Program > ExportDefaultDeclaration"(
+      "Program > ExportDefaultDeclaration": (
         node: TSESTree.ExportDefaultDeclaration
-      ): void {
+      ): void => {
         exportDefaultDeclarations.add(node);
       },
-      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(
+      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id": (
         node: TSESTree.Identifier
-      ): void {
+      ): void => {
         identifiers.add(node);
       },
-      "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node);
-      },
-      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node);
-      },
-      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node);
-      },
-      "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node);
-      },
-      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node);
-      },
-      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node);
-      },
-      "Program:exit"(): void {
+      "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node);
+        },
+      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node);
+        },
+      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node);
+        },
+      "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node);
+        },
+      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node);
+        },
+      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node);
+        },
+      "Program:exit": (): void => {
         const primary = a
           .fromIterable(identifiers.values())
           .find(

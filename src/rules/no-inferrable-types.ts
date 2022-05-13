@@ -3,9 +3,9 @@ import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const noInferrableTypes = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.VariableDeclarator](node): void {
+      [AST_NODE_TYPES.VariableDeclarator]: (node): void => {
         const { id, init } = node;
 
         if (

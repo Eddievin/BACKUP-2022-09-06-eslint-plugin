@@ -3,9 +3,9 @@ import { fn, is, num } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const objectFormat = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.ObjectExpression](node): void {
+      [AST_NODE_TYPES.ObjectExpression]: (node): void => {
         const texts = node.properties.map(property =>
           context.getTextWithLeadingTrivia(property).trim()
         );
@@ -50,7 +50,7 @@ export const objectFormat = utils.createRule({
 
         if (expectMultiline && !gotMultiline)
           context.report({
-            fix() {
+            fix: () => {
               const propertiesText = texts.join(",\n");
 
               return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
@@ -61,7 +61,7 @@ export const objectFormat = utils.createRule({
 
         if (expectSingleLine && !gotSingleLine)
           context.report({
-            fix() {
+            fix: () => {
               const propertiesText = texts.join(",");
 
               return [{ range: node.range, text: `{${propertiesText}}` }];

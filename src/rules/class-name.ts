@@ -4,11 +4,11 @@ import path from "path";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const className = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      "ExportNamedDeclaration > ClassDeclaration"(
+      "ExportNamedDeclaration > ClassDeclaration": (
         node: TSESTree.ClassDeclaration
-      ): void {
+      ): void => {
         if (node.id)
           if (node.id.name === path.parse(context.path).name) {
             // Valid

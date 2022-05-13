@@ -3,9 +3,9 @@ import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const preferTsToolbelt = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.TSConditionalType](node): void {
+      [AST_NODE_TYPES.TSConditionalType]: (node): void => {
         if (/\binfer\b/u.test(context.getText(node))) {
           // Do not report
         } else context.report({ messageId: "preferExtends", node });

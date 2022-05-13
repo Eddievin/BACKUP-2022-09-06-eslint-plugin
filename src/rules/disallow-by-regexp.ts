@@ -5,17 +5,17 @@ import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const disallowByRegexp = utils.createRule({
-  create(context) {
+  create: context => {
     const stringRanges: utils.ReadonlyRange[] = [];
 
     return {
-      [AST_NODE_TYPES.Literal](node): void {
+      [AST_NODE_TYPES.Literal]: (node): void => {
         stringRanges.push(node.range);
       },
-      [AST_NODE_TYPES.TemplateLiteral](node): void {
+      [AST_NODE_TYPES.TemplateLiteral]: (node): void => {
         stringRanges.push(node.range);
       },
-      "Program:exit"(program: TSESTree.Program): void {
+      "Program:exit": (program: TSESTree.Program): void => {
         const commentRanges = utils
           .getComments(program)
           .map(comment => comment.range);
@@ -34,8 +34,8 @@ export const disallowByRegexp = utils.createRule({
                 )
               )
                 context.report({
-                  fix() {
-                    return is.not.empty(subOptions.replacement)
+                  fix: () =>
+                    is.not.empty(subOptions.replacement)
                       ? [
                           {
                             range,
@@ -44,8 +44,7 @@ export const disallowByRegexp = utils.createRule({
                               .replace(re, subOptions.replacement)
                           }
                         ]
-                      : [];
-                  },
+                      : [],
                   loc: context.getLocFromRange(range),
                   messageId: "disallowedCode"
                 });

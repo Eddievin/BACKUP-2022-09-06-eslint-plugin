@@ -4,19 +4,18 @@ import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const disallowIdentifier = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      ":not(Property) > Identifier:not(.property)"(
+      ":not(Property) > Identifier:not(.property)": (
         node: TSESTree.Identifier
-      ): void {
+      ): void => {
         for (const subOptions of context.subOptionsArray)
           if (subOptions.ids.includes(node.name.valueOf()))
             context.report({
-              fix() {
-                return is.not.empty(subOptions.replacement)
+              fix: () =>
+                is.not.empty(subOptions.replacement)
                   ? [{ range: node.range, text: subOptions.replacement }]
-                  : [];
-              },
+                  : [],
               messageId: "disallowedIdentifier",
               node
             });

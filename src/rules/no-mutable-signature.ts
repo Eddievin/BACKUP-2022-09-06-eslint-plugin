@@ -5,7 +5,7 @@ import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noMutableSignature = utils.createRule({
-  create(context) {
+  create: context => {
     const {
       ignoreClasses,
       ignoreIdentifiers,
@@ -37,17 +37,17 @@ export const noMutableSignature = utils.createRule({
     const restAnnotations: TSESTree.TSTypeAnnotation[] = [];
 
     return {
-      [AST_NODE_TYPES.Identifier](node): void {
+      [AST_NODE_TYPES.Identifier]: (node): void => {
         if (node.typeAnnotation && ignoreIdentifiersMatcher(node.name))
           ignoreAnnotations.push(node.typeAnnotation);
       },
-      [AST_NODE_TYPES.RestElement](node): void {
+      [AST_NODE_TYPES.RestElement]: (node): void => {
         if (node.typeAnnotation) restAnnotations.push(node.typeAnnotation);
       },
-      [AST_NODE_TYPES.TSTypeAnnotation](node): void {
+      [AST_NODE_TYPES.TSTypeAnnotation]: (node): void => {
         annotations.push(node);
       },
-      "Program:exit"(): void {
+      "Program:exit": (): void => {
         const ignoreAnnotationsSet = new Set(ignoreAnnotations);
 
         const restAnnotationsSet = new Set(restAnnotations);

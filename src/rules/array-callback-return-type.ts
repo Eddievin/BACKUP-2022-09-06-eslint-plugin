@@ -6,9 +6,9 @@ import * as ts from "typescript";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const arrayCallbackReturnType = utils.createRule({
-  create(context) {
+  create: context => {
     return {
-      [AST_NODE_TYPES.CallExpression](node): void {
+      [AST_NODE_TYPES.CallExpression]: (node): void => {
         if (
           node.callee.type === AST_NODE_TYPES.MemberExpression &&
           node.callee.property.type === AST_NODE_TYPES.Identifier &&

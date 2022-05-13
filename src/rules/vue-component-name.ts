@@ -5,11 +5,11 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import path from "path";
 
 export const vueComponentName = utils.createRule({
-  create(context) {
+  create: context => {
     const { prefix, suffix } = context.options;
 
     return {
-      [AST_NODE_TYPES.CallExpression](node): void {
+      [AST_NODE_TYPES.CallExpression]: (node): void => {
         if (
           node.callee.type === AST_NODE_TYPES.Identifier &&
           node.callee.name === "defineComponent"

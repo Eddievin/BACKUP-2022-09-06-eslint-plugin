@@ -71,20 +71,18 @@ export const createFileMatcher = o.extend(
     /**
      * Creates file matcher.
      *
-     * @param this - No this.
      * @param disallow - Disallow patterns.
      * @param allow - Allow patterns.
      * @param defVal - Default value.
      * @param options - Minimatch options.
      * @returns Matcher.
      */
-    disallowAllow(
-      this: void,
+    disallowAllow: (
       disallow: strings,
       allow: strings,
       defVal: boolean,
       options: Readonly<minimatch.IOptions>
-    ): Matcher {
+    ): Matcher => {
       if (disallow.length || allow.length) {
         const disallowMatcher = createFileMatcher(disallow, true, options);
 
@@ -314,7 +312,7 @@ export function createRule<
   );
 
   return ruleCreator({
-    create(context: RuleContext<M, [object]>, rawOptions) {
+    create: (context: RuleContext<M, [object]>, rawOptions) => {
       const betterContext = createBetterContext(context, rawOptions, options);
 
       return shouldBeLinted(
@@ -594,6 +592,7 @@ function createBetterContext<
     checker: parser.program.getTypeChecker(),
     code,
     eol: s.detectEol(code),
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     getLeadingTrivia(node): string {
       const tsNode = this.toTsNode(node);
 
@@ -602,12 +601,14 @@ function createBetterContext<
         node.range[0]
       );
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     getLocFromRange(range): estree.SourceLocation {
       return {
         end: source.getLocFromIndex(range[1]),
         start: source.getLocFromIndex(range[0])
       };
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     getMemberName(node: TSESTree.ClassElement | TSESTree.TypeElement): string {
       switch (node.type) {
         case AST_NODE_TYPES.MethodDefinition:
@@ -634,38 +635,46 @@ function createBetterContext<
           return "";
       }
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     getRangeWithLeadingTrivia(node): TSESTree.Range {
       return [
         node.range[0] - this.getLeadingTrivia(node).length,
         node.range[1]
       ];
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     getText(node): string {
       return code.slice(...node.range);
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     getTextWithLeadingTrivia(node): string {
       return code.slice(
         node.range[0] - this.getLeadingTrivia(node).length,
         node.range[1]
       );
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     getTypeDefinitions(types): string {
       return types.map(type => this.checker.typeToString(type)).join(" > ");
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     hasLeadingComment(node): boolean {
       return (
         this.getLeadingTrivia(node).trim().startsWith("/*") ||
         this.getLeadingTrivia(node).trim().startsWith("//")
       );
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     hasLeadingDocComment(node): boolean {
       return this.getLeadingTrivia(node).trim().startsWith("/**");
     },
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     hasTrailingComment(node): boolean {
       return code.slice(node.range[1]).trim().startsWith("//");
     },
     id,
     locZero: source.getLocFromIndex(0),
+    // eslint-disable-next-line no-restricted-syntax -- Postponed
     missingDocComment(mixed): boolean {
       return mixed.getDocumentationComment(this.checker).length === 0;
     },

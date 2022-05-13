@@ -15,7 +15,7 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const statementsOrder = utils.createRule({
-  create(context) {
+  create: context => {
     const blockOrder: Rec<NodeType, number> = {
       ...defaultOrder,
       ...o.fromEntries(
@@ -49,7 +49,7 @@ export const statementsOrder = utils.createRule({
     const itemsMap = new Accumulator<string, Item>();
 
     return {
-      "*"(node: TSESTree.Node): void {
+      "*": (node: TSESTree.Node): void => {
         if (node.parent) {
           const id = utils.getNodeId(node.parent);
 
@@ -77,7 +77,7 @@ export const statementsOrder = utils.createRule({
             itemsMap.push(id, nodeInfo(node, parentNode, index, order));
         }
       },
-      "Program:exit"(): void {
+      "Program:exit": (): void => {
         for (const items of itemsMap.values()) {
           const sortedItems = _.sortBy(items, node => node.sortingOrder);
 

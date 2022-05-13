@@ -6,16 +6,15 @@ import type { stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const consistentFilename = utils.createRule({
-  create(context) {
+  create: context => {
     let className: stringU;
 
     return {
-      "Program > :matches(ExportDefaultDeclaration, ExportNamedDeclaration) > ClassDeclaration > Identifier.id"(
-        node: TSESTree.Identifier
-      ): void {
-        className = node.name;
-      },
-      "Program:exit"(): void {
+      "Program > :matches(ExportDefaultDeclaration, ExportNamedDeclaration) > ClassDeclaration > Identifier.id":
+        (node: TSESTree.Identifier): void => {
+          className = node.name;
+        },
+      "Program:exit": (): void => {
         const got = path.parse(context.path).name;
 
         const expected =

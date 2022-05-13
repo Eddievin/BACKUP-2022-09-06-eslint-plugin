@@ -14,25 +14,24 @@ import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const consistentImport = utils.createRule({
-  create(context) {
+  create: context => {
     const identifiers = new Set<string>();
 
     const importDeclarations: TSESTree.ImportDeclaration[] = [];
 
     return {
-      [AST_NODE_TYPES.ImportDeclaration](node): void {
+      [AST_NODE_TYPES.ImportDeclaration]: (node): void => {
         importDeclarations.push(node);
       },
-      ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)"(
-        node: TSESTree.Identifier
-      ): void {
-        identifiers.add(node.name);
-      },
-      "Program:exit"(program: TSESTree.Program): void {
+      ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node.name);
+        },
+      "Program:exit": (program: TSESTree.Program): void => {
         autoImport(program, context);
         checkImport(importDeclarations, identifiers, context);
       },
-      "Property > Identifier.value"(node: TSESTree.Identifier): void {
+      "Property > Identifier.value": (node: TSESTree.Identifier): void => {
         identifiers.add(node.name);
       }
     };
@@ -103,7 +102,7 @@ function autoImport(program: TSESTree.Program, context: Context): void {
 
   if (fixes.size)
     context.report({
-      fix() {
+      fix: () => {
         const fix = a.fromIterable(fixes).join(context.eol);
 
         return [
