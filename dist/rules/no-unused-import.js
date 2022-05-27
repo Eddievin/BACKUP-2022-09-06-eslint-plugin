@@ -6,17 +6,17 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.noUnusedImport = utils.createRule({
-    create(context) {
+    create: context => {
         const identifiers = new Set();
         const importDeclarations = [];
         return {
-            [utils_1.AST_NODE_TYPES.ImportDeclaration](node) {
+            [utils_1.AST_NODE_TYPES.ImportDeclaration]: (node) => {
                 importDeclarations.push(node);
             },
-            ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)"(node) {
+            ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)": (node) => {
                 identifiers.add(node.name);
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 for (const node of importDeclarations) {
                     const specifiers = node.specifiers
                         .filter(used)
@@ -41,29 +41,25 @@ exports.noUnusedImport = utils.createRule({
                     }
                     else if (node.specifiers.some(used))
                         context.report({
-                            fix() {
-                                return [
-                                    {
-                                        range: node.range,
-                                        text: `import ${specifiers} from "${source}";`
-                                    }
-                                ];
-                            },
+                            fix: () => [
+                                {
+                                    range: node.range,
+                                    text: `import ${specifiers} from "${source}";`
+                                }
+                            ],
                             messageId: "unusedImport",
                             node
                         });
                     else
                         context.report({
-                            fix() {
-                                return context.hasLeadingComment(node)
-                                    ? []
-                                    : [
-                                        {
-                                            range: context.getRangeWithLeadingTrivia(node),
-                                            text: ""
-                                        }
-                                    ];
-                            },
+                            fix: () => context.hasLeadingComment(node)
+                                ? []
+                                : [
+                                    {
+                                        range: context.getRangeWithLeadingTrivia(node),
+                                        text: ""
+                                    }
+                                ],
                             messageId: "unusedImport",
                             node
                         });
@@ -72,7 +68,7 @@ exports.noUnusedImport = utils.createRule({
                     return identifiers.has(specifier.local.name);
                 }
             },
-            "Property > Identifier.value"(node) {
+            "Property > Identifier.value": (node) => {
                 identifiers.add(node.name);
             }
         };

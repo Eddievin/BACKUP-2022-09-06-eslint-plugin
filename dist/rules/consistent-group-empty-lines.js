@@ -5,41 +5,39 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 exports.consistentGroupEmptyLines = utils.createRule({
-    create(context) {
+    create: context => {
         const childNodesMap = new functions_1.Accumulator();
-        const nodesMap2 = new Map();
+        const nodesMap2 = new functions_1.Accumulator2();
         const listener = {
-            "*"(node) {
+            "*": (node) => {
                 utils.buildChildNodesMap(node, childNodesMap);
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 for (const subOptions of context.subOptionsArray) {
                     const nodesMap = nodesMap2.get(subOptions.selector);
-                    if (nodesMap)
-                        for (const nodes of nodesMap.values()) {
-                            const group = [];
-                            for (const node of nodes)
-                                if (group.length)
-                                    if (utils.isAdjacentNodes(functions_1.a.last(group), node, childNodesMap))
-                                        group.push(node);
-                                    else {
-                                        lintGroup(group, subOptions, context);
-                                        functions_1.a.truncate(group);
-                                        group.push(node);
-                                    }
-                                else
+                    for (const nodes of nodesMap.values()) {
+                        const group = [];
+                        for (const node of nodes)
+                            if (group.length)
+                                if (utils.isAdjacentNodes(functions_1.a.last(group), node, childNodesMap))
                                     group.push(node);
-                            lintGroup(group, subOptions, context);
-                        }
+                                else {
+                                    lintGroup(group, subOptions, context);
+                                    functions_1.a.truncate(group);
+                                    group.push(node);
+                                }
+                            else
+                                group.push(node);
+                        lintGroup(group, subOptions, context);
+                    }
                 }
             }
         };
         for (const subOptions of context.subOptionsArray)
             listener[subOptions.selector] = function (node) {
-                const selector = subOptions.selector;
+                const { selector } = subOptions;
                 const id = utils.getNodeId(node.parent);
-                // eslint-disable-next-line deprecation/deprecation -- Postponed
-                functions_1.arrayMap.push2(selector, id, node, nodesMap2);
+                nodesMap2.push(selector, id, node);
             };
         return listener;
     },
@@ -97,14 +95,12 @@ function lintGroup(group, subOptions, context) {
                 }
                 else
                     context.report({
-                        fix() {
-                            return [
-                                {
-                                    range: [node.range[0] - got.length, node.range[0]],
-                                    text: expected
-                                }
-                            ];
-                        },
+                        fix: () => [
+                            {
+                                range: [node.range[0] - got.length, node.range[0]],
+                                text: expected
+                            }
+                        ],
                         messageId,
                         node
                     });

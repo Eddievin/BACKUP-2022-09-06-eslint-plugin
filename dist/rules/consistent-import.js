@@ -8,21 +8,21 @@ const utils_1 = require("@typescript-eslint/utils");
 const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
 const path_1 = tslib_1.__importDefault(require("path"));
 exports.consistentImport = utils.createRule({
-    create(context) {
+    create: context => {
         const identifiers = new Set();
         const importDeclarations = [];
         return {
-            [utils_1.AST_NODE_TYPES.ImportDeclaration](node) {
+            [utils_1.AST_NODE_TYPES.ImportDeclaration]: (node) => {
                 importDeclarations.push(node);
             },
-            ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)"(node) {
+            ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)": (node) => {
                 identifiers.add(node.name);
             },
-            "Program:exit"(program) {
+            "Program:exit": (program) => {
                 autoImport(program, context);
                 checkImport(importDeclarations, identifiers, context);
             },
-            "Property > Identifier.value"(node) {
+            "Property > Identifier.value": (node) => {
                 identifiers.add(node.name);
             }
         };
@@ -70,7 +70,7 @@ function autoImport(program, context) {
     }
     if (fixes.size)
         context.report({
-            fix() {
+            fix: () => {
                 const fix = functions_1.a.fromIterable(fixes).join(context.eol);
                 return [
                     {

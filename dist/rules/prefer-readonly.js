@@ -7,11 +7,11 @@ const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const ts = tslib_1.__importStar(require("typescript"));
 exports.preferReadonly = utils.createRule({
-    create(context) {
+    create: context => {
         const { ignoreInferredTypes } = context.options;
         const selectors = utils.getSelectors(context.options, defaultSelectors);
         return {
-            [selectors](node) {
+            [selectors]: (node) => {
                 const tsNode = context.toTsNode(node);
                 if (ts.isFunctionLike(tsNode))
                     for (const param of tsNode.parameters)

@@ -7,17 +7,16 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 exports.statementsOrder = utils.createRule({
-    create(context) {
+    create: context => {
         const blockOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.blockOrder.map((type, index) => [type, index])));
         const moduleOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.moduleOrder.map((type, index) => [type, index])));
         const rootOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.rootOrder.map((type, index) => [type, index])));
-        const itemsMap = new Map();
+        const itemsMap = new functions_1.Accumulator();
         return {
-            "*"(node) {
+            "*": (node) => {
                 if (node.parent) {
                     const id = utils.getNodeId(node.parent);
-                    // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
-                    const index = functions_1.arrayMap.get(id, itemsMap).length;
+                    const index = itemsMap.get(id).length;
                     const parentNode = node.parent;
                     const order = functions_1.fn.run(() => {
                         switch (parentNode.type) {
@@ -32,11 +31,10 @@ exports.statementsOrder = utils.createRule({
                         }
                     });
                     if (order)
-                        // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/functions update
-                        functions_1.arrayMap.push(id, nodeInfo(node, parentNode, index, order), itemsMap);
+                        itemsMap.push(id, nodeInfo(node, parentNode, index, order));
                 }
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 for (const items of itemsMap.values()) {
                     const sortedItems = _.sortBy(items, node => node.sortingOrder);
                     const fixes = [];
@@ -141,7 +139,7 @@ function getJestTestName(node) {
         if (argument &&
             argument.type === utils_1.AST_NODE_TYPES.Literal &&
             functions_1.is.string(argument.value)) {
-            const callee = node.expression.callee;
+            const { callee } = node.expression;
             if (callee.type === utils_1.AST_NODE_TYPES.Identifier && callee.name === "test")
                 return argument.value;
             if (callee.type === utils_1.AST_NODE_TYPES.CallExpression &&
@@ -228,7 +226,7 @@ function nodeInfo(node, parentNode, index, order) {
             return buildResult("Unknown");
     }
     function buildResult(type, id = "") {
-        const order1 = order[type];
+        const order1 = 1000000 + order[type];
         const order2 = sortable[type] ? id : "";
         const order3 = 1000000 + node.range[0];
         return {

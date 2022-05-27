@@ -24,7 +24,7 @@ function createRule(name, isTypeToCheck, readonliness, messageId, message) {
         ignoreTypes: functions_1.is.strings
     }, {});
     return utils.createRule({
-        create(context) {
+        create: context => {
             const { ignoreClasses, ignoreInterfaces, ignoreTypes } = context.options;
             const checker = new Checker_1.Checker({
                 context,
@@ -34,7 +34,7 @@ function createRule(name, isTypeToCheck, readonliness, messageId, message) {
                 readonliness
             });
             return {
-                [utils_1.AST_NODE_TYPES.TSTypeReference](node) {
+                [utils_1.AST_NODE_TYPES.TSTypeReference]: (node) => {
                     const { typeArguments, typeName } = context.toTsNode(node);
                     if (isTypeToCheck(typeName.getText()) &&
                         typeArguments &&

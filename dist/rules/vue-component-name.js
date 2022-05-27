@@ -8,10 +8,10 @@ const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 const path_1 = tslib_1.__importDefault(require("path"));
 exports.vueComponentName = utils.createRule({
-    create(context) {
+    create: context => {
         const { prefix, suffix } = context.options;
         return {
-            [utils_1.AST_NODE_TYPES.CallExpression](node) {
+            [utils_1.AST_NODE_TYPES.CallExpression]: (node) => {
                 if (node.callee.type === utils_1.AST_NODE_TYPES.Identifier &&
                     node.callee.name === "defineComponent") {
                     const argument = node.arguments[0];

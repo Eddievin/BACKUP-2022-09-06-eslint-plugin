@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.noMutableSignature = utils.createRule({
-    create(context) {
+    create: context => {
         const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignoreNumberSignature, ignoreStringSignature, ignoreTypes } = context.options;
         const ignoreIdentifiersMatcher = utils.createMatcher(ignoreIdentifiers);
         const signatures = [
@@ -25,18 +25,18 @@ exports.noMutableSignature = utils.createRule({
         const ignoreAnnotations = [];
         const restAnnotations = [];
         return {
-            [utils_1.AST_NODE_TYPES.Identifier](node) {
+            [utils_1.AST_NODE_TYPES.Identifier]: (node) => {
                 if (node.typeAnnotation && ignoreIdentifiersMatcher(node.name))
                     ignoreAnnotations.push(node.typeAnnotation);
             },
-            [utils_1.AST_NODE_TYPES.RestElement](node) {
+            [utils_1.AST_NODE_TYPES.RestElement]: (node) => {
                 if (node.typeAnnotation)
                     restAnnotations.push(node.typeAnnotation);
             },
-            [utils_1.AST_NODE_TYPES.TSTypeAnnotation](node) {
+            [utils_1.AST_NODE_TYPES.TSTypeAnnotation]: (node) => {
                 annotations.push(node);
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 const ignoreAnnotationsSet = new Set(ignoreAnnotations);
                 const restAnnotationsSet = new Set(restAnnotations);
                 for (const { ignore, messageId, readonliness } of signatures)

@@ -6,9 +6,9 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.templateLiteralFormat = utils.createRule({
-    create(context) {
+    create: context => {
         return {
-            [utils_1.AST_NODE_TYPES.TemplateLiteral](node) {
+            [utils_1.AST_NODE_TYPES.TemplateLiteral]: (node) => {
                 const lines = functions_1.s.lines(context.getText(node));
                 if (lines.length > 1) {
                     const firstLine = functions_1.a.first(lines);
@@ -25,18 +25,16 @@ exports.templateLiteralFormat = utils.createRule({
                         const delta3 = padding1 - padding3;
                         if (delta2 || delta3)
                             context.report({
-                                fix() {
-                                    return [
-                                        {
-                                            range: node.range,
-                                            text: [
-                                                firstLine,
-                                                ...middleLines.map(line => fixLine(line, delta2)),
-                                                fixLine(lastLine, delta3)
-                                            ].join(context.eol)
-                                        }
-                                    ];
-                                },
+                                fix: () => [
+                                    {
+                                        range: node.range,
+                                        text: [
+                                            firstLine,
+                                            ...middleLines.map(line => fixLine(line, delta2)),
+                                            fixLine(lastLine, delta3)
+                                        ].join(context.eol)
+                                    }
+                                ],
                                 messageId: "invalidTemplateLiteralFormat",
                                 node
                             });

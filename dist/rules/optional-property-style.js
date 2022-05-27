@@ -20,9 +20,9 @@ exports.optionalPropertyStyle = functions_1.fn.run(() => {
     const isTarget = functions_1.is.factory(functions_1.is.enumeration, TargetVO);
     return utils.createRule({
         // eslint-disable-next-line sonarjs/cognitive-complexity
-        create(context) {
+        create: context => {
             return {
-                "ClassDeclaration, ClassExpression, TSInterfaceDeclaration"(node) {
+                "ClassDeclaration, ClassExpression, TSInterfaceDeclaration": (node) => {
                     var _a;
                     const name = (_a = node.id) === null || _a === void 0 ? void 0 : _a.name;
                     const target = functions_1.fn.run(() => {

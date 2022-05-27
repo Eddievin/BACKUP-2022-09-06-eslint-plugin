@@ -6,48 +6,48 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.classOnlyExport = utils.createRule({
-    create(context) {
+    create: context => {
         const exportAllDeclarations = [];
         const exportDefaultDeclaration = [];
         const identifiers = [];
         let className;
         return {
-            "Program > ExportAllDeclaration"(node) {
+            "Program > ExportAllDeclaration": (node) => {
                 if (functions_1.is.empty(node.exported))
                     exportAllDeclarations.push(node);
             },
-            "Program > ExportAllDeclaration > Identifier"(node) {
+            "Program > ExportAllDeclaration > Identifier": (node) => {
                 identifiers.push(node);
             },
-            "Program > ExportDefaultDeclaration"(node) {
+            "Program > ExportDefaultDeclaration": (node) => {
                 if (node.declaration.type === utils_1.AST_NODE_TYPES.ClassDeclaration &&
                     node.declaration.id)
                     className = node.declaration.id.name;
                 else
                     exportDefaultDeclaration.push(node);
             },
-            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id": (node) => {
                 className = node.name;
             },
-            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(node) {
+            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported": (node) => {
                 identifiers.push(node);
             },
-            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id": (node) => {
                 identifiers.push(node);
             },
-            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id": (node) => {
                 identifiers.push(node);
             },
-            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id": (node) => {
                 identifiers.push(node);
             },
-            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id": (node) => {
                 identifiers.push(node);
             },
-            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id": (node) => {
                 identifiers.push(node);
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 if (functions_1.is.not.empty(className)) {
                     const nodes = [
                         ...exportAllDeclarations,

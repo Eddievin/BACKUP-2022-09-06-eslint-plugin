@@ -6,16 +6,16 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.disallowByRegexp = utils.createRule({
-    create(context) {
+    create: context => {
         const stringRanges = [];
         return {
-            [utils_1.AST_NODE_TYPES.Literal](node) {
+            [utils_1.AST_NODE_TYPES.Literal]: (node) => {
                 stringRanges.push(node.range);
             },
-            [utils_1.AST_NODE_TYPES.TemplateLiteral](node) {
+            [utils_1.AST_NODE_TYPES.TemplateLiteral]: (node) => {
                 stringRanges.push(node.range);
             },
-            "Program:exit"(program) {
+            "Program:exit": (program) => {
                 var _a;
                 const commentRanges = utils
                     .getComments(program)
@@ -28,18 +28,16 @@ exports.disallowByRegexp = utils.createRule({
                         for (const range of matchAll(re, context))
                             if (contexts.includes(getContext(range, commentRanges, stringRanges)))
                                 context.report({
-                                    fix() {
-                                        return functions_1.is.not.empty(subOptions.replacement)
-                                            ? [
-                                                {
-                                                    range,
-                                                    text: context.code
-                                                        .slice(...range)
-                                                        .replace(re, subOptions.replacement)
-                                                }
-                                            ]
-                                            : [];
-                                    },
+                                    fix: () => functions_1.is.not.empty(subOptions.replacement)
+                                        ? [
+                                            {
+                                                range,
+                                                text: context.code
+                                                    .slice(...range)
+                                                    .replace(re, subOptions.replacement)
+                                            }
+                                        ]
+                                        : [],
                                     loc: context.getLocFromRange(range),
                                     messageId: "disallowedCode"
                                 });

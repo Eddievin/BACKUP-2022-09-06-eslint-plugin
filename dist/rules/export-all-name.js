@@ -6,9 +6,9 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.exportAllName = utils.createRule({
-    create(context) {
+    create: context => {
         return {
-            [utils_1.AST_NODE_TYPES.ExportAllDeclaration](node) {
+            [utils_1.AST_NODE_TYPES.ExportAllDeclaration]: (node) => {
                 if (node.exported && node.source) {
                     const expected = utils.getNameFromFilename(node.source.value);
                     if (node.exported.name === expected) {

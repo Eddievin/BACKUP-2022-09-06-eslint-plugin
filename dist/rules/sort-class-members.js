@@ -7,10 +7,10 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 exports.sortClassMembers = utils.createRule({
-    create(context) {
+    create: context => {
         const sortingOrders = new Map(context.options.sortingOrder.map((name, index) => [name, index]));
         return {
-            [utils_1.AST_NODE_TYPES.ClassBody](node) {
+            [utils_1.AST_NODE_TYPES.ClassBody]: (node) => {
                 const members = node.body.map((member, index) => {
                     const x = getMemberAccessibility(member);
                     const y = getMemberDynamicStatic(member);

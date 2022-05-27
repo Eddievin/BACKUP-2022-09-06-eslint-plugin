@@ -7,9 +7,9 @@ const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const ts = tslib_1.__importStar(require("typescript"));
 exports.functionPropertiesStyle = utils.createRule({
-    create(context) {
+    create: context => {
         return {
-            [utils_1.AST_NODE_TYPES.AssignmentExpression](node) {
+            [utils_1.AST_NODE_TYPES.AssignmentExpression]: (node) => {
                 if (node.left.type === utils_1.AST_NODE_TYPES.MemberExpression) {
                     const tsObject = context.toTsNode(node.left.object);
                     const type = context.checker.getTypeAtLocation(tsObject);

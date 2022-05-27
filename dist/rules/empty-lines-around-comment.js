@@ -6,13 +6,13 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.emptyLinesAroundComment = utils.createRule({
-    create(context) {
+    create: context => {
         const nodes = [];
         return {
-            "*"(node) {
+            "*": (node) => {
                 nodes.push(node);
             },
-            "Program:exit"(program) {
+            "Program:exit": (program) => {
                 const eol = context.eol;
                 for (const comment of utils.getComments(program)) {
                     const { inBlockLike, multilineComment, onSeparateLine, prefix, suffix } = explodeComment(comment, program, nodes, context);
@@ -25,7 +25,7 @@ exports.emptyLinesAroundComment = utils.createRule({
                             const expected = inBlockLike && multilineComment && !prefix.blockStart;
                             if (expected && !got)
                                 context.report({
-                                    fix() {
+                                    fix: () => {
                                         return {
                                             range: functions_1.a.clone(prefix.range),
                                             text: `${eol}${eol}${functions_1.a.last(prefix.spaces)}`
@@ -43,7 +43,7 @@ exports.emptyLinesAroundComment = utils.createRule({
                             const expected = inBlockLike && multilineComment && !suffix.blockEnd;
                             if (expected && !got)
                                 context.report({
-                                    fix() {
+                                    fix: () => {
                                         return {
                                             range: functions_1.a.clone(suffix.range),
                                             text: `${eol}${eol}${functions_1.a.last(suffix.spaces)}`
@@ -54,7 +54,7 @@ exports.emptyLinesAroundComment = utils.createRule({
                                 });
                             if (got && !expected)
                                 context.report({
-                                    fix() {
+                                    fix: () => {
                                         return {
                                             range: functions_1.a.clone(suffix.range),
                                             text: `${context.eol}${functions_1.a.last(suffix.spaces)}`

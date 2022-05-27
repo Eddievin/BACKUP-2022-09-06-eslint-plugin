@@ -7,35 +7,35 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const path_1 = tslib_1.__importDefault(require("path"));
 exports.primaryExportOnly = utils.createRule({
-    create(context) {
+    create: context => {
         const exportDefaultDeclarations = new Set();
         const identifiers = new Set();
         return {
-            "Program > ExportDefaultDeclaration"(node) {
+            "Program > ExportDefaultDeclaration": (node) => {
                 exportDefaultDeclarations.add(node);
             },
-            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id": (node) => {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(node) {
+            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported": (node) => {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id": (node) => {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id": (node) => {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id": (node) => {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id": (node) => {
                 identifiers.add(node);
             },
-            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id": (node) => {
                 identifiers.add(node);
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 const primary = functions_1.a
                     .fromIterable(identifiers.values())
                     .find(node => _.kebabCase(node.name) ===

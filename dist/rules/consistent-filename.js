@@ -7,13 +7,13 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const path_1 = tslib_1.__importDefault(require("path"));
 exports.consistentFilename = utils.createRule({
-    create(context) {
+    create: context => {
         let className;
         return {
-            "Program > :matches(ExportDefaultDeclaration, ExportNamedDeclaration) > ClassDeclaration > Identifier.id"(node) {
+            "Program > :matches(ExportDefaultDeclaration, ExportNamedDeclaration) > ClassDeclaration > Identifier.id": (node) => {
                 className = node.name;
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 const got = path_1.default.parse(context.path).name;
                 const expected = className !== null && className !== void 0 ? className : got
                     .split(".")

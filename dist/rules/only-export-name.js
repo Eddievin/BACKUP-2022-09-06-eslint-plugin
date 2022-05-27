@@ -5,35 +5,35 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 exports.onlyExportName = utils.createRule({
-    create(context) {
+    create: context => {
         let hasDefaultExport = false;
         const nodes = new Set();
         return {
-            "Program > ExportDefaultDeclaration"() {
+            "Program > ExportDefaultDeclaration": () => {
                 hasDefaultExport = true;
             },
-            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id": (node) => {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported"(node) {
+            "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported": (node) => {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id": (node) => {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id": (node) => {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id": (node) => {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id": (node) => {
                 nodes.add(node);
             },
-            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"(node) {
+            "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id": (node) => {
                 nodes.add(node);
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 const expected = utils.getNameFromFilename(context.path);
                 if (hasDefaultExport || nodes.size > 1) {
                     // Valid

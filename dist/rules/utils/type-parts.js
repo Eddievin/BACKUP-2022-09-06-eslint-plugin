@@ -33,7 +33,7 @@ exports.getTypeParts = functions_1.o.extend((node, context) => {
      * @param context - Context.
      * @returns Type parts.
      */
-    typeofFix(node, context) {
+    typeofFix: (node, context) => {
         return node.type === utils_1.AST_NODE_TYPES.UnaryExpression &&
             node.operator === "typeof"
             ? recurs(context.checker.getTypeAtLocation(context.toTsNode(node.argument)))

@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.preferReadonlyProps = utils.createRule({
-    create(context) {
+    create: context => {
         const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignorePrivateProperties, ignoreProtectedProperties, ignorePublicProperties, ignoreSelectedClasses, ignoreSelectedInterfaces } = context.options;
         const ignoreAccessebilities = functions_1.fn.run(() => {
             const result = new Set();

@@ -17,7 +17,7 @@ export declare const getTypeParts: {
      * @param context - Context.
      * @returns Type parts.
      */
-    typeofFix<M extends string, O extends object, S extends object>(node: TSESTree.Node, context: utils.Context<M, O, S>): readonly TypePart[];
+    typeofFix: <M extends string, O extends object, S extends object>(node: TSESTree.Node, context: utils.Context<M, O, S>) => readonly TypePart[];
 } & (<M_1 extends string, O_1 extends object, S_1 extends object>(node: TSESTree.Node, context: utils.Context<M_1, O_1, S_1>) => readonly TypePart[]);
 export declare type TypePart = NumStrU | ts.Type;
 //# sourceMappingURL=type-parts.d.ts.map

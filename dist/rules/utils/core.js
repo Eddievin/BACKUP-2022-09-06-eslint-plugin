@@ -29,14 +29,13 @@ exports.createFileMatcher = functions_1.o.extend((patterns, defVal, options) => 
     /**
      * Creates file matcher.
      *
-     * @param this - No this.
      * @param disallow - Disallow patterns.
      * @param allow - Allow patterns.
      * @param defVal - Default value.
      * @param options - Minimatch options.
      * @returns Matcher.
      */
-    disallowAllow(disallow, allow, defVal, options) {
+    disallowAllow: (disallow, allow, defVal, options) => {
         if (disallow.length || allow.length) {
             const disallowMatcher = (0, exports.createFileMatcher)(disallow, true, options);
             const allowMatcher = (0, exports.createFileMatcher)(allow, false, options);
@@ -78,7 +77,7 @@ function createRule(options) {
     const { create, defaultOptions, fixable, messages } = options;
     const ruleCreator = utils_1.ESLintUtils.RuleCreator((name) => `https://ilyub.github.io/eslint-plugin/${name}.html`);
     return ruleCreator({
-        create(context, rawOptions) {
+        create: (context, rawOptions) => {
             const betterContext = createBetterContext(context, rawOptions, options);
             return shouldBeLinted(betterContext.options, betterContext.id, betterContext.path, betterContext.code)
                 ? create(betterContext)
@@ -271,16 +270,19 @@ function createBetterContext(context, ruleOptionsArray, options) {
         checker: parser.program.getTypeChecker(),
         code,
         eol: functions_1.s.detectEol(code),
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         getLeadingTrivia(node) {
             const tsNode = this.toTsNode(node);
             return code.slice(node.range[0] - tsNode.getLeadingTriviaWidth(), node.range[0]);
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         getLocFromRange(range) {
             return {
                 end: source.getLocFromIndex(range[1]),
                 start: source.getLocFromIndex(range[0])
             };
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         getMemberName(node) {
             switch (node.type) {
                 case utils_1.AST_NODE_TYPES.MethodDefinition:
@@ -304,33 +306,41 @@ function createBetterContext(context, ruleOptionsArray, options) {
                     return "";
             }
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         getRangeWithLeadingTrivia(node) {
             return [
                 node.range[0] - this.getLeadingTrivia(node).length,
                 node.range[1]
             ];
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         getText(node) {
             return code.slice(...node.range);
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         getTextWithLeadingTrivia(node) {
             return code.slice(node.range[0] - this.getLeadingTrivia(node).length, node.range[1]);
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         getTypeDefinitions(types) {
             return types.map(type => this.checker.typeToString(type)).join(" > ");
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         hasLeadingComment(node) {
             return (this.getLeadingTrivia(node).trim().startsWith("/*") ||
                 this.getLeadingTrivia(node).trim().startsWith("//"));
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         hasLeadingDocComment(node) {
             return this.getLeadingTrivia(node).trim().startsWith("/**");
         },
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         hasTrailingComment(node) {
             return code.slice(node.range[1]).trim().startsWith("//");
         },
         id,
         locZero: source.getLocFromIndex(0),
+        // eslint-disable-next-line no-restricted-syntax -- Postponed
         missingDocComment(mixed) {
             return mixed.getDocumentationComment(this.checker).length === 0;
         },

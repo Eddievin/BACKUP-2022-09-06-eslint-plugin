@@ -5,17 +5,15 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 exports.disallowIdentifier = utils.createRule({
-    create(context) {
+    create: context => {
         return {
-            ":not(Property) > Identifier:not(.property)"(node) {
+            ":not(Property) > Identifier:not(.property)": (node) => {
                 for (const subOptions of context.subOptionsArray)
                     if (subOptions.ids.includes(node.name.valueOf()))
                         context.report({
-                            fix() {
-                                return functions_1.is.not.empty(subOptions.replacement)
-                                    ? [{ range: node.range, text: subOptions.replacement }]
-                                    : [];
-                            },
+                            fix: () => functions_1.is.not.empty(subOptions.replacement)
+                                ? [{ range: node.range, text: subOptions.replacement }]
+                                : [],
                             messageId: "disallowedIdentifier",
                             node
                         });

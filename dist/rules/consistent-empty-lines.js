@@ -5,17 +5,17 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 exports.consistentEmptyLines = utils.createRule({
-    create(context) {
+    create: context => {
         const childNodesMap = new functions_1.Accumulator();
         const prevRuleIndexes = new functions_1.Accumulator();
         const nextRuleIndexes = new functions_1.Accumulator();
         const prevItems = [];
         const nextItems = [];
         const listener = {
-            "*"(node) {
+            "*": (node) => {
                 utils.buildChildNodesMap(node, childNodesMap);
             },
-            "Program:exit"() {
+            "Program:exit": () => {
                 const items = new Map();
                 prevItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
                 nextItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
@@ -50,14 +50,12 @@ exports.consistentEmptyLines = utils.createRule({
                         }
                         else
                             context.report({
-                                fix() {
-                                    return [
-                                        {
-                                            range: [node.range[0] - got.length, node.range[0]],
-                                            text: expected
-                                        }
-                                    ];
-                                },
+                                fix: () => [
+                                    {
+                                        range: [node.range[0] - got.length, node.range[0]],
+                                        text: expected
+                                    }
+                                ],
                                 messageId,
                                 node
                             });

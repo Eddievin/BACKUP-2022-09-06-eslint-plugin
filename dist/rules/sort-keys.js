@@ -7,9 +7,9 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 exports.sortKeys = utils.createRule({
-    create(context) {
+    create: context => {
         return {
-            [utils_1.AST_NODE_TYPES.ObjectExpression](node) {
+            [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {
                 const group = [];
                 for (const property of node.properties)
                     if (property.type === utils_1.AST_NODE_TYPES.SpreadElement)

@@ -6,9 +6,9 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.switchCaseEmptyLines = utils.createRule({
-    create(context) {
+    create: context => {
         return {
-            [utils_1.AST_NODE_TYPES.SwitchStatement](node) {
+            [utils_1.AST_NODE_TYPES.SwitchStatement]: (node) => {
                 for (const [case1, case2] of functions_1.a.chain(node.cases)) {
                     const spread = case1.consequent.length > 0;
                     const count = spread ? 2 : 1;
@@ -22,14 +22,12 @@ exports.switchCaseEmptyLines = utils.createRule({
                     }
                     else
                         context.report({
-                            fix() {
-                                return [
-                                    {
-                                        range: [case2.range[0] - got.length, case2.range[0]],
-                                        text: expected
-                                    }
-                                ];
-                            },
+                            fix: () => [
+                                {
+                                    range: [case2.range[0] - got.length, case2.range[0]],
+                                    text: expected
+                                }
+                            ],
                             messageId,
                             node: case2
                         });

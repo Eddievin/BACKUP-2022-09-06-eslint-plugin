@@ -19,14 +19,13 @@ export declare const createFileMatcher: {
     /**
      * Creates file matcher.
      *
-     * @param this - No this.
      * @param disallow - Disallow patterns.
      * @param allow - Allow patterns.
      * @param defVal - Default value.
      * @param options - Minimatch options.
      * @returns Matcher.
      */
-    disallowAllow(this: void, disallow: strings, allow: strings, defVal: boolean, options: Readonly<minimatch.IOptions>): Matcher;
+    disallowAllow: (disallow: strings, allow: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher;
 } & ((patterns: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher);
 export interface Context<M extends string, O extends object, S extends object> {
     readonly checker: ts.TypeChecker;

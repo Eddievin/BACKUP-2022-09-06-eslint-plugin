@@ -8,9 +8,9 @@ const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 exports.noUnsafeObjectAssignment = utils.createRule({
-    create(context) {
+    create: context => {
         return {
-            [utils_1.AST_NODE_TYPES.ArrowFunctionExpression](node) {
+            [utils_1.AST_NODE_TYPES.ArrowFunctionExpression]: (node) => {
                 if (node.body.type === utils_1.AST_NODE_TYPES.BlockStatement) {
                     // Should be checked by ReturnStatement
                 }
@@ -20,20 +20,20 @@ exports.noUnsafeObjectAssignment = utils.createRule({
                     // No return type to check
                 }
             },
-            [utils_1.AST_NODE_TYPES.AssignmentExpression](node) {
+            [utils_1.AST_NODE_TYPES.AssignmentExpression]: (node) => {
                 lintNodes(node.left, node.right, context);
             },
-            [utils_1.AST_NODE_TYPES.CallExpression](node) {
+            [utils_1.AST_NODE_TYPES.CallExpression]: (node) => {
                 const tsNode = context.toTsNode(node);
                 for (const arg of tsNode.arguments)
                     lintExpression(arg, context);
             },
-            [utils_1.AST_NODE_TYPES.ReturnStatement](node) {
+            [utils_1.AST_NODE_TYPES.ReturnStatement]: (node) => {
                 const tsNode = context.toTsNode(node);
                 if (tsNode.expression)
                     lintExpression(tsNode.expression, context);
             },
-            [utils_1.AST_NODE_TYPES.VariableDeclaration](node) {
+            [utils_1.AST_NODE_TYPES.VariableDeclaration]: (node) => {
                 for (const declaration of node.declarations)
                     if (declaration.init)
                         lintNodes(declaration.id, declaration.init, context);
