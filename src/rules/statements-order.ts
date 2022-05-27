@@ -364,7 +364,7 @@ function nodeInfo(
   }
 
   function buildResult(type: NodeType, id = ""): Item {
-    const order1 = order[type];
+    const order1 = 1_000_000 + order[type];
 
     const order2 = sortable[type] ? id : "";
 

@@ -325,6 +325,40 @@ utils.testRule(
         export = x;
       `,
       name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        const x = 1;
+        test("sample", () => {});
+      `,
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: `
+        const x = 1;
+        test("sample", () => {});
+      `,
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          rootOrder: [
+            "ImportDeclaration",
+            "GlobalModuleDeclaration",
+            "ExportAllDeclaration",
+            "ExportDeclaration",
+            "ExportDefaultDeclaration",
+            "ExportUnknown",
+            "ExportTypeDeclaration",
+            "ExportFunctionDeclaration",
+            "ExportModuleDeclaration",
+            "Unknown",
+            "TypeDeclaration",
+            "FunctionDeclaration",
+            "ModuleDeclaration",
+            "JestTest"
+          ]
+        }
+      ]
     }
   ]
 );
