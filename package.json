@@ -39,16 +39,16 @@
     "update-package-force-skylib": "ncu --dep peer --filter @skylib/* --upgrade"
   },
   "dependencies": {
-    "@skylib/functions": "^2.3.0",
+    "@skylib/functions": "^2.4.0",
     "@skylib/lodash-commonjs-es": "^0.1.0",
     "@skylib/typescript-types": "^1.0.0",
     "@types/estree": "^0.0.51",
     "@types/minimatch": "^3.0.5",
-    "minimatch": "^5.0.1"
+    "minimatch": "^5.1.0"
   },
   "devDependencies": {
-    "@skylib/config": "^1.13.0",
-    "@skylib/eslint-plugin": "^0.1.27",
+    "@skylib/config": "^1.15.0",
+    "@skylib/eslint-plugin": "^0.1.28",
     "get-current-line": "^6.6.0"
   },
   "peerDependencies": {
