@@ -1,4 +1,4 @@
-import { assert, is, createValidationObject, o } from "@skylib/functions";
+import { assert, createValidationObject, is, o } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";

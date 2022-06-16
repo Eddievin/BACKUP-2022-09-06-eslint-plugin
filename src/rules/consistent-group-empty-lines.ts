@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { a, is, s, num, Accumulator, Accumulator2 } from "@skylib/functions";
+import { Accumulator, Accumulator2, a, is, num, s } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 

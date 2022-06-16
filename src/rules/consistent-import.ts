@@ -2,9 +2,9 @@ import * as utils from "./utils";
 import {
   a,
   assert,
+  createValidationObject,
   fn,
   is,
-  createValidationObject,
   s
 } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";

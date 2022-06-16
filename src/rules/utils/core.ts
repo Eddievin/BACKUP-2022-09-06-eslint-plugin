@@ -1,4 +1,4 @@
-import { assert, cast, fn, is, o, s, json, reflect } from "@skylib/functions";
+import { assert, cast, fn, is, json, o, reflect, s } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import {
   AST_NODE_TYPES,
@@ -11,20 +11,20 @@ import nodePath from "path";
 import * as tsutils from "tsutils";
 import type {
   Accumulator,
-  objects,
   Rec,
+  objects,
   strings,
   unknowns
 } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type {
   InvalidTestCase as BaseInvalidTestCase,
+  ValidTestCase as BaseValidTestCase,
   ReportDescriptor,
   RuleContext,
   RuleListener,
   RuleModule,
-  SourceCode,
-  ValidTestCase as BaseValidTestCase
+  SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
 import type * as ts from "typescript";

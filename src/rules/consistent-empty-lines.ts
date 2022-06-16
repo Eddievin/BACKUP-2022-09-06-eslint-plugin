@@ -1,11 +1,11 @@
 import * as utils from "./utils";
 import {
+  Accumulator,
   a,
+  createValidationObject,
   fn,
   is,
-  s,
-  createValidationObject,
-  Accumulator
+  s
 } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";

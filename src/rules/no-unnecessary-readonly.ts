@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { is, createValidationObject, fn } from "@skylib/functions";
+import { createValidationObject, fn, is } from "@skylib/functions";
 
 export const noUnnecessaryReadonly = utils.noUnnecessaryReadonliness.createRule(
   "no-unnecessary-readonly",

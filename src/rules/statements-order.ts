@@ -1,12 +1,12 @@
 import * as utils from "./utils";
 import {
+  Accumulator,
   a,
   assert,
+  createValidationObject,
   fn,
   is,
-  createValidationObject,
-  o,
-  Accumulator
+  o
 } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";

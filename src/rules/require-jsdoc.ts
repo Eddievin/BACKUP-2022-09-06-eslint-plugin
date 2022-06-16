@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { is, createValidationObject, fn } from "@skylib/functions";
+import { createValidationObject, fn, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import type { strings } from "@skylib/functions";
