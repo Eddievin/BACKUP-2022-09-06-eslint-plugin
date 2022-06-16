@@ -9,6 +9,8 @@ module.exports = {
     "@skylib/prefer-alias-for-array-types": "off",
     "@skylib/prefer-readonly": "off",
     "@skylib/prefer-readonly-props": "off",
+    "boundaries/element-types": "off",
+    "boundaries/no-unknown-files": "off",
     "eslint-comments/require-description": "off",
     "import/no-internal-modules": [
       "warn",
