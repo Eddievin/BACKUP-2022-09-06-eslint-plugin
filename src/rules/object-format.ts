@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { fn, is, num } from "@skylib/functions";
+import { evaluate, is, num } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const objectFormat = utils.createRule({
@@ -10,10 +10,10 @@ export const objectFormat = utils.createRule({
           context.getTextWithLeadingTrivia(property).trim()
         );
 
-        const predictedLength = fn.run(() => {
+        const predictedLength = evaluate(() => {
           const headLength = context.getLocFromRange(node.range).start.column;
 
-          const tailLength = fn.run(() => {
+          const tailLength = evaluate(() => {
             const tail = context.code.slice(node.range[1]);
 
             if (tail.startsWith(" as ")) return 1000;

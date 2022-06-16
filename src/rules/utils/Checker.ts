@@ -16,7 +16,7 @@ export class Checker<M extends string, O extends object, S extends object> {
     this.checker = options.context.checker;
     this.ignoreClasses = options.ignoreClasses;
     this.ignoreInterfaces = options.ignoreInterfaces;
-    this.ignoreTypeParameters = options.ignoreTypeParameters ?? false;
+    this.ignoreTypeParameters = options.ignoreTypeParameters;
     this.ignoreTypes = utils.createMatcher(options.ignoreTypes);
     this.readonliness = options.readonliness;
   }
@@ -352,7 +352,7 @@ export namespace Checker {
     readonly context: utils.Context<M, O, S>;
     readonly ignoreClasses: boolean;
     readonly ignoreInterfaces: boolean;
-    readonly ignoreTypeParameters?: boolean;
+    readonly ignoreTypeParameters: boolean;
     readonly ignoreTypes: strings;
     readonly readonliness: Readonliness;
   }

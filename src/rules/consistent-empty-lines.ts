@@ -3,7 +3,7 @@ import {
   Accumulator,
   a,
   createValidationObject,
-  fn,
+  evaluate,
   is,
   s
 } from "@skylib/functions";
@@ -51,7 +51,7 @@ export const consistentEmptyLines = utils.createRule({
           } else {
             const node = item.node;
 
-            const spread = fn.run(() => {
+            const spread = evaluate(() => {
               switch (emptyLine) {
                 case "always":
                   return true;
@@ -109,7 +109,7 @@ export const consistentEmptyLines = utils.createRule({
   },
   fixable: "whitespace",
   isRuleOptions: is.object,
-  isSubOptions: fn.run(() => {
+  isSubOptions: evaluate(() => {
     const EmptyLineVO = createValidationObject<EmptyLine>({
       always: "always",
       any: "any",

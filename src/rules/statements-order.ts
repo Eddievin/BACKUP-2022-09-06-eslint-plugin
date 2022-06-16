@@ -4,7 +4,7 @@ import {
   a,
   assert,
   createValidationObject,
-  fn,
+  evaluate,
   is,
   o
 } from "@skylib/functions";
@@ -57,7 +57,7 @@ export const statementsOrder = utils.createRule({
 
           const parentNode = node.parent;
 
-          const order = fn.run(() => {
+          const order = evaluate(() => {
             switch (parentNode.type) {
               case "BlockStatement":
                 return blockOrder;
@@ -112,7 +112,7 @@ export const statementsOrder = utils.createRule({
     rootOrder: []
   },
   fixable: "code",
-  isRuleOptions: fn.run(() => {
+  isRuleOptions: evaluate(() => {
     const NodeTypeVO = createValidationObject<NodeType>({
       ExportAllDeclaration: "ExportAllDeclaration",
       ExportDeclaration: "ExportDeclaration",

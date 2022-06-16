@@ -1,11 +1,11 @@
 import * as utils from "./utils";
-import { createValidationObject, fn, is } from "@skylib/functions";
+import { createValidationObject, evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-export const optionalPropertyStyle = fn.run(() => {
+export const optionalPropertyStyle = evaluate(() => {
   const StyleVO = createValidationObject<Style>({
     combined: "combined",
     optional: "optional",
@@ -33,7 +33,7 @@ export const optionalPropertyStyle = fn.run(() => {
         ): void => {
           const name = node.id?.name;
 
-          const target = fn.run<Target>(() => {
+          const target = evaluate<Target>(() => {
             switch (node.type) {
               case AST_NODE_TYPES.ClassDeclaration:
               case AST_NODE_TYPES.ClassExpression:
@@ -72,7 +72,7 @@ export const optionalPropertyStyle = fn.run(() => {
 
           const type = context.checker.getTypeAtLocation(tsNode);
 
-          const got = fn.run<Style | undefined>(() => {
+          const got = evaluate<Style | undefined>(() => {
             const optional = node.optional ?? false;
 
             const hasUndefined =
@@ -90,7 +90,7 @@ export const optionalPropertyStyle = fn.run(() => {
             return undefined;
           });
 
-          const expected = fn.run(() => {
+          const expected = evaluate(() => {
             const targets = new Set([target, undefined]);
 
             return (

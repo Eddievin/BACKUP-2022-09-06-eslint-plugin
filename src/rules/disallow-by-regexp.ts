@@ -1,5 +1,11 @@
 import * as utils from "./utils";
-import { a, createValidationObject, fn, is, regexp } from "@skylib/functions";
+import {
+  a,
+  createValidationObject,
+  evaluate,
+  is,
+  regexp
+} from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
@@ -55,7 +61,7 @@ export const disallowByRegexp = utils.createRule({
   },
   defaultOptions: { contexts: ["code", "comment", "string"] },
   fixable: "code",
-  isRuleOptions: fn.run(() => {
+  isRuleOptions: evaluate(() => {
     const SubOptionsContextVO = createValidationObject<SubOptionsContext>({
       code: "code",
       comment: "comment",
@@ -71,7 +77,7 @@ export const disallowByRegexp = utils.createRule({
       {}
     );
   }),
-  isSubOptions: fn.run(() => {
+  isSubOptions: evaluate(() => {
     const SubOptionsContextVO = createValidationObject<SubOptionsContext>({
       code: "code",
       comment: "comment",

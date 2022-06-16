@@ -6,7 +6,7 @@ export const exportAllName = utils.createRule({
   create: context => {
     return {
       [AST_NODE_TYPES.ExportAllDeclaration]: (node): void => {
-        if (node.exported && node.source) {
+        if (node.exported) {
           const expected = utils.getNameFromFilename(node.source.value);
 
           if (node.exported.name === expected) {

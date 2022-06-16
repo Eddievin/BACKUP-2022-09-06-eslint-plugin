@@ -1,9 +1,9 @@
 import * as utils from "./utils";
-import { createValidationObject, fn, is } from "@skylib/functions";
+import { createValidationObject, evaluate, is } from "@skylib/functions";
 
 export const noUnnecessaryWritable = utils.noUnnecessaryReadonliness.createRule(
   "no-unnecessary-writable",
-  fn.run(() => {
+  evaluate(() => {
     const TypeToCheckVO = createValidationObject<TypeToCheck>({
       DeepWritable: "DeepWritable",
       Writable: "Writable"

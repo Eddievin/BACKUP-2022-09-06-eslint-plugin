@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { createValidationObject, fn, is } from "@skylib/functions";
+import { createValidationObject, evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import type { strings } from "@skylib/functions";
@@ -43,7 +43,7 @@ export const requireJsdoc = utils.createRule({
     noDefaultSelectors: false,
     properties: ["function", "nonFunction"]
   },
-  isRuleOptions: fn.run(() => {
+  isRuleOptions: evaluate(() => {
     const InterfaceOptionVO = createValidationObject<InterfaceOption>({
       callSignatures: "callSignatures",
       constructSignatures: "constructSignatures",

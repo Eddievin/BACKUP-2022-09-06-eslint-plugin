@@ -1,4 +1,4 @@
-import { assert, cast, fn, is, json, o, reflect, s } from "@skylib/functions";
+import { assert, cast, evaluate, fn, is, json, o, s } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import {
   AST_NODE_TYPES,
@@ -228,8 +228,8 @@ export interface GetSelectorsOptions {
 
 export interface InvalidTestCase<M extends string>
   extends BaseInvalidTestCase<M, readonly [object]> {
-  filename?: SourceFile;
-  name: string;
+  readonly filename?: SourceFile;
+  readonly name: string;
 }
 
 export interface Matcher {
@@ -259,8 +259,8 @@ export type SourceFile =
   | "vue.d.ts";
 
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
-  filename?: SourceFile;
-  name: string;
+  readonly filename?: SourceFile;
+  readonly name: string;
 }
 
 /**
@@ -425,7 +425,9 @@ export function getSelectors(
  * @returns Type name.
  */
 export function getTypeName(type: ts.Type): string {
-  return type.getSymbol()?.name ?? "?";
+  const symbol = type.getSymbol();
+
+  return symbol ? symbol.name : "?";
 }
 
 /**
@@ -746,7 +748,8 @@ function getSubOptionsArray<
   if (isSubOptions) {
     const ruleOptions = getRuleOptions(ruleOptionsArray, options);
 
-    const raw = reflect.get(ruleOptions, subOptionsKey ?? "rules") ?? [];
+    // eslint-disable-next-line no-restricted-syntax -- Ok
+    const raw = o.get(ruleOptions, subOptionsKey ?? "rules") ?? [];
 
     assert.array.of(raw, is.object, "Expecting valid rule options");
 
@@ -787,7 +790,7 @@ function shouldBeLinted(
       `/* skylib/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`
     );
 
-  const disallowByPath = fn.run<boolean>(() => {
+  const disallowByPath = evaluate<boolean>(() => {
     const matcher = createFileMatcher.disallowAllow(
       options.filesToSkip ?? [],
       options.filesToLint ?? [],

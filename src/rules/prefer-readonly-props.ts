@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { fn, is } from "@skylib/functions";
+import { evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 import type { Accessibility } from "@typescript-eslint/types/dist/generated/ast-spec";
@@ -19,7 +19,7 @@ export const preferReadonlyProps = utils.createRule({
       ignoreSelectedInterfaces
     } = context.options;
 
-    const ignoreAccessebilities = fn.run(() => {
+    const ignoreAccessebilities = evaluate(() => {
       const result = new Set<Accessibility | undefined>();
 
       if (ignorePrivateProperties) result.add("private");

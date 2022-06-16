@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { a, fn, is, s } from "@skylib/functions";
+import { a, evaluate, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const noExpressionEmptyLine = utils.createRule({
@@ -8,7 +8,7 @@ export const noExpressionEmptyLine = utils.createRule({
       [AST_NODE_TYPES.MemberExpression]: (node): void => {
         const got = s.leadingSpaces(context.code.slice(node.object.range[1]));
 
-        const expected = fn.run(() => {
+        const expected = evaluate(() => {
           const lines = s.lines(got);
 
           return lines.length >= 3

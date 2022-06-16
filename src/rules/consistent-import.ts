@@ -3,7 +3,7 @@ import {
   a,
   assert,
   createValidationObject,
-  fn,
+  evaluate,
   is,
   s
 } from "@skylib/functions";
@@ -39,7 +39,7 @@ export const consistentImport = utils.createRule({
   defaultSubOptions: { altLocalNames: [] },
   fixable: "code",
   isRuleOptions: is.object,
-  isSubOptions: fn.run(() => {
+  isSubOptions: evaluate(() => {
     const TypeVO = createValidationObject<Type>({
       default: "default",
       wildcard: "wildcard"
@@ -301,7 +301,7 @@ function identifierFromPath(path: string): string {
  * @returns Normalized source.
  */
 function normalizeSource(source: string, context: Context): string {
-  source = fn.run(() => {
+  source = evaluate(() => {
     if (source.startsWith("@/")) {
       assert.not.empty(context.package.name, "Missing package name");
 
