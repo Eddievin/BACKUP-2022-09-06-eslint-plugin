@@ -40,6 +40,7 @@ export function createRule<M extends string, T extends string>(
         context,
         ignoreClasses,
         ignoreInterfaces,
+        ignoreTypeParameters: false,
         ignoreTypes,
         readonliness
       });
