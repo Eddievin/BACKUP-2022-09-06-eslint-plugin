@@ -18,6 +18,7 @@ import { noInferrableTypes } from "./no-inferrable-types";
 import { noMultiTypeTuples } from "./no-multi-type-tuples";
 import { noMutableSignature } from "./no-mutable-signature";
 import { noNegatedCondition } from "./no-negated-condition";
+import { noRestrictedSyntax } from "./no-restricted-syntax";
 import { noUnnecessaryReadonly } from "./no-unnecessary-readonly";
 import { noUnnecessaryWritable } from "./no-unnecessary-writable";
 import { noUnsafeObjectAssignment } from "./no-unsafe-object-assignment";
@@ -61,6 +62,7 @@ export const rules = {
   "no-multi-type-tuples": noMultiTypeTuples,
   "no-mutable-signature": noMutableSignature,
   "no-negated-condition": noNegatedCondition,
+  "no-restricted-syntax": noRestrictedSyntax,
   "no-unnecessary-readonly": noUnnecessaryReadonly,
   "no-unnecessary-writable": noUnnecessaryWritable,
   "no-unsafe-object-assignment": noUnsafeObjectAssignment,
