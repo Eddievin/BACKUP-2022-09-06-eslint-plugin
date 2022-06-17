@@ -43,7 +43,7 @@
     "minimatch": "^5.1.0"
   },
   "devDependencies": {
-    "@skylib/config": "^1.15.0",
+    "@skylib/config": "^1.16.0",
     "@skylib/eslint-plugin": "^0.1.28",
     "get-current-line": "^6.6.0"
   },
