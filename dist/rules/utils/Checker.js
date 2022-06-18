@@ -14,7 +14,6 @@ class Checker {
      * @param options - Options.
      */
     constructor(options) {
-        var _a;
         Object.defineProperty(this, "checker", {
             enumerable: true,
             configurable: true,
@@ -60,7 +59,7 @@ class Checker {
         this.checker = options.context.checker;
         this.ignoreClasses = options.ignoreClasses;
         this.ignoreInterfaces = options.ignoreInterfaces;
-        this.ignoreTypeParameters = (_a = options.ignoreTypeParameters) !== null && _a !== void 0 ? _a : false;
+        this.ignoreTypeParameters = options.ignoreTypeParameters;
         this.ignoreTypes = utils.createMatcher(options.ignoreTypes);
         this.readonliness = options.readonliness;
     }

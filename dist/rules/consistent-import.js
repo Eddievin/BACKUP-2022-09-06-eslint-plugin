@@ -30,7 +30,7 @@ exports.consistentImport = utils.createRule({
     defaultSubOptions: { altLocalNames: [] },
     fixable: "code",
     isRuleOptions: functions_1.is.object,
-    isSubOptions: functions_1.fn.run(() => {
+    isSubOptions: (0, functions_1.evaluate)(() => {
         const TypeVO = (0, functions_1.createValidationObject)({
             default: "default",
             wildcard: "wildcard"
@@ -232,7 +232,7 @@ function identifierFromPath(path) {
  * @returns Normalized source.
  */
 function normalizeSource(source, context) {
-    source = functions_1.fn.run(() => {
+    source = (0, functions_1.evaluate)(() => {
         if (source.startsWith("@/")) {
             functions_1.assert.not.empty(context.package.name, "Missing package name");
             const path = `src/${source.slice(2)}`;

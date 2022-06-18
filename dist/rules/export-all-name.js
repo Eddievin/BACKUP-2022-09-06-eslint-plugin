@@ -9,7 +9,7 @@ exports.exportAllName = utils.createRule({
     create: context => {
         return {
             [utils_1.AST_NODE_TYPES.ExportAllDeclaration]: (node) => {
-                if (node.exported && node.source) {
+                if (node.exported) {
                     const expected = utils.getNameFromFilename(node.source.value);
                     if (node.exported.name === expected) {
                         // Valid

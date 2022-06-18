@@ -8,7 +8,7 @@ const utils_1 = require("@typescript-eslint/utils");
 exports.preferReadonlyProps = utils.createRule({
     create: context => {
         const { ignoreClasses, ignoreIdentifiers, ignoreInterfaces, ignorePrivateProperties, ignoreProtectedProperties, ignorePublicProperties, ignoreSelectedClasses, ignoreSelectedInterfaces } = context.options;
-        const ignoreAccessebilities = functions_1.fn.run(() => {
+        const ignoreAccessebilities = (0, functions_1.evaluate)(() => {
             const result = new Set();
             if (ignorePrivateProperties)
                 result.add("private");

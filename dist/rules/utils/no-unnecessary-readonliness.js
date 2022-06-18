@@ -30,6 +30,7 @@ function createRule(name, isTypeToCheck, readonliness, messageId, message) {
                 context,
                 ignoreClasses,
                 ignoreInterfaces,
+                ignoreTypeParameters: false,
                 ignoreTypes,
                 readonliness
             });

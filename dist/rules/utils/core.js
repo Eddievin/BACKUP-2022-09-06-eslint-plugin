@@ -165,8 +165,8 @@ exports.getSelectors = getSelectors;
  * @returns Type name.
  */
 function getTypeName(type) {
-    var _a, _b;
-    return (_b = (_a = type.getSymbol()) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : "?";
+    const symbol = type.getSymbol();
+    return symbol ? symbol.name : "?";
 }
 exports.getTypeName = getTypeName;
 /**
@@ -383,7 +383,8 @@ function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
     const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
     if (isSubOptions) {
         const ruleOptions = getRuleOptions(ruleOptionsArray, options);
-        const raw = (_a = functions_1.reflect.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
+        // eslint-disable-next-line no-restricted-syntax -- Ok
+        const raw = (_a = functions_1.o.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
         functions_1.assert.array.of(raw, functions_1.is.object, "Expecting valid rule options");
         const result = raw
             .map(subOptions => {
@@ -408,7 +409,7 @@ function shouldBeLinted(options, ruleId, path, code) {
     functions_1.assert.byGuard(options, isSharedOptions, "Expecting valid rule options");
     const disallowById = functions_1.is.not.empty(options.subOptionsId) &&
         code.includes(`/* skylib/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`);
-    const disallowByPath = functions_1.fn.run(() => {
+    const disallowByPath = (0, functions_1.evaluate)(() => {
         var _a, _b;
         const matcher = exports.createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });
         return matcher(stripBase(functions_1.s.path.canonicalize(path), "./"));

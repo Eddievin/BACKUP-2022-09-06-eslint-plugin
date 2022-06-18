@@ -4,7 +4,7 @@ exports.noUnnecessaryReadonly = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
-exports.noUnnecessaryReadonly = utils.noUnnecessaryReadonliness.createRule("no-unnecessary-readonly", functions_1.fn.run(() => {
+exports.noUnnecessaryReadonly = utils.noUnnecessaryReadonliness.createRule("no-unnecessary-readonly", (0, functions_1.evaluate)(() => {
     const TypeToCheckVO = (0, functions_1.createValidationObject)({
         DeepReadonly: "DeepReadonly",
         Readonly: "Readonly"

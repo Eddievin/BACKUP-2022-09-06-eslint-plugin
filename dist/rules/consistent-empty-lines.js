@@ -31,7 +31,7 @@ exports.consistentEmptyLines = utils.createRule({
                     }
                     else {
                         const node = item.node;
-                        const spread = functions_1.fn.run(() => {
+                        const spread = (0, functions_1.evaluate)(() => {
                             switch (emptyLine) {
                                 case "always":
                                     return true;
@@ -79,7 +79,7 @@ exports.consistentEmptyLines = utils.createRule({
     },
     fixable: "whitespace",
     isRuleOptions: functions_1.is.object,
-    isSubOptions: functions_1.fn.run(() => {
+    isSubOptions: (0, functions_1.evaluate)(() => {
         const EmptyLineVO = (0, functions_1.createValidationObject)({
             always: "always",
             any: "any",

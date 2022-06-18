@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const ts = tslib_1.__importStar(require("typescript"));
-exports.optionalPropertyStyle = functions_1.fn.run(() => {
+exports.optionalPropertyStyle = (0, functions_1.evaluate)(() => {
     const StyleVO = (0, functions_1.createValidationObject)({
         combined: "combined",
         optional: "optional",
@@ -25,7 +25,7 @@ exports.optionalPropertyStyle = functions_1.fn.run(() => {
                 "ClassDeclaration, ClassExpression, TSInterfaceDeclaration": (node) => {
                     var _a;
                     const name = (_a = node.id) === null || _a === void 0 ? void 0 : _a.name;
-                    const target = functions_1.fn.run(() => {
+                    const target = (0, functions_1.evaluate)(() => {
                         switch (node.type) {
                             case utils_1.AST_NODE_TYPES.ClassDeclaration:
                             case utils_1.AST_NODE_TYPES.ClassExpression:
@@ -50,7 +50,7 @@ exports.optionalPropertyStyle = functions_1.fn.run(() => {
                 if (node.typeAnnotation) {
                     const tsNode = context.toTsNode(node.typeAnnotation.typeAnnotation);
                     const type = context.checker.getTypeAtLocation(tsNode);
-                    const got = functions_1.fn.run(() => {
+                    const got = (0, functions_1.evaluate)(() => {
                         var _a;
                         const optional = (_a = node.optional) !== null && _a !== void 0 ? _a : false;
                         const hasUndefined = type.isUnion() &&
@@ -63,7 +63,7 @@ exports.optionalPropertyStyle = functions_1.fn.run(() => {
                             return "undefined";
                         return undefined;
                     });
-                    const expected = functions_1.fn.run(() => {
+                    const expected = (0, functions_1.evaluate)(() => {
                         var _a;
                         const targets = new Set([target, undefined]);
                         return ((_a = context.subOptionsArray

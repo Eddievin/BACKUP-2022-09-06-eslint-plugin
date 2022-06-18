@@ -18,7 +18,7 @@ exports.statementsOrder = utils.createRule({
                     const id = utils.getNodeId(node.parent);
                     const index = itemsMap.get(id).length;
                     const parentNode = node.parent;
-                    const order = functions_1.fn.run(() => {
+                    const order = (0, functions_1.evaluate)(() => {
                         switch (parentNode.type) {
                             case "BlockStatement":
                                 return blockOrder;
@@ -66,7 +66,7 @@ exports.statementsOrder = utils.createRule({
         rootOrder: []
     },
     fixable: "code",
-    isRuleOptions: functions_1.fn.run(() => {
+    isRuleOptions: (0, functions_1.evaluate)(() => {
         const NodeTypeVO = (0, functions_1.createValidationObject)({
             ExportAllDeclaration: "ExportAllDeclaration",
             ExportDeclaration: "ExportDeclaration",

@@ -10,9 +10,9 @@ exports.objectFormat = utils.createRule({
         return {
             [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {
                 const texts = node.properties.map(property => context.getTextWithLeadingTrivia(property).trim());
-                const predictedLength = functions_1.fn.run(() => {
+                const predictedLength = (0, functions_1.evaluate)(() => {
                     const headLength = context.getLocFromRange(node.range).start.column;
-                    const tailLength = functions_1.fn.run(() => {
+                    const tailLength = (0, functions_1.evaluate)(() => {
                         const tail = context.code.slice(node.range[1]);
                         if (tail.startsWith(" as "))
                             return 1000;

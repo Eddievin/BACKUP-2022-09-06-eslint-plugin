@@ -10,7 +10,7 @@ exports.noExpressionEmptyLine = utils.createRule({
         return {
             [utils_1.AST_NODE_TYPES.MemberExpression]: (node) => {
                 const got = functions_1.s.leadingSpaces(context.code.slice(node.object.range[1]));
-                const expected = functions_1.fn.run(() => {
+                const expected = (0, functions_1.evaluate)(() => {
                     const lines = functions_1.s.lines(got);
                     return lines.length >= 3
                         ? `${functions_1.a.first(lines)}\n${functions_1.a.last(lines)}`

@@ -1,0 +1,2 @@
+export declare const noRestrictedSyntax: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"customMessage", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=no-restricted-syntax.d.ts.map

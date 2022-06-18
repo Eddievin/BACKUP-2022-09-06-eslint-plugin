@@ -36,7 +36,7 @@ exports.requireJsdoc = utils.createRule({
         noDefaultSelectors: false,
         properties: ["function", "nonFunction"]
     },
-    isRuleOptions: functions_1.fn.run(() => {
+    isRuleOptions: (0, functions_1.evaluate)(() => {
         const InterfaceOptionVO = (0, functions_1.createValidationObject)({
             callSignatures: "callSignatures",
             constructSignatures: "constructSignatures",

@@ -1,8 +1,8 @@
 import { is, s } from "@skylib/functions";
 import minimatch from "minimatch";
-import type { Accumulator, objects, Rec, strings, unknowns } from "@skylib/functions";
+import type { Accumulator, Rec, objects, strings, unknowns } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
-import type { InvalidTestCase as BaseInvalidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode, ValidTestCase as BaseValidTestCase } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { InvalidTestCase as BaseInvalidTestCase, ValidTestCase as BaseValidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
 import type * as ts from "typescript";
 export declare const isPackage: is.Guard<Package>;
@@ -149,8 +149,8 @@ export interface GetSelectorsOptions {
     readonly noDefaultSelectors: boolean;
 }
 export interface InvalidTestCase<M extends string> extends BaseInvalidTestCase<M, readonly [object]> {
-    filename?: SourceFile;
-    name: string;
+    readonly filename?: SourceFile;
+    readonly name: string;
 }
 export interface Matcher {
     /**
@@ -168,8 +168,8 @@ export interface Package {
 export declare type ReadonlyRange = readonly [number, number];
 export declare type SourceFile = "camelCase.ts" | "file.extras.ts" | "kebab-case.ts" | "PascalCase.ts" | "subfolder/index.ts" | "vue.d.ts";
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
-    filename?: SourceFile;
-    name: string;
+    readonly filename?: SourceFile;
+    readonly name: string;
 }
 /**
  * Adds node to child nodes map.

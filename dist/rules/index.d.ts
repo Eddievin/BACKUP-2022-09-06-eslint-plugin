@@ -1,5 +1,10 @@
 export * as utils from "./utils";
-export declare const rules: {
+export declare const configs: {
+    all: {
+        plugins: string[];
+        rules: import("@skylib/functions").WritablePartialRecord<"@skylib/array-callback-return-type" | "@skylib/class-member-typedef" | "@skylib/class-name" | "@skylib/class-only-export" | "@skylib/consistent-empty-lines" | "@skylib/consistent-group-empty-lines" | "@skylib/consistent-import" | "@skylib/disallow-by-regexp" | "@skylib/disallow-identifier" | "@skylib/disallow-import" | "@skylib/empty-lines-around-comment" | "@skylib/exhaustive-switch" | "@skylib/export-all-name" | "@skylib/function-properties-style" | "@skylib/no-expression-empty-line" | "@skylib/no-inferrable-types" | "@skylib/no-multi-type-tuples" | "@skylib/no-mutable-signature" | "@skylib/no-negated-condition" | "@skylib/no-restricted-syntax" | "@skylib/no-unnecessary-readonly" | "@skylib/no-unnecessary-writable" | "@skylib/no-unsafe-object-assignment" | "@skylib/no-unused-import" | "@skylib/object-format" | "@skylib/only-export-name" | "@skylib/optional-property-style" | "@skylib/prefer-alias-for-array-types" | "@skylib/prefer-readonly" | "@skylib/prefer-readonly-props" | "@skylib/prefer-ts-toolbelt" | "@skylib/primary-export-only" | "@skylib/require-jsdoc" | "@skylib/sort-class-members" | "@skylib/sort-keys" | "@skylib/statements-order" | "@skylib/switch-case-empty-lines" | "@skylib/template-literal-format" | "@skylib/vue-component-name" | "@skylib/consistent-filename", string>;
+    };
+}, rules: {
     "array-callback-return-type": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"expectingBooleanReturnType", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "class-member-typedef": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"typedefRequired", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "class-name": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"invalidClassName", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
@@ -20,6 +25,7 @@ export declare const rules: {
     "no-multi-type-tuples": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"multiTypeTuplesDisallowed", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "no-mutable-signature": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"noMutableNumberSignature" | "noMutableStringSignature", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "no-negated-condition": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"noNegatedCondition", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+    "no-restricted-syntax": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"customMessage", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "no-unnecessary-readonly": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"unnecessaryReadonly", import("@skylib/functions").unknowns, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "no-unnecessary-writable": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"unnecessaryWritable", import("@skylib/functions").unknowns, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
     "no-unsafe-object-assignment": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"unsafeOptionalAssignment" | "unsafeReadonlyAssignment", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;

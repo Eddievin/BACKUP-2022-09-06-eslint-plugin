@@ -104,7 +104,7 @@ export declare namespace Checker {
         readonly context: utils.Context<M, O, S>;
         readonly ignoreClasses: boolean;
         readonly ignoreInterfaces: boolean;
-        readonly ignoreTypeParameters?: boolean;
+        readonly ignoreTypeParameters: boolean;
         readonly ignoreTypes: strings;
         readonly readonliness: Readonliness;
     }

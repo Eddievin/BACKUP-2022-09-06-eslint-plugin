@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTypeParts = exports.Checker = exports.noUnnecessaryReadonliness = void 0;
 const tslib_1 = require("tslib");
+// eslint-disable-next-line no-restricted-syntax -- Ok
 tslib_1.__exportStar(require("./core"), exports);
 exports.noUnnecessaryReadonliness = tslib_1.__importStar(require("./no-unnecessary-readonliness"));
 var Checker_1 = require("./Checker");

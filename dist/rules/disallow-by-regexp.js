@@ -48,7 +48,7 @@ exports.disallowByRegexp = utils.createRule({
     },
     defaultOptions: { contexts: ["code", "comment", "string"] },
     fixable: "code",
-    isRuleOptions: functions_1.fn.run(() => {
+    isRuleOptions: (0, functions_1.evaluate)(() => {
         const SubOptionsContextVO = (0, functions_1.createValidationObject)({
             code: "code",
             comment: "comment",
@@ -58,7 +58,7 @@ exports.disallowByRegexp = utils.createRule({
         const isSubOptionsContexts = functions_1.is.factory(functions_1.is.array.of, isSubOptionsContext);
         return functions_1.is.object.factory({ contexts: isSubOptionsContexts }, {});
     }),
-    isSubOptions: functions_1.fn.run(() => {
+    isSubOptions: (0, functions_1.evaluate)(() => {
         const SubOptionsContextVO = (0, functions_1.createValidationObject)({
             code: "code",
             comment: "comment",
