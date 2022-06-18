@@ -21,7 +21,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --project tsconfig-build.json",
-    "build-doc": "php scripts/build-doc.php",
+    "build-doc": "php chore/build-doc.php",
     "commitlint": "commitlint --edit",
     "commitlint-all": "commitlint --config commitlint-all.config.js --from=",
     "package-json-lint": "npmPkgJsonLint .",
