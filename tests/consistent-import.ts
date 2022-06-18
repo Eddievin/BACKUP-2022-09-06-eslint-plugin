@@ -156,8 +156,7 @@ utils.testRule(
       errors: [
         { line: 1, messageId: "wildcardImportRequired" },
         { line: 2, messageId: "wildcardImportRequired" },
-        { line: 3, messageId: "wildcardImportDisallowed" },
-        { line: 4, messageId: "wildcardImportDisallowed" }
+        { line: 3, messageId: "wildcardImportDisallowed" }
       ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
@@ -286,20 +285,6 @@ utils.testRule(
           ]
         }
       ]
-    },
-    {
-      code: `
-        import wrongName from "source1";
-        import source2 from "source2";
-      `,
-      errors: [
-        {
-          data: { expectedLocalName: '"source1"' },
-          line: 1,
-          messageId: "invalidLocalName"
-        }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
     }
   ],
   [
@@ -328,14 +313,20 @@ utils.testRule(
     },
     {
       code: `
-        import * as source1 from "@/source1";
-        import * as source2 from "./source2";
-        import * as source3 from "../source3";
+        import * as index from "@";
+        import * as source1 from "@/source2";
+        import * as source2 from "./source3";
+        import * as source3 from "../source4";
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           sources: [
+            {
+              localName: "index",
+              sourcePattern: "@skylib/eslint-plugin",
+              type: "wildcard"
+            },
             {
               sourcePattern: "@skylib/eslint-plugin/src/source1",
               type: "wildcard"
@@ -383,6 +374,13 @@ utils.testRule(
           ]
         }
       ]
+    },
+    {
+      code: `
+        import wrongName from "source1";
+        import source2 from "source2";
+      `,
+      name: `Test at line ${getCurrentLine().line}`
     }
   ]
 );

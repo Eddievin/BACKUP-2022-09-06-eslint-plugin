@@ -198,22 +198,6 @@ function checkImport(
               });
           else context.report({ messageId: "wildcardImportRequired", node });
       }
-    } else {
-      if (defaultSpecifier) {
-        const localName = identifierFromPath(source);
-
-        if (defaultSpecifier.local.name === localName) {
-          // Valid name
-        } else
-          context.report({
-            data: { expectedLocalName: `"${localName}"` },
-            messageId: "invalidLocalName",
-            node
-          });
-      }
-
-      if (wildcardSpecifier)
-        context.report({ messageId: "wildcardImportDisallowed", node });
     }
   }
 }
@@ -302,6 +286,12 @@ function identifierFromPath(path: string): string {
  */
 function normalizeSource(source: string, context: Context): string {
   source = evaluate(() => {
+    if (source === "@") {
+      assert.not.empty(context.package.name, "Missing package name");
+
+      return `${context.package.name}`;
+    }
+
     if (source.startsWith("@/")) {
       assert.not.empty(context.package.name, "Missing package name");
 
