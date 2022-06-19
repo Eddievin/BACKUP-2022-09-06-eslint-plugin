@@ -37,36 +37,43 @@ utils.testRule(
         {
           sources: [
             {
+              autoImportSource: "source1",
               localName: "localName1",
               sourcePattern: "source1",
               type: "default"
             },
             {
+              autoImportSource: "source2",
               localName: "localName2",
               sourcePattern: "source2",
               type: "wildcard"
             },
             {
+              autoImportSource: "source3",
               localName: "localName3",
               sourcePattern: "source3",
               type: "wildcard"
             },
             {
+              autoImportSource: "source4",
               localName: "localName4",
               sourcePattern: "source4",
               type: "wildcard"
             },
             {
+              autoImportSource: "source5",
               localName: "localName5",
               sourcePattern: "source5",
               type: "wildcard"
             },
             {
+              autoImportSource: "source6",
               localName: "localName6",
               sourcePattern: "source6",
               type: "wildcard"
             },
             {
+              autoImportSource: "source7",
               localName: "localName7",
               sourcePattern: "source7",
               type: "wildcard"
@@ -110,6 +117,7 @@ utils.testRule(
           sources: [
             {
               autoImportSource: "@/source",
+              localName: "source",
               sourcePattern: "@skylib/eslint-plugin/src/source",
               type: "wildcard"
             }
@@ -135,6 +143,7 @@ utils.testRule(
           sources: [
             {
               autoImportSource: "@/source",
+              localName: "source",
               sourcePattern: "@skylib/eslint-plugin/src/source",
               type: "wildcard"
             }

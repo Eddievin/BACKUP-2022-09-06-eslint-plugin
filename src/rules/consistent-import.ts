@@ -91,13 +91,23 @@ function autoImport(program: TSESTree.Program, context: Context): void {
   const fixes = new Set<string>();
 
   for (const subOptions of context.subOptionsArray) {
-    const localName = getLocalName(subOptions);
+    const { autoImportSource: source, localName } = subOptions;
 
-    for (const ref of context.scope.through)
-      if (ref.identifier.name === localName) {
-        fixes.add(getFix(subOptions));
-        context.report({ messageId: "missingImport", node: ref.identifier });
-      }
+    if (is.not.empty(localName) && is.not.empty(source))
+      for (const ref of context.scope.through)
+        if (ref.identifier.name === localName) {
+          context.report({ messageId: "missingImport", node: ref.identifier });
+
+          switch (subOptions.type) {
+            case "default":
+              fixes.add(`import ${localName} from "${source}";`);
+
+              break;
+
+            case "wildcard":
+              fixes.add(`import * as ${localName} from "${source}";`);
+          }
+        }
   }
 
   if (fixes.size)
@@ -147,7 +157,7 @@ function checkImport(
     );
 
     if (subOptions) {
-      const localName = getLocalName(subOptions);
+      const localName = subOptions.localName ?? identifierFromPath(source);
 
       switch (subOptions.type) {
         case "default":
@@ -163,8 +173,9 @@ function checkImport(
               context.report({
                 data: {
                   expectedLocalName: getExpectedLocalName(
-                    identifiers,
-                    subOptions
+                    localName,
+                    subOptions.altLocalNames,
+                    identifiers
                   )
                 },
                 messageId: "invalidLocalName",
@@ -189,8 +200,9 @@ function checkImport(
               context.report({
                 data: {
                   expectedLocalName: getExpectedLocalName(
-                    identifiers,
-                    subOptions
+                    localName,
+                    subOptions.altLocalNames,
+                    identifiers
                   )
                 },
                 messageId: "invalidLocalName",
@@ -205,59 +217,19 @@ function checkImport(
 /**
  * Gets expected local name.
  *
+ * @param localName - Local name.
+ * @param altLocalNames - Alt names.
  * @param identifiers - Identifiers.
- * @param subOptions - Suboptions.
  * @returns Expected local name.
  */
 function getExpectedLocalName(
-  identifiers: ReadonlySet<string>,
-  subOptions: SubOptions
+  localName: string,
+  altLocalNames: strings,
+  identifiers: ReadonlySet<string>
 ): string {
-  const localName = getLocalName(subOptions);
-
-  return identifiers.has(localName) && subOptions.altLocalNames.length
-    ? `"${subOptions.altLocalNames.join(", ")}"`
+  return identifiers.has(localName) && altLocalNames.length
+    ? `"${altLocalNames.join(", ")}"`
     : `"${localName}"`;
-}
-
-/**
- * Gets fix.
- *
- * @param subOptions - Suboptions.
- * @returns Fix.
- */
-function getFix(subOptions: SubOptions): string {
-  const localName = getLocalName(subOptions);
-
-  const source = getSource(subOptions);
-
-  switch (subOptions.type) {
-    case "default":
-      return `import ${localName} from "${source}";`;
-
-    case "wildcard":
-      return `import * as ${localName} from "${source}";`;
-  }
-}
-
-/**
- * Gets local name.
- *
- * @param subOptions - Suboptions.
- * @returns Local name.
- */
-function getLocalName(subOptions: SubOptions): string {
-  return subOptions.localName ?? identifierFromPath(getSource(subOptions));
-}
-
-/**
- * Gets source.
- *
- * @param subOptions - Suboptions.
- * @returns Source.
- */
-function getSource(subOptions: SubOptions): string {
-  return subOptions.autoImportSource ?? subOptions.sourcePattern;
 }
 
 /**
