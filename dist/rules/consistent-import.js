@@ -61,12 +61,19 @@ exports.consistentImport = utils.createRule({
 function autoImport(program, context) {
     const fixes = new Set();
     for (const subOptions of context.subOptionsArray) {
-        const localName = getLocalName(subOptions);
-        for (const ref of context.scope.through)
-            if (ref.identifier.name === localName) {
-                fixes.add(getFix(subOptions));
-                context.report({ messageId: "missingImport", node: ref.identifier });
-            }
+        const { autoImportSource: source, localName } = subOptions;
+        if (functions_1.is.not.empty(localName) && functions_1.is.not.empty(source))
+            for (const ref of context.scope.through)
+                if (ref.identifier.name === localName) {
+                    context.report({ messageId: "missingImport", node: ref.identifier });
+                    switch (subOptions.type) {
+                        case "default":
+                            fixes.add(`import ${localName} from "${source}";`);
+                            break;
+                        case "wildcard":
+                            fixes.add(`import * as ${localName} from "${source}";`);
+                    }
+                }
     }
     if (fixes.size)
         context.report({
@@ -91,6 +98,7 @@ function autoImport(program, context) {
  * @param context - Context.
  */
 function checkImport(importDeclarations, identifiers, context) {
+    var _a;
     for (const node of importDeclarations) {
         const defaultSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
         const wildcardSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
@@ -98,7 +106,7 @@ function checkImport(importDeclarations, identifiers, context) {
         functions_1.assert.string(source);
         const subOptions = context.subOptionsArray.find(candidate => (0, minimatch_1.default)(source, candidate.sourcePattern, { dot: true }));
         if (subOptions) {
-            const localName = getLocalName(subOptions);
+            const localName = (_a = subOptions.localName) !== null && _a !== void 0 ? _a : identifierFromPath(source);
             switch (subOptions.type) {
                 case "default":
                     if (defaultSpecifier)
@@ -112,7 +120,7 @@ function checkImport(importDeclarations, identifiers, context) {
                         else
                             context.report({
                                 data: {
-                                    expectedLocalName: getExpectedLocalName(identifiers, subOptions)
+                                    expectedLocalName: getExpectedLocalName(localName, subOptions.altLocalNames, identifiers)
                                 },
                                 messageId: "invalidLocalName",
                                 node
@@ -132,7 +140,7 @@ function checkImport(importDeclarations, identifiers, context) {
                         else
                             context.report({
                                 data: {
-                                    expectedLocalName: getExpectedLocalName(identifiers, subOptions)
+                                    expectedLocalName: getExpectedLocalName(localName, subOptions.altLocalNames, identifiers)
                                 },
                                 messageId: "invalidLocalName",
                                 node
@@ -146,51 +154,15 @@ function checkImport(importDeclarations, identifiers, context) {
 /**
  * Gets expected local name.
  *
+ * @param localName - Local name.
+ * @param altLocalNames - Alt names.
  * @param identifiers - Identifiers.
- * @param subOptions - Suboptions.
  * @returns Expected local name.
  */
-function getExpectedLocalName(identifiers, subOptions) {
-    const localName = getLocalName(subOptions);
-    return identifiers.has(localName) && subOptions.altLocalNames.length
-        ? `"${subOptions.altLocalNames.join(", ")}"`
+function getExpectedLocalName(localName, altLocalNames, identifiers) {
+    return identifiers.has(localName) && altLocalNames.length
+        ? `"${altLocalNames.join(", ")}"`
         : `"${localName}"`;
-}
-/**
- * Gets fix.
- *
- * @param subOptions - Suboptions.
- * @returns Fix.
- */
-function getFix(subOptions) {
-    const localName = getLocalName(subOptions);
-    const source = getSource(subOptions);
-    switch (subOptions.type) {
-        case "default":
-            return `import ${localName} from "${source}";`;
-        case "wildcard":
-            return `import * as ${localName} from "${source}";`;
-    }
-}
-/**
- * Gets local name.
- *
- * @param subOptions - Suboptions.
- * @returns Local name.
- */
-function getLocalName(subOptions) {
-    var _a;
-    return (_a = subOptions.localName) !== null && _a !== void 0 ? _a : identifierFromPath(getSource(subOptions));
-}
-/**
- * Gets source.
- *
- * @param subOptions - Suboptions.
- * @returns Source.
- */
-function getSource(subOptions) {
-    var _a;
-    return (_a = subOptions.autoImportSource) !== null && _a !== void 0 ? _a : subOptions.sourcePattern;
 }
 /**
  * Creates identifier from path.
