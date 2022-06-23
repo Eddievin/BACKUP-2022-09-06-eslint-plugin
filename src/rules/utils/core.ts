@@ -284,7 +284,8 @@ export function buildChildNodesMap(
  */
 export function createMatcher(patterns: strings): Matcher {
   const matchers = patterns
-    .map(pattern => new RegExp(pattern, "u")) // eslint-disable-line security/detect-non-literal-regexp
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    .map(pattern => new RegExp(pattern, "u"))
     .map(
       re =>
         (str: string): boolean =>
@@ -505,6 +506,7 @@ export function testRule<K extends string, M extends string>(
   const rule = rules[name];
 
   const tester = new TSESLint.RuleTester({
+    // eslint-disable-next-line unicorn/prefer-module -- Postponed
     parser: require.resolve("@typescript-eslint/parser"),
     parserOptions: {
       ecmaVersion: 2017,
