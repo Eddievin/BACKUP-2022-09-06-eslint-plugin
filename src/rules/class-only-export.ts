@@ -72,7 +72,7 @@ export const classOnlyExport = utils.createRule({
             ...identifiers.filter(node => node.name !== className)
           ];
 
-          if (nodes.length)
+          if (nodes.length > 0)
             for (const node of nodes)
               context.report({ messageId: "exportNotAllowed", node });
         }

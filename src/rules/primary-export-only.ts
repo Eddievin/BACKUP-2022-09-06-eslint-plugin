@@ -1,7 +1,7 @@
 import * as utils from "./utils";
 import { a, is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
-import path from "path";
+import path from "node:path";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const primaryExportOnly = utils.createRule({

@@ -21,7 +21,7 @@ export const consistentGroupEmptyLines = utils.createRule({
             const group: TSESTree.Node[] = [];
 
             for (const node of nodes)
-              if (group.length)
+              if (group.length > 0)
                 if (utils.isAdjacentNodes(a.last(group), node, childNodesMap))
                   group.push(node);
                 else {

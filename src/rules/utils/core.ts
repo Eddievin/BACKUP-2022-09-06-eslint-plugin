@@ -5,9 +5,9 @@ import {
   ESLintUtils,
   TSESLint
 } from "@typescript-eslint/utils";
-import fs from "fs";
 import minimatch from "minimatch";
-import nodePath from "path";
+import fs from "node:fs";
+import nodePath from "node:path";
 import * as tsutils from "tsutils";
 import type {
   Accumulator,
@@ -55,7 +55,7 @@ export const createFileMatcher = o.extend(
     defVal: boolean,
     options: Readonly<minimatch.IOptions>
   ): Matcher => {
-    if (patterns.length) {
+    if (patterns.length > 0) {
       const matchers = patterns.map(
         pattern =>
           (str: string): boolean =>
@@ -83,7 +83,7 @@ export const createFileMatcher = o.extend(
       defVal: boolean,
       options: Readonly<minimatch.IOptions>
     ): Matcher => {
-      if (disallow.length || allow.length) {
+      if (disallow.length > 0 || allow.length > 0) {
         const disallowMatcher = createFileMatcher(disallow, true, options);
 
         const allowMatcher = createFileMatcher(allow, false, options);

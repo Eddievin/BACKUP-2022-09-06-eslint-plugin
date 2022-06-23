@@ -17,7 +17,7 @@ export const functionPropertiesStyle = utils.createRule({
             ts.SignatureKind.Call
           );
 
-          if (signatures.length)
+          if (signatures.length > 0)
             context.report({ messageId: "noDistributedDefinition", node });
         }
       }

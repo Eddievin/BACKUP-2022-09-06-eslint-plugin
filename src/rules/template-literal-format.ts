@@ -19,7 +19,7 @@ export const templateLiteralFormat = utils.createRule({
 
           if (
             firstLine === "`" &&
-            nonEmptyMiddleLines.length &&
+            nonEmptyMiddleLines.length > 0 &&
             lastLine.trimStart() === "`"
           ) {
             const padding1 = fn.pipe(
@@ -74,7 +74,7 @@ export const templateLiteralFormat = utils.createRule({
  * @returns Fixed line.
  */
 function fixLine(line: string, delta: number): string {
-  return line.length
+  return line.length > 0
     ? " ".repeat(s.leadingSpaces(line).length + delta) + line.trimStart()
     : line;
 }

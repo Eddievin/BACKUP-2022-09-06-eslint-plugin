@@ -1,6 +1,6 @@
 import * as utils from "./utils";
 import { is } from "@skylib/functions";
-import path from "path";
+import path from "node:path";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const className = utils.createRule({

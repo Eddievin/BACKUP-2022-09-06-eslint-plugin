@@ -105,7 +105,7 @@ function lintNodes(group: readonly Item[], context: Context): void {
         });
       }
 
-    if (fixes.length) {
+    if (fixes.length > 0) {
       assert.not.empty(min);
       assert.not.empty(max);
 

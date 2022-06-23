@@ -73,7 +73,7 @@ export class Checker<M extends string, O extends object, S extends object> {
 
       const nodes = declarations.filter(tsutils.isMappedTypeNode);
 
-      if (nodes.length) {
+      if (nodes.length > 0) {
         const readonly = nodes.every(node => this.readonlyMappedTypeNode(node));
 
         if (this.invalidReadonliness(readonly, "property"))

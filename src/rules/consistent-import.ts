@@ -9,7 +9,7 @@ import {
 } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
-import nodePath from "path";
+import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
@@ -110,7 +110,7 @@ function autoImport(program: TSESTree.Program, context: Context): void {
         }
   }
 
-  if (fixes.size)
+  if (fixes.size > 0)
     context.report({
       fix: () => {
         const fix = a.fromIterable(fixes).join(context.eol);
@@ -227,7 +227,7 @@ function getExpectedLocalName(
   altLocalNames: strings,
   identifiers: ReadonlySet<string>
 ): string {
-  return identifiers.has(localName) && altLocalNames.length
+  return identifiers.has(localName) && altLocalNames.length > 0
     ? `"${altLocalNames.join(", ")}"`
     : `"${localName}"`;
 }

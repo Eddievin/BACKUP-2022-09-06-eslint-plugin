@@ -1,5 +1,4 @@
 import { assert, createValidationObject, is, o } from "@skylib/functions";
-import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
@@ -27,9 +26,7 @@ export const getTypeParts = o.extend(
       if (type.isStringLiteral()) return [type.value];
 
       if (type.isUnion())
-        return _.flatten(
-          tsutils.unionTypeParts(type).map(part => recurs(part))
-        );
+        return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
 
       return [type];
     }
@@ -54,14 +51,12 @@ export const getTypeParts = o.extend(
         : getTypeParts(node, context);
 
       function recurs(type: ts.Type): readonly TypePart[] {
-        if (type.getCallSignatures().length) return ["function"];
+        if (type.getCallSignatures().length > 0) return ["function"];
 
-        if (type.getConstructSignatures().length) return ["function"];
+        if (type.getConstructSignatures().length > 0) return ["function"];
 
         if (type.isUnion())
-          return _.flatten(
-            tsutils.unionTypeParts(type).map(part => recurs(part))
-          );
+          return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
 
         assert.byGuard(type.flags, isExpectedFlags);
 
