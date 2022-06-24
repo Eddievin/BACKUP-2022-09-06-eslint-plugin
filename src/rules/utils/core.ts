@@ -739,6 +739,7 @@ function getSubOptionsArray<
   if (isSubOptions) {
     const ruleOptions = getRuleOptions(ruleOptionsArray, options);
 
+    // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
     const raw = o.get(ruleOptions, subOptionsKey ?? "rules") ?? [];
 
     assert.array.of(raw, is.object, "Expecting valid rule options");

@@ -4,56 +4,53 @@ import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noRestrictedSyntax = utils.createRule({
-  create: context => {
-    return {
-      ...o.fromEntries(
-        context.subOptionsArray.flatMap(subOptions => {
-          const {
-            message,
-            replacement,
-            search,
-            selector: mixedSelector
-          } = subOptions;
+  create: context =>
+    o.fromEntries(
+      context.subOptionsArray.flatMap(subOptions => {
+        const {
+          message,
+          replacement,
+          search,
+          selector: mixedSelector
+        } = subOptions;
 
-          // eslint-disable-next-line no-warning-comments -- Wait for @skylib/function update
-          // fixme - mixedToArray
-          const selectors = is.string(mixedSelector)
-            ? [mixedSelector]
-            : mixedSelector;
+        // eslint-disable-next-line no-warning-comments -- Wait for @skylib/function update
+        // fixme - mixedToArray
+        const selectors = is.string(mixedSelector)
+          ? [mixedSelector]
+          : mixedSelector;
 
-          return selectors.map(selector => [
-            selector,
-            (node: TSESTree.Node): void => {
-              const range = node.range;
+        return selectors.map(selector => [
+          selector,
+          (node: TSESTree.Node): void => {
+            const range = node.range;
 
-              context.report({
-                data: {
-                  message: message ?? `This syntax is not allowed: ${selector}`
-                },
-                fix: () =>
-                  is.not.empty(replacement)
-                    ? [
-                        {
-                          range,
-                          text: is.not.empty(search)
-                            ? context.getText(node).replace(
-                                // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-                                new RegExp(search, "u"),
-                                replacement
-                              )
-                            : replacement
-                        }
-                      ]
-                    : [],
-                loc: context.getLocFromRange(range),
-                messageId: "customMessage"
-              });
-            }
-          ]);
-        })
-      )
-    };
-  },
+            context.report({
+              data: {
+                message: message ?? `This syntax is not allowed: ${selector}`
+              },
+              fix: () =>
+                is.not.empty(replacement)
+                  ? [
+                      {
+                        range,
+                        text: is.not.empty(search)
+                          ? context.getText(node).replace(
+                              // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                              new RegExp(search, "u"),
+                              replacement
+                            )
+                          : replacement
+                      }
+                    ]
+                  : [],
+              loc: context.getLocFromRange(range),
+              messageId: "customMessage"
+            });
+          }
+        ]);
+      })
+    ),
   fixable: "code",
   isRuleOptions: is.object,
   isSubOptions: is.object.factory<SubOptions>(
