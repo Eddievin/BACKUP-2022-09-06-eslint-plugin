@@ -80,7 +80,7 @@ function lintNodes(group, context) {
                     text: context.getTextWithLeadingTrivia(sortedItem.node)
                 });
             }
-        if (fixes.length) {
+        if (fixes.length > 0) {
             functions_1.assert.not.empty(min);
             functions_1.assert.not.empty(max);
             const loc = context.getLocFromRange([

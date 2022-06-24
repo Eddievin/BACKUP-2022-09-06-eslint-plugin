@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const path_1 = tslib_1.__importDefault(require("path"));
+const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.vueComponentName = utils.createRule({
     create: context => {
         const { prefix, suffix } = context.options;
@@ -22,7 +22,7 @@ exports.vueComponentName = utils.createRule({
                                 property.key.name === "name" &&
                                 property.value.type === utils_1.AST_NODE_TYPES.Literal)
                                 if (property.value.value ===
-                                    prefix + _.kebabCase(path_1.default.parse(context.path).name) + suffix) {
+                                    prefix + _.kebabCase(node_path_1.default.parse(context.path).name) + suffix) {
                                     // Valid
                                 }
                                 else

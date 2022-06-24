@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
-const path_1 = tslib_1.__importDefault(require("path"));
+const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.consistentImport = utils.createRule({
     create: context => {
         const identifiers = new Set();
@@ -75,7 +75,7 @@ function autoImport(program, context) {
                     }
                 }
     }
-    if (fixes.size)
+    if (fixes.size > 0)
         context.report({
             fix: () => {
                 const fix = functions_1.a.fromIterable(fixes).join(context.eol);
@@ -160,7 +160,7 @@ function checkImport(importDeclarations, identifiers, context) {
  * @returns Expected local name.
  */
 function getExpectedLocalName(localName, altLocalNames, identifiers) {
-    return identifiers.has(localName) && altLocalNames.length
+    return identifiers.has(localName) && altLocalNames.length > 0
         ? `"${altLocalNames.join(", ")}"`
         : `"${localName}"`;
 }
@@ -171,7 +171,7 @@ function getExpectedLocalName(localName, altLocalNames, identifiers) {
  * @returns Identifier.
  */
 function identifierFromPath(path) {
-    return path_1.default
+    return node_path_1.default
         .basename(path)
         .split(".")
         .filter(part => part.length)
@@ -203,7 +203,7 @@ function normalizeSource(source, context) {
             source.startsWith("./") ||
             source.startsWith("../")) {
             functions_1.assert.not.empty(context.package.name, "Missing package name");
-            const path = utils.stripBase(path_1.default.join(path_1.default.dirname(context.path), source));
+            const path = utils.stripBase(node_path_1.default.join(node_path_1.default.dirname(context.path), source));
             return `${context.package.name}/${path}`;
         }
         return source;

@@ -89,7 +89,7 @@ class Checker {
         if (symbol) {
             const declarations = functions_1.cast.not.empty(symbol.getDeclarations(), []);
             const nodes = declarations.filter(tsutils.isMappedTypeNode);
-            if (nodes.length) {
+            if (nodes.length > 0) {
                 const readonly = nodes.every(node => this.readonlyMappedTypeNode(node));
                 if (this.invalidReadonliness(readonly, "property"))
                     return { failed: true, types: [type] };

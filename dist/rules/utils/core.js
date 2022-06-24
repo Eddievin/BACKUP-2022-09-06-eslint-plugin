@@ -5,9 +5,9 @@ const tslib_1 = require("tslib");
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
-const fs_1 = tslib_1.__importDefault(require("fs"));
 const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
-const path_1 = tslib_1.__importDefault(require("path"));
+const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
+const node_path_1 = tslib_1.__importDefault(require("node:path"));
 const tsutils = tslib_1.__importStar(require("tsutils"));
 exports.isPackage = functions_1.is.factory(functions_1.is.object.of, {}, { name: functions_1.is.string });
 exports.base = functions_1.fn.pipe(process.cwd(), functions_1.s.path.canonicalize, functions_1.s.path.addTrailingSlash);
@@ -20,7 +20,7 @@ exports.base = functions_1.fn.pipe(process.cwd(), functions_1.s.path.canonicaliz
  * @returns Matcher.
  */
 exports.createFileMatcher = functions_1.o.extend((patterns, defVal, options) => {
-    if (patterns.length) {
+    if (patterns.length > 0) {
         const matchers = patterns.map(pattern => (str) => (0, minimatch_1.default)(str, pattern, options));
         return (str) => matchers.some(matcher => matcher(str));
     }
@@ -36,7 +36,7 @@ exports.createFileMatcher = functions_1.o.extend((patterns, defVal, options) => 
      * @returns Matcher.
      */
     disallowAllow: (disallow, allow, defVal, options) => {
-        if (disallow.length || allow.length) {
+        if (disallow.length > 0 || allow.length > 0) {
             const disallowMatcher = (0, exports.createFileMatcher)(disallow, true, options);
             const allowMatcher = (0, exports.createFileMatcher)(allow, false, options);
             return (str) => disallowMatcher(str) && !allowMatcher(str);
@@ -62,7 +62,8 @@ exports.buildChildNodesMap = buildChildNodesMap;
  */
 function createMatcher(patterns) {
     const matchers = patterns
-        .map(pattern => new RegExp(pattern, "u")) // eslint-disable-line security/detect-non-literal-regexp
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        .map(pattern => new RegExp(pattern, "u"))
         .map(re => (str) => re.test(str));
     return (str) => matchers.some(matcher => matcher(str));
 }
@@ -110,8 +111,8 @@ exports.getComments = getComments;
  * @returns Identifier.
  */
 function getNameFromFilename(path) {
-    const name1 = path_1.default.parse(path).name;
-    const name2 = name1 === "index" ? path_1.default.parse(path_1.default.parse(path).dir).name : name1;
+    const name1 = node_path_1.default.parse(path).name;
+    const name2 = name1 === "index" ? node_path_1.default.parse(node_path_1.default.parse(path).dir).name : name1;
     return /^[A-Z]/u.test(name2)
         ? functions_1.s.ucFirst(_.camelCase(name2))
         : _.camelCase(name2);
@@ -134,8 +135,8 @@ exports.getNodeId = getNodeId;
  * @returns Package file data.
  */
 function getPackage(path = "package.json") {
-    if (fs_1.default.existsSync(path)) {
-        const result = functions_1.json.decode(fs_1.default.readFileSync(path).toString());
+    if (node_fs_1.default.existsSync(path)) {
+        const result = functions_1.json.decode(node_fs_1.default.readFileSync(path).toString());
         if ((0, exports.isPackage)(result))
             return result;
     }
@@ -223,6 +224,7 @@ exports.stripBase = stripBase;
 function testRule(name, rules, invalid, valid = []) {
     const rule = rules[name];
     const tester = new utils_1.TSESLint.RuleTester({
+        // eslint-disable-next-line unicorn/prefer-module -- Postponed
         parser: require.resolve("@typescript-eslint/parser"),
         parserOptions: {
             ecmaVersion: 2017,
@@ -372,6 +374,7 @@ function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
     const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
     if (isSubOptions) {
         const ruleOptions = getRuleOptions(ruleOptionsArray, options);
+        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
         const raw = (_a = functions_1.o.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
         functions_1.assert.array.of(raw, functions_1.is.object, "Expecting valid rule options");
         const result = raw

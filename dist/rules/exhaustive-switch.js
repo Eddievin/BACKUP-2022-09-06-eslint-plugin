@@ -16,11 +16,11 @@ exports.exhaustiveSwitch = utils.createRule({
                     // Has default
                 }
                 else {
-                    const got = _.flatten(tests
+                    const got = tests
                         .filter(functions_1.is.not.empty)
-                        .map(expression => utils.getTypeParts(expression, context)));
+                        .flatMap(expression => utils.getTypeParts(expression, context));
                     const expected = utils.getTypeParts.typeofFix(node.discriminant, context);
-                    if (_.difference(expected, got).length)
+                    if (_.difference(expected, got).length > 0)
                         context.report({ messageId: "inexhaustiveSwitch", node });
                 }
             }

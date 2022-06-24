@@ -18,7 +18,7 @@ exports.consistentGroupEmptyLines = utils.createRule({
                     for (const nodes of nodesMap.values()) {
                         const group = [];
                         for (const node of nodes)
-                            if (group.length)
+                            if (group.length > 0)
                                 if (utils.isAdjacentNodes(functions_1.a.last(group), node, childNodesMap))
                                     group.push(node);
                                 else {

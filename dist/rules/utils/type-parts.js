@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTypeParts = void 0;
 const tslib_1 = require("tslib");
 const functions_1 = require("@skylib/functions");
-const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
@@ -22,7 +21,7 @@ exports.getTypeParts = functions_1.o.extend((node, context) => {
         if (type.isStringLiteral())
             return [type.value];
         if (type.isUnion())
-            return _.flatten(tsutils.unionTypeParts(type).map(part => recurs(part)));
+            return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
         return [type];
     }
 }, {
@@ -39,12 +38,12 @@ exports.getTypeParts = functions_1.o.extend((node, context) => {
             ? recurs(context.checker.getTypeAtLocation(context.toTsNode(node.argument)))
             : (0, exports.getTypeParts)(node, context);
         function recurs(type) {
-            if (type.getCallSignatures().length)
+            if (type.getCallSignatures().length > 0)
                 return ["function"];
-            if (type.getConstructSignatures().length)
+            if (type.getConstructSignatures().length > 0)
                 return ["function"];
             if (type.isUnion())
-                return _.flatten(tsutils.unionTypeParts(type).map(part => recurs(part)));
+                return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
             functions_1.assert.byGuard(type.flags, isExpectedFlags);
             switch (type.flags) {
                 case ts.TypeFlags.BigInt:

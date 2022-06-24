@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
-const path_1 = tslib_1.__importDefault(require("path"));
+const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.consistentFilename = utils.createRule({
     create: context => {
         let className;
@@ -14,7 +14,7 @@ exports.consistentFilename = utils.createRule({
                 className = node.name;
             },
             "Program:exit": () => {
-                const got = path_1.default.parse(context.path).name;
+                const got = node_path_1.default.parse(context.path).name;
                 const expected = className !== null && className !== void 0 ? className : got
                     .split(".")
                     .map(part => _.kebabCase(part))

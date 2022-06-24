@@ -49,7 +49,7 @@ exports.statementsOrder = utils.createRule({
                                 text: context.getTextWithLeadingTrivia(sortedItem.node)
                             });
                         }
-                    if (fixes.length)
+                    if (fixes.length > 0)
                         context.report({
                             fix: () => fixes,
                             messageId: "incorrectStatementsOrder",
@@ -133,6 +133,7 @@ const sortable = {
  * @param node - Node.
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
+// eslint-disable-next-line complexity -- Postponed
 function getJestTestName(node) {
     if (node.expression.type === utils_1.AST_NODE_TYPES.CallExpression) {
         const argument = node.expression.arguments[0];

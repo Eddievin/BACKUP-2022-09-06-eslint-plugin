@@ -55,7 +55,7 @@ exports.sortClassMembers = utils.createRule({
                             text: context.getTextWithLeadingTrivia(sortedMember.node)
                         });
                     }
-                if (fixes.length)
+                if (fixes.length > 0)
                     context.report({
                         fix: () => fixes,
                         messageId: "incorrectSortingOrder",

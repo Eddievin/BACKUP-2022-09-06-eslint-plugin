@@ -14,7 +14,7 @@ exports.functionPropertiesStyle = utils.createRule({
                     const tsObject = context.toTsNode(node.left.object);
                     const type = context.checker.getTypeAtLocation(tsObject);
                     const signatures = context.checker.getSignaturesOfType(type, ts.SignatureKind.Call);
-                    if (signatures.length)
+                    if (signatures.length > 0)
                         context.report({ messageId: "noDistributedDefinition", node });
                 }
             }

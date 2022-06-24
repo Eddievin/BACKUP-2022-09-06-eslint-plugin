@@ -16,7 +16,7 @@ exports.templateLiteralFormat = utils.createRule({
                     const lastLine = functions_1.a.last(lines);
                     const nonEmptyMiddleLines = middleLines.filter(line => line.length);
                     if (firstLine === "`" &&
-                        nonEmptyMiddleLines.length &&
+                        nonEmptyMiddleLines.length > 0 &&
                         lastLine.trimStart() === "`") {
                         const padding1 = functions_1.fn.pipe(context.code.slice(0, node.range[0]), functions_1.s.lines, functions_1.a.last, functions_1.s.leadingSpaces).length;
                         const padding2 = Math.min(...nonEmptyMiddleLines.map(line => functions_1.s.leadingSpaces(line).length));
@@ -58,7 +58,7 @@ exports.templateLiteralFormat = utils.createRule({
  * @returns Fixed line.
  */
 function fixLine(line, delta) {
-    return line.length
+    return line.length > 0
         ? " ".repeat(functions_1.s.leadingSpaces(line).length + delta) + line.trimStart()
         : line;
 }

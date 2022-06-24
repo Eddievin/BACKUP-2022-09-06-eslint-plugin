@@ -90,11 +90,13 @@ _a = (0, functions_1.evaluate)(() => {
     };
     const copies = {};
     for (const [name, rule] of functions_1.o.entries(core)) {
+        copies[`chore/${name}`] = rule;
         copies[`facades/${name}`] = rule;
         copies[`framework/${name}`] = rule;
         copies[`functions/${name}`] = rule;
         copies[`project/${name}`] = rule;
         copies[`quasar-extension/${name}`] = rule;
+        copies[`tests/${name}`] = rule;
     }
     return {
         configs: {
