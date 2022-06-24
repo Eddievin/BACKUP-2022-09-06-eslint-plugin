@@ -65,8 +65,8 @@
     "vue-tsc": "echo Skip vue-tsc"
   },
   "dependencies": {
-    "@skylib/functions": "^2.4.0",
-    "@skylib/lodash-commonjs-es": "^0.1.0",
+    "@skylib/functions": "^2.5.1",
+    "@skylib/lodash-commonjs-es": "^0.1.1",
     "@skylib/typescript-types": "^1.0.0",
     "@types/estree": "^0.0.51",
     "@types/minimatch": "^3.0.5",
