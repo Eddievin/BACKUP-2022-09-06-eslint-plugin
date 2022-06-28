@@ -1,6 +1,7 @@
 import * as utils from "./utils";
 import {
   a,
+  as,
   assert,
   createValidationObject,
   evaluate,
@@ -148,9 +149,7 @@ function checkImport(
       specifier => specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
     );
 
-    const source = normalizeSource(node.source.value, context);
-
-    assert.string(source);
+    const source = as.string(normalizeSource(node.source.value, context));
 
     const subOptions = context.subOptionsArray.find(candidate =>
       minimatch(source, candidate.sourcePattern, { dot: true })

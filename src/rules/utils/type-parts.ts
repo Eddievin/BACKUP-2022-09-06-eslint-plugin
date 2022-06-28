@@ -1,4 +1,4 @@
-import { assert, createValidationObject, is, o } from "@skylib/functions";
+import { as, createValidationObject, is, o } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
@@ -58,9 +58,7 @@ export const getTypeParts = o.extend(
         if (type.isUnion())
           return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
 
-        assert.byGuard(type.flags, isExpectedFlags);
-
-        switch (type.flags) {
+        switch (as.byGuard(type.flags, isExpectedFlags)) {
           case ts.TypeFlags.BigInt:
           case ts.TypeFlags.BigIntLiteral:
             return ["bigint"];

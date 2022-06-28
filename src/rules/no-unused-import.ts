@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { assert, is } from "@skylib/functions";
+import { as, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
@@ -38,9 +38,7 @@ export const noUnusedImport = utils.createRule({
             .join(", ")
             .replace(/ \}, \{ /gu, ", ");
 
-          const source = node.source.value;
-
-          assert.string(source);
+          const source = as.string(node.source.value);
 
           if (node.specifiers.every(used)) {
             // Valid

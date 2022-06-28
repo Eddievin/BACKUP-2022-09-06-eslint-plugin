@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { assert, is } from "@skylib/functions";
+import { as, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
@@ -16,9 +16,7 @@ export const disallowImport = utils.createRule({
 
     return {
       [AST_NODE_TYPES.ImportDeclaration]: (node): void => {
-        const source = node.source.value;
-
-        assert.string(source);
+        const source = as.string(node.source.value);
 
         if (matchers.some(matcher => matcher(source)))
           context.report({ messageId: "disallowedSource", node });

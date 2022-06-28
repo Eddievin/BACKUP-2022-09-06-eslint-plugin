@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { a, assert, is } from "@skylib/functions";
+import { a, as, is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { numberU } from "@skylib/functions";
@@ -106,12 +106,9 @@ function lintNodes(group: readonly Item[], context: Context): void {
       }
 
     if (fixes.length > 0) {
-      assert.not.empty(min);
-      assert.not.empty(max);
-
       const loc = context.getLocFromRange([
-        a.get(group, min).node.range[0],
-        a.get(group, max).node.range[1]
+        a.get(group, as.not.empty(min)).node.range[0],
+        a.get(group, as.not.empty(max)).node.range[1]
       ]);
 
       context.report({

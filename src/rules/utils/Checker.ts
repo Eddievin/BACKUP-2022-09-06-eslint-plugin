@@ -1,5 +1,5 @@
 import * as utils from "./core";
-import { assert, cast, is } from "@skylib/functions";
+import { as, cast, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
@@ -151,12 +151,9 @@ export class Checker<M extends string, O extends object, S extends object> {
           return { failed: true, types: [type] };
 
         {
-          const subtype = this.checker.getTypeOfPropertyOfType(
-            type,
-            property.name
+          const subtype = as.not.empty(
+            this.checker.getTypeOfPropertyOfType(type, property.name)
           );
-
-          assert.not.empty(subtype);
 
           const result = this.checkSubTypes(type, [subtype]);
 

@@ -292,7 +292,7 @@ function nodeInfo(
 ): Item {
   switch (node.type) {
     case AST_NODE_TYPES.ExportAllDeclaration:
-      assert.not.empty(node.source);
+      assert.not.empty(node.source, "Expecting source");
 
       return buildResult(
         "ExportAllDeclaration",
@@ -307,7 +307,7 @@ function nodeInfo(
         switch (node.declaration.type) {
           case AST_NODE_TYPES.FunctionDeclaration:
           case AST_NODE_TYPES.TSDeclareFunction:
-            assert.not.empty(node.declaration.id);
+            assert.not.empty(node.declaration.id, "Expecting declaration ID");
 
             return buildResult(
               "ExportFunctionDeclaration",
@@ -344,7 +344,7 @@ function nodeInfo(
 
     case AST_NODE_TYPES.FunctionDeclaration:
     case AST_NODE_TYPES.TSDeclareFunction:
-      assert.not.empty(node.id);
+      assert.not.empty(node.id, "Expecting node ID");
 
       return buildResult("FunctionDeclaration", node.id.name);
 

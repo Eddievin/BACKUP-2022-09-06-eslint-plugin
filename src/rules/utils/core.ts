@@ -461,7 +461,7 @@ export function isAdjacentNodes(
   if (id1 === id2) {
     const siblings = childNodesMap.get(id1);
 
-    assert.not.empty(siblings);
+    assert.not.empty(siblings, "Expecting siblings");
 
     const index1 = siblings.indexOf(node1);
 
