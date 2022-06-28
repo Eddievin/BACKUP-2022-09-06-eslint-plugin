@@ -1,17 +1,10 @@
 <?php
 
-include_once __DIR__.'/init.php';
+use Skylib\Config\Assert;
 
-if (file_exists('docs'))
-{
-  // Already exists
-}
-else
-{
-  mkdir('docs');
-}
+include_once __DIR__.'/api/init.php';
 
-foreach (scandir('docs') as $basename)
+foreach (Assert::strings(scandir('docs')) as $basename)
 {
   if (str_ends_with($basename, '.md'))
   {
@@ -21,11 +14,11 @@ foreach (scandir('docs') as $basename)
 
 copy('README.md', 'docs/index.md');
 
-foreach (scandir('src/rules') as $basename)
+foreach (Assert::strings(scandir('src/rules')) as $basename)
 {
   if (str_ends_with($basename, '.md'))
   {
-    $contents = file_get_contents('src/rules/'.$basename);
+    $contents = Assert::string(file_get_contents('src/rules/'.$basename));
 
     preg_match('`^\#\s([^\r\n]+)`imsuxDX', $contents, $matches);
 
