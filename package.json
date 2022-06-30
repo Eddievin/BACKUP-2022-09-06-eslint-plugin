@@ -51,12 +51,11 @@
     "npm:publish": "publish-if-not-exists",
     "npm:regenerate-lock-file": "npm install --no-audit --package-lock-only --strict-peer-deps",
     "npm:update": "npm update --no-audit --strict-peer-deps",
-    "package-json-lint": "npmPkgJsonLint .",
+    "package-json-lint": "npmPkgJsonLint ./package.json",
     "php-cs-fixer": "php vendor/bin/php-cs-fixer fix --verbose",
     "phpstan": "php vendor/bin/phpstan analyse -c phpstan.neon",
     "phpstan-quiet": "php vendor/bin/phpstan analyse -c phpstan.neon --quiet",
     "prepare": "husky install",
-    "serve": "quasar dev",
     "sonar": "sonar-scanner",
     "test": "cf ./lcov-report & jest",
     "test-fast": "cf ./lcov-report & jest --config=jest.config.fast.js",
@@ -74,7 +73,7 @@
     "minimatch": "^5.1.0"
   },
   "devDependencies": {
-    "@skylib/config": "^3.10.0",
+    "@skylib/config": "^3.12.0",
     "@skylib/eslint-plugin": "^0.1.32",
     "get-current-line": "^6.6.0"
   },
