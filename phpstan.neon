@@ -5,3 +5,4 @@ parameters:
     - chore
   scanDirectories:
     - node_modules/@skylib/config/api
+  tmpDir: cache/phpstan
