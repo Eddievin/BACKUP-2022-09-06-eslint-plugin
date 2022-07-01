@@ -62,5 +62,31 @@ utils.testRule("no-restricted-syntax", rules, [
       }
     ],
     output: "const ie1 = [];"
+  },
+  {
+    code: `
+      const cats = "";
+      const dogs = [];
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        rules: [
+          {
+            message: "Custom message",
+            notType: "array",
+            search: /d/u.source,
+            selector: ["Identifier[name=/s$/u]"]
+          }
+        ]
+      }
+    ]
   }
 ]);
