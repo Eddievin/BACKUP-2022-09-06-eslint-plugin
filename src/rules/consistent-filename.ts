@@ -15,16 +15,18 @@ export const consistentFilename = utils.createRule({
           className = node.name;
         },
       "Program:exit": (): void => {
-        const got = path.parse(context.path).name;
+        const { base } = path.parse(context.path);
 
-        const expected =
-          className ??
-          got
-            .split(".")
-            .map(part => _.kebabCase(part))
-            .join(".");
+        const expected = base
+          .split(".")
+          .map((part, index) =>
+            index === 0 && is.not.empty(className)
+              ? className
+              : _.kebabCase(part)
+          )
+          .join(".");
 
-        if (got === expected) {
+        if (base === expected) {
           // Valid
         } else
           context.report({

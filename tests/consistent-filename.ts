@@ -9,7 +9,7 @@ utils.testRule(
       code: "export const x = 1;",
       errors: [
         {
-          data: { expected: "camel-case" },
+          data: { expected: "camel-case.ts" },
           line: 1,
           messageId: "invalidFilename"
         }
@@ -21,12 +21,36 @@ utils.testRule(
       code: "export const x = 1;",
       errors: [
         {
-          data: { expected: "pascal-case" },
+          data: { expected: "camel-case.camel-case.ts" },
+          line: 1,
+          messageId: "invalidFilename"
+        }
+      ],
+      filename: "camelCase.camelCase.ts",
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: "export const x = 1;",
+      errors: [
+        {
+          data: { expected: "pascal-case.ts" },
           line: 1,
           messageId: "invalidFilename"
         }
       ],
       filename: "PascalCase.ts",
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: "export const x = 1;",
+      errors: [
+        {
+          data: { expected: "pascal-case.pascal-case.ts" },
+          line: 1,
+          messageId: "invalidFilename"
+        }
+      ],
+      filename: "PascalCase.PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     }
   ],
@@ -38,6 +62,16 @@ utils.testRule(
     {
       code: "export const x = 1;",
       filename: "file.extras.ts",
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: "export const x = 1;",
+      filename: "kebab-case.ts",
+      name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: "export const x = 1;",
+      filename: "kebab-case.kebab-case.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {

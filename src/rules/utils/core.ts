@@ -251,9 +251,12 @@ export interface Package {
 export type ReadonlyRange = readonly [number, number];
 
 export type SourceFile =
+  | "camelCase.camelCase.ts"
   | "camelCase.ts"
   | "file.extras.ts"
+  | "kebab-case.kebab-case.ts"
   | "kebab-case.ts"
+  | "PascalCase.PascalCase.ts"
   | "PascalCase.ts"
   | "subfolder/index.ts"
   | "vue.d.ts";
