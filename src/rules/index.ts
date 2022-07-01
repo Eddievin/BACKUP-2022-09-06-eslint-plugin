@@ -6,7 +6,6 @@ import { consistentEmptyLines } from "./consistent-empty-lines";
 import { consistentFilename } from "./consistent-filename";
 import { consistentGroupEmptyLines } from "./consistent-group-empty-lines";
 import { consistentImport } from "./consistent-import";
-import { disallowByRegexp } from "./disallow-by-regexp";
 import { disallowIdentifier } from "./disallow-identifier";
 import { disallowImport } from "./disallow-import";
 import { emptyLinesAroundComment } from "./empty-lines-around-comment";
@@ -53,7 +52,6 @@ export const { configs, rules } = evaluate(() => {
     "consistent-filename": consistentFilename,
     "consistent-group-empty-lines": consistentGroupEmptyLines,
     "consistent-import": consistentImport,
-    "disallow-by-regexp": disallowByRegexp,
     "disallow-identifier": disallowIdentifier,
     "disallow-import": disallowImport,
     "empty-lines-around-comment": emptyLinesAroundComment,

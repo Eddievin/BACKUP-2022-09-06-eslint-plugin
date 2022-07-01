@@ -1,1 +1,1 @@
-module.exports = { scopes: ["utils.readonliness"] };
+module.exports = { scopes: ["disallow-by-regexp", "utils.readonliness"] };
