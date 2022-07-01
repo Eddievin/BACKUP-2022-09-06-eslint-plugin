@@ -1,6 +1,7 @@
 import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import * as ts from "typescript";
 
 export const preferAliasForArrayTypes = utils.createRule({
   create: context => {
@@ -13,13 +14,16 @@ export const preferAliasForArrayTypes = utils.createRule({
 
           const type = context.checker.getTypeAtLocation(tsNode);
 
-          if (context.checker.isArrayType(type))
+          if (context.checker.isArrayType(type)) {
+            const args = type.typeArguments ?? [];
+
             if (
-              type.typeArguments &&
-              type.typeArguments.every(subtype => subtype.isTypeParameter())
+              args.every(subtype => subtype.isTypeParameter()) ||
+              args.every(subtype => subtype.flags === ts.TypeFlags.Any)
             ) {
               // Valid
             } else context.report({ messageId: "preferAlias", node });
+          }
         }
       }
     };

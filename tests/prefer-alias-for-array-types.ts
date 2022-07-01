@@ -24,7 +24,9 @@ utils.testRule(
     {
       code: `
         type Type = string[];
+        function f<T>(x: any[]): void {}
         function f<T>(x: T[]): void {}
+        function g<T>(x: readonly any[]): void {}
         function g<T>(x: readonly T[]): void {}
         function h(x: Type): void {}
       `,
