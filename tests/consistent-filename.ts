@@ -9,13 +9,14 @@ utils.testRule(
       code: "export const x = 1;",
       errors: [
         {
-          data: { expected: "camel-case.ts" },
+          data: { expected: "CamelCase.ts" },
           line: 1,
           messageId: "invalidFilename"
         }
       ],
       filename: "camelCase.ts",
-      name: `Test at line ${getCurrentLine().line}`
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ format: "PascalCase" }]
     },
     {
       code: "export const x = 1;",
@@ -27,19 +28,21 @@ utils.testRule(
         }
       ],
       filename: "camelCase.camelCase.ts",
-      name: `Test at line ${getCurrentLine().line}`
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ format: "kebab-case" }]
     },
     {
       code: "export const x = 1;",
       errors: [
         {
-          data: { expected: "pascal-case.ts" },
+          data: { expected: "pascalCase.ts" },
           line: 1,
           messageId: "invalidFilename"
         }
       ],
       filename: "PascalCase.ts",
-      name: `Test at line ${getCurrentLine().line}`
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ format: "camelCase" }]
     },
     {
       code: "export const x = 1;",
@@ -51,7 +54,34 @@ utils.testRule(
         }
       ],
       filename: "PascalCase.PascalCase.ts",
-      name: `Test at line ${getCurrentLine().line}`
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ format: "kebab-case" }]
+    },
+    {
+      code: "export const x = 1;",
+      errors: [
+        {
+          data: { expected: "KebabCase.ts" },
+          line: 1,
+          messageId: "invalidFilename"
+        }
+      ],
+      filename: "kebab-case.ts",
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ format: "PascalCase" }]
+    },
+    {
+      code: "export const x = 1;",
+      errors: [
+        {
+          data: { expected: "kebabCase.kebab-case.ts" },
+          line: 1,
+          messageId: "invalidFilename"
+        }
+      ],
+      filename: "kebab-case.kebab-case.ts",
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ format: "camelCase" }]
     }
   ],
   [
@@ -88,6 +118,22 @@ utils.testRule(
       code: "export class PascalCase {}",
       filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
+    },
+    {
+      code: "export default defineComponent({});",
+      filename: "PascalCase.ts",
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          overrides: [
+            {
+              format: "PascalCase",
+              selector:
+                "Program > ExportDefaultDeclaration > CallExpression > Identifier.callee[name=defineComponent]"
+            }
+          ]
+        }
+      ]
     }
   ]
 );
