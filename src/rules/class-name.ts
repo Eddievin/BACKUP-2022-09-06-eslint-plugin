@@ -12,7 +12,8 @@ export const className = utils.createRule({
         if (node.id)
           if (node.id.name === path.parse(context.path).name) {
             // Valid
-          } else context.report({ messageId: "invalidClassName", node });
+          } else
+            context.report({ messageId: "invalidClassName", node: node.id });
       }
     };
   },
