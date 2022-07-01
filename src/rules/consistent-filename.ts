@@ -28,6 +28,7 @@ export const consistentFilename = utils.createRule({
           // Valid
         } else
           context.report({
+            data: { expected },
             loc: context.locZero,
             messageId: "invalidFilename"
           });
@@ -35,6 +36,6 @@ export const consistentFilename = utils.createRule({
     };
   },
   isRuleOptions: is.object,
-  messages: { invalidFilename: "Invalid file name" },
+  messages: { invalidFilename: "Expecting file name to be: {{ expected }}" },
   name: "filename"
 });

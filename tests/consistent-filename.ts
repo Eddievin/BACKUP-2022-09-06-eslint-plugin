@@ -6,54 +6,52 @@ utils.testRule(
   rules,
   [
     {
-      code: `
-        export const x = 1;
-      `,
-      errors: [{ line: 1, messageId: "invalidFilename" }],
+      code: "export const x = 1;",
+      errors: [
+        {
+          data: { expected: "camel-case" },
+          line: 1,
+          messageId: "invalidFilename"
+        }
+      ],
       filename: "camelCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
-      code: `
-        export const x = 1;
-      `,
-      errors: [{ line: 1, messageId: "invalidFilename" }],
+      code: "export const x = 1;",
+      errors: [
+        {
+          data: { expected: "pascal-case" },
+          line: 1,
+          messageId: "invalidFilename"
+        }
+      ],
       filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     }
   ],
   [
     {
-      code: `
-        export const x = 1;
-      `,
+      code: "export const x = 1;",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
-      code: `
-        export const x = 1;
-      `,
+      code: "export const x = 1;",
       filename: "file.extras.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
-      code: `
-        export const x = 1;
-      `,
+      code: "export const x = 1;",
       filename: "vue.d.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
-      code: `
-        export default class PascalCase {}
-      `,
+      code: "export default class PascalCase {}",
       filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     },
     {
-      code: `
-        export class PascalCase {}
-      `,
+      code: "export class PascalCase {}",
       filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`
     }
