@@ -290,10 +290,12 @@ utils.testRule(
     {
       code: `
         import "I1";
-        test.only.each([])("test8", () => {});
-        test.only("test7", () => {});
-        test.each([])("test6", () => {});
-        test("test5", () => {});
+        test.only.each([])("testA", () => {});
+        test.only("test9", () => {});
+        test.each([])("test8", () => {});
+        test("test7", () => {});
+        test.skip.each([])("test6", () => {});
+        test.skip("test5", () => {});
         test.only.each([])("test4", () => {});
         test.only("test3", () => {});
         test.each([])("test2", () => {});
@@ -311,10 +313,12 @@ utils.testRule(
         test.each([])("test2", () => {});
         test.only("test3", () => {});
         test.only.each([])("test4", () => {});
-        test("test5", () => {});
-        test.each([])("test6", () => {});
-        test.only("test7", () => {});
-        test.only.each([])("test8", () => {});
+        test.skip("test5", () => {});
+        test.skip.each([])("test6", () => {});
+        test("test7", () => {});
+        test.each([])("test8", () => {});
+        test.only("test9", () => {});
+        test.only.each([])("testA", () => {});
       `
     }
   ],

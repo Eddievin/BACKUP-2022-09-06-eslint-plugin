@@ -10,7 +10,7 @@ import {
 } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { Rec, stringU } from "@skylib/functions";
+import type { Rec, stringU, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 
@@ -223,7 +223,6 @@ interface RuleOptions {
  * @param node - Node.
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
-// eslint-disable-next-line complexity -- Postponed
 function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
   if (node.expression.type === AST_NODE_TYPES.CallExpression) {
     const argument = node.expression.arguments[0];
@@ -239,21 +238,17 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
         return argument.value;
 
       if (
-        callee.type === AST_NODE_TYPES.CallExpression &&
-        callee.callee.type === AST_NODE_TYPES.MemberExpression &&
-        callee.callee.object.type === AST_NODE_TYPES.Identifier &&
-        callee.callee.object.name === "test" &&
-        callee.callee.property.type === AST_NODE_TYPES.Identifier &&
-        callee.callee.property.name === "each"
+        callee.type === AST_NODE_TYPES.MemberExpression &&
+        isIdentifier(callee.object, "test") &&
+        isIdentifier(callee.property, "only", "skip")
       )
         return argument.value;
 
       if (
-        callee.type === AST_NODE_TYPES.MemberExpression &&
-        callee.object.type === AST_NODE_TYPES.Identifier &&
-        callee.object.name === "test" &&
-        callee.property.type === AST_NODE_TYPES.Identifier &&
-        callee.property.name === "only"
+        callee.type === AST_NODE_TYPES.CallExpression &&
+        callee.callee.type === AST_NODE_TYPES.MemberExpression &&
+        isIdentifier(callee.callee.object, "test") &&
+        isIdentifier(callee.callee.property, "each")
       )
         return argument.value;
 
@@ -261,18 +256,26 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
         callee.type === AST_NODE_TYPES.CallExpression &&
         callee.callee.type === AST_NODE_TYPES.MemberExpression &&
         callee.callee.object.type === AST_NODE_TYPES.MemberExpression &&
-        callee.callee.object.object.type === AST_NODE_TYPES.Identifier &&
-        callee.callee.object.object.name === "test" &&
-        callee.callee.object.property.type === AST_NODE_TYPES.Identifier &&
-        callee.callee.object.property.name === "only" &&
-        callee.callee.property.type === AST_NODE_TYPES.Identifier &&
-        callee.callee.property.name === "each"
+        isIdentifier(callee.callee.object.object, "test") &&
+        isIdentifier(callee.callee.object.property, "only", "skip") &&
+        isIdentifier(callee.callee.property, "each")
       )
         return argument.value;
     }
   }
 
   return undefined;
+}
+
+/**
+ * Checks if node is an identifier.
+ *
+ * @param node - Node.
+ * @param names - Allowed names.
+ * @returns _True_ if node is an identifier, _false_ otherwise.
+ */
+function isIdentifier(node: TSESTree.Node, ...names: strings): boolean {
+  return node.type === AST_NODE_TYPES.Identifier && names.includes(node.name);
 }
 
 /**
