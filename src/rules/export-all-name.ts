@@ -7,7 +7,10 @@ export const exportAllName = utils.createRule({
     return {
       [AST_NODE_TYPES.ExportAllDeclaration]: (node): void => {
         if (node.exported) {
-          const expected = utils.getNameFromFilename(node.source.value);
+          const expected = utils.getNameFromFilename(
+            node.source.value,
+            node.exported.name
+          );
 
           if (node.exported.name === expected) {
             // Valid

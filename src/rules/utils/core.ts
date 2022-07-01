@@ -352,20 +352,24 @@ export function getComments(program: TSESTree.Program): TSESTree.Comment[] {
 }
 
 /**
- * Creates identifier from from file name.
+ * Gets name from filename.
  *
  * @param path - Path.
- * @returns Identifier.
+ * @param expected - Expected name.
+ * @returns Name.
  */
-export function getNameFromFilename(path: string): string {
-  const name1 = nodePath.parse(path).name;
+export function getNameFromFilename(path: string, expected?: string): string {
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+  const { base, dir, name } = nodePath.parse(path);
 
-  const name2 =
-    name1 === "index" ? nodePath.parse(nodePath.parse(path).dir).name : name1;
+  return is.not.empty(expected) &&
+    base.split(".").some(part => getName(part) === expected)
+    ? expected
+    : getName(name === "index" ? nodePath.parse(dir).name : name);
 
-  return /^[A-Z]/u.test(name2)
-    ? s.ucFirst(_.camelCase(name2))
-    : _.camelCase(name2);
+  function getName(x: string): string {
+    return /^[A-Z]/u.test(x) ? s.ucFirst(_.camelCase(x)) : _.camelCase(x);
+  }
 }
 
 /**

@@ -42,15 +42,16 @@ export const onlyExportName = utils.createRule({
           nodes.add(node);
         },
       "Program:exit": (): void => {
-        const expected = utils.getNameFromFilename(context.path);
-
         if (hasDefaultExport || nodes.size > 1) {
           // Valid
         } else
-          for (const node of nodes)
+          for (const node of nodes) {
+            const expected = utils.getNameFromFilename(context.path, node.name);
+
             if (node.name === "default" || node.name === expected) {
               // Valid
             } else context.report({ messageId: "invalidName", node });
+          }
       }
     };
   },
