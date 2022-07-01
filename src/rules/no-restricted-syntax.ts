@@ -1,26 +1,17 @@
 import * as utils from "./utils";
-import { is, o } from "@skylib/functions";
+import { a, is, o } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noRestrictedSyntax = utils.createRule({
   create: context =>
     o.fromEntries(
-      context.subOptionsArray.flatMap(subOptions => {
-        const {
-          message,
-          replacement,
-          search,
-          selector: mixedSelector
-        } = subOptions;
+      context.subOptionsArray.map(subOptions => {
+        const { message, replacement, search, selector: mixed } = subOptions;
 
-        // eslint-disable-next-line no-warning-comments -- Wait for @skylib/function update
-        // fixme - mixedToArray
-        const selectors = is.string(mixedSelector)
-          ? [mixedSelector]
-          : mixedSelector;
+        const selector = a.fromMixed(mixed).join(", ");
 
-        return selectors.map(selector => [
+        return [
           selector,
           (node: TSESTree.Node): void => {
             const range = node.range;
@@ -48,7 +39,7 @@ export const noRestrictedSyntax = utils.createRule({
               messageId: "customMessage"
             });
           }
-        ]);
+        ];
       })
     ),
   fixable: "code",

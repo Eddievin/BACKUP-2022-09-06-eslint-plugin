@@ -12,15 +12,7 @@ utils.testRule(
       errors: [{ line: 1, messageId: "customMessage" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          rules: [
-            {
-              data: { message: "Custom message" },
-              selector: "Identifier",
-              subOptionsId: "rule-id"
-            }
-          ]
-        }
+        { rules: [{ selector: "Identifier", subOptionsId: "rule-id" }] }
       ]
     },
     {
@@ -33,7 +25,6 @@ utils.testRule(
         {
           rules: [
             {
-              data: { message: "Custom message" },
               filesToLint: ["./fixtures/file.ts"],
               filesToSkip: ["./fixtures/**", "./other/**"],
               selector: "Identifier"
@@ -56,15 +47,7 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          rules: [
-            {
-              data: { message: "Custom message" },
-              filesToSkip: ["./fixtures/**"],
-              selector: "Identifier"
-            }
-          ]
-        }
+        { rules: [{ filesToSkip: ["./fixtures/**"], selector: "Identifier" }] }
       ]
     },
     {
@@ -73,15 +56,7 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          rules: [
-            {
-              data: { message: "Custom message" },
-              filesToLint: ["./other/**"],
-              selector: "Identifier"
-            }
-          ]
-        }
+        { rules: [{ filesToLint: ["./other/**"], selector: "Identifier" }] }
       ]
     },
     {
@@ -92,15 +67,7 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          rules: [
-            {
-              data: { message: "Custom message" },
-              selector: "Identifier",
-              subOptionsId: "rule-id"
-            }
-          ]
-        }
+        { rules: [{ selector: "Identifier", subOptionsId: "rule-id" }] }
       ]
     }
   ]
