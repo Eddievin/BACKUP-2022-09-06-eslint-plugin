@@ -377,7 +377,7 @@ function nodeInfo(
       node,
       order,
       parentNode,
-      sortingOrder: `${order1} ${order2} ${order3}`,
+      sortingOrder: `${order1}\u0000${order2}\u0000${order3}`,
       type
     };
   }

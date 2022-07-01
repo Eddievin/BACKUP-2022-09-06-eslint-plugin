@@ -359,6 +359,13 @@ utils.testRule(
           ]
         }
       ]
+    },
+    {
+      code: `
+        test.each([])("prop: selected", async () => {});
+        test.each([])("prop: selected (multi-select)", async () => {});
+      `,
+      name: `Test at line ${getCurrentLine().line}`
     }
   ]
 );
