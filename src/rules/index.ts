@@ -86,13 +86,11 @@ export const { configs, rules } = evaluate(() => {
   const copies: WritableIndexedObject = {};
 
   for (const [name, rule] of o.entries(core)) {
-    copies[`chore/${name}`] = rule;
     copies[`facades/${name}`] = rule;
     copies[`framework/${name}`] = rule;
     copies[`functions/${name}`] = rule;
     copies[`project/${name}`] = rule;
     copies[`quasar-extension/${name}`] = rule;
-    copies[`tests/${name}`] = rule;
   }
 
   return {
