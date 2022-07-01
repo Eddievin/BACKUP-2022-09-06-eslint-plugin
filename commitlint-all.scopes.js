@@ -1,1 +1,3 @@
-module.exports = { scopes: ["disallow-by-regexp", "utils.readonliness"] };
+module.exports = {
+  scopes: ["disallow-identifier", "disallow-by-regexp", "utils.readonliness"]
+};

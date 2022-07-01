@@ -5,7 +5,7 @@ Enforces unified style for optional properties.
 ## eslintrc.js
 
 ```ts
-"@skylib/disallow-identifier": [
+"@skylib/optional-property-style": [
   "error",
   {
     classes: "combined" | "optional" | "undefined",
