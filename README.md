@@ -68,6 +68,7 @@ npm install --save-dev @skylib/eslint-plugin
 - [prefer-readonly](https://ilyub.github.io/eslint-plugin/prefer-readonly.html)
 - [prefer-ts-toolbelt](https://ilyub.github.io/eslint-plugin/prefer-ts-toolbelt.html)
 - [require-jsdoc](https://ilyub.github.io/eslint-plugin/require-jsdoc.html)
+- [sort-array](https://ilyub.github.io/eslint-plugin/sort-array.html)
 - [sort-class-members](https://ilyub.github.io/eslint-plugin/sort-class-members.html)
 - [sort-keys](https://ilyub.github.io/eslint-plugin/sort-keys.html)
 - [statements-order](https://ilyub.github.io/eslint-plugin/statements-order.html)

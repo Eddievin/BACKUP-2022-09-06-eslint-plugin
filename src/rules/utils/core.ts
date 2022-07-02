@@ -1,4 +1,15 @@
-import { assert, cast, evaluate, fn, is, json, o, s } from "@skylib/functions";
+import {
+  a,
+  as,
+  assert,
+  cast,
+  evaluate,
+  fn,
+  is,
+  json,
+  o,
+  s
+} from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import {
   AST_NODE_TYPES,
@@ -12,7 +23,9 @@ import * as tsutils from "tsutils";
 import type {
   Accumulator,
   Rec,
+  numberU,
   objects,
+  stringU,
   strings,
   unknowns
 } from "@skylib/functions";
@@ -22,6 +35,7 @@ import type {
   ValidTestCase as BaseValidTestCase,
   ReportDescriptor,
   RuleContext,
+  RuleFix,
   RuleListener,
   RuleModule,
   SourceCode
@@ -478,6 +492,120 @@ export function isAdjacentNodes(
   }
 
   return false;
+}
+
+/**
+ * Returns string representing node.
+ *
+ * @param node - Node.
+ * @param context - Context.
+ * @returns String representing node.
+ */
+export function nodeToString(
+  node: TSESTree.Node,
+  context: Context<never, object, object>
+): string {
+  switch (node.type) {
+    case AST_NODE_TYPES.Identifier:
+      return node.name;
+
+    case AST_NODE_TYPES.Literal:
+      return cast.string(node.value);
+
+    default:
+      return `\u0000${context.getText(node)}`;
+  }
+}
+
+/**
+ * Sorts nodes.
+ *
+ * @param nodes - Nodes.
+ * @param key - Key.
+ * @param subOptionsId - Suboptions ID.
+ * @param context - Context.
+ */
+export function sort(
+  nodes: readonly TSESTree.Node[],
+  key: stringU,
+  subOptionsId: stringU,
+  context: Context<"incorrectSortingOrder", object, object>
+): void {
+  const items = nodes.map<Item>((node, index) => {
+    // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
+    switch (node.type) {
+      case AST_NODE_TYPES.ObjectExpression: {
+        return {
+          index,
+          key:
+            node.properties
+              .map(property => {
+                switch (property.type) {
+                  case AST_NODE_TYPES.MethodDefinition:
+                  case AST_NODE_TYPES.Property:
+                    return nodeToString(property.key, context) === key
+                      ? nodeToString(property.value, context)
+                      : undefined;
+
+                  case AST_NODE_TYPES.SpreadElement:
+                    return undefined;
+                }
+              })
+              .find(is.string) ?? nodeToString(node, context),
+          node
+        };
+      }
+
+      default:
+        return {
+          index,
+          key: nodeToString(node, context),
+          node
+        };
+    }
+  });
+
+  const sortedItems = _.sortBy(items, item => item.key);
+
+  const fixes: RuleFix[] = [];
+
+  let min: numberU;
+
+  let max: numberU;
+
+  for (const [index, sortedItem] of sortedItems.entries())
+    if (sortedItem.index === index) {
+      // Valid
+    } else {
+      const item = a.get(items, index);
+
+      min = is.not.empty(min) ? Math.min(min, index) : index;
+      max = is.not.empty(max) ? Math.max(max, index) : index;
+      fixes.push({
+        range: context.getRangeWithLeadingTrivia(item.node),
+        text: context.getTextWithLeadingTrivia(sortedItem.node)
+      });
+    }
+
+  if (fixes.length > 0) {
+    const loc = context.getLocFromRange([
+      a.get(items, as.not.empty(min)).node.range[0],
+      a.get(items, as.not.empty(max)).node.range[1]
+    ]);
+
+    context.report({
+      data: { subOptionsId },
+      fix: () => fixes,
+      loc,
+      messageId: "incorrectSortingOrder"
+    });
+  }
+
+  interface Item {
+    readonly index: number;
+    readonly key: unknown;
+    readonly node: TSESTree.Node;
+  }
 }
 
 /**

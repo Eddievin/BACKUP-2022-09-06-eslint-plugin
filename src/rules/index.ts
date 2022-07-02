@@ -30,6 +30,7 @@ import { preferReadonlyProps } from "./prefer-readonly-props";
 import { preferTsToolbelt } from "./prefer-ts-toolbelt";
 import { primaryExportOnly } from "./primary-export-only";
 import { requireJsdoc } from "./require-jsdoc";
+import { sortArray } from "./sort-array";
 import { sortClassMembers } from "./sort-class-members";
 import { sortKeys } from "./sort-keys";
 import { statementsOrder } from "./statements-order";
@@ -75,6 +76,7 @@ export const { configs, rules } = evaluate(() => {
     "prefer-ts-toolbelt": preferTsToolbelt,
     "primary-export-only": primaryExportOnly,
     "require-jsdoc": requireJsdoc,
+    "sort-array": sortArray,
     "sort-class-members": sortClassMembers,
     "sort-keys": sortKeys,
     "statements-order": statementsOrder,
