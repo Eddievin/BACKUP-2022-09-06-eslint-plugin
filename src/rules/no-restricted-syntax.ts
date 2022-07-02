@@ -20,68 +20,27 @@ export const noRestrictedSyntax = utils.createRule({
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
-    function getVisitors(): any {
-      return o.fromEntries(
-        context.subOptionsArray.map(subOptions => {
-          const {
-            _id,
-            message,
-            replacement,
-            search,
-            selector: mixed,
-            typeContain,
-            typeDontContain,
-            typeEq,
-            typeNeq
-          } = subOptions;
-
-          const selector = a.fromMixed(mixed).join(", ");
-
-          return [
-            selector,
-            (node: TSESTree.Node): void => {
-              const tsNode = context.toTsNode(node);
-
-              const type = context.checker.getTypeAtLocation(tsNode);
-
-              if (
-                isTypeEqualsTo(type, typeEq) &&
-                isTypeNotEqualsTo(type, typeNeq) &&
-                isTypeIncludes(type, typeContain) &&
-                isTypeExcludes(type, typeDontContain)
-              )
-                context.report({
-                  data: {
-                    _id,
-                    message:
-                      message ?? `This syntax is not allowed: ${selector}`
-                  },
-                  fix: () =>
-                    is.not.empty(replacement)
-                      ? [
-                          {
-                            range: node.range,
-                            text: is.not.empty(search)
-                              ? context.getText(node).replace(
-                                  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-                                  new RegExp(search, "u"),
-                                  replacement
-                                )
-                              : replacement
-                          }
-                        ]
-                      : [],
-                  loc: context.getLocFromRange(node.range),
-                  messageId: "customMessage"
-                });
-            }
-          ];
-        })
-      );
+    function checkTypeHas(type: ts.Type, expected?: Type): boolean {
+      return expected
+        ? checkTypeIs(type, expected) ||
+            (type.isUnion() &&
+              type.types.some(subtype => checkTypeIs(subtype, expected)))
+        : true;
     }
 
-    function isTypeEqualsTo(type: ts.Type, expected?: Type): boolean {
+    function checkTypeHasNoneOf(type: ts.Type, expected?: Types): boolean {
+      return expected ? expected.every(x => checkTypeHasNot(type, x)) : true;
+    }
+
+    function checkTypeHasNot(type: ts.Type, expected?: Type): boolean {
+      return expected ? !checkTypeHas(type, expected) : true;
+    }
+
+    function checkTypeHasOneOf(type: ts.Type, expected?: Types): boolean {
+      return expected ? expected.some(x => checkTypeHas(type, x)) : true;
+    }
+
+    function checkTypeIs(type: ts.Type, expected?: Type): boolean {
       if (expected)
         switch (expected) {
           case "any":
@@ -135,20 +94,85 @@ export const noRestrictedSyntax = utils.createRule({
       return true;
     }
 
-    function isTypeExcludes(type: ts.Type, expected?: Type): boolean {
-      return expected ? !isTypeIncludes(type, expected) : true;
+    function checkTypeIsNoneOf(type: ts.Type, expected?: Types): boolean {
+      return expected ? expected.every(x => checkTypeIsNot(type, x)) : true;
     }
 
-    function isTypeIncludes(type: ts.Type, expected?: Type): boolean {
-      return expected
-        ? isTypeEqualsTo(type, expected) ||
-            (type.isUnion() &&
-              type.types.some(subtype => isTypeEqualsTo(subtype, expected)))
-        : true;
+    function checkTypeIsNot(type: ts.Type, expected?: Type): boolean {
+      return expected ? !checkTypeIs(type, expected) : true;
     }
 
-    function isTypeNotEqualsTo(type: ts.Type, expected?: Type): boolean {
-      return expected ? !isTypeEqualsTo(type, expected) : true;
+    function checkTypeIsOneOf(type: ts.Type, expected?: Types): boolean {
+      return expected ? expected.some(x => checkTypeIs(type, x)) : true;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
+    function getVisitors(): any {
+      return o.fromEntries(
+        context.subOptionsArray.map(subOptions => {
+          const {
+            _id,
+            message,
+            replacement,
+            search,
+            selector: mixed,
+            typeHas,
+            typeHasNoneOf,
+            typeHasNot,
+            typeHasOneOf,
+            typeIs,
+            typeIsNoneOf,
+            typeIsNot,
+            typeIsOneOf
+          } = subOptions;
+
+          const selector = a.fromMixed(mixed).join(", ");
+
+          return [
+            selector,
+            (node: TSESTree.Node): void => {
+              const tsNode = context.toTsNode(node);
+
+              const type = context.checker.getTypeAtLocation(tsNode);
+
+              if (
+                checkTypeIs(type, typeIs) &&
+                checkTypeHasNot(type, typeHasNot) &&
+                checkTypeIsNot(type, typeIsNot) &&
+                checkTypeHas(type, typeHas) &&
+                checkTypeHasNoneOf(type, typeHasNoneOf) &&
+                checkTypeHasOneOf(type, typeHasOneOf) &&
+                checkTypeIsNoneOf(type, typeIsNoneOf) &&
+                checkTypeIsOneOf(type, typeIsOneOf)
+              )
+                context.report({
+                  data: {
+                    _id,
+                    message:
+                      message ?? `This syntax is not allowed: ${selector}`
+                  },
+                  fix: () =>
+                    is.not.empty(replacement)
+                      ? [
+                          {
+                            range: node.range,
+                            text: is.not.empty(search)
+                              ? context.getText(node).replace(
+                                  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                                  new RegExp(search, "u"),
+                                  replacement
+                                )
+                              : replacement
+                          }
+                        ]
+                      : [],
+                  loc: context.getLocFromRange(node.range),
+                  messageId: "customMessage"
+                });
+            }
+          ];
+        })
+      );
     }
   },
   fixable: "code",
@@ -168,6 +192,8 @@ export const noRestrictedSyntax = utils.createRule({
 
     const isType = is.factory(is.enumeration, TypeVO);
 
+    const isTypes = is.factory(is.array.of, isType);
+
     return is.object.factory<SubOptions>(
       { selector: is.or.factory(is.string, is.strings) },
       {
@@ -175,10 +201,14 @@ export const noRestrictedSyntax = utils.createRule({
         message: is.string,
         replacement: is.string,
         search: is.string,
-        typeContain: isType,
-        typeDontContain: isType,
-        typeEq: isType,
-        typeNeq: isType
+        typeHas: isType,
+        typeHasNoneOf: isTypes,
+        typeHasNot: isType,
+        typeHasOneOf: isTypes,
+        typeIs: isType,
+        typeIsNoneOf: isTypes,
+        typeIsNot: isType,
+        typeIsOneOf: isTypes
       }
     );
 
@@ -188,10 +218,14 @@ export const noRestrictedSyntax = utils.createRule({
       readonly replacement?: string;
       readonly search?: string;
       readonly selector: strings | string;
-      readonly typeContain?: Type;
-      readonly typeDontContain?: Type;
-      readonly typeEq?: Type;
-      readonly typeNeq?: Type;
+      readonly typeHas?: Type;
+      readonly typeHasNoneOf?: Types;
+      readonly typeHasNot?: Type;
+      readonly typeHasOneOf?: Types;
+      readonly typeIs?: Type;
+      readonly typeIsNoneOf?: Types;
+      readonly typeIsNot?: Type;
+      readonly typeIsOneOf?: Types;
     }
   }),
   messages: { customMessage: "{{ message }} ({{ _id }})" },
@@ -208,3 +242,5 @@ type Type =
   | "symbol"
   | "undefined"
   | "unknown";
+
+type Types = readonly Type[];

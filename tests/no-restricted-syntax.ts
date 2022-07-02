@@ -158,55 +158,55 @@ utils.testRule("no-restricted-syntax", rules, [
             _id: "any",
             message: "Custom message",
             selector: ["Identifier[name=x1]"],
-            typeEq: "any"
+            typeIsOneOf: ["any"]
           },
           {
             _id: "array",
             message: "Custom message",
             selector: ["Identifier[name=x2]"],
-            typeEq: "array"
+            typeIsOneOf: ["array"]
           },
           {
             _id: "boolean",
             message: "Custom message",
             selector: ["Identifier[name=x3]"],
-            typeEq: "boolean"
+            typeIsOneOf: ["boolean"]
           },
           {
             _id: "null",
             message: "Custom message",
             selector: ["Identifier[name=x4]"],
-            typeEq: "null"
+            typeIsOneOf: ["null"]
           },
           {
             _id: "number",
             message: "Custom message",
             selector: ["Identifier[name=x5]"],
-            typeEq: "number"
+            typeIsOneOf: ["number"]
           },
           {
             _id: "string",
             message: "Custom message",
             selector: ["Identifier[name=x6]"],
-            typeEq: "string"
+            typeIsOneOf: ["string"]
           },
           {
             _id: "symbol",
             message: "Custom message",
             selector: ["Identifier[name=x7]"],
-            typeEq: "symbol"
+            typeIsOneOf: ["symbol"]
           },
           {
             _id: "undefined",
             message: "Custom message",
             selector: ["Identifier[name=x8]"],
-            typeEq: "undefined"
+            typeIsOneOf: ["undefined"]
           },
           {
             _id: "unknown",
             message: "Custom message",
             selector: ["Identifier[name=x9]"],
-            typeEq: "unknown"
+            typeIsOneOf: ["unknown"]
           }
         ]
       }
@@ -232,7 +232,7 @@ utils.testRule("no-restricted-syntax", rules, [
             _id: "id",
             message: "Custom message",
             selector: ["Identifier[name=/s$/u]"],
-            typeNeq: "array"
+            typeIsNoneOf: ["array"]
           }
         ]
       }
@@ -260,7 +260,35 @@ utils.testRule("no-restricted-syntax", rules, [
             _id: "id",
             message: "Custom message",
             selector: ["CallExpression[callee.name=g] > .arguments"],
-            typeDontContain: "undefined"
+            typeHasNoneOf: ["undefined"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    code: `
+      function f(x: string,  y: string | undefined) {
+        g(x);
+        g(y);
+      }
+    `,
+    errors: [
+      {
+        data: { _id: "id", message: "Custom message" },
+        line: 3,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        rules: [
+          {
+            _id: "id",
+            message: "Custom message",
+            selector: ["CallExpression[callee.name=g] > .arguments"],
+            typeHasOneOf: ["undefined"]
           }
         ]
       }
