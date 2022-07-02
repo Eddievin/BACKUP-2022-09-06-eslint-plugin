@@ -8,14 +8,14 @@ utils.testRule("no-restricted-syntax", rules, [
       {
         data: {
           message: "This syntax is not allowed: Identifier",
-          subOptionsId: "id"
+          _id: "id"
         },
         line: 1,
         messageId: "customMessage"
       }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ selector: "Identifier", subOptionsId: "id" }] }]
+    options: [{ rules: [{ selector: "Identifier", _id: "id" }] }]
   },
   {
     code: "const id1 = [];",
@@ -24,7 +24,7 @@ utils.testRule("no-restricted-syntax", rules, [
         data: {
           message:
             "This syntax is not allowed: Identifier, Identifier[name=id1]",
-          subOptionsId: "id"
+          _id: "id"
         },
         line: 1,
         messageId: "customMessage"
@@ -37,7 +37,7 @@ utils.testRule("no-restricted-syntax", rules, [
           {
             replacement: "id2",
             selector: ["Identifier", "Identifier[name=id1]"],
-            subOptionsId: "id"
+            _id: "id"
           }
         ]
       }
@@ -48,7 +48,7 @@ utils.testRule("no-restricted-syntax", rules, [
     code: "const id1 = [];",
     errors: [
       {
-        data: { message: "Custom message", subOptionsId: "id" },
+        data: { message: "Custom message", _id: "id" },
         line: 1,
         messageId: "customMessage"
       }
@@ -62,7 +62,7 @@ utils.testRule("no-restricted-syntax", rules, [
             replacement: "e",
             search: /d/u.source,
             selector: ["Identifier"],
-            subOptionsId: "id"
+            _id: "id"
           }
         ]
       }
@@ -76,7 +76,7 @@ utils.testRule("no-restricted-syntax", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message", subOptionsId: "id" },
+        data: { message: "Custom message", _id: "id" },
         line: 1,
         messageId: "customMessage"
       }
@@ -88,7 +88,7 @@ utils.testRule("no-restricted-syntax", rules, [
           {
             message: "Custom message",
             selector: ["Identifier[name=/s$/u]"],
-            subOptionsId: "id",
+            _id: "id",
             typeNeq: "array"
           }
         ]
@@ -104,7 +104,7 @@ utils.testRule("no-restricted-syntax", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message", subOptionsId: "id" },
+        data: { message: "Custom message", _id: "id" },
         line: 2,
         messageId: "customMessage"
       }
@@ -116,7 +116,7 @@ utils.testRule("no-restricted-syntax", rules, [
           {
             message: "Custom message",
             selector: ["CallExpression[callee.name=g] > .arguments"],
-            subOptionsId: "id",
+            _id: "id",
             typeDontContain: "undefined"
           }
         ]

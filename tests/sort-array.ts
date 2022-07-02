@@ -13,14 +13,14 @@ utils.testRule("sort-array", rules, [
     `,
     errors: [
       {
-        data: { subOptionsId: "id" },
+        data: { _id: "id" },
         endLine: 5,
         line: 3,
         messageId: "incorrectSortingOrder"
       }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ selector: "ArrayExpression", subOptionsId: "id" }] }],
+    options: [{ rules: [{ selector: "ArrayExpression", _id: "id" }] }],
     output: `
       const x = [
       "a",
@@ -40,7 +40,7 @@ utils.testRule("sort-array", rules, [
     `,
     errors: [
       {
-        data: { subOptionsId: "id" },
+        data: { _id: "id" },
         endLine: 4,
         line: 3,
         messageId: "incorrectSortingOrder"
@@ -53,7 +53,7 @@ utils.testRule("sort-array", rules, [
           {
             key: "key",
             selector: "ArrayExpression",
-            subOptionsId: "id"
+            _id: "id"
           }
         ]
       }

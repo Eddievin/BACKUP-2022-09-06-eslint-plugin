@@ -27,11 +27,11 @@ export const disallowImport = utils.createRule({
   isRuleOptions: is.object,
   isSubOptions: is.object.factory<SubOptions>(
     { allow: is.strings, disallow: is.strings },
-    { subOptionsId: is.string }
+    { _id: is.string }
   ),
   messages: {
     disallowedSource:
-      "Import from this source is not allowed ({{ subOptionsId }})"
+      "Import from this source is not allowed ({{ _id }})"
   },
   name: "disallow-import"
 });

@@ -57,18 +57,18 @@ export const consistentImport = utils.createRule({
       {
         autoImportSource: is.string,
         localName: is.string,
-        subOptionsId: is.string
+        _id: is.string
       }
     );
   }),
   messages: {
     autoImport:
-      'Run "eslint --fix" to add missing import statement(s) ({{ subOptionsId }})',
+      'Run "eslint --fix" to add missing import statement(s) ({{ _id }})',
     invalidLocalName:
-      "Expecting local name to be {{ expectedLocalName }} ({{ subOptionsId }})",
-    missingImport: "Missing import statement ({{ subOptionsId }})",
-    wildcardImportDisallowed: "Wildcard import disallowed ({{ subOptionsId }})",
-    wildcardImportRequired: "Wildcard import required ({{ subOptionsId }})"
+      "Expecting local name to be {{ expectedLocalName }} ({{ _id }})",
+    missingImport: "Missing import statement ({{ _id }})",
+    wildcardImportDisallowed: "Wildcard import disallowed ({{ _id }})",
+    wildcardImportRequired: "Wildcard import required ({{ _id }})"
   },
   name: "consistent-import",
   subOptionsKey: "sources"
@@ -83,7 +83,7 @@ interface SubOptions {
   readonly autoImportSource?: string;
   readonly localName?: string;
   readonly sourcePattern: string;
-  readonly subOptionsId?: string;
+  readonly _id?: string;
   readonly type: Type;
 }
 
@@ -183,7 +183,7 @@ function checkImport(
                     subOptions.altLocalNames,
                     identifiers
                   ),
-                  subOptionsId: subOptions.subOptionsId
+                  _id: subOptions._id
                 },
                 messageId: "invalidLocalName",
                 node
@@ -211,7 +211,7 @@ function checkImport(
                     subOptions.altLocalNames,
                     identifiers
                   ),
-                  subOptionsId: subOptions.subOptionsId
+                  _id: subOptions._id
                 },
                 messageId: "invalidLocalName",
                 node

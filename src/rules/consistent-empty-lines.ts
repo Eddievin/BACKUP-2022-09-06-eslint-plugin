@@ -77,7 +77,7 @@ export const consistentEmptyLines = utils.createRule({
               // Valid
             } else
               context.report({
-                data: { subOptionsId: item.subOptionsId },
+                data: { _id: item._id },
                 fix: () => [
                   {
                     range: [node.range[0] - got.length, node.range[0]],
@@ -104,14 +104,14 @@ export const consistentEmptyLines = utils.createRule({
             prevItems.push({
               node,
               ruleIndex,
-              subOptionsId: subOptions.subOptionsId
+              _id: subOptions._id
             });
 
           for (const ruleIndex of nextRuleIndexes.get(selector))
             nextItems.push({
               node,
               ruleIndex,
-              subOptionsId: subOptions.subOptionsId
+              _id: subOptions._id
             });
         };
 
@@ -134,12 +134,12 @@ export const consistentEmptyLines = utils.createRule({
         next: is.string,
         prev: is.string
       },
-      { subOptionsId: is.string }
+      { _id: is.string }
     );
   }),
   messages: {
-    expectingEmptyLine: "Expecting empty line before ({{ subOptionsId }})",
-    unexpectedEmptyLine: "Unexpected empty line before ({{ subOptionsId }})"
+    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
+    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
   },
   name: "consistent-empty-lines"
 });
@@ -150,12 +150,12 @@ interface Item {
   readonly node: TSESTree.Node;
   readonly ruleIndex: number;
   // eslint-disable-next-line @skylib/optional-property-style -- Temp
-  readonly subOptionsId: stringU;
+  readonly _id: stringU;
 }
 
 interface SubOptions {
   readonly emptyLine: EmptyLine;
   readonly next: string;
   readonly prev: string;
-  readonly subOptionsId?: string;
+  readonly _id?: string;
 }

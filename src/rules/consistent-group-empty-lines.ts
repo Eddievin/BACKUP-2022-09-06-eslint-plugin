@@ -64,11 +64,11 @@ export const consistentGroupEmptyLines = utils.createRule({
       someHasDocComment: is.boolean,
       someLinesGte: is.number
     },
-    { subOptionsId: is.string }
+    { _id: is.string }
   ),
   messages: {
-    expectingEmptyLine: "Expecting empty line before ({{ subOptionsId }})",
-    unexpectedEmptyLine: "Unexpected empty line before ({{ subOptionsId }})"
+    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
+    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
   },
   name: "consistent-group-empty-lines"
 });
@@ -83,7 +83,7 @@ interface SubOptions {
   readonly selector: string;
   readonly someHasDocComment: boolean;
   readonly someLinesGte: number;
-  readonly subOptionsId?: string;
+  readonly _id?: string;
 }
 
 /**
@@ -134,7 +134,7 @@ function lintGroup(
           // Valid
         } else
           context.report({
-            data: { subOptionsId: subOptions.subOptionsId },
+            data: { _id: subOptions._id },
             fix: () => [
               {
                 range: [node.range[0] - got.length, node.range[0]],

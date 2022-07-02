@@ -12,7 +12,7 @@ utils.testRule(
       errors: [{ line: 1, messageId: "customMessage" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        { rules: [{ selector: "Identifier", subOptionsId: "rule-id" }] }
+        { rules: [{ selector: "Identifier", _id: "rule-id" }] }
       ]
     },
     {
@@ -67,7 +67,7 @@ utils.testRule(
       `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        { rules: [{ selector: "Identifier", subOptionsId: "rule-id" }] }
+        { rules: [{ selector: "Identifier", _id: "rule-id" }] }
       ]
     }
   ]

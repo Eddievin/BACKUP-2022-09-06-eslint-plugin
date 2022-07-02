@@ -26,7 +26,7 @@ npm install --save-dev @skylib/eslint-plugin
       {
         filesToLint?: string[],
         filesToSkip?: string[],
-        subOptionsId?: string
+        _id?: string
       },
       ...
     ]
@@ -40,7 +40,7 @@ npm install --save-dev @skylib/eslint-plugin
 | :------ | :------ |
 | `filesToLint` | Files to lint (minimatch patterns). |
 | `filesToSkip` | Files to skip (minimatch patterns). |
-| `subOptionsId` | Suboptions ID. |
+| `_id` | Suboptions ID. |
 
 ### Configuration comment
 

@@ -13,7 +13,7 @@ export const sortArray = utils.createRule({
             utils.sort(
               node.elements,
               subOptions.key,
-              subOptions.subOptionsId,
+              subOptions._id,
               context
             );
           else throw new Error(`Invalid selector: ${subOptions.selector}`);
@@ -24,10 +24,10 @@ export const sortArray = utils.createRule({
   isRuleOptions: is.object,
   isSubOptions: is.object.factory<SubOptions>(
     { selector: is.string },
-    { key: is.string, subOptionsId: is.string }
+    { key: is.string, _id: is.string }
   ),
   messages: {
-    incorrectSortingOrder: "Incorrect sorting order ({{ subOptionsId }})"
+    incorrectSortingOrder: "Incorrect sorting order ({{ _id }})"
   },
   name: "sort-array"
 });
@@ -35,5 +35,5 @@ export const sortArray = utils.createRule({
 interface SubOptions {
   readonly key?: string;
   readonly selector: string;
-  readonly subOptionsId?: string;
+  readonly _id?: string;
 }

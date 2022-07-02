@@ -40,49 +40,49 @@ utils.testRule(
               autoImportSource: "source1",
               localName: "localName1",
               sourcePattern: "source1",
-              subOptionsId: "id1",
+              _id: "id1",
               type: "default"
             },
             {
               autoImportSource: "source2",
               localName: "localName2",
               sourcePattern: "source2",
-              subOptionsId: "id2",
+              _id: "id2",
               type: "wildcard"
             },
             {
               autoImportSource: "source3",
               localName: "localName3",
               sourcePattern: "source3",
-              subOptionsId: "id3",
+              _id: "id3",
               type: "wildcard"
             },
             {
               autoImportSource: "source4",
               localName: "localName4",
               sourcePattern: "source4",
-              subOptionsId: "id4",
+              _id: "id4",
               type: "wildcard"
             },
             {
               autoImportSource: "source5",
               localName: "localName5",
               sourcePattern: "source5",
-              subOptionsId: "id5",
+              _id: "id5",
               type: "wildcard"
             },
             {
               autoImportSource: "source6",
               localName: "localName6",
               sourcePattern: "source6",
-              subOptionsId: "id6",
+              _id: "id6",
               type: "wildcard"
             },
             {
               autoImportSource: "source7",
               localName: "localName7",
               sourcePattern: "source7",
-              subOptionsId: "id7",
+              _id: "id7",
               type: "wildcard"
             }
           ]
@@ -126,7 +126,7 @@ utils.testRule(
               autoImportSource: "@/source",
               localName: "source",
               sourcePattern: "@skylib/eslint-plugin/src/source",
-              subOptionsId: "id",
+              _id: "id",
               type: "wildcard"
             }
           ]
@@ -153,7 +153,7 @@ utils.testRule(
               autoImportSource: "@/source",
               localName: "source",
               sourcePattern: "@skylib/eslint-plugin/src/source",
-              subOptionsId: "id",
+              _id: "id",
               type: "wildcard"
             }
           ]
@@ -183,19 +183,19 @@ utils.testRule(
             {
               localName: "localName1",
               sourcePattern: "source1",
-              subOptionsId: "id1",
+              _id: "id1",
               type: "wildcard"
             },
             {
               localName: "localName2",
               sourcePattern: "source2",
-              subOptionsId: "id2",
+              _id: "id2",
               type: "wildcard"
             },
             {
               localName: "localName3",
               sourcePattern: "source3",
-              subOptionsId: "id3",
+              _id: "id3",
               type: "default"
             }
           ]
@@ -209,12 +209,12 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { expectedLocalName: '"localName1"', subOptionsId: "id1" },
+          data: { expectedLocalName: '"localName1"', _id: "id1" },
           line: 1,
           messageId: "invalidLocalName"
         },
         {
-          data: { expectedLocalName: '"localName2"', subOptionsId: "id2" },
+          data: { expectedLocalName: '"localName2"', _id: "id2" },
           line: 2,
           messageId: "invalidLocalName"
         }
@@ -226,13 +226,13 @@ utils.testRule(
             {
               localName: "localName1",
               sourcePattern: "source1",
-              subOptionsId: "id1",
+              _id: "id1",
               type: "default"
             },
             {
               localName: "localName2",
               sourcePattern: "source2",
-              subOptionsId: "id2",
+              _id: "id2",
               type: "wildcard"
             }
           ]
@@ -255,12 +255,12 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { expectedLocalName: '"altName1"', subOptionsId: "id1" },
+          data: { expectedLocalName: '"altName1"', _id: "id1" },
           line: 1,
           messageId: "invalidLocalName"
         },
         {
-          data: { expectedLocalName: '"altName4"', subOptionsId: "id4" },
+          data: { expectedLocalName: '"altName4"', _id: "id4" },
           line: 4,
           messageId: "invalidLocalName"
         }
@@ -273,42 +273,42 @@ utils.testRule(
               altLocalNames: ["altName1"],
               localName: "localName1",
               sourcePattern: "source1",
-              subOptionsId: "id1",
+              _id: "id1",
               type: "default"
             },
             {
               altLocalNames: ["altName2"],
               localName: "localName2",
               sourcePattern: "source2",
-              subOptionsId: "id2",
+              _id: "id2",
               type: "default"
             },
             {
               altLocalNames: ["altName3"],
               localName: "localName3",
               sourcePattern: "source3",
-              subOptionsId: "id3",
+              _id: "id3",
               type: "default"
             },
             {
               altLocalNames: ["altName4"],
               localName: "localName4",
               sourcePattern: "source4",
-              subOptionsId: "id4",
+              _id: "id4",
               type: "wildcard"
             },
             {
               altLocalNames: ["altName5"],
               localName: "localName5",
               sourcePattern: "source5",
-              subOptionsId: "id5",
+              _id: "id5",
               type: "wildcard"
             },
             {
               altLocalNames: ["altName6"],
               localName: "localName6",
               sourcePattern: "source6",
-              subOptionsId: "id6",
+              _id: "id6",
               type: "wildcard"
             }
           ]
@@ -329,13 +329,13 @@ utils.testRule(
             {
               localName: "localName1",
               sourcePattern: "source1",
-              subOptionsId: "id1",
+              _id: "id1",
               type: "default"
             },
             {
               localName: "localName2",
               sourcePattern: "source2",
-              subOptionsId: "id2",
+              _id: "id2",
               type: "wildcard"
             }
           ]
@@ -356,22 +356,22 @@ utils.testRule(
             {
               localName: "index",
               sourcePattern: "@skylib/eslint-plugin",
-              subOptionsId: "id0",
+              _id: "id0",
               type: "wildcard"
             },
             {
               sourcePattern: "@skylib/eslint-plugin/src/source1",
-              subOptionsId: "id1",
+              _id: "id1",
               type: "wildcard"
             },
             {
               sourcePattern: "@skylib/eslint-plugin/fixtures/source2",
-              subOptionsId: "id2",
+              _id: "id2",
               type: "wildcard"
             },
             {
               sourcePattern: "@skylib/eslint-plugin/source3",
-              subOptionsId: "id3",
+              _id: "id3",
               type: "wildcard"
             }
           ]
@@ -388,7 +388,7 @@ utils.testRule(
           sources: [
             {
               sourcePattern: "@skylib/eslint-plugin/src/some-source",
-              subOptionsId: "id",
+              _id: "id",
               type: "wildcard"
             }
           ]
@@ -405,7 +405,7 @@ utils.testRule(
           sources: [
             {
               sourcePattern: "@skylib/eslint-plugin/fixtures",
-              subOptionsId: "id",
+              _id: "id",
               type: "wildcard"
             }
           ]

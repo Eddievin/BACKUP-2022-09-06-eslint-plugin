@@ -13,7 +13,7 @@ export const noRestrictedSyntax = utils.createRule({
           replacement,
           search,
           selector: mixed,
-          subOptionsId,
+          _id,
           typeContain,
           typeDontContain,
           typeEq,
@@ -38,7 +38,7 @@ export const noRestrictedSyntax = utils.createRule({
               context.report({
                 data: {
                   message: message ?? `This syntax is not allowed: ${selector}`,
-                  subOptionsId
+                  _id
                 },
                 fix: () =>
                   is.not.empty(replacement)
@@ -152,7 +152,7 @@ export const noRestrictedSyntax = utils.createRule({
         message: is.string,
         replacement: is.string,
         search: is.string,
-        subOptionsId: is.string,
+        _id: is.string,
         typeContain: isType,
         typeDontContain: isType,
         typeEq: isType,
@@ -165,14 +165,14 @@ export const noRestrictedSyntax = utils.createRule({
       readonly replacement?: string;
       readonly search?: string;
       readonly selector: strings | string;
-      readonly subOptionsId?: string;
+      readonly _id?: string;
       readonly typeContain?: Type;
       readonly typeDontContain?: Type;
       readonly typeEq?: Type;
       readonly typeNeq?: Type;
     }
   }),
-  messages: { customMessage: "{{ message }} ({{ subOptionsId }})" },
+  messages: { customMessage: "{{ message }} ({{ _id }})" },
   name: "no-restricted-syntax"
 });
 

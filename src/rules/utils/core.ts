@@ -522,13 +522,13 @@ export function nodeToString(
  *
  * @param nodes - Nodes.
  * @param key - Key.
- * @param subOptionsId - Suboptions ID.
+ * @param _id - Suboptions ID.
  * @param context - Context.
  */
 export function sort(
   nodes: readonly TSESTree.Node[],
   key: stringU,
-  subOptionsId: stringU,
+  _id: stringU,
   context: Context<"incorrectSortingOrder", object, object>
 ): void {
   const items = nodes.map<Item>((node, index) => {
@@ -594,7 +594,7 @@ export function sort(
     ]);
 
     context.report({
-      data: { subOptionsId },
+      data: { _id },
       fix: () => fixes,
       loc,
       messageId: "incorrectSortingOrder"
@@ -682,14 +682,14 @@ const isSharedOptions: is.Guard<SharedOptions> = is.factory(
   {
     filesToLint: is.strings,
     filesToSkip: is.strings,
-    subOptionsId: is.string
+    _id: is.string
   }
 );
 
 interface SharedOptions {
   readonly filesToLint?: strings;
   readonly filesToSkip?: strings;
-  readonly subOptionsId?: string;
+  readonly _id?: string;
 }
 
 /**
@@ -910,9 +910,9 @@ function shouldBeLinted(
   assert.byGuard(options, isSharedOptions, "Expecting valid rule options");
 
   const disallowById =
-    is.not.empty(options.subOptionsId) &&
+    is.not.empty(options._id) &&
     code.includes(
-      `/* skylib/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`
+      `/* skylib/eslint-plugin disable ${ruleId}[${options._id}] */`
     );
 
   const disallowByPath = evaluate<boolean>(() => {
