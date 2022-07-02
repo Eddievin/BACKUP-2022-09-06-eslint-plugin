@@ -9,11 +9,11 @@ export const noRestrictedSyntax = utils.createRule({
     return o.fromEntries(
       context.subOptionsArray.map(subOptions => {
         const {
+          _id,
           message,
           replacement,
           search,
           selector: mixed,
-          _id,
           typeContain,
           typeDontContain,
           typeEq,
@@ -37,8 +37,8 @@ export const noRestrictedSyntax = utils.createRule({
             )
               context.report({
                 data: {
-                  message: message ?? `This syntax is not allowed: ${selector}`,
-                  _id
+                  _id,
+                  message: message ?? `This syntax is not allowed: ${selector}`
                 },
                 fix: () =>
                   is.not.empty(replacement)
@@ -63,6 +63,14 @@ export const noRestrictedSyntax = utils.createRule({
       })
     );
 
+    function checkType(type: ts.Type, ...flags: ts.TypeFlags[]): boolean {
+      return (
+        flags.includes(type.getFlags()) ||
+        (type.isUnion() &&
+          type.types.every(subtype => flags.includes(subtype.getFlags())))
+      );
+    }
+
     function isTypeEqualsTo(type: ts.Type, expected?: Type): boolean {
       if (expected)
         switch (expected) {
@@ -73,34 +81,38 @@ export const noRestrictedSyntax = utils.createRule({
             return context.checker.isArrayType(type);
 
           case "boolean":
-            return (
-              type.getFlags() === ts.TypeFlags.Boolean ||
-              type.getFlags() === ts.TypeFlags.BooleanLike ||
-              type.getFlags() === ts.TypeFlags.BooleanLiteral
+            return checkType(
+              type,
+              ts.TypeFlags.Boolean,
+              ts.TypeFlags.BooleanLike,
+              ts.TypeFlags.BooleanLiteral
             );
 
           case "null":
             return type.getFlags() === ts.TypeFlags.Null;
 
           case "number":
-            return (
-              type.getFlags() === ts.TypeFlags.Number ||
-              type.getFlags() === ts.TypeFlags.NumberLike ||
-              type.getFlags() === ts.TypeFlags.NumberLiteral
+            return checkType(
+              type,
+              ts.TypeFlags.Number,
+              ts.TypeFlags.NumberLike,
+              ts.TypeFlags.NumberLiteral
             );
 
           case "string":
-            return (
-              type.getFlags() === ts.TypeFlags.String ||
-              type.getFlags() === ts.TypeFlags.StringLike ||
-              type.getFlags() === ts.TypeFlags.StringLiteral
+            return checkType(
+              type,
+              ts.TypeFlags.String,
+              ts.TypeFlags.StringLike,
+              ts.TypeFlags.StringLiteral
             );
 
           case "symbol":
-            return (
-              type.getFlags() === ts.TypeFlags.ESSymbol ||
-              type.getFlags() === ts.TypeFlags.ESSymbolLike ||
-              type.getFlags() === ts.TypeFlags.UniqueESSymbol
+            return checkType(
+              type,
+              ts.TypeFlags.ESSymbol,
+              ts.TypeFlags.ESSymbolLike,
+              ts.TypeFlags.UniqueESSymbol
             );
 
           case "undefined":
@@ -149,10 +161,10 @@ export const noRestrictedSyntax = utils.createRule({
     return is.object.factory<SubOptions>(
       { selector: is.or.factory(is.string, is.strings) },
       {
+        _id: is.string,
         message: is.string,
         replacement: is.string,
         search: is.string,
-        _id: is.string,
         typeContain: isType,
         typeDontContain: isType,
         typeEq: isType,
@@ -161,11 +173,11 @@ export const noRestrictedSyntax = utils.createRule({
     );
 
     interface SubOptions {
+      readonly _id?: string;
       readonly message?: string;
       readonly replacement?: string;
       readonly search?: string;
       readonly selector: strings | string;
-      readonly _id?: string;
       readonly typeContain?: Type;
       readonly typeDontContain?: Type;
       readonly typeEq?: Type;

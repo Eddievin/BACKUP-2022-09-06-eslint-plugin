@@ -5,6 +5,7 @@ utils.testRule("sort-array", rules, [
   {
     code: `
       const x = [
+      {},
       "a",
       "c",
       // Comment
@@ -14,15 +15,16 @@ utils.testRule("sort-array", rules, [
     errors: [
       {
         data: { _id: "id" },
-        endLine: 5,
-        line: 3,
+        endLine: 6,
+        line: 4,
         messageId: "incorrectSortingOrder"
       }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ selector: "ArrayExpression", _id: "id" }] }],
+    options: [{ rules: [{ _id: "id", selector: "ArrayExpression" }] }],
     output: `
       const x = [
+      {},
       "a",
       // Comment
       "b",
@@ -33,9 +35,9 @@ utils.testRule("sort-array", rules, [
   {
     code: `
       const x = [
-      { a: 1, key: "a" },
-      { a: 2, key: "c" },
-      { a: 3, key: "b" }
+      { ...{}, a: 1, key: "a" },
+      { ...{}, a: 2, key: "c" },
+      { ...{}, a: 3, key: "b" }
       ];
     `,
     errors: [
@@ -51,19 +53,32 @@ utils.testRule("sort-array", rules, [
       {
         rules: [
           {
+            _id: "id",
             key: "key",
-            selector: "ArrayExpression",
-            _id: "id"
+            selector: "ArrayExpression"
           }
         ]
       }
     ],
     output: `
       const x = [
-      { a: 1, key: "a" },
-      { a: 3, key: "b" },
-      { a: 2, key: "c" }
+      { ...{}, a: 1, key: "a" },
+      { ...{}, a: 3, key: "b" },
+      { ...{}, a: 2, key: "c" }
       ];
     `
+  },
+  {
+    code: "const id = 1;",
+    errors: [
+      {
+        data: { _id: "id" },
+        endLine: 1,
+        line: 1,
+        messageId: "expectingArray"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ rules: [{ _id: "id", selector: "Identifier" }] }]
   }
 ]);

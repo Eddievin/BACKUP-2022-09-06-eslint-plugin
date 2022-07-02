@@ -24,11 +24,13 @@ utils.testRule(
     {
       code: `
         type Type = string[];
-        function f<T>(x: any[]): void {}
-        function f<T>(x: T[]): void {}
-        function g<T>(x: readonly any[]): void {}
-        function g<T>(x: readonly T[]): void {}
-        function h(x: Type): void {}
+        function f1<T>(x: []): void {}
+        function f2<T>(x: T[]): void {}
+        function f3<T>(x: any[]): void {}
+        function f4<T>(x: readonly []): void {}
+        function f5<T>(x: readonly T[]): void {}
+        function f6<T>(x: readonly any[]): void {}
+        function f7(x: Type): void {}
       `,
       name: `Test at line ${getCurrentLine().line}`
     }

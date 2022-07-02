@@ -55,9 +55,9 @@ export const consistentImport = utils.createRule({
         type: isType
       },
       {
+        _id: is.string,
         autoImportSource: is.string,
-        localName: is.string,
-        _id: is.string
+        localName: is.string
       }
     );
   }),
@@ -79,11 +79,11 @@ type Context = utils.Context<MessageId, object, SubOptions>;
 type MessageId = utils.MessageId<typeof consistentImport>;
 
 interface SubOptions {
+  readonly _id?: string;
   readonly altLocalNames: strings;
   readonly autoImportSource?: string;
   readonly localName?: string;
   readonly sourcePattern: string;
-  readonly _id?: string;
   readonly type: Type;
 }
 
@@ -178,12 +178,12 @@ function checkImport(
             } else
               context.report({
                 data: {
+                  _id: subOptions._id,
                   expectedLocalName: getExpectedLocalName(
                     localName,
                     subOptions.altLocalNames,
                     identifiers
-                  ),
-                  _id: subOptions._id
+                  )
                 },
                 messageId: "invalidLocalName",
                 node
@@ -206,12 +206,12 @@ function checkImport(
             } else
               context.report({
                 data: {
+                  _id: subOptions._id,
                   expectedLocalName: getExpectedLocalName(
                     localName,
                     subOptions.altLocalNames,
                     identifiers
-                  ),
-                  _id: subOptions._id
+                  )
                 },
                 messageId: "invalidLocalName",
                 node

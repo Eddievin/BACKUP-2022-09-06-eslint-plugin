@@ -102,16 +102,16 @@ export const consistentEmptyLines = utils.createRule({
         listener[selector] = (node: TSESTree.Node): void => {
           for (const ruleIndex of prevRuleIndexes.get(selector))
             prevItems.push({
+              _id: subOptions._id,
               node,
-              ruleIndex,
-              _id: subOptions._id
+              ruleIndex
             });
 
           for (const ruleIndex of nextRuleIndexes.get(selector))
             nextItems.push({
+              _id: subOptions._id,
               node,
-              ruleIndex,
-              _id: subOptions._id
+              ruleIndex
             });
         };
 
@@ -147,15 +147,15 @@ export const consistentEmptyLines = utils.createRule({
 type EmptyLine = "always" | "any" | "never";
 
 interface Item {
-  readonly node: TSESTree.Node;
-  readonly ruleIndex: number;
   // eslint-disable-next-line @skylib/optional-property-style -- Temp
   readonly _id: stringU;
+  readonly node: TSESTree.Node;
+  readonly ruleIndex: number;
 }
 
 interface SubOptions {
+  readonly _id?: string;
   readonly emptyLine: EmptyLine;
   readonly next: string;
   readonly prev: string;
-  readonly _id?: string;
 }

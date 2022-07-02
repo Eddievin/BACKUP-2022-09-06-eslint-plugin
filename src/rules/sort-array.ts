@@ -10,13 +10,13 @@ export const sortArray = utils.createRule({
         subOptions.selector,
         (node: TSESTree.Node): void => {
           if (node.type === AST_NODE_TYPES.ArrayExpression)
-            utils.sort(
-              node.elements,
-              subOptions.key,
-              subOptions._id,
-              context
-            );
-          else throw new Error(`Invalid selector: ${subOptions.selector}`);
+            utils.sort(node.elements, subOptions.key, subOptions._id, context);
+          else
+            context.report({
+              data: { _id: subOptions._id },
+              messageId: "expectingArray",
+              node
+            });
         }
       ])
     ),
@@ -24,16 +24,17 @@ export const sortArray = utils.createRule({
   isRuleOptions: is.object,
   isSubOptions: is.object.factory<SubOptions>(
     { selector: is.string },
-    { key: is.string, _id: is.string }
+    { _id: is.string, key: is.string }
   ),
   messages: {
+    expectingArray: "Expecting array ({{ _id }})",
     incorrectSortingOrder: "Incorrect sorting order ({{ _id }})"
   },
   name: "sort-array"
 });
 
 interface SubOptions {
+  readonly _id?: string;
   readonly key?: string;
   readonly selector: string;
-  readonly _id?: string;
 }

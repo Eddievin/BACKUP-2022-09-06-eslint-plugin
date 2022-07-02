@@ -30,8 +30,7 @@ export const disallowImport = utils.createRule({
     { _id: is.string }
   ),
   messages: {
-    disallowedSource:
-      "Import from this source is not allowed ({{ _id }})"
+    disallowedSource: "Import from this source is not allowed ({{ _id }})"
   },
   name: "disallow-import"
 });

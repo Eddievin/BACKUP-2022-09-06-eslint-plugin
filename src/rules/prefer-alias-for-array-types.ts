@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { is } from "@skylib/functions";
+import { as, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
 
@@ -15,7 +15,7 @@ export const preferAliasForArrayTypes = utils.createRule({
           const type = context.checker.getTypeAtLocation(tsNode);
 
           if (context.checker.isArrayType(type)) {
-            const args = type.typeArguments ?? [];
+            const args = as.not.empty(type.typeArguments);
 
             if (
               args.every(subtype => subtype.isTypeParameter()) ||

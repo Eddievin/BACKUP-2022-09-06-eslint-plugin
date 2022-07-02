@@ -155,9 +155,9 @@ export const optionalPropertyStyle = evaluate(() => {
     isSubOptions: is.object.factory<SubOptions>(
       { style: isStyle },
       {
+        _id: is.string,
         patterns: is.strings,
         propertyPatterns: is.strings,
-        _id: is.string,
         target: isTarget
       }
     ),
@@ -181,10 +181,10 @@ export const optionalPropertyStyle = evaluate(() => {
   type Style = "combined" | "optional" | "undefined";
 
   interface SubOptions {
+    readonly _id?: string;
     readonly patterns?: strings;
     readonly propertyPatterns?: strings;
     readonly style: Style;
-    readonly _id?: string;
     readonly target?: Target;
   }
 

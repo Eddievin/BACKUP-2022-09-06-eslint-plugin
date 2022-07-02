@@ -540,14 +540,14 @@ export function sort(
           key:
             node.properties
               .map(property => {
+                // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
                 switch (property.type) {
-                  case AST_NODE_TYPES.MethodDefinition:
                   case AST_NODE_TYPES.Property:
                     return nodeToString(property.key, context) === key
                       ? nodeToString(property.value, context)
                       : undefined;
 
-                  case AST_NODE_TYPES.SpreadElement:
+                  default:
                     return undefined;
                 }
               })

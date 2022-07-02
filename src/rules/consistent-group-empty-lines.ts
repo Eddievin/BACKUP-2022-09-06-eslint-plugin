@@ -78,12 +78,12 @@ type Context = utils.Context<MessageId, object, SubOptions>;
 type MessageId = utils.MessageId<typeof consistentGroupEmptyLines>;
 
 interface SubOptions {
+  readonly _id?: string;
   readonly averageLinesGte: number;
   readonly everyLinesGte: number;
   readonly selector: string;
   readonly someHasDocComment: boolean;
   readonly someLinesGte: number;
-  readonly _id?: string;
 }
 
 /**
