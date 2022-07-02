@@ -157,16 +157,17 @@ export const optionalPropertyStyle = evaluate(() => {
       {
         patterns: is.strings,
         propertyPatterns: is.strings,
+        subOptionsId: is.string,
         target: isTarget
       }
     ),
     messages: {
       expectingCombinedStyle:
-        "Expecting combined style for optional property (e.g. x?: string | undefined)",
+        "Expecting combined style for optional property (e.g. x?: string | undefined) ({{ subOptionsId }})",
       expectingOptionalStyle:
-        "Expecting optional style for optional property (e.g. x?: string)",
+        "Expecting optional style for optional property (e.g. x?: string) ({{ subOptionsId }})",
       expectingUndefinedStyle:
-        "Expecting undefined style for optional property (e.g. x: string | undefined)"
+        "Expecting undefined style for optional property (e.g. x: string | undefined) ({{ subOptionsId }})"
     },
     name: "optional-property-style",
     subOptionsKey: "overrides"
@@ -183,6 +184,7 @@ export const optionalPropertyStyle = evaluate(() => {
     readonly patterns?: strings;
     readonly propertyPatterns?: strings;
     readonly style: Style;
+    readonly subOptionsId?: string;
     readonly target?: Target;
   }
 

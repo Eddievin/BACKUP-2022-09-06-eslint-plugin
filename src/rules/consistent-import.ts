@@ -54,15 +54,21 @@ export const consistentImport = utils.createRule({
         sourcePattern: is.string,
         type: isType
       },
-      { autoImportSource: is.string, localName: is.string }
+      {
+        autoImportSource: is.string,
+        localName: is.string,
+        subOptionsId: is.string
+      }
     );
   }),
   messages: {
-    autoImport: 'Run "eslint --fix" to add missing import statement(s)',
-    invalidLocalName: "Expecting local name to be {{ expectedLocalName }}",
-    missingImport: "Missing import statement",
-    wildcardImportDisallowed: "Wildcard import disallowed",
-    wildcardImportRequired: "Wildcard import required"
+    autoImport:
+      'Run "eslint --fix" to add missing import statement(s) ({{ subOptionsId }})',
+    invalidLocalName:
+      "Expecting local name to be {{ expectedLocalName }} ({{ subOptionsId }})",
+    missingImport: "Missing import statement ({{ subOptionsId }})",
+    wildcardImportDisallowed: "Wildcard import disallowed ({{ subOptionsId }})",
+    wildcardImportRequired: "Wildcard import required ({{ subOptionsId }})"
   },
   name: "consistent-import",
   subOptionsKey: "sources"
@@ -77,6 +83,7 @@ interface SubOptions {
   readonly autoImportSource?: string;
   readonly localName?: string;
   readonly sourcePattern: string;
+  readonly subOptionsId?: string;
   readonly type: Type;
 }
 
@@ -175,7 +182,8 @@ function checkImport(
                     localName,
                     subOptions.altLocalNames,
                     identifiers
-                  )
+                  ),
+                  subOptionsId: subOptions.subOptionsId
                 },
                 messageId: "invalidLocalName",
                 node
@@ -202,7 +210,8 @@ function checkImport(
                     localName,
                     subOptions.altLocalNames,
                     identifiers
-                  )
+                  ),
+                  subOptionsId: subOptions.subOptionsId
                 },
                 messageId: "invalidLocalName",
                 node

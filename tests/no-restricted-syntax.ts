@@ -6,13 +6,16 @@ utils.testRule("no-restricted-syntax", rules, [
     code: "const id1 = [];",
     errors: [
       {
-        data: { message: "This syntax is not allowed: Identifier" },
+        data: {
+          message: "This syntax is not allowed: Identifier",
+          subOptionsId: "id"
+        },
         line: 1,
         messageId: "customMessage"
       }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ selector: "Identifier" }] }]
+    options: [{ rules: [{ selector: "Identifier", subOptionsId: "id" }] }]
   },
   {
     code: "const id1 = [];",
@@ -20,7 +23,8 @@ utils.testRule("no-restricted-syntax", rules, [
       {
         data: {
           message:
-            "This syntax is not allowed: Identifier, Identifier[name=id1]"
+            "This syntax is not allowed: Identifier, Identifier[name=id1]",
+          subOptionsId: "id"
         },
         line: 1,
         messageId: "customMessage"
@@ -32,7 +36,8 @@ utils.testRule("no-restricted-syntax", rules, [
         rules: [
           {
             replacement: "id2",
-            selector: ["Identifier", "Identifier[name=id1]"]
+            selector: ["Identifier", "Identifier[name=id1]"],
+            subOptionsId: "id"
           }
         ]
       }
@@ -43,7 +48,7 @@ utils.testRule("no-restricted-syntax", rules, [
     code: "const id1 = [];",
     errors: [
       {
-        data: { message: "Custom message" },
+        data: { message: "Custom message", subOptionsId: "id" },
         line: 1,
         messageId: "customMessage"
       }
@@ -56,7 +61,8 @@ utils.testRule("no-restricted-syntax", rules, [
             message: "Custom message",
             replacement: "e",
             search: /d/u.source,
-            selector: ["Identifier"]
+            selector: ["Identifier"],
+            subOptionsId: "id"
           }
         ]
       }
@@ -70,7 +76,7 @@ utils.testRule("no-restricted-syntax", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
+        data: { message: "Custom message", subOptionsId: "id" },
         line: 1,
         messageId: "customMessage"
       }
@@ -83,7 +89,8 @@ utils.testRule("no-restricted-syntax", rules, [
             message: "Custom message",
             notType: "array",
             search: /d/u.source,
-            selector: ["Identifier[name=/s$/u]"]
+            selector: ["Identifier[name=/s$/u]"],
+            subOptionsId: "id"
           }
         ]
       }

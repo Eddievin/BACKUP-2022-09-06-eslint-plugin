@@ -7,6 +7,7 @@ import {
   is,
   s
 } from "@skylib/functions";
+import type { stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
@@ -76,6 +77,7 @@ export const consistentEmptyLines = utils.createRule({
               // Valid
             } else
               context.report({
+                data: { subOptionsId: item.subOptionsId },
                 fix: () => [
                   {
                     range: [node.range[0] - got.length, node.range[0]],
@@ -99,10 +101,18 @@ export const consistentEmptyLines = utils.createRule({
       for (const selector of [subOptions.prev, subOptions.next])
         listener[selector] = (node: TSESTree.Node): void => {
           for (const ruleIndex of prevRuleIndexes.get(selector))
-            prevItems.push({ node, ruleIndex });
+            prevItems.push({
+              node,
+              ruleIndex,
+              subOptionsId: subOptions.subOptionsId
+            });
 
           for (const ruleIndex of nextRuleIndexes.get(selector))
-            nextItems.push({ node, ruleIndex });
+            nextItems.push({
+              node,
+              ruleIndex,
+              subOptionsId: subOptions.subOptionsId
+            });
         };
 
     return listener;
@@ -124,12 +134,12 @@ export const consistentEmptyLines = utils.createRule({
         next: is.string,
         prev: is.string
       },
-      {}
+      { subOptionsId: is.string }
     );
   }),
   messages: {
-    expectingEmptyLine: "Expecting empty line before",
-    unexpectedEmptyLine: "Unexpected empty line before"
+    expectingEmptyLine: "Expecting empty line before ({{ subOptionsId }})",
+    unexpectedEmptyLine: "Unexpected empty line before ({{ subOptionsId }})"
   },
   name: "consistent-empty-lines"
 });
@@ -139,10 +149,13 @@ type EmptyLine = "always" | "any" | "never";
 interface Item {
   readonly node: TSESTree.Node;
   readonly ruleIndex: number;
+  // eslint-disable-next-line @skylib/optional-property-style -- Temp
+  readonly subOptionsId: stringU;
 }
 
 interface SubOptions {
   readonly emptyLine: EmptyLine;
   readonly next: string;
   readonly prev: string;
+  readonly subOptionsId?: string;
 }
