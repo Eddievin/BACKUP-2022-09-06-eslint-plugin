@@ -10,12 +10,14 @@ export const noRestrictedSyntax = utils.createRule({
       context.subOptionsArray.map(subOptions => {
         const {
           message,
-          notType,
           replacement,
           search,
           selector: mixed,
           subOptionsId,
-          type
+          typeContain,
+          typeDontContain,
+          typeEq,
+          typeNeq
         } = subOptions;
 
         const selector = a.fromMixed(mixed).join(", ");
@@ -23,7 +25,16 @@ export const noRestrictedSyntax = utils.createRule({
         return [
           selector,
           (node: TSESTree.Node): void => {
-            if (isType(node, type) && isNotType(node, notType))
+            const tsNode = context.toTsNode(node);
+
+            const type = context.checker.getTypeAtLocation(tsNode);
+
+            if (
+              isTypeEqualsTo(type, typeEq) &&
+              isTypeNotEqualsTo(type, typeNeq) &&
+              isTypeIncludes(type, typeContain) &&
+              isTypeExcludes(type, typeDontContain)
+            )
               context.report({
                 data: {
                   message: message ?? `This syntax is not allowed: ${selector}`,
@@ -52,16 +63,8 @@ export const noRestrictedSyntax = utils.createRule({
       })
     );
 
-    function isNotType(node: TSESTree.Node, expected?: Type): boolean {
-      return expected ? !isType(node, expected) : true;
-    }
-
-    function isType(node: TSESTree.Node, expected?: Type): boolean {
-      if (expected) {
-        const tsNode = context.toTsNode(node);
-
-        const type = context.checker.getTypeAtLocation(tsNode);
-
+    function isTypeEqualsTo(type: ts.Type, expected?: Type): boolean {
+      if (expected)
         switch (expected) {
           case "any":
             return type.getFlags() === ts.TypeFlags.Any;
@@ -106,9 +109,24 @@ export const noRestrictedSyntax = utils.createRule({
           case "unknown":
             return type.getFlags() === ts.TypeFlags.Unknown;
         }
-      }
 
       return true;
+    }
+
+    function isTypeExcludes(type: ts.Type, expected?: Type): boolean {
+      return expected ? !isTypeIncludes(type, expected) : true;
+    }
+
+    function isTypeIncludes(type: ts.Type, expected?: Type): boolean {
+      return expected
+        ? isTypeEqualsTo(type, expected) ||
+            (type.isUnion() &&
+              type.types.some(subtype => isTypeEqualsTo(subtype, expected)))
+        : true;
+    }
+
+    function isTypeNotEqualsTo(type: ts.Type, expected?: Type): boolean {
+      return expected ? !isTypeEqualsTo(type, expected) : true;
     }
   },
   fixable: "code",
@@ -132,22 +150,26 @@ export const noRestrictedSyntax = utils.createRule({
       { selector: is.or.factory(is.string, is.strings) },
       {
         message: is.string,
-        notType: isType,
         replacement: is.string,
         search: is.string,
         subOptionsId: is.string,
-        type: isType
+        typeContain: isType,
+        typeDontContain: isType,
+        typeEq: isType,
+        typeNeq: isType
       }
     );
 
     interface SubOptions {
       readonly message?: string;
-      readonly notType?: Type;
       readonly replacement?: string;
       readonly search?: string;
       readonly selector: strings | string;
       readonly subOptionsId?: string;
-      readonly type?: Type;
+      readonly typeContain?: Type;
+      readonly typeDontContain?: Type;
+      readonly typeEq?: Type;
+      readonly typeNeq?: Type;
     }
   }),
   messages: { customMessage: "{{ message }} ({{ subOptionsId }})" },

@@ -87,10 +87,37 @@ utils.testRule("no-restricted-syntax", rules, [
         rules: [
           {
             message: "Custom message",
-            notType: "array",
-            search: /d/u.source,
             selector: ["Identifier[name=/s$/u]"],
-            subOptionsId: "id"
+            subOptionsId: "id",
+            typeNeq: "array"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    code: `
+      function f(x: string,  y: string | undefined) {
+        g(x);
+        g(y);
+      }
+    `,
+    errors: [
+      {
+        data: { message: "Custom message", subOptionsId: "id" },
+        line: 2,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        rules: [
+          {
+            message: "Custom message",
+            selector: ["CallExpression[callee.name=g] > .arguments"],
+            subOptionsId: "id",
+            typeDontContain: "undefined"
           }
         ]
       }
