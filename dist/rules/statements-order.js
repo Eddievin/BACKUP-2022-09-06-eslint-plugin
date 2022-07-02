@@ -133,7 +133,6 @@ const sortable = {
  * @param node - Node.
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
-// eslint-disable-next-line complexity -- Postponed
 function getJestTestName(node) {
     if (node.expression.type === utils_1.AST_NODE_TYPES.CallExpression) {
         const argument = node.expression.arguments[0];
@@ -143,32 +142,35 @@ function getJestTestName(node) {
             const { callee } = node.expression;
             if (callee.type === utils_1.AST_NODE_TYPES.Identifier && callee.name === "test")
                 return argument.value;
+            if (callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
+                isIdentifier(callee.object, "test") &&
+                isIdentifier(callee.property, "only", "skip"))
+                return argument.value;
             if (callee.type === utils_1.AST_NODE_TYPES.CallExpression &&
                 callee.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
-                callee.callee.object.type === utils_1.AST_NODE_TYPES.Identifier &&
-                callee.callee.object.name === "test" &&
-                callee.callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
-                callee.callee.property.name === "each")
-                return argument.value;
-            if (callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
-                callee.object.type === utils_1.AST_NODE_TYPES.Identifier &&
-                callee.object.name === "test" &&
-                callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
-                callee.property.name === "only")
+                isIdentifier(callee.callee.object, "test") &&
+                isIdentifier(callee.callee.property, "each"))
                 return argument.value;
             if (callee.type === utils_1.AST_NODE_TYPES.CallExpression &&
                 callee.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
                 callee.callee.object.type === utils_1.AST_NODE_TYPES.MemberExpression &&
-                callee.callee.object.object.type === utils_1.AST_NODE_TYPES.Identifier &&
-                callee.callee.object.object.name === "test" &&
-                callee.callee.object.property.type === utils_1.AST_NODE_TYPES.Identifier &&
-                callee.callee.object.property.name === "only" &&
-                callee.callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
-                callee.callee.property.name === "each")
+                isIdentifier(callee.callee.object.object, "test") &&
+                isIdentifier(callee.callee.object.property, "only", "skip") &&
+                isIdentifier(callee.callee.property, "each"))
                 return argument.value;
         }
     }
     return undefined;
+}
+/**
+ * Checks if node is an identifier.
+ *
+ * @param node - Node.
+ * @param names - Allowed names.
+ * @returns _True_ if node is an identifier, _false_ otherwise.
+ */
+function isIdentifier(node, ...names) {
+    return node.type === utils_1.AST_NODE_TYPES.Identifier && names.includes(node.name);
 }
 /**
  * Returns node info.
@@ -183,7 +185,7 @@ function nodeInfo(node, parentNode, index, order) {
     var _a;
     switch (node.type) {
         case utils_1.AST_NODE_TYPES.ExportAllDeclaration:
-            functions_1.assert.not.empty(node.source);
+            functions_1.assert.not.empty(node.source, "Expecting source");
             return buildResult("ExportAllDeclaration", `${node.source.value} ${node.exportKind}`);
         case utils_1.AST_NODE_TYPES.ExportDefaultDeclaration:
             return buildResult("ExportDefaultDeclaration");
@@ -192,7 +194,7 @@ function nodeInfo(node, parentNode, index, order) {
                 switch (node.declaration.type) {
                     case utils_1.AST_NODE_TYPES.FunctionDeclaration:
                     case utils_1.AST_NODE_TYPES.TSDeclareFunction:
-                        functions_1.assert.not.empty(node.declaration.id);
+                        functions_1.assert.not.empty(node.declaration.id, "Expecting declaration ID");
                         return buildResult("ExportFunctionDeclaration", node.declaration.id.name);
                     case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
                     case utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration:
@@ -212,7 +214,7 @@ function nodeInfo(node, parentNode, index, order) {
             return buildResult("Unknown");
         case utils_1.AST_NODE_TYPES.FunctionDeclaration:
         case utils_1.AST_NODE_TYPES.TSDeclareFunction:
-            functions_1.assert.not.empty(node.id);
+            functions_1.assert.not.empty(node.id, "Expecting node ID");
             return buildResult("FunctionDeclaration", node.id.name);
         case utils_1.AST_NODE_TYPES.ImportDeclaration:
             return buildResult("ImportDeclaration");
@@ -236,7 +238,7 @@ function nodeInfo(node, parentNode, index, order) {
             node,
             order,
             parentNode,
-            sortingOrder: `${order1} ${order2} ${order3}`,
+            sortingOrder: `${order1}\u0000${order2}\u0000${order3}`,
             type
         };
     }

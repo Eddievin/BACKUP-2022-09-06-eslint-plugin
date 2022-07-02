@@ -11,8 +11,6 @@ const consistent_empty_lines_1 = require("./consistent-empty-lines");
 const consistent_filename_1 = require("./consistent-filename");
 const consistent_group_empty_lines_1 = require("./consistent-group-empty-lines");
 const consistent_import_1 = require("./consistent-import");
-const disallow_by_regexp_1 = require("./disallow-by-regexp");
-const disallow_identifier_1 = require("./disallow-identifier");
 const disallow_import_1 = require("./disallow-import");
 const empty_lines_around_comment_1 = require("./empty-lines-around-comment");
 const exhaustive_switch_1 = require("./exhaustive-switch");
@@ -37,6 +35,7 @@ const prefer_readonly_props_1 = require("./prefer-readonly-props");
 const prefer_ts_toolbelt_1 = require("./prefer-ts-toolbelt");
 const primary_export_only_1 = require("./primary-export-only");
 const require_jsdoc_1 = require("./require-jsdoc");
+const sort_array_1 = require("./sort-array");
 const sort_class_members_1 = require("./sort-class-members");
 const sort_keys_1 = require("./sort-keys");
 const statements_order_1 = require("./statements-order");
@@ -55,8 +54,6 @@ _a = (0, functions_1.evaluate)(() => {
         "consistent-filename": consistent_filename_1.consistentFilename,
         "consistent-group-empty-lines": consistent_group_empty_lines_1.consistentGroupEmptyLines,
         "consistent-import": consistent_import_1.consistentImport,
-        "disallow-by-regexp": disallow_by_regexp_1.disallowByRegexp,
-        "disallow-identifier": disallow_identifier_1.disallowIdentifier,
         "disallow-import": disallow_import_1.disallowImport,
         "empty-lines-around-comment": empty_lines_around_comment_1.emptyLinesAroundComment,
         "exhaustive-switch": exhaustive_switch_1.exhaustiveSwitch,
@@ -81,6 +78,7 @@ _a = (0, functions_1.evaluate)(() => {
         "prefer-ts-toolbelt": prefer_ts_toolbelt_1.preferTsToolbelt,
         "primary-export-only": primary_export_only_1.primaryExportOnly,
         "require-jsdoc": require_jsdoc_1.requireJsdoc,
+        "sort-array": sort_array_1.sortArray,
         "sort-class-members": sort_class_members_1.sortClassMembers,
         "sort-keys": sort_keys_1.sortKeys,
         "statements-order": statements_order_1.statementsOrder,
@@ -90,13 +88,11 @@ _a = (0, functions_1.evaluate)(() => {
     };
     const copies = {};
     for (const [name, rule] of functions_1.o.entries(core)) {
-        copies[`chore/${name}`] = rule;
         copies[`facades/${name}`] = rule;
         copies[`framework/${name}`] = rule;
         copies[`functions/${name}`] = rule;
         copies[`project/${name}`] = rule;
         copies[`quasar-extension/${name}`] = rule;
-        copies[`tests/${name}`] = rule;
     }
     return {
         configs: {

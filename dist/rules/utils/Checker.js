@@ -141,8 +141,7 @@ class Checker {
                     this.invalidReadonliness(tsutils.isPropertyReadonlyInType(type, property.getEscapedName(), this.checker), "property"))
                     return { failed: true, types: [type] };
                 {
-                    const subtype = this.checker.getTypeOfPropertyOfType(type, property.name);
-                    functions_1.assert.not.empty(subtype);
+                    const subtype = functions_1.as.not.empty(this.checker.getTypeOfPropertyOfType(type, property.name));
                     const result = this.checkSubTypes(type, [subtype]);
                     if ("failed" in result)
                         return result;

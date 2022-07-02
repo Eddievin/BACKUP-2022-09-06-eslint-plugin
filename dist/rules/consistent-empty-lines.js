@@ -50,6 +50,7 @@ exports.consistentEmptyLines = utils.createRule({
                         }
                         else
                             context.report({
+                                data: { _id: item._id },
                                 fix: () => [
                                     {
                                         range: [node.range[0] - got.length, node.range[0]],
@@ -71,9 +72,17 @@ exports.consistentEmptyLines = utils.createRule({
             for (const selector of [subOptions.prev, subOptions.next])
                 listener[selector] = (node) => {
                     for (const ruleIndex of prevRuleIndexes.get(selector))
-                        prevItems.push({ node, ruleIndex });
+                        prevItems.push({
+                            _id: subOptions._id,
+                            node,
+                            ruleIndex
+                        });
                     for (const ruleIndex of nextRuleIndexes.get(selector))
-                        nextItems.push({ node, ruleIndex });
+                        nextItems.push({
+                            _id: subOptions._id,
+                            node,
+                            ruleIndex
+                        });
                 };
         return listener;
     },
@@ -90,11 +99,11 @@ exports.consistentEmptyLines = utils.createRule({
             emptyLine: isEmptyLine,
             next: functions_1.is.string,
             prev: functions_1.is.string
-        }, {});
+        }, { _id: functions_1.is.string });
     }),
     messages: {
-        expectingEmptyLine: "Expecting empty line before",
-        unexpectedEmptyLine: "Unexpected empty line before"
+        expectingEmptyLine: "Expecting empty line before ({{ _id }})",
+        unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
     },
     name: "consistent-empty-lines"
 });

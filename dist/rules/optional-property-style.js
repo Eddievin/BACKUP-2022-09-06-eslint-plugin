@@ -112,14 +112,15 @@ exports.optionalPropertyStyle = (0, functions_1.evaluate)(() => {
         defaultOptions: { classes: "combined", interfaces: "combined" },
         isRuleOptions: functions_1.is.object.factory({ classes: isStyle, interfaces: isStyle }, {}),
         isSubOptions: functions_1.is.object.factory({ style: isStyle }, {
+            _id: functions_1.is.string,
             patterns: functions_1.is.strings,
             propertyPatterns: functions_1.is.strings,
             target: isTarget
         }),
         messages: {
-            expectingCombinedStyle: "Expecting combined style for optional property (e.g. x?: string | undefined)",
-            expectingOptionalStyle: "Expecting optional style for optional property (e.g. x?: string)",
-            expectingUndefinedStyle: "Expecting undefined style for optional property (e.g. x: string | undefined)"
+            expectingCombinedStyle: "Expecting combined style for optional property (e.g. x?: string | undefined) ({{ _id }})",
+            expectingOptionalStyle: "Expecting optional style for optional property (e.g. x?: string) ({{ _id }})",
+            expectingUndefinedStyle: "Expecting undefined style for optional property (e.g. x: string | undefined) ({{ _id }})"
         },
         name: "optional-property-style",
         subOptionsKey: "overrides"

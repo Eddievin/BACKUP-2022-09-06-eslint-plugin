@@ -40,14 +40,18 @@ exports.consistentImport = utils.createRule({
             altLocalNames: functions_1.is.strings,
             sourcePattern: functions_1.is.string,
             type: isType
-        }, { autoImportSource: functions_1.is.string, localName: functions_1.is.string });
+        }, {
+            _id: functions_1.is.string,
+            autoImportSource: functions_1.is.string,
+            localName: functions_1.is.string
+        });
     }),
     messages: {
-        autoImport: 'Run "eslint --fix" to add missing import statement(s)',
-        invalidLocalName: "Expecting local name to be {{ expectedLocalName }}",
-        missingImport: "Missing import statement",
-        wildcardImportDisallowed: "Wildcard import disallowed",
-        wildcardImportRequired: "Wildcard import required"
+        autoImport: 'Run "eslint --fix" to add missing import statement(s) ({{ _id }})',
+        invalidLocalName: "Expecting local name to be {{ expectedLocalName }} ({{ _id }})",
+        missingImport: "Missing import statement ({{ _id }})",
+        wildcardImportDisallowed: "Wildcard import disallowed ({{ _id }})",
+        wildcardImportRequired: "Wildcard import required ({{ _id }})"
     },
     name: "consistent-import",
     subOptionsKey: "sources"
@@ -102,8 +106,7 @@ function checkImport(importDeclarations, identifiers, context) {
     for (const node of importDeclarations) {
         const defaultSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
         const wildcardSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
-        const source = normalizeSource(node.source.value, context);
-        functions_1.assert.string(source);
+        const source = functions_1.as.string(normalizeSource(node.source.value, context));
         const subOptions = context.subOptionsArray.find(candidate => (0, minimatch_1.default)(source, candidate.sourcePattern, { dot: true }));
         if (subOptions) {
             const localName = (_a = subOptions.localName) !== null && _a !== void 0 ? _a : identifierFromPath(source);
@@ -120,6 +123,7 @@ function checkImport(importDeclarations, identifiers, context) {
                         else
                             context.report({
                                 data: {
+                                    _id: subOptions._id,
                                     expectedLocalName: getExpectedLocalName(localName, subOptions.altLocalNames, identifiers)
                                 },
                                 messageId: "invalidLocalName",
@@ -140,6 +144,7 @@ function checkImport(importDeclarations, identifiers, context) {
                         else
                             context.report({
                                 data: {
+                                    _id: subOptions._id,
                                     expectedLocalName: getExpectedLocalName(localName, subOptions.altLocalNames, identifiers)
                                 },
                                 messageId: "invalidLocalName",

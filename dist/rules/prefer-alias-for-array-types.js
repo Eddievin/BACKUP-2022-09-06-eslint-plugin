@@ -5,6 +5,7 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
+const ts = tslib_1.__importStar(require("typescript"));
 exports.preferAliasForArrayTypes = utils.createRule({
     create: context => {
         return {
@@ -15,13 +16,15 @@ exports.preferAliasForArrayTypes = utils.createRule({
                 else {
                     const tsNode = context.toTsNode(node.typeAnnotation);
                     const type = context.checker.getTypeAtLocation(tsNode);
-                    if (context.checker.isArrayType(type))
-                        if (type.typeArguments &&
-                            type.typeArguments.every(subtype => subtype.isTypeParameter())) {
+                    if (context.checker.isArrayType(type)) {
+                        const args = functions_1.as.not.empty(type.typeArguments);
+                        if (args.every(subtype => subtype.isTypeParameter()) ||
+                            args.every(subtype => subtype.flags === ts.TypeFlags.Any)) {
                             // Valid
                         }
                         else
                             context.report({ messageId: "preferAlias", node });
+                    }
                 }
             }
         };

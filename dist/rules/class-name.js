@@ -14,7 +14,7 @@ exports.className = utils.createRule({
                         // Valid
                     }
                     else
-                        context.report({ messageId: "invalidClassName", node });
+                        context.report({ messageId: "invalidClassName", node: node.id });
             }
         };
     },

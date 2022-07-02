@@ -81,11 +81,9 @@ function lintNodes(group, context) {
                 });
             }
         if (fixes.length > 0) {
-            functions_1.assert.not.empty(min);
-            functions_1.assert.not.empty(max);
             const loc = context.getLocFromRange([
-                functions_1.a.get(group, min).node.range[0],
-                functions_1.a.get(group, max).node.range[1]
+                functions_1.a.get(group, functions_1.as.not.empty(min)).node.range[0],
+                functions_1.a.get(group, functions_1.as.not.empty(max)).node.range[1]
             ]);
             context.report({
                 fix: () => fixes,

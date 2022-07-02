@@ -26,7 +26,7 @@ npm install --save-dev @skylib/eslint-plugin
       {
         filesToLint?: string[],
         filesToSkip?: string[],
-        subOptionsId?: string
+        _id?: string
       },
       ...
     ]
@@ -40,12 +40,12 @@ npm install --save-dev @skylib/eslint-plugin
 | :------ | :------ |
 | `filesToLint` | Files to lint (minimatch patterns). |
 | `filesToSkip` | Files to skip (minimatch patterns). |
-| `subOptionsId` | Suboptions ID. |
+| `_id` | Suboptions ID. |
 
 ### Configuration comment
 
 ```ts
-/* skylib/eslint-plugin disable @skylib/<rule-id>[<sub-options-id>] */
+/* disable @skylib/<rule-id>[<sub-options-id>] */
 ```
 
 ## <a name="rules"></a>Rules
@@ -54,8 +54,6 @@ npm install --save-dev @skylib/eslint-plugin
 - [consistent-empty-lines](https://ilyub.github.io/eslint-plugin/consistent-empty-lines.html)
 - [consistent-group-empty-lines](https://ilyub.github.io/eslint-plugin/consistent-group-empty-lines.html)
 - [consistent-import](https://ilyub.github.io/eslint-plugin/consistent-import.html)
-- [disallow-by-regexp](https://ilyub.github.io/eslint-plugin/disallow-by-regexp.html)
-- [disallow-identifier](https://ilyub.github.io/eslint-plugin/disallow-identifier.html)
 - [disallow-import](https://ilyub.github.io/eslint-plugin/disallow-import.html)
 - [empty-lines-around-comment](https://ilyub.github.io/eslint-plugin/empty-lines-around-comment.html)
 - [exhaustive-switch](https://ilyub.github.io/eslint-plugin/exhaustive-switch.html)
@@ -70,6 +68,7 @@ npm install --save-dev @skylib/eslint-plugin
 - [prefer-readonly](https://ilyub.github.io/eslint-plugin/prefer-readonly.html)
 - [prefer-ts-toolbelt](https://ilyub.github.io/eslint-plugin/prefer-ts-toolbelt.html)
 - [require-jsdoc](https://ilyub.github.io/eslint-plugin/require-jsdoc.html)
+- [sort-array](https://ilyub.github.io/eslint-plugin/sort-array.html)
 - [sort-class-members](https://ilyub.github.io/eslint-plugin/sort-class-members.html)
 - [sort-keys](https://ilyub.github.io/eslint-plugin/sort-keys.html)
 - [statements-order](https://ilyub.github.io/eslint-plugin/statements-order.html)

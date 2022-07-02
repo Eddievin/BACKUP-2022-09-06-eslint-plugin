@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testRule = exports.stripBase = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getNameFromFilename = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
+exports.testRule = exports.stripBase = exports.sort = exports.nodeToString = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getNameFromFilename = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
@@ -105,17 +105,22 @@ function getComments(program) {
 }
 exports.getComments = getComments;
 /**
- * Creates identifier from from file name.
+ * Gets name from filename.
  *
  * @param path - Path.
- * @returns Identifier.
+ * @param expected - Expected name.
+ * @returns Name.
  */
-function getNameFromFilename(path) {
-    const name1 = node_path_1.default.parse(path).name;
-    const name2 = name1 === "index" ? node_path_1.default.parse(node_path_1.default.parse(path).dir).name : name1;
-    return /^[A-Z]/u.test(name2)
-        ? functions_1.s.ucFirst(_.camelCase(name2))
-        : _.camelCase(name2);
+function getNameFromFilename(path, expected) {
+    // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+    const { base, dir, name } = node_path_1.default.parse(path);
+    return functions_1.is.not.empty(expected) &&
+        base.split(".").some(part => getName(part) === expected)
+        ? expected
+        : getName(name === "index" ? node_path_1.default.parse(dir).name : name);
+    function getName(x) {
+        return /^[A-Z]/u.test(x) ? functions_1.s.ucFirst(_.camelCase(x)) : _.camelCase(x);
+    }
 }
 exports.getNameFromFilename = getNameFromFilename;
 /**
@@ -193,7 +198,7 @@ function isAdjacentNodes(node1, node2, childNodesMap) {
     const id2 = getNodeId(node2.parent);
     if (id1 === id2) {
         const siblings = childNodesMap.get(id1);
-        functions_1.assert.not.empty(siblings);
+        functions_1.assert.not.empty(siblings, "Expecting siblings");
         const index1 = siblings.indexOf(node1);
         const index2 = siblings.indexOf(node2);
         return index1 !== -1 && index2 !== -1 && index2 - index1 === 1;
@@ -201,6 +206,95 @@ function isAdjacentNodes(node1, node2, childNodesMap) {
     return false;
 }
 exports.isAdjacentNodes = isAdjacentNodes;
+/**
+ * Returns string representing node.
+ *
+ * @param node - Node.
+ * @param context - Context.
+ * @returns String representing node.
+ */
+function nodeToString(node, context) {
+    switch (node.type) {
+        case utils_1.AST_NODE_TYPES.Identifier:
+            return node.name;
+        case utils_1.AST_NODE_TYPES.Literal:
+            return functions_1.cast.string(node.value);
+        default:
+            return `\u0000${context.getText(node)}`;
+    }
+}
+exports.nodeToString = nodeToString;
+/**
+ * Sorts nodes.
+ *
+ * @param nodes - Nodes.
+ * @param key - Key.
+ * @param _id - Suboptions ID.
+ * @param context - Context.
+ */
+function sort(nodes, key, _id, context) {
+    const items = nodes.map((node, index) => {
+        var _a;
+        // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
+        switch (node.type) {
+            case utils_1.AST_NODE_TYPES.ObjectExpression: {
+                return {
+                    index,
+                    key: (_a = node.properties
+                        .map(property => {
+                        // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
+                        switch (property.type) {
+                            case utils_1.AST_NODE_TYPES.Property:
+                                return nodeToString(property.key, context) === key
+                                    ? nodeToString(property.value, context)
+                                    : undefined;
+                            default:
+                                return undefined;
+                        }
+                    })
+                        .find(functions_1.is.string)) !== null && _a !== void 0 ? _a : nodeToString(node, context),
+                    node
+                };
+            }
+            default:
+                return {
+                    index,
+                    key: nodeToString(node, context),
+                    node
+                };
+        }
+    });
+    const sortedItems = _.sortBy(items, item => item.key);
+    const fixes = [];
+    let min;
+    let max;
+    for (const [index, sortedItem] of sortedItems.entries())
+        if (sortedItem.index === index) {
+            // Valid
+        }
+        else {
+            const item = functions_1.a.get(items, index);
+            min = functions_1.is.not.empty(min) ? Math.min(min, index) : index;
+            max = functions_1.is.not.empty(max) ? Math.max(max, index) : index;
+            fixes.push({
+                range: context.getRangeWithLeadingTrivia(item.node),
+                text: context.getTextWithLeadingTrivia(sortedItem.node)
+            });
+        }
+    if (fixes.length > 0) {
+        const loc = context.getLocFromRange([
+            functions_1.a.get(items, functions_1.as.not.empty(min)).node.range[0],
+            functions_1.a.get(items, functions_1.as.not.empty(max)).node.range[1]
+        ]);
+        context.report({
+            data: { _id },
+            fix: () => fixes,
+            loc,
+            messageId: "incorrectSortingOrder"
+        });
+    }
+}
+exports.sort = sort;
 /**
  * Strips base path.
  *
@@ -225,9 +319,14 @@ function testRule(name, rules, invalid, valid = []) {
     const rule = rules[name];
     const tester = new utils_1.TSESLint.RuleTester({
         // eslint-disable-next-line unicorn/prefer-module -- Postponed
-        parser: require.resolve("@typescript-eslint/parser"),
+        parser: require.resolve("vue-eslint-parser"),
         parserOptions: {
+            ecmaFeatures: { jsx: true },
             ecmaVersion: 2017,
+            extraFileExtensions: [".vue"],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
+            // @ts-expect-error
+            parser: "@typescript-eslint/parser",
             project: "./tsconfig.json",
             sourceType: "module",
             tsconfigRootDir: `${exports.base}fixtures`
@@ -249,9 +348,9 @@ function testRule(name, rules, invalid, valid = []) {
 }
 exports.testRule = testRule;
 const isSharedOptions = functions_1.is.factory(functions_1.is.object.of, {}, {
+    _id: functions_1.is.string,
     filesToLint: functions_1.is.strings,
-    filesToSkip: functions_1.is.strings,
-    subOptionsId: functions_1.is.string
+    filesToSkip: functions_1.is.strings
 });
 /**
  * Creates better context.
@@ -271,10 +370,25 @@ function createBetterContext(context, ruleOptionsArray, options) {
     return {
         checker: parser.program.getTypeChecker(),
         code,
+        defineTemplateBodyVisitor: (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+        templateVisitor, 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+        scriptVisitor
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+        ) => {
+            functions_1.assert.indexedObject(context.parserServices, "Missing Vue parser");
+            const defineTemplateBodyVisitor = context.parserServices["defineTemplateBodyVisitor"];
+            functions_1.assert.callable(defineTemplateBodyVisitor, "Missing Vue parser");
+            return defineTemplateBodyVisitor(templateVisitor, scriptVisitor);
+        },
         eol: functions_1.s.detectEol(code),
         getLeadingTrivia(node) {
-            const tsNode = this.toTsNode(node);
-            return code.slice(node.range[0] - tsNode.getLeadingTriviaWidth(), node.range[0]);
+            // May be undefined inside Vue <template>
+            const tsNode = (0, functions_1.typedef)(this.toTsNode(node));
+            return tsNode
+                ? code.slice(node.range[0] - tsNode.getLeadingTriviaWidth(), node.range[0])
+                : code.slice(node.range[0], node.range[0]);
         },
         getLocFromRange(range) {
             return {
@@ -374,7 +488,6 @@ function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
     const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
     if (isSubOptions) {
         const ruleOptions = getRuleOptions(ruleOptionsArray, options);
-        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
         const raw = (_a = functions_1.o.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
         functions_1.assert.array.of(raw, functions_1.is.object, "Expecting valid rule options");
         const result = raw
@@ -398,8 +511,8 @@ function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
  */
 function shouldBeLinted(options, ruleId, path, code) {
     functions_1.assert.byGuard(options, isSharedOptions, "Expecting valid rule options");
-    const disallowById = functions_1.is.not.empty(options.subOptionsId) &&
-        code.includes(`/* skylib/eslint-plugin disable ${ruleId}[${options.subOptionsId}] */`);
+    const disallowById = functions_1.is.not.empty(options._id) &&
+        code.includes(`/* disable ${ruleId}[${options._id}] */`);
     const disallowByPath = (0, functions_1.evaluate)(() => {
         var _a, _b;
         const matcher = exports.createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });

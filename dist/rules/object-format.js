@@ -7,53 +7,57 @@ const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.objectFormat = utils.createRule({
     create: context => {
-        return {
+        const listener = {
             [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {
                 const texts = node.properties.map(property => context.getTextWithLeadingTrivia(property).trim());
-                const predictedLength = (0, functions_1.evaluate)(() => {
-                    const headLength = context.getLocFromRange(node.range).start.column;
-                    const tailLength = (0, functions_1.evaluate)(() => {
-                        const tail = context.code.slice(node.range[1]);
-                        if (tail.startsWith(" as "))
-                            return 1000;
-                        if (tail.startsWith(");"))
-                            return 2;
-                        return 1;
+                if (texts.length > 0) {
+                    const predictedLength = (0, functions_1.evaluate)(() => {
+                        const headLength = context.getLocFromRange(node.range).start.column;
+                        const tailLength = (0, functions_1.evaluate)(() => {
+                            const tail = context.code.slice(node.range[1]);
+                            if (tail.startsWith(" as "))
+                                return 1000;
+                            if (tail.startsWith(");"))
+                                return 2;
+                            return 1;
+                        });
+                        return (headLength +
+                            2 +
+                            functions_1.num.sum(...texts.map(text => text.trim().length)) +
+                            2 * (texts.length - 1) +
+                            2 +
+                            tailLength);
                     });
-                    return (headLength +
-                        2 +
-                        functions_1.num.sum(...texts.map(text => text.trim().length)) +
-                        2 * (texts.length - 1) +
-                        2 +
-                        tailLength);
-                });
-                const expectMultiline = texts.length > context.options.maxObjectSize;
-                const gotMultiline = isMultiline(context.getText(node));
-                const keepMultiline = predictedLength > context.options.maxLineLength ||
-                    texts.some(text => isMultiline(text)) ||
-                    node.properties.some(property => context.hasTrailingComment(property));
-                const expectSingleLine = !expectMultiline && !keepMultiline;
-                const gotSingleLine = isSingleLine(context.getText(node));
-                if (expectMultiline && !gotMultiline)
-                    context.report({
-                        fix: () => {
-                            const propertiesText = texts.join(",\n");
-                            return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
-                        },
-                        messageId: "expectingMultiline",
-                        node
-                    });
-                if (expectSingleLine && !gotSingleLine)
-                    context.report({
-                        fix: () => {
-                            const propertiesText = texts.join(",");
-                            return [{ range: node.range, text: `{${propertiesText}}` }];
-                        },
-                        messageId: "expectingSingleLine",
-                        node
-                    });
+                    const expectMultiline = texts.length > context.options.maxObjectSize;
+                    const gotMultiline = isMultiline(context.getText(node));
+                    const keepMultiline = predictedLength > context.options.maxLineLength ||
+                        texts.some(text => isMultiline(text)) ||
+                        node.properties.some(property => context.hasTrailingComment(property));
+                    const expectSingleLine = !expectMultiline && !keepMultiline;
+                    const gotSingleLine = isSingleLine(context.getText(node));
+                    if (expectMultiline && !gotMultiline)
+                        context.report({
+                            fix: () => {
+                                const propertiesText = texts.join(",\n");
+                                return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
+                            },
+                            messageId: "expectingMultiline",
+                            node
+                        });
+                    if (expectSingleLine && !gotSingleLine)
+                        context.report({
+                            fix: () => {
+                                const propertiesText = texts.join(",");
+                                return [{ range: node.range, text: `{${propertiesText}}` }];
+                            },
+                            messageId: "expectingSingleLine",
+                            node
+                        });
+                }
             }
         };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
+        return context.defineTemplateBodyVisitor(listener, listener);
     },
     defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
     fixable: "code",

@@ -44,8 +44,7 @@ exports.getTypeParts = functions_1.o.extend((node, context) => {
                 return ["function"];
             if (type.isUnion())
                 return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
-            functions_1.assert.byGuard(type.flags, isExpectedFlags);
-            switch (type.flags) {
+            switch (functions_1.as.byGuard(type.flags, isExpectedFlags)) {
                 case ts.TypeFlags.BigInt:
                 case ts.TypeFlags.BigIntLiteral:
                     return ["bigint"];

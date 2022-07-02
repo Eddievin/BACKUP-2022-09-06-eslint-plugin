@@ -34,8 +34,7 @@ exports.noUnusedImport = utils.createRule({
                     })
                         .join(", ")
                         .replace(/ \}, \{ /gu, ", ");
-                    const source = node.source.value;
-                    functions_1.assert.string(source);
+                    const source = functions_1.as.string(node.source.value);
                     if (node.specifiers.every(used)) {
                         // Valid
                     }

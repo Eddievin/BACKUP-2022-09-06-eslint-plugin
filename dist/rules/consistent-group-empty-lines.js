@@ -55,10 +55,10 @@ exports.consistentGroupEmptyLines = utils.createRule({
         selector: functions_1.is.string,
         someHasDocComment: functions_1.is.boolean,
         someLinesGte: functions_1.is.number
-    }, {}),
+    }, { _id: functions_1.is.string }),
     messages: {
-        expectingEmptyLine: "Expecting empty line before",
-        unexpectedEmptyLine: "Unexpected empty line before"
+        expectingEmptyLine: "Expecting empty line before ({{ _id }})",
+        unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
     },
     name: "consistent-group-empty-lines"
 });
@@ -95,6 +95,7 @@ function lintGroup(group, subOptions, context) {
                 }
                 else
                     context.report({
+                        data: { _id: subOptions._id },
                         fix: () => [
                             {
                                 range: [node.range[0] - got.length, node.range[0]],

@@ -1,2 +1,0 @@
-export declare const disallowIdentifier: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"disallowedIdentifier", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-//# sourceMappingURL=disallow-identifier.d.ts.map

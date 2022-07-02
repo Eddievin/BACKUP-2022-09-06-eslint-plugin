@@ -1,6 +1,6 @@
 import { is, s } from "@skylib/functions";
 import minimatch from "minimatch";
-import type { Accumulator, Rec, objects, strings, unknowns } from "@skylib/functions";
+import type { Accumulator, Rec, objects, stringU, strings, unknowns } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ValidTestCase as BaseValidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
@@ -30,6 +30,7 @@ export declare const createFileMatcher: {
 export interface Context<M extends string, O extends object, S extends object> {
     readonly checker: ts.TypeChecker;
     readonly code: string;
+    readonly defineTemplateBodyVisitor: DefineTemplateBodyVisitor;
     readonly eol: s.Eol;
     /**
      * Gets leading trivia.
@@ -143,6 +144,9 @@ export interface CreateRuleOptions<M extends string, O extends object, S extends
     readonly name: string;
     readonly subOptionsKey?: string;
 }
+export interface DefineTemplateBodyVisitor {
+    (templateVisitor: any, scriptVisitor?: any, options?: any): any;
+}
 export interface GetSelectorsOptions {
     readonly excludeSelectors: strings;
     readonly includeSelectors: strings;
@@ -166,7 +170,7 @@ export interface Package {
     readonly name?: string;
 }
 export declare type ReadonlyRange = readonly [number, number];
-export declare type SourceFile = "camelCase.ts" | "file.extras.ts" | "kebab-case.ts" | "PascalCase.ts" | "subfolder/index.ts" | "vue.d.ts";
+export declare type SourceFile = "camelCase.camelCase.ts" | "camelCase.ts" | "file.extras.ts" | "kebab-case.kebab-case.ts" | "kebab-case.ts" | "PascalCase.PascalCase.ts" | "PascalCase.ts" | "subfolder/index.ts" | "vue.d.ts";
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
     readonly filename?: SourceFile;
     readonly name: string;
@@ -200,12 +204,13 @@ export declare function createRule<M extends string, O extends object, S extends
  */
 export declare function getComments(program: TSESTree.Program): TSESTree.Comment[];
 /**
- * Creates identifier from from file name.
+ * Gets name from filename.
  *
  * @param path - Path.
- * @returns Identifier.
+ * @param expected - Expected name.
+ * @returns Name.
  */
-export declare function getNameFromFilename(path: string): string;
+export declare function getNameFromFilename(path: string, expected?: string): string;
 /**
  * Generates node ID.
  *
@@ -251,6 +256,23 @@ export declare function getTypeNames(types: readonly ts.Type[]): string;
  * @returns _True_ if two nodes are adjacent, _false_ otherwise.
  */
 export declare function isAdjacentNodes(node1: TSESTree.Node, node2: TSESTree.Node, childNodesMap: Accumulator<string, TSESTree.Node>): boolean;
+/**
+ * Returns string representing node.
+ *
+ * @param node - Node.
+ * @param context - Context.
+ * @returns String representing node.
+ */
+export declare function nodeToString(node: TSESTree.Node, context: Context<never, object, object>): string;
+/**
+ * Sorts nodes.
+ *
+ * @param nodes - Nodes.
+ * @param key - Key.
+ * @param _id - Suboptions ID.
+ * @param context - Context.
+ */
+export declare function sort(nodes: readonly TSESTree.Node[], key: stringU, _id: stringU, context: Context<"incorrectSortingOrder", object, object>): void;
 /**
  * Strips base path.
  *

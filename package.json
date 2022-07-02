@@ -1,6 +1,6 @@
 {
   "name": "@skylib/eslint-plugin",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "private": false,
   "description": "ESLint plugin",
   "keywords": [
