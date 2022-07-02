@@ -113,6 +113,7 @@ export const createFileMatcher = o.extend(
 export interface Context<M extends string, O extends object, S extends object> {
   readonly checker: ts.TypeChecker;
   readonly code: string;
+  readonly defineTemplateBodyVisitor: DefineTemplateBodyVisitor;
   readonly eol: s.Eol;
   /**
    * Gets leading trivia.
@@ -232,6 +233,12 @@ export interface CreateRuleOptions<
   readonly messages: Rec<M, string>;
   readonly name: string;
   readonly subOptionsKey?: string;
+}
+
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+export interface DefineTemplateBodyVisitor {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
+  (templateVisitor: any, scriptVisitor?: any, options?: any): any;
 }
 
 export interface GetSelectorsOptions {
@@ -642,9 +649,14 @@ export function testRule<K extends string, M extends string>(
 
   const tester = new TSESLint.RuleTester({
     // eslint-disable-next-line unicorn/prefer-module -- Postponed
-    parser: require.resolve("@typescript-eslint/parser"),
+    parser: require.resolve("vue-eslint-parser"),
     parserOptions: {
+      ecmaFeatures: { jsx: true },
       ecmaVersion: 2017,
+      extraFileExtensions: [".vue"],
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
+      // @ts-expect-error
+      parser: "@typescript-eslint/parser",
       project: "./tsconfig.json",
       sourceType: "module",
       tsconfigRootDir: `${base}fixtures`
@@ -730,6 +742,19 @@ function createBetterContext<
   return {
     checker: parser.program.getTypeChecker(),
     code,
+    defineTemplateBodyVisitor:
+      is.indexedObject(context.parserServices) &&
+      is.callable<DefineTemplateBodyVisitor>(
+        context.parserServices["defineTemplateBodyVisitor"]
+      )
+        ? context.parserServices["defineTemplateBodyVisitor"]
+        : () => {
+            return {
+              "zzzzzzzzzz"() {
+                //
+              }
+            };
+          },
     eol: s.detectEol(code),
     getLeadingTrivia(node): string {
       const tsNode = this.toTsNode(node);

@@ -3,11 +3,34 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("no-restricted-syntax", rules, [
   {
-    code: "const id1 = [];",
+    code: `
+      <template>
+        <p>Text</p>
+      </template>
+    `,
+    errors: [
+      {
+        data: {
+          _id: "id",
+          message: "This syntax is not allowed: VElement[name=p]"
+        },
+        line: 2,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ rules: [{ _id: "id", selector: "VElement[name=p]" }] }]
+  },
+  {
+    code: `
+      <script lang="ts">
+        const id1 = [];
+      </script>
+    `,
     errors: [
       {
         data: { _id: "id", message: "This syntax is not allowed: Identifier" },
-        line: 1,
+        line: 2,
         messageId: "customMessage"
       }
     ],

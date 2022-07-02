@@ -6,68 +6,78 @@ import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noRestrictedSyntax = utils.createRule({
   create: context => {
-    return o.fromEntries(
-      context.subOptionsArray.map(subOptions => {
-        const {
-          _id,
-          message,
-          replacement,
-          search,
-          selector: mixed,
-          typeContain,
-          typeDontContain,
-          typeEq,
-          typeNeq
-        } = subOptions;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
+    const listener = getVisitors();
 
-        const selector = a.fromMixed(mixed).join(", ");
-
-        return [
-          selector,
-          (node: TSESTree.Node): void => {
-            const tsNode = context.toTsNode(node);
-
-            const type = context.checker.getTypeAtLocation(tsNode);
-
-            if (
-              isTypeEqualsTo(type, typeEq) &&
-              isTypeNotEqualsTo(type, typeNeq) &&
-              isTypeIncludes(type, typeContain) &&
-              isTypeExcludes(type, typeDontContain)
-            )
-              context.report({
-                data: {
-                  _id,
-                  message: message ?? `This syntax is not allowed: ${selector}`
-                },
-                fix: () =>
-                  is.not.empty(replacement)
-                    ? [
-                        {
-                          range: node.range,
-                          text: is.not.empty(search)
-                            ? context.getText(node).replace(
-                                // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-                                new RegExp(search, "u"),
-                                replacement
-                              )
-                            : replacement
-                        }
-                      ]
-                    : [],
-                loc: context.getLocFromRange(node.range),
-                messageId: "customMessage"
-              });
-          }
-        ];
-      })
-    );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
+    return context.defineTemplateBodyVisitor(listener, listener);
 
     function checkType(type: ts.Type, ...flags: ts.TypeFlags[]): boolean {
       return (
         flags.includes(type.getFlags()) ||
         (type.isUnion() &&
           type.types.every(subtype => flags.includes(subtype.getFlags())))
+      );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
+    function getVisitors(): any {
+      return o.fromEntries(
+        context.subOptionsArray.map(subOptions => {
+          const {
+            _id,
+            message,
+            replacement,
+            search,
+            selector: mixed,
+            typeContain,
+            typeDontContain,
+            typeEq,
+            typeNeq
+          } = subOptions;
+
+          const selector = a.fromMixed(mixed).join(", ");
+
+          return [
+            selector,
+            (node: TSESTree.Node): void => {
+              const tsNode = context.toTsNode(node);
+
+              const type = context.checker.getTypeAtLocation(tsNode);
+
+              if (
+                isTypeEqualsTo(type, typeEq) &&
+                isTypeNotEqualsTo(type, typeNeq) &&
+                isTypeIncludes(type, typeContain) &&
+                isTypeExcludes(type, typeDontContain)
+              )
+                context.report({
+                  data: {
+                    _id,
+                    message:
+                      message ?? `This syntax is not allowed: ${selector}`
+                  },
+                  fix: () =>
+                    is.not.empty(replacement)
+                      ? [
+                          {
+                            range: node.range,
+                            text: is.not.empty(search)
+                              ? context.getText(node).replace(
+                                  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                                  new RegExp(search, "u"),
+                                  replacement
+                                )
+                              : replacement
+                          }
+                        ]
+                      : [],
+                  loc: context.getLocFromRange(node.range),
+                  messageId: "customMessage"
+                });
+            }
+          ];
+        })
       );
     }
 
