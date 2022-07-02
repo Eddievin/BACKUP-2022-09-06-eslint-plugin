@@ -45,7 +45,7 @@ npm install --save-dev @skylib/eslint-plugin
 ### Configuration comment
 
 ```ts
-/* skylib/eslint-plugin disable @skylib/<rule-id>[<sub-options-id>] */
+/* disable @skylib/<rule-id>[<sub-options-id>] */
 ```
 
 ## <a name="rules"></a>Rules

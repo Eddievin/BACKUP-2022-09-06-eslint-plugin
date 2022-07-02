@@ -680,16 +680,16 @@ const isSharedOptions: is.Guard<SharedOptions> = is.factory(
   is.object.of,
   {},
   {
+    _id: is.string,
     filesToLint: is.strings,
-    filesToSkip: is.strings,
-    _id: is.string
+    filesToSkip: is.strings
   }
 );
 
 interface SharedOptions {
+  readonly _id?: string;
   readonly filesToLint?: strings;
   readonly filesToSkip?: strings;
-  readonly _id?: string;
 }
 
 /**
@@ -911,9 +911,7 @@ function shouldBeLinted(
 
   const disallowById =
     is.not.empty(options._id) &&
-    code.includes(
-      `/* skylib/eslint-plugin disable ${ruleId}[${options._id}] */`
-    );
+    code.includes(`/* disable ${ruleId}[${options._id}] */`);
 
   const disallowByPath = evaluate<boolean>(() => {
     const matcher = createFileMatcher.disallowAllow(

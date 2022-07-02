@@ -11,9 +11,7 @@ utils.testRule(
       `,
       errors: [{ line: 1, messageId: "customMessage" }],
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        { rules: [{ selector: "Identifier", _id: "rule-id" }] }
-      ]
+      options: [{ rules: [{ _id: "rule-id", selector: "Identifier" }] }]
     },
     {
       code: `
@@ -61,14 +59,12 @@ utils.testRule(
     },
     {
       code: `
-        /* skylib/eslint-plugin disable no-restricted-syntax[rule-id] */
+        /* disable no-restricted-syntax[rule-id] */
 
         invalid();
       `,
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        { rules: [{ selector: "Identifier", _id: "rule-id" }] }
-      ]
+      options: [{ rules: [{ _id: "rule-id", selector: "Identifier" }] }]
     }
   ]
 );
