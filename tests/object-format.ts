@@ -7,6 +7,22 @@ utils.testRule(
   [
     {
       code: `
+        <template>
+        <p :value="{
+        x: 1
+        }"></p>
+        </template>
+      `,
+      errors: [{ line: 2, messageId: "expectingSingleLine" }],
+      name: `Test at line ${getCurrentLine().line}`,
+      output: `
+        <template>
+        <p :value="{x: 1}"></p>
+        </template>
+      `
+    },
+    {
+      code: `
         const obj = {
         x: 1
         };

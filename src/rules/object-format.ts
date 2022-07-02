@@ -1,10 +1,11 @@
 import * as utils from "./utils";
 import { evaluate, is, num } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const objectFormat = utils.createRule({
   create: context => {
-    return {
+    const listener: RuleListener = {
       [AST_NODE_TYPES.ObjectExpression]: (node): void => {
         const texts = node.properties.map(property =>
           context.getTextWithLeadingTrivia(property).trim()
@@ -73,6 +74,9 @@ export const objectFormat = utils.createRule({
         }
       }
     };
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
+    return context.defineTemplateBodyVisitor(listener, listener);
   },
   defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
   fixable: "code",

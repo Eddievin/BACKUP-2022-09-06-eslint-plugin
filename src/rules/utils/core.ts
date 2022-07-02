@@ -8,7 +8,8 @@ import {
   is,
   json,
   o,
-  s
+  s,
+  typedef
 } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import {
@@ -742,27 +743,36 @@ function createBetterContext<
   return {
     checker: parser.program.getTypeChecker(),
     code,
-    defineTemplateBodyVisitor:
-      is.indexedObject(context.parserServices) &&
-      is.callable<DefineTemplateBodyVisitor>(
-        context.parserServices["defineTemplateBodyVisitor"]
-      )
-        ? context.parserServices["defineTemplateBodyVisitor"]
-        : () => {
-            return {
-              "zzzzzzzzzz"() {
-                //
-              }
-            };
-          },
+    defineTemplateBodyVisitor: (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+      templateVisitor: any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+      scriptVisitor?: any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+    ): any => {
+      assert.indexedObject(context.parserServices, "Missing Vue parser");
+
+      const defineTemplateBodyVisitor =
+        context.parserServices["defineTemplateBodyVisitor"];
+
+      assert.callable<DefineTemplateBodyVisitor>(
+        defineTemplateBodyVisitor,
+        "Missing Vue parser"
+      );
+
+      return defineTemplateBodyVisitor(templateVisitor, scriptVisitor);
+    },
     eol: s.detectEol(code),
     getLeadingTrivia(node): string {
-      const tsNode = this.toTsNode(node);
+      // May be undefined inside Vue <template>
+      const tsNode = typedef<ts.Node | undefined>(this.toTsNode(node));
 
-      return code.slice(
-        node.range[0] - tsNode.getLeadingTriviaWidth(),
-        node.range[0]
-      );
+      return tsNode
+        ? code.slice(
+            node.range[0] - tsNode.getLeadingTriviaWidth(),
+            node.range[0]
+          )
+        : code.slice(node.range[0], node.range[0]);
     },
     getLocFromRange(range): estree.SourceLocation {
       return {
