@@ -26,7 +26,6 @@ import type {
   Rec,
   numberU,
   objects,
-  stringU,
   strings,
   unknowns
 } from "@skylib/functions";
@@ -271,6 +270,13 @@ export interface Package {
 }
 
 export type ReadonlyRange = readonly [number, number];
+
+export interface SortOptions {
+  readonly _id: string;
+  readonly key?: string;
+  readonly sendToBottom?: string;
+  readonly sendToTop?: string;
+}
 
 export type SourceFile =
   | "camelCase.camelCase.ts"
@@ -524,29 +530,33 @@ export function nodeToString(
  * Sorts nodes.
  *
  * @param nodes - Nodes.
- * @param key - Key.
- * @param _id - Suboptions ID.
+ * @param options - Options.
  * @param context - Context.
  */
 export function sort(
   nodes: readonly TSESTree.Node[],
-  key: stringU,
-  _id: string,
+  options: SortOptions,
   context: Context<"incorrectSortingOrder", object, object>
 ): void {
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+  const sendToBottom = new RegExp(options.sendToBottom ?? ".", "u");
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+  const sendToTop = new RegExp(options.sendToTop ?? ".", "u");
+
   const items = nodes.map<Item>((node, index) => {
     // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
     switch (node.type) {
       case AST_NODE_TYPES.ObjectExpression: {
         return {
           index,
-          key:
+          key: wrapKey(
             node.properties
               .map(property => {
                 // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
                 switch (property.type) {
                   case AST_NODE_TYPES.Property:
-                    return nodeToString(property.key, context) === key
+                    return nodeToString(property.key, context) === options.key
                       ? nodeToString(property.value, context)
                       : undefined;
 
@@ -554,7 +564,8 @@ export function sort(
                     return undefined;
                 }
               })
-              .find(is.string) ?? nodeToString(node, context),
+              .find(is.string) ?? nodeToString(node, context)
+          ),
           node
         };
       }
@@ -562,7 +573,7 @@ export function sort(
       default:
         return {
           index,
-          key: nodeToString(node, context),
+          key: wrapKey(nodeToString(node, context)),
           node
         };
     }
@@ -597,7 +608,7 @@ export function sort(
     ]);
 
     context.report({
-      data: { _id },
+      data: { _id: options._id },
       fix: () => fixes,
       loc,
       messageId: "incorrectSortingOrder"
@@ -608,6 +619,14 @@ export function sort(
     readonly index: number;
     readonly key: unknown;
     readonly node: TSESTree.Node;
+  }
+
+  function wrapKey(key: string): string {
+    if (sendToTop.test(key)) return `1:${key}`;
+
+    if (sendToBottom.test(key)) return `3:${key}`;
+
+    return `2:${key}`;
   }
 }
 
@@ -932,7 +951,6 @@ function getSubOptionsArray<
  *
  * @param options - Options.
  * @param path - Path.
- * @param code - Code.
  * @returns _True_ if file should be linted, _false_ otherwise.
  */
 function shouldBeLinted1(options: unknown, path: string): boolean {

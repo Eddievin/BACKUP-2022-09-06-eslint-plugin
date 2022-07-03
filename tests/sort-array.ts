@@ -35,15 +35,19 @@ utils.testRule("sort-array", rules, [
   {
     code: `
       const x = [
-      { ...{}, a: 1, key: "a" },
-      { ...{}, a: 2, key: "c" },
-      { ...{}, a: 3, key: "b" }
+      { ...{}, a: 1, key: "top:x" },
+      { ...{}, a: 2, key: "bottom:y" },
+      { ...{}, a: 3, key: "bottom:x" },
+      { ...{}, a: 4, key: "a" },
+      { ...{}, a: 5, key: "c" },
+      { ...{}, a: 6, key: "b" },
+      { ...{}, a: 7, key: "top:y" }
       ];
     `,
     errors: [
       {
         data: { _id: "id" },
-        endLine: 4,
+        endLine: 8,
         line: 3,
         messageId: "incorrectSortingOrder"
       }
@@ -55,16 +59,22 @@ utils.testRule("sort-array", rules, [
           {
             _id: "id",
             key: "key",
-            selector: "ArrayExpression"
+            selector: "ArrayExpression",
+            sendToBottom: /^bottom:/u.source,
+            sendToTop: /^top:/u.source
           }
         ]
       }
     ],
     output: `
       const x = [
-      { ...{}, a: 1, key: "a" },
-      { ...{}, a: 3, key: "b" },
-      { ...{}, a: 2, key: "c" }
+      { ...{}, a: 1, key: "top:x" },
+      { ...{}, a: 7, key: "top:y" },
+      { ...{}, a: 4, key: "a" },
+      { ...{}, a: 6, key: "b" },
+      { ...{}, a: 5, key: "c" },
+      { ...{}, a: 3, key: "bottom:x" },
+      { ...{}, a: 2, key: "bottom:y" }
       ];
     `
   },
