@@ -38,51 +38,58 @@ utils.testRule(
           sources: [
             {
               _id: "id1",
+              autoImport: true,
               autoImportSource: "source1",
               localName: "localName1",
-              sourcePattern: "source1",
+              source: "source1",
               type: "default"
             },
             {
               _id: "id2",
+              autoImport: true,
               autoImportSource: "source2",
               localName: "localName2",
-              sourcePattern: "source2",
+              source: "source2",
               type: "wildcard"
             },
             {
               _id: "id3",
+              autoImport: true,
               autoImportSource: "source3",
               localName: "localName3",
-              sourcePattern: "source3",
+              source: "source3",
               type: "wildcard"
             },
             {
               _id: "id4",
+              autoImport: true,
               autoImportSource: "source4",
               localName: "localName4",
-              sourcePattern: "source4",
+              source: "source4",
               type: "wildcard"
             },
             {
               _id: "id5",
+              autoImport: true,
               autoImportSource: "source5",
               localName: "localName5",
-              sourcePattern: "source5",
+              source: "source5",
               type: "wildcard"
             },
             {
               _id: "id6",
+              autoImport: true,
               autoImportSource: "source6",
               localName: "localName6",
-              sourcePattern: "source6",
+              source: "source6",
               type: "wildcard"
             },
             {
               _id: "id7",
+              autoImport: true,
               autoImportSource: "source7",
               localName: "localName7",
-              sourcePattern: "source7",
+              source: "source7",
               type: "wildcard"
             }
           ]
@@ -111,9 +118,7 @@ utils.testRule(
       `
     },
     {
-      code: `
-        source;
-      `,
+      code: "source;",
       errors: [
         { line: 1, messageId: "missingImport" },
         { line: 1, messageId: "autoImport" }
@@ -124,9 +129,10 @@ utils.testRule(
           sources: [
             {
               _id: "id",
+              autoImport: true,
               autoImportSource: "@/source",
               localName: "source",
-              sourcePattern: "@skylib/eslint-plugin/src/source",
+              source: "@skylib/eslint-plugin/src/source",
               type: "wildcard"
             }
           ]
@@ -138,9 +144,7 @@ utils.testRule(
       `
     },
     {
-      code: `
-        const x = { source };
-      `,
+      code: "const x = { source };",
       errors: [
         { line: 1, messageId: "autoImport" },
         { line: 1, messageId: "missingImport" }
@@ -151,9 +155,10 @@ utils.testRule(
           sources: [
             {
               _id: "id",
+              autoImport: true,
               autoImportSource: "@/source",
               localName: "source",
-              sourcePattern: "@skylib/eslint-plugin/src/source",
+              source: "@skylib/eslint-plugin/src/source",
               type: "wildcard"
             }
           ]
@@ -183,19 +188,19 @@ utils.testRule(
             {
               _id: "id1",
               localName: "localName1",
-              sourcePattern: "source1",
+              source: "source1",
               type: "wildcard"
             },
             {
               _id: "id2",
               localName: "localName2",
-              sourcePattern: "source2",
+              source: "source2",
               type: "wildcard"
             },
             {
               _id: "id3",
               localName: "localName3",
-              sourcePattern: "source3",
+              source: "source3",
               type: "default"
             }
           ]
@@ -226,13 +231,13 @@ utils.testRule(
             {
               _id: "id1",
               localName: "localName1",
-              sourcePattern: "source1",
+              source: "source1",
               type: "default"
             },
             {
               _id: "id2",
               localName: "localName2",
-              sourcePattern: "source2",
+              source: "source2",
               type: "wildcard"
             }
           ]
@@ -273,42 +278,42 @@ utils.testRule(
               _id: "id1",
               altLocalNames: ["altName1"],
               localName: "localName1",
-              sourcePattern: "source1",
+              source: "source1",
               type: "default"
             },
             {
               _id: "id2",
               altLocalNames: ["altName2"],
               localName: "localName2",
-              sourcePattern: "source2",
+              source: "source2",
               type: "default"
             },
             {
               _id: "id3",
               altLocalNames: ["altName3"],
               localName: "localName3",
-              sourcePattern: "source3",
+              source: "source3",
               type: "default"
             },
             {
               _id: "id4",
               altLocalNames: ["altName4"],
               localName: "localName4",
-              sourcePattern: "source4",
+              source: "source4",
               type: "wildcard"
             },
             {
               _id: "id5",
               altLocalNames: ["altName5"],
               localName: "localName5",
-              sourcePattern: "source5",
+              source: "source5",
               type: "wildcard"
             },
             {
               _id: "id6",
               altLocalNames: ["altName6"],
               localName: "localName6",
-              sourcePattern: "source6",
+              source: "source6",
               type: "wildcard"
             }
           ]
@@ -329,13 +334,13 @@ utils.testRule(
             {
               _id: "id1",
               localName: "localName1",
-              sourcePattern: "source1",
+              source: "source1",
               type: "default"
             },
             {
               _id: "id2",
               localName: "localName2",
-              sourcePattern: "source2",
+              source: "source2",
               type: "wildcard"
             }
           ]
@@ -356,22 +361,22 @@ utils.testRule(
             {
               _id: "id0",
               localName: "index",
-              sourcePattern: "@skylib/eslint-plugin",
+              source: "@skylib/eslint-plugin",
               type: "wildcard"
             },
             {
               _id: "id1",
-              sourcePattern: "@skylib/eslint-plugin/src/source1",
+              source: "@skylib/eslint-plugin/src/source1",
               type: "wildcard"
             },
             {
               _id: "id2",
-              sourcePattern: "@skylib/eslint-plugin/fixtures/source2",
+              source: "@skylib/eslint-plugin/fixtures/source2",
               type: "wildcard"
             },
             {
               _id: "id3",
-              sourcePattern: "@skylib/eslint-plugin/source3",
+              source: "@skylib/eslint-plugin/source3",
               type: "wildcard"
             }
           ]
@@ -388,7 +393,7 @@ utils.testRule(
           sources: [
             {
               _id: "id",
-              sourcePattern: "@skylib/eslint-plugin/src/some-source",
+              source: "@skylib/eslint-plugin/src/some-source",
               type: "wildcard"
             }
           ]
@@ -396,16 +401,15 @@ utils.testRule(
       ]
     },
     {
-      code: `
-        import * as fixtures from ".";
-      `,
+      code: 'import * as fixtures from ".";',
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           sources: [
             {
               _id: "id",
-              sourcePattern: "@skylib/eslint-plugin/fixtures",
+              source: "@skylib/eslint-plugin/fixtures",
+              sourcePattern: "@skylib/*/fixtures",
               type: "wildcard"
             }
           ]

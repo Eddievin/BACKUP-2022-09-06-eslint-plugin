@@ -29,7 +29,7 @@ export const consistentImport = utils.createRule({
           identifiers.add(node.name);
         },
       "Program:exit": (program: TSESTree.Program): void => {
-        autoImport(program, context);
+        autoImportFn(program, context);
         checkImport(importDeclarations, identifiers, context);
       },
       "Property > Identifier.value": (node: TSESTree.Identifier): void => {
@@ -51,13 +51,15 @@ export const consistentImport = utils.createRule({
     return is.object.factory<SubOptions>(
       {
         altLocalNames: is.strings,
-        sourcePattern: is.string,
+        source: is.string,
         type: isType
       },
       {
         _id: is.string,
+        autoImport: is.boolean,
         autoImportSource: is.string,
-        localName: is.string
+        localName: is.string,
+        sourcePattern: is.string
       }
     );
   }),
@@ -81,9 +83,11 @@ type MessageId = utils.MessageId<typeof consistentImport>;
 interface SubOptions {
   readonly _id?: string;
   readonly altLocalNames: strings;
+  readonly autoImport?: boolean;
   readonly autoImportSource?: string;
   readonly localName?: string;
-  readonly sourcePattern: string;
+  readonly source: string;
+  readonly sourcePattern?: string;
   readonly type: Type;
 }
 
@@ -95,25 +99,30 @@ type Type = "default" | "wildcard";
  * @param program - Program node.
  * @param context - Context.
  */
-function autoImport(program: TSESTree.Program, context: Context): void {
+function autoImportFn(program: TSESTree.Program, context: Context): void {
   const fixes = new Set<string>();
 
   for (const subOptions of context.subOptionsArray) {
-    const { autoImportSource: source, localName } = subOptions;
+    const { autoImport, autoImportSource, localName } = {
+      autoImport: false,
+      autoImportSource: subOptions.source,
+      localName: utils.getNameFromFilename(subOptions.source),
+      ...subOptions
+    };
 
-    if (is.not.empty(localName) && is.not.empty(source))
+    if (autoImport)
       for (const ref of context.scope.through)
         if (ref.identifier.name === localName) {
           context.report({ messageId: "missingImport", node: ref.identifier });
 
           switch (subOptions.type) {
             case "default":
-              fixes.add(`import ${localName} from "${source}";`);
+              fixes.add(`import ${localName} from "${autoImportSource}";`);
 
               break;
 
             case "wildcard":
-              fixes.add(`import * as ${localName} from "${source}";`);
+              fixes.add(`import * as ${localName} from "${autoImportSource}";`);
           }
         }
   }
@@ -159,7 +168,9 @@ function checkImport(
     const source = as.string(normalizeSource(node.source.value, context));
 
     const subOptions = context.subOptionsArray.find(candidate =>
-      minimatch(source, candidate.sourcePattern, { dot: true })
+      minimatch(source, candidate.sourcePattern ?? candidate.source, {
+        dot: true
+      })
     );
 
     if (subOptions) {
