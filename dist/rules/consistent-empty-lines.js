@@ -96,10 +96,11 @@ exports.consistentEmptyLines = utils.createRule({
         });
         const isEmptyLine = functions_1.is.factory(functions_1.is.enumeration, EmptyLineVO);
         return functions_1.is.object.factory({
+            _id: functions_1.is.string,
             emptyLine: isEmptyLine,
             next: functions_1.is.string,
             prev: functions_1.is.string
-        }, { _id: functions_1.is.string });
+        }, {});
     }),
     messages: {
         expectingEmptyLine: "Expecting empty line before ({{ _id }})",

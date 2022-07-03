@@ -19,7 +19,7 @@ exports.consistentImport = utils.createRule({
                 identifiers.add(node.name);
             },
             "Program:exit": (program) => {
-                autoImport(program, context);
+                autoImportFn(program, context);
                 checkImport(importDeclarations, identifiers, context);
             },
             "Property > Identifier.value": (node) => {
@@ -37,13 +37,15 @@ exports.consistentImport = utils.createRule({
         });
         const isType = functions_1.is.factory(functions_1.is.enumeration, TypeVO);
         return functions_1.is.object.factory({
+            _id: functions_1.is.string,
             altLocalNames: functions_1.is.strings,
-            sourcePattern: functions_1.is.string,
+            source: functions_1.is.string,
             type: isType
         }, {
-            _id: functions_1.is.string,
+            autoImport: functions_1.is.boolean,
             autoImportSource: functions_1.is.string,
-            localName: functions_1.is.string
+            localName: functions_1.is.string,
+            sourcePattern: functions_1.is.string
         });
     }),
     messages: {
@@ -62,20 +64,20 @@ exports.consistentImport = utils.createRule({
  * @param program - Program node.
  * @param context - Context.
  */
-function autoImport(program, context) {
+function autoImportFn(program, context) {
     const fixes = new Set();
     for (const subOptions of context.subOptionsArray) {
-        const { autoImportSource: source, localName } = subOptions;
-        if (functions_1.is.not.empty(localName) && functions_1.is.not.empty(source))
+        const { autoImport, autoImportSource, localName } = Object.assign({ autoImport: false, autoImportSource: subOptions.source, localName: utils.getNameFromFilename(subOptions.source) }, subOptions);
+        if (autoImport)
             for (const ref of context.scope.through)
                 if (ref.identifier.name === localName) {
                     context.report({ messageId: "missingImport", node: ref.identifier });
                     switch (subOptions.type) {
                         case "default":
-                            fixes.add(`import ${localName} from "${source}";`);
+                            fixes.add(`import ${localName} from "${autoImportSource}";`);
                             break;
                         case "wildcard":
-                            fixes.add(`import * as ${localName} from "${source}";`);
+                            fixes.add(`import * as ${localName} from "${autoImportSource}";`);
                     }
                 }
     }
@@ -107,7 +109,12 @@ function checkImport(importDeclarations, identifiers, context) {
         const defaultSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
         const wildcardSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
         const source = functions_1.as.string(normalizeSource(node.source.value, context));
-        const subOptions = context.subOptionsArray.find(candidate => (0, minimatch_1.default)(source, candidate.sourcePattern, { dot: true }));
+        const subOptions = context.subOptionsArray.find(candidate => {
+            var _a;
+            return (0, minimatch_1.default)(source, (_a = candidate.sourcePattern) !== null && _a !== void 0 ? _a : candidate.source, {
+                dot: true
+            });
+        });
         if (subOptions) {
             const localName = (_a = subOptions.localName) !== null && _a !== void 0 ? _a : identifierFromPath(source);
             switch (subOptions.type) {

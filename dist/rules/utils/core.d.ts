@@ -1,6 +1,6 @@
 import { is, s } from "@skylib/functions";
 import minimatch from "minimatch";
-import type { Accumulator, Rec, objects, stringU, strings, unknowns } from "@skylib/functions";
+import type { Accumulator, Rec, objects, strings, unknowns } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type { InvalidTestCase as BaseInvalidTestCase, ValidTestCase as BaseValidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
@@ -170,6 +170,12 @@ export interface Package {
     readonly name?: string;
 }
 export declare type ReadonlyRange = readonly [number, number];
+export interface SortOptions {
+    readonly _id: string;
+    readonly key?: string;
+    readonly sendToBottom?: string;
+    readonly sendToTop?: string;
+}
 export declare type SourceFile = "camelCase.camelCase.ts" | "camelCase.ts" | "file.extras.ts" | "kebab-case.kebab-case.ts" | "kebab-case.ts" | "PascalCase.PascalCase.ts" | "PascalCase.ts" | "subfolder/index.ts" | "vue.d.ts";
 export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
     readonly filename?: SourceFile;
@@ -268,11 +274,10 @@ export declare function nodeToString(node: TSESTree.Node, context: Context<never
  * Sorts nodes.
  *
  * @param nodes - Nodes.
- * @param key - Key.
- * @param _id - Suboptions ID.
+ * @param options - Options.
  * @param context - Context.
  */
-export declare function sort(nodes: readonly TSESTree.Node[], key: stringU, _id: stringU, context: Context<"incorrectSortingOrder", object, object>): void;
+export declare function sort(nodes: readonly TSESTree.Node[], options: SortOptions, context: Context<"incorrectSortingOrder", object, object>): void;
 /**
  * Strips base path.
  *

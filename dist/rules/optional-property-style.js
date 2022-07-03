@@ -111,8 +111,7 @@ exports.optionalPropertyStyle = (0, functions_1.evaluate)(() => {
         },
         defaultOptions: { classes: "combined", interfaces: "combined" },
         isRuleOptions: functions_1.is.object.factory({ classes: isStyle, interfaces: isStyle }, {}),
-        isSubOptions: functions_1.is.object.factory({ style: isStyle }, {
-            _id: functions_1.is.string,
+        isSubOptions: functions_1.is.object.factory({ _id: functions_1.is.string, style: isStyle }, {
             patterns: functions_1.is.strings,
             propertyPatterns: functions_1.is.strings,
             target: isTarget

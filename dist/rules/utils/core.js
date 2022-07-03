@@ -80,7 +80,7 @@ function createRule(options) {
     return ruleCreator({
         create: (context, rawOptions) => {
             const betterContext = createBetterContext(context, rawOptions, options);
-            return shouldBeLinted(betterContext.options, betterContext.id, betterContext.path, betterContext.code)
+            return shouldBeLinted1(betterContext.options, betterContext.path)
                 ? create(betterContext)
                 : {};
         },
@@ -228,11 +228,15 @@ exports.nodeToString = nodeToString;
  * Sorts nodes.
  *
  * @param nodes - Nodes.
- * @param key - Key.
- * @param _id - Suboptions ID.
+ * @param options - Options.
  * @param context - Context.
  */
-function sort(nodes, key, _id, context) {
+function sort(nodes, options, context) {
+    var _a, _b;
+    // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+    const sendToBottom = new RegExp((_a = options.sendToBottom) !== null && _a !== void 0 ? _a : ".", "u");
+    // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+    const sendToTop = new RegExp((_b = options.sendToTop) !== null && _b !== void 0 ? _b : ".", "u");
     const items = nodes.map((node, index) => {
         var _a;
         // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
@@ -240,26 +244,26 @@ function sort(nodes, key, _id, context) {
             case utils_1.AST_NODE_TYPES.ObjectExpression: {
                 return {
                     index,
-                    key: (_a = node.properties
+                    key: wrapKey((_a = node.properties
                         .map(property => {
                         // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
                         switch (property.type) {
                             case utils_1.AST_NODE_TYPES.Property:
-                                return nodeToString(property.key, context) === key
+                                return nodeToString(property.key, context) === options.key
                                     ? nodeToString(property.value, context)
                                     : undefined;
                             default:
                                 return undefined;
                         }
                     })
-                        .find(functions_1.is.string)) !== null && _a !== void 0 ? _a : nodeToString(node, context),
+                        .find(functions_1.is.string)) !== null && _a !== void 0 ? _a : nodeToString(node, context)),
                     node
                 };
             }
             default:
                 return {
                     index,
-                    key: nodeToString(node, context),
+                    key: wrapKey(nodeToString(node, context)),
                     node
                 };
         }
@@ -287,11 +291,18 @@ function sort(nodes, key, _id, context) {
             functions_1.a.get(items, functions_1.as.not.empty(max)).node.range[1]
         ]);
         context.report({
-            data: { _id },
+            data: { _id: options._id },
             fix: () => fixes,
             loc,
             messageId: "incorrectSortingOrder"
         });
+    }
+    function wrapKey(key) {
+        if (sendToTop.test(key))
+            return `1:${key}`;
+        if (sendToBottom.test(key))
+            return `3:${key}`;
+        return `2:${key}`;
     }
 }
 exports.sort = sort;
@@ -347,11 +358,8 @@ function testRule(name, rules, invalid, valid = []) {
     });
 }
 exports.testRule = testRule;
-const isSharedOptions = functions_1.is.factory(functions_1.is.object.of, {}, {
-    _id: functions_1.is.string,
-    filesToLint: functions_1.is.strings,
-    filesToSkip: functions_1.is.strings
-});
+const isSharedOptions1 = functions_1.is.object.factory({}, { filesToLint: functions_1.is.strings, filesToSkip: functions_1.is.strings });
+const isSharedOptions2 = functions_1.is.object.factory({ _id: functions_1.is.string }, { filesToLint: functions_1.is.strings, filesToSkip: functions_1.is.strings });
 /**
  * Creates better context.
  *
@@ -494,11 +502,27 @@ function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
             .map(subOptions => {
             return Object.assign(Object.assign({}, defaultSubOptions), subOptions);
         })
-            .filter(subOptions => shouldBeLinted(subOptions, ruleId, path, code));
+            .filter(subOptions => shouldBeLinted2(subOptions, ruleId, path, code));
         functions_1.assert.array.of(result, isSubOptions, "Expecting valid rule options");
         return result;
     }
     return [];
+}
+/**
+ * Determines if file should be linted.
+ *
+ * @param options - Options.
+ * @param path - Path.
+ * @returns _True_ if file should be linted, _false_ otherwise.
+ */
+function shouldBeLinted1(options, path) {
+    functions_1.assert.byGuard(options, isSharedOptions1, "Expecting valid rule options");
+    const disallowByPath = (0, functions_1.evaluate)(() => {
+        var _a, _b;
+        const matcher = exports.createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });
+        return matcher(stripBase(functions_1.s.path.canonicalize(path), "./"));
+    });
+    return !disallowByPath;
 }
 /**
  * Determines if file should be linted.
@@ -509,10 +533,9 @@ function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
  * @param code - Code.
  * @returns _True_ if file should be linted, _false_ otherwise.
  */
-function shouldBeLinted(options, ruleId, path, code) {
-    functions_1.assert.byGuard(options, isSharedOptions, "Expecting valid rule options");
-    const disallowById = functions_1.is.not.empty(options._id) &&
-        code.includes(`/* disable ${ruleId}[${options._id}] */`);
+function shouldBeLinted2(options, ruleId, path, code) {
+    functions_1.assert.byGuard(options, isSharedOptions2, "Expecting valid rule options");
+    const disallowById = code.includes(`/* disable ${ruleId}[${options._id}] */`);
     const disallowByPath = (0, functions_1.evaluate)(() => {
         var _a, _b;
         const matcher = exports.createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });

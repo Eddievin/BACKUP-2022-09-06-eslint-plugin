@@ -50,12 +50,13 @@ exports.consistentGroupEmptyLines = utils.createRule({
     fixable: "whitespace",
     isRuleOptions: functions_1.is.object,
     isSubOptions: functions_1.is.object.factory({
+        _id: functions_1.is.string,
         averageLinesGte: functions_1.is.number,
         everyLinesGte: functions_1.is.number,
         selector: functions_1.is.string,
         someHasDocComment: functions_1.is.boolean,
         someLinesGte: functions_1.is.number
-    }, { _id: functions_1.is.string }),
+    }, {}),
     messages: {
         expectingEmptyLine: "Expecting empty line before ({{ _id }})",
         unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"

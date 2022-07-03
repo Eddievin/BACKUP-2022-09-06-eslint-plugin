@@ -16,20 +16,73 @@ exports.noRestrictedSyntax = utils.createRule({
                 (type.isUnion() &&
                     type.types.every(subtype => flags.includes(subtype.getFlags()))));
         }
+        function checkTypeHas(type, expected) {
+            return expected
+                ? checkTypeIs(type, expected) ||
+                    (type.isUnion() &&
+                        type.types.some(subtype => checkTypeIs(subtype, expected)))
+                : true;
+        }
+        function checkTypeHasNoneOf(type, expected) {
+            return expected ? expected.every(x => checkTypeHasNot(type, x)) : true;
+        }
+        function checkTypeHasNot(type, expected) {
+            return expected ? !checkTypeHas(type, expected) : true;
+        }
+        function checkTypeHasOneOf(type, expected) {
+            return expected ? expected.some(x => checkTypeHas(type, x)) : true;
+        }
+        function checkTypeIs(type, expected) {
+            if (expected)
+                switch (expected) {
+                    case "any":
+                        return type.getFlags() === ts.TypeFlags.Any;
+                    case "array":
+                        return context.checker.isArrayType(type);
+                    case "boolean":
+                        return checkType(type, ts.TypeFlags.Boolean, ts.TypeFlags.BooleanLike, ts.TypeFlags.BooleanLiteral);
+                    case "null":
+                        return type.getFlags() === ts.TypeFlags.Null;
+                    case "number":
+                        return checkType(type, ts.TypeFlags.Number, ts.TypeFlags.NumberLike, ts.TypeFlags.NumberLiteral);
+                    case "string":
+                        return checkType(type, ts.TypeFlags.String, ts.TypeFlags.StringLike, ts.TypeFlags.StringLiteral);
+                    case "symbol":
+                        return checkType(type, ts.TypeFlags.ESSymbol, ts.TypeFlags.ESSymbolLike, ts.TypeFlags.UniqueESSymbol);
+                    case "undefined":
+                        return type.getFlags() === ts.TypeFlags.Undefined;
+                    case "unknown":
+                        return type.getFlags() === ts.TypeFlags.Unknown;
+                }
+            return true;
+        }
+        function checkTypeIsNoneOf(type, expected) {
+            return expected ? expected.every(x => checkTypeIsNot(type, x)) : true;
+        }
+        function checkTypeIsNot(type, expected) {
+            return expected ? !checkTypeIs(type, expected) : true;
+        }
+        function checkTypeIsOneOf(type, expected) {
+            return expected ? expected.some(x => checkTypeIs(type, x)) : true;
+        }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
         function getVisitors() {
             return functions_1.o.fromEntries(context.subOptionsArray.map(subOptions => {
-                const { _id, message, replacement, search, selector: mixed, typeContain, typeDontContain, typeEq, typeNeq } = subOptions;
+                const { _id, message, replacement, search, selector: mixed, typeHas, typeHasNoneOf, typeHasNot, typeHasOneOf, typeIs, typeIsNoneOf, typeIsNot, typeIsOneOf } = subOptions;
                 const selector = functions_1.a.fromMixed(mixed).join(", ");
                 return [
                     selector,
                     (node) => {
                         const tsNode = context.toTsNode(node);
                         const type = context.checker.getTypeAtLocation(tsNode);
-                        if (isTypeEqualsTo(type, typeEq) &&
-                            isTypeNotEqualsTo(type, typeNeq) &&
-                            isTypeIncludes(type, typeContain) &&
-                            isTypeExcludes(type, typeDontContain))
+                        if (checkTypeIs(type, typeIs) &&
+                            checkTypeHasNot(type, typeHasNot) &&
+                            checkTypeIsNot(type, typeIsNot) &&
+                            checkTypeHas(type, typeHas) &&
+                            checkTypeHasNoneOf(type, typeHasNoneOf) &&
+                            checkTypeHasOneOf(type, typeHasOneOf) &&
+                            checkTypeIsNoneOf(type, typeIsNoneOf) &&
+                            checkTypeIsOneOf(type, typeIsOneOf))
                             context.report({
                                 data: {
                                     _id,
@@ -54,43 +107,6 @@ exports.noRestrictedSyntax = utils.createRule({
                 ];
             }));
         }
-        function isTypeEqualsTo(type, expected) {
-            if (expected)
-                switch (expected) {
-                    case "any":
-                        return type.getFlags() === ts.TypeFlags.Any;
-                    case "array":
-                        return context.checker.isArrayType(type);
-                    case "boolean":
-                        return checkType(type, ts.TypeFlags.Boolean, ts.TypeFlags.BooleanLike, ts.TypeFlags.BooleanLiteral);
-                    case "null":
-                        return type.getFlags() === ts.TypeFlags.Null;
-                    case "number":
-                        return checkType(type, ts.TypeFlags.Number, ts.TypeFlags.NumberLike, ts.TypeFlags.NumberLiteral);
-                    case "string":
-                        return checkType(type, ts.TypeFlags.String, ts.TypeFlags.StringLike, ts.TypeFlags.StringLiteral);
-                    case "symbol":
-                        return checkType(type, ts.TypeFlags.ESSymbol, ts.TypeFlags.ESSymbolLike, ts.TypeFlags.UniqueESSymbol);
-                    case "undefined":
-                        return type.getFlags() === ts.TypeFlags.Undefined;
-                    case "unknown":
-                        return type.getFlags() === ts.TypeFlags.Unknown;
-                }
-            return true;
-        }
-        function isTypeExcludes(type, expected) {
-            return expected ? !isTypeIncludes(type, expected) : true;
-        }
-        function isTypeIncludes(type, expected) {
-            return expected
-                ? isTypeEqualsTo(type, expected) ||
-                    (type.isUnion() &&
-                        type.types.some(subtype => isTypeEqualsTo(subtype, expected)))
-                : true;
-        }
-        function isTypeNotEqualsTo(type, expected) {
-            return expected ? !isTypeEqualsTo(type, expected) : true;
-        }
     },
     fixable: "code",
     isRuleOptions: functions_1.is.object,
@@ -107,15 +123,19 @@ exports.noRestrictedSyntax = utils.createRule({
             unknown: "unknown"
         });
         const isType = functions_1.is.factory(functions_1.is.enumeration, TypeVO);
-        return functions_1.is.object.factory({ selector: functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings) }, {
-            _id: functions_1.is.string,
+        const isTypes = functions_1.is.factory(functions_1.is.array.of, isType);
+        return functions_1.is.object.factory({ _id: functions_1.is.string, selector: functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings) }, {
             message: functions_1.is.string,
             replacement: functions_1.is.string,
             search: functions_1.is.string,
-            typeContain: isType,
-            typeDontContain: isType,
-            typeEq: isType,
-            typeNeq: isType
+            typeHas: isType,
+            typeHasNoneOf: isTypes,
+            typeHasNot: isType,
+            typeHasOneOf: isTypes,
+            typeIs: isType,
+            typeIsNoneOf: isTypes,
+            typeIsNot: isType,
+            typeIsOneOf: isTypes
         });
     }),
     messages: { customMessage: "{{ message }} ({{ _id }})" },

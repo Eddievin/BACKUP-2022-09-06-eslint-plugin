@@ -10,7 +10,7 @@ exports.sortArray = utils.createRule({
         subOptions.selector,
         (node) => {
             if (node.type === utils_1.AST_NODE_TYPES.ArrayExpression)
-                utils.sort(node.elements, subOptions.key, subOptions._id, context);
+                utils.sort(node.elements, subOptions, context);
             else
                 context.report({
                     data: { _id: subOptions._id },
@@ -21,7 +21,11 @@ exports.sortArray = utils.createRule({
     ])),
     fixable: "code",
     isRuleOptions: functions_1.is.object,
-    isSubOptions: functions_1.is.object.factory({ selector: functions_1.is.string }, { _id: functions_1.is.string, key: functions_1.is.string }),
+    isSubOptions: functions_1.is.object.factory({ _id: functions_1.is.string, selector: functions_1.is.string }, {
+        key: functions_1.is.string,
+        sendToBottom: functions_1.is.string,
+        sendToTop: functions_1.is.string
+    }),
     messages: {
         expectingArray: "Expecting array ({{ _id }})",
         incorrectSortingOrder: "Incorrect sorting order ({{ _id }})"
