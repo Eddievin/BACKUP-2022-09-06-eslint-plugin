@@ -341,12 +341,7 @@ export function createRule<
     create: (context: RuleContext<M, [object]>, rawOptions) => {
       const betterContext = createBetterContext(context, rawOptions, options);
 
-      return shouldBeLinted(
-        betterContext.options,
-        betterContext.id,
-        betterContext.path,
-        betterContext.code
-      )
+      return shouldBeLinted1(betterContext.options, betterContext.path)
         ? create(betterContext)
         : {};
     },
@@ -536,7 +531,7 @@ export function nodeToString(
 export function sort(
   nodes: readonly TSESTree.Node[],
   key: stringU,
-  _id: stringU,
+  _id: string,
   context: Context<"incorrectSortingOrder", object, object>
 ): void {
   const items = nodes.map<Item>((node, index) => {
@@ -689,18 +684,23 @@ export function testRule<K extends string, M extends string>(
   });
 }
 
-const isSharedOptions: is.Guard<SharedOptions> = is.factory(
-  is.object.of,
+const isSharedOptions1 = is.object.factory<SharedOptions1>(
   {},
-  {
-    _id: is.string,
-    filesToLint: is.strings,
-    filesToSkip: is.strings
-  }
+  { filesToLint: is.strings, filesToSkip: is.strings }
 );
 
-interface SharedOptions {
-  readonly _id?: string;
+const isSharedOptions2 = is.object.factory<SharedOptions2>(
+  { _id: is.string },
+  { filesToLint: is.strings, filesToSkip: is.strings }
+);
+
+interface SharedOptions1 {
+  readonly filesToLint?: strings;
+  readonly filesToSkip?: strings;
+}
+
+interface SharedOptions2 {
+  readonly _id: string;
   readonly filesToLint?: strings;
   readonly filesToSkip?: strings;
 }
@@ -917,7 +917,7 @@ function getSubOptionsArray<
       .map(subOptions => {
         return { ...defaultSubOptions, ...subOptions };
       })
-      .filter(subOptions => shouldBeLinted(subOptions, ruleId, path, code));
+      .filter(subOptions => shouldBeLinted2(subOptions, ruleId, path, code));
 
     assert.array.of(result, isSubOptions, "Expecting valid rule options");
 
@@ -931,22 +931,45 @@ function getSubOptionsArray<
  * Determines if file should be linted.
  *
  * @param options - Options.
+ * @param path - Path.
+ * @param code - Code.
+ * @returns _True_ if file should be linted, _false_ otherwise.
+ */
+function shouldBeLinted1(options: unknown, path: string): boolean {
+  assert.byGuard(options, isSharedOptions1, "Expecting valid rule options");
+
+  const disallowByPath = evaluate<boolean>(() => {
+    const matcher = createFileMatcher.disallowAllow(
+      options.filesToSkip ?? [],
+      options.filesToLint ?? [],
+      false,
+      { dot: true, matchBase: true }
+    );
+
+    return matcher(stripBase(s.path.canonicalize(path), "./"));
+  });
+
+  return !disallowByPath;
+}
+
+/**
+ * Determines if file should be linted.
+ *
+ * @param options - Options.
  * @param ruleId - Rule id.
  * @param path - Path.
  * @param code - Code.
  * @returns _True_ if file should be linted, _false_ otherwise.
  */
-function shouldBeLinted(
+function shouldBeLinted2(
   options: unknown,
   ruleId: string,
   path: string,
   code: string
 ): boolean {
-  assert.byGuard(options, isSharedOptions, "Expecting valid rule options");
+  assert.byGuard(options, isSharedOptions2, "Expecting valid rule options");
 
-  const disallowById =
-    is.not.empty(options._id) &&
-    code.includes(`/* disable ${ruleId}[${options._id}] */`);
+  const disallowById = code.includes(`/* disable ${ruleId}[${options._id}] */`);
 
   const disallowByPath = evaluate<boolean>(() => {
     const matcher = createFileMatcher.disallowAllow(

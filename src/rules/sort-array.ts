@@ -23,8 +23,8 @@ export const sortArray = utils.createRule({
   fixable: "code",
   isRuleOptions: is.object,
   isSubOptions: is.object.factory<SubOptions>(
-    { selector: is.string },
-    { _id: is.string, key: is.string }
+    { _id: is.string, selector: is.string },
+    { key: is.string }
   ),
   messages: {
     expectingArray: "Expecting array ({{ _id }})",
@@ -34,7 +34,7 @@ export const sortArray = utils.createRule({
 });
 
 interface SubOptions {
-  readonly _id?: string;
+  readonly _id: string;
   readonly key?: string;
   readonly selector: string;
 }

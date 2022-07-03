@@ -15,7 +15,13 @@ utils.testRule("disallow-import", rules, [
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
-        rules: [{ allow: ["source1", "*/source1"], disallow: ["**/source1"] }]
+        rules: [
+          {
+            _id: "source1",
+            allow: ["source1", "*/source1"],
+            disallow: ["**/source1"]
+          }
+        ]
       }
     ]
   },
@@ -36,7 +42,7 @@ utils.testRule("disallow-import", rules, [
       { line: 6, messageId: "disallowedSource" }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ allow: ["*/source1"] }] }]
+    options: [{ rules: [{ _id: "source1", allow: ["*/source1"] }] }]
   },
   {
     code: `
@@ -50,6 +56,8 @@ utils.testRule("disallow-import", rules, [
       { line: 3, messageId: "disallowedSource" }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ disallow: ["@/*", "./*", "../*"] }] }]
+    options: [
+      { rules: [{ _id: "external", disallow: ["@/*", "./*", "../*"] }] }
+    ]
   }
 ]);

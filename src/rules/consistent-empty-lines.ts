@@ -130,11 +130,12 @@ export const consistentEmptyLines = utils.createRule({
 
     return is.object.factory<SubOptions>(
       {
+        _id: is.string,
         emptyLine: isEmptyLine,
         next: is.string,
         prev: is.string
       },
-      { _id: is.string }
+      {}
     );
   }),
   messages: {
@@ -154,7 +155,7 @@ interface Item {
 }
 
 interface SubOptions {
-  readonly _id?: string;
+  readonly _id: string;
   readonly emptyLine: EmptyLine;
   readonly next: string;
   readonly prev: string;

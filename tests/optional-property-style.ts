@@ -84,11 +84,13 @@ utils.testRule(
         {
           overrides: [
             {
+              _id: "id1",
               patterns: ["^C$"],
               style: "undefined",
               target: "classes"
             },
             {
+              _id: "id2",
               propertyPatterns: ["^x$"],
               style: "undefined",
               target: "classes"
@@ -176,11 +178,13 @@ utils.testRule(
         {
           overrides: [
             {
+              _id: "id1",
               patterns: ["^I$"],
               style: "undefined",
               target: "interfaces"
             },
             {
+              _id: "id2",
               propertyPatterns: ["^x$"],
               style: "undefined",
               target: "interfaces"

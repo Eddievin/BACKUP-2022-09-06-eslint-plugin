@@ -195,9 +195,8 @@ export const noRestrictedSyntax = utils.createRule({
     const isTypes = is.factory(is.array.of, isType);
 
     return is.object.factory<SubOptions>(
-      { selector: is.or.factory(is.string, is.strings) },
+      { _id: is.string, selector: is.or.factory(is.string, is.strings) },
       {
-        _id: is.string,
         message: is.string,
         replacement: is.string,
         search: is.string,
@@ -213,7 +212,7 @@ export const noRestrictedSyntax = utils.createRule({
     );
 
     interface SubOptions {
-      readonly _id?: string;
+      readonly _id: string;
       readonly message?: string;
       readonly replacement?: string;
       readonly search?: string;

@@ -127,6 +127,7 @@ utils.testRule(
         {
           overrides: [
             {
+              _id: "id",
               format: "PascalCase",
               selector:
                 "Program > ExportDefaultDeclaration > CallExpression > Identifier.callee[name=defineComponent]"

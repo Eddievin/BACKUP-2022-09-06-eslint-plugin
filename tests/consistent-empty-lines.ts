@@ -18,11 +18,13 @@ utils.testRule("consistent-empty-lines", rules, [
       {
         rules: [
           {
+            _id: "id1",
             emptyLine: "always",
             next: ":statement, TSExportAssignment",
             prev: ":statement, TSExportAssignment"
           },
           {
+            _id: "id2",
             emptyLine: "never",
             next: "ImportDeclaration",
             prev: "ImportDeclaration"
@@ -50,11 +52,13 @@ utils.testRule("consistent-empty-lines", rules, [
       {
         rules: [
           {
+            _id: "id1",
             emptyLine: "always",
             next: ":statement, TSExportAssignment",
             prev: ":statement, TSExportAssignment"
           },
           {
+            _id: "id2",
             emptyLine: "any",
             next: "ImportDeclaration",
             prev: "ImportDeclaration"
@@ -87,6 +91,7 @@ utils.testRule("consistent-empty-lines", rules, [
       {
         rules: [
           {
+            _id: "id",
             emptyLine: "always",
             next: ":statement",
             prev: ":statement"

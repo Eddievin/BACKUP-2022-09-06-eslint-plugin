@@ -50,12 +50,12 @@ export const consistentImport = utils.createRule({
 
     return is.object.factory<SubOptions>(
       {
+        _id: is.string,
         altLocalNames: is.strings,
         source: is.string,
         type: isType
       },
       {
-        _id: is.string,
         autoImport: is.boolean,
         autoImportSource: is.string,
         localName: is.string,
@@ -81,7 +81,7 @@ type Context = utils.Context<MessageId, object, SubOptions>;
 type MessageId = utils.MessageId<typeof consistentImport>;
 
 interface SubOptions {
-  readonly _id?: string;
+  readonly _id: string;
   readonly altLocalNames: strings;
   readonly autoImport?: boolean;
   readonly autoImportSource?: string;

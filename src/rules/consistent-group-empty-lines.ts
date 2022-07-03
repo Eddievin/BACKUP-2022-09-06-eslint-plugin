@@ -58,13 +58,14 @@ export const consistentGroupEmptyLines = utils.createRule({
   isRuleOptions: is.object,
   isSubOptions: is.object.factory<SubOptions>(
     {
+      _id: is.string,
       averageLinesGte: is.number,
       everyLinesGte: is.number,
       selector: is.string,
       someHasDocComment: is.boolean,
       someLinesGte: is.number
     },
-    { _id: is.string }
+    {}
   ),
   messages: {
     expectingEmptyLine: "Expecting empty line before ({{ _id }})",
@@ -78,7 +79,7 @@ type Context = utils.Context<MessageId, object, SubOptions>;
 type MessageId = utils.MessageId<typeof consistentGroupEmptyLines>;
 
 interface SubOptions {
-  readonly _id?: string;
+  readonly _id: string;
   readonly averageLinesGte: number;
   readonly everyLinesGte: number;
   readonly selector: string;

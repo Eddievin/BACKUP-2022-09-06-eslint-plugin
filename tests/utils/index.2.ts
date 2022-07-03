@@ -6,23 +6,20 @@ utils.testRule(
   rules,
   [
     {
-      code: `
-        invalid();
-      `,
+      code: "invalid();",
       errors: [{ line: 1, messageId: "customMessage" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ rules: [{ _id: "rule-id", selector: "Identifier" }] }]
     },
     {
-      code: `
-        invalid();
-      `,
+      code: "invalid();",
       errors: [{ line: 1, messageId: "customMessage" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           rules: [
             {
+              _id: "rule-id",
               filesToLint: ["./fixtures/file.ts"],
               filesToSkip: ["./fixtures/**", "./other/**"],
               selector: "Identifier"
@@ -33,28 +30,35 @@ utils.testRule(
     }
   ],
   [
+    { code: "invalid();", name: `Test at line ${getCurrentLine().line}` },
     {
-      code: `
-        invalid();
-      `,
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: `
-        invalid();
-      `,
+      code: "invalid();",
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        { rules: [{ filesToSkip: ["./fixtures/**"], selector: "Identifier" }] }
+        {
+          rules: [
+            {
+              _id: "rule-id",
+              filesToSkip: ["./fixtures/**"],
+              selector: "Identifier"
+            }
+          ]
+        }
       ]
     },
     {
-      code: `
-        invalid();
-      `,
+      code: "invalid();",
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        { rules: [{ filesToLint: ["./other/**"], selector: "Identifier" }] }
+        {
+          rules: [
+            {
+              _id: "rule-id",
+              filesToLint: ["./other/**"],
+              selector: "Identifier"
+            }
+          ]
+        }
       ]
     },
     {
