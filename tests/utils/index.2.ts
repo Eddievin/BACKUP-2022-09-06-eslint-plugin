@@ -2,27 +2,38 @@ import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
 utils.testRule(
-  "no-restricted-syntax",
+  "consistent-import",
   rules,
   [
     {
-      code: "invalid();",
-      errors: [{ line: 1, messageId: "customMessage" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ rules: [{ _id: "rule-id", selector: "Identifier" }] }]
-    },
-    {
-      code: "invalid();",
-      errors: [{ line: 1, messageId: "customMessage" }],
+      code: 'import source from "source"',
+      errors: [{ line: 1, messageId: "wildcardImportRequired" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
-          rules: [
+          sources: [
             {
-              _id: "rule-id",
+              _id: "id",
+              source: "source",
+              type: "wildcard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      code: 'import source from "source"',
+      errors: [{ line: 1, messageId: "wildcardImportRequired" }],
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          sources: [
+            {
+              _id: "id",
               filesToLint: ["./fixtures/file.ts"],
               filesToSkip: ["./fixtures/**", "./other/**"],
-              selector: "Identifier"
+              source: "source",
+              type: "wildcard"
             }
           ]
         }
@@ -30,32 +41,33 @@ utils.testRule(
     }
   ],
   [
-    { code: "invalid();", name: `Test at line ${getCurrentLine().line}` },
     {
-      code: "invalid();",
+      code: 'import source from "source"',
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
-          rules: [
+          sources: [
             {
-              _id: "rule-id",
+              _id: "id",
               filesToSkip: ["./fixtures/**"],
-              selector: "Identifier"
+              source: "source",
+              type: "wildcard"
             }
           ]
         }
       ]
     },
     {
-      code: "invalid();",
+      code: 'import source from "source"',
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
-          rules: [
+          sources: [
             {
-              _id: "rule-id",
+              _id: "id",
               filesToLint: ["./other/**"],
-              selector: "Identifier"
+              source: "source",
+              type: "wildcard"
             }
           ]
         }
@@ -63,12 +75,23 @@ utils.testRule(
     },
     {
       code: `
-        /* disable no-restricted-syntax[rule-id] */
+        /* disable consistent-import[id] */
 
-        invalid();
+        source();
       `,
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ rules: [{ _id: "rule-id", selector: "Identifier" }] }]
+      options: [
+        {
+          sources: [
+            {
+              _id: "id",
+              filesToLint: ["./other/**"],
+              source: "source",
+              type: "wildcard"
+            }
+          ]
+        }
+      ]
     }
   ]
 );

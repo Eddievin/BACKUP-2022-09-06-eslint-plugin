@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { a, createValidationObject, evaluate, is, o } from "@skylib/functions";
+import { a, createValidationObject, evaluate, is } from "@skylib/functions";
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
@@ -142,76 +142,67 @@ export const noRestrictedSyntax = utils.createRule({
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
     function getVisitors(): any {
-      return o.fromEntries(
-        context.subOptionsArray.map(subOptions => {
-          const {
-            _id,
-            message,
-            replacement,
-            search,
-            selector: mixed,
-            typeHas,
-            typeHasNoneOf,
-            typeHasNot,
-            typeHasOneOf,
-            typeIs,
-            typeIsNoneOf,
-            typeIsNot,
-            typeIsOneOf
-          } = subOptions;
+      const {
+        message,
+        replacement,
+        search,
+        selector: mixed,
+        typeHas,
+        typeHasNoneOf,
+        typeHasNot,
+        typeHasOneOf,
+        typeIs,
+        typeIsNoneOf,
+        typeIsNot,
+        typeIsOneOf
+      } = context.options;
 
-          const selector = a.fromMixed(mixed).join(", ");
+      const selector = a.fromMixed(mixed).join(", ");
 
-          return [
-            selector,
-            (node: TSESTree.Node): void => {
-              const tsNode = context.toTsNode(node);
+      return {
+        [selector]: (node: TSESTree.Node): void => {
+          const tsNode = context.toTsNode(node);
 
-              const type = context.checker.getTypeAtLocation(tsNode);
+          const type = context.checker.getTypeAtLocation(tsNode);
 
-              if (
-                checkTypeIs(type, typeIs) &&
-                checkTypeHasNot(type, typeHasNot) &&
-                checkTypeIsNot(type, typeIsNot) &&
-                checkTypeHas(type, typeHas) &&
-                checkTypeHasNoneOf(type, typeHasNoneOf) &&
-                checkTypeHasOneOf(type, typeHasOneOf) &&
-                checkTypeIsNoneOf(type, typeIsNoneOf) &&
-                checkTypeIsOneOf(type, typeIsOneOf)
-              )
-                context.report({
-                  data: {
-                    _id,
-                    message:
-                      message ?? `This syntax is not allowed: ${selector}`
-                  },
-                  fix: () =>
-                    is.not.empty(replacement)
-                      ? [
-                          {
-                            range: node.range,
-                            text: is.not.empty(search)
-                              ? context.getText(node).replace(
-                                  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-                                  new RegExp(search, "u"),
-                                  replacement
-                                )
-                              : replacement
-                          }
-                        ]
-                      : [],
-                  loc: context.getLocFromRange(node.range),
-                  messageId: "customMessage"
-                });
-            }
-          ];
-        })
-      );
+          if (
+            checkTypeIs(type, typeIs) &&
+            checkTypeHasNot(type, typeHasNot) &&
+            checkTypeIsNot(type, typeIsNot) &&
+            checkTypeHas(type, typeHas) &&
+            checkTypeHasNoneOf(type, typeHasNoneOf) &&
+            checkTypeHasOneOf(type, typeHasOneOf) &&
+            checkTypeIsNoneOf(type, typeIsNoneOf) &&
+            checkTypeIsOneOf(type, typeIsOneOf)
+          )
+            context.report({
+              data: {
+                message: message ?? `This syntax is not allowed: ${selector}`
+              },
+              fix: () =>
+                is.not.empty(replacement)
+                  ? [
+                      {
+                        range: node.range,
+                        text: is.not.empty(search)
+                          ? context.getText(node).replace(
+                              // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                              new RegExp(search, "u"),
+                              replacement
+                            )
+                          : replacement
+                      }
+                    ]
+                  : [],
+              loc: context.getLocFromRange(node.range),
+              messageId: "customMessage"
+            });
+        }
+      };
     }
   },
   fixable: "code",
-  isRuleOptions: is.object,
-  isSubOptions: evaluate(() => {
+  isRuleOptions: evaluate(() => {
     const TypeVO = createValidationObject<Type>({
       any: "any",
       array: "array",
@@ -230,8 +221,8 @@ export const noRestrictedSyntax = utils.createRule({
 
     const isTypes = is.factory(is.array.of, isType);
 
-    return is.object.factory<SubOptions>(
-      { _id: is.string, selector: is.or.factory(is.string, is.strings) },
+    return is.object.factory<RuleOptions>(
+      { selector: is.or.factory(is.string, is.strings) },
       {
         message: is.string,
         replacement: is.string,
@@ -247,8 +238,7 @@ export const noRestrictedSyntax = utils.createRule({
       }
     );
 
-    interface SubOptions {
-      readonly _id: string;
+    interface RuleOptions {
       readonly message?: string;
       readonly replacement?: string;
       readonly search?: string;
@@ -263,7 +253,7 @@ export const noRestrictedSyntax = utils.createRule({
       readonly typeIsOneOf?: Types;
     }
   }),
-  messages: { customMessage: "{{ message }} ({{ _id }})" },
+  messages: { customMessage: "{{ message }}" },
   name: "no-restricted-syntax"
 });
 

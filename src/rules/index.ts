@@ -36,13 +36,13 @@ import { sortKeys } from "./sort-keys";
 import { statementsOrder } from "./statements-order";
 import { switchCaseEmptyLines } from "./switch-case-empty-lines";
 import { templateLiteralFormat } from "./template-literal-format";
+import { getSynonyms } from "./utils";
 import { vueComponentName } from "./vue-component-name";
-import { evaluate, o } from "@skylib/functions";
-import type { WritableIndexedObject } from "@skylib/functions";
+import { evaluate } from "@skylib/functions";
 
 export * as utils from "./utils";
 
-export const { configs, rules } = evaluate(() => {
+export const rules = evaluate(() => {
   const core = {
     "array-callback-return-type": arrayCallbackReturnType,
     "class-member-typedef": classMemberTypedef,
@@ -85,25 +85,5 @@ export const { configs, rules } = evaluate(() => {
     "vue-component-name": vueComponentName
   };
 
-  const copies: WritableIndexedObject = {};
-
-  for (const [name, rule] of o.entries(core)) {
-    copies[`facades/${name}`] = rule;
-    copies[`framework/${name}`] = rule;
-    copies[`functions/${name}`] = rule;
-    copies[`project/${name}`] = rule;
-    copies[`quasar-extension/${name}`] = rule;
-  }
-
-  return {
-    configs: {
-      all: {
-        plugins: ["@skylib/eslint-plugin"],
-        rules: o.fromEntries(
-          o.keys(core).map(name => [`@skylib/${name}`, "warn"])
-        )
-      }
-    },
-    rules: { ...core, ...copies }
-  };
+  return { ...core, ...getSynonyms("./.eslintrc.synonyms.js", core) };
 });
