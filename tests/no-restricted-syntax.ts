@@ -95,12 +95,14 @@ utils.testRule("no-restricted-syntax", rules, [
         x1: any,
         x2: unknown[],
         x3: boolean,
-        x4: null,
-        x5: number,
-        x6: string,
-        x7: symbol,
-        x8: undefined,
-        x9: unknown
+        x4: () => void,
+        x5: null,
+        x6: number,
+        x7: object,
+        x8: string,
+        x9: symbol,
+        xA: undefined,
+        xB: unknown
       ) {}
     `,
     errors: [
@@ -120,33 +122,43 @@ utils.testRule("no-restricted-syntax", rules, [
         messageId: "customMessage"
       },
       {
-        data: { _id: "null", message: "Custom message" },
+        data: { _id: "function", message: "Custom message" },
         line: 5,
         messageId: "customMessage"
       },
       {
-        data: { _id: "number", message: "Custom message" },
+        data: { _id: "null", message: "Custom message" },
         line: 6,
         messageId: "customMessage"
       },
       {
-        data: { _id: "string", message: "Custom message" },
+        data: { _id: "number", message: "Custom message" },
         line: 7,
         messageId: "customMessage"
       },
       {
-        data: { _id: "symbol", message: "Custom message" },
+        data: { _id: "object", message: "Custom message" },
         line: 8,
         messageId: "customMessage"
       },
       {
-        data: { _id: "undefined", message: "Custom message" },
+        data: { _id: "string", message: "Custom message" },
         line: 9,
         messageId: "customMessage"
       },
       {
-        data: { _id: "unknown", message: "Custom message" },
+        data: { _id: "symbol", message: "Custom message" },
         line: 10,
+        messageId: "customMessage"
+      },
+      {
+        data: { _id: "undefined", message: "Custom message" },
+        line: 11,
+        messageId: "customMessage"
+      },
+      {
+        data: { _id: "unknown", message: "Custom message" },
+        line: 12,
         messageId: "customMessage"
       }
     ],
@@ -173,39 +185,51 @@ utils.testRule("no-restricted-syntax", rules, [
             typeIsOneOf: ["boolean"]
           },
           {
-            _id: "null",
+            _id: "function",
             message: "Custom message",
             selector: ["Identifier[name=x4]"],
+            typeIsOneOf: ["function"]
+          },
+          {
+            _id: "null",
+            message: "Custom message",
+            selector: ["Identifier[name=x5]"],
             typeIsOneOf: ["null"]
           },
           {
             _id: "number",
             message: "Custom message",
-            selector: ["Identifier[name=x5]"],
+            selector: ["Identifier[name=x6]"],
             typeIsOneOf: ["number"]
+          },
+          {
+            _id: "object",
+            message: "Custom message",
+            selector: ["Identifier[name=x7]"],
+            typeIsOneOf: ["object"]
           },
           {
             _id: "string",
             message: "Custom message",
-            selector: ["Identifier[name=x6]"],
+            selector: ["Identifier[name=x8]"],
             typeIsOneOf: ["string"]
           },
           {
             _id: "symbol",
             message: "Custom message",
-            selector: ["Identifier[name=x7]"],
+            selector: ["Identifier[name=x9]"],
             typeIsOneOf: ["symbol"]
           },
           {
             _id: "undefined",
             message: "Custom message",
-            selector: ["Identifier[name=x8]"],
+            selector: ["Identifier[name=xA]"],
             typeIsOneOf: ["undefined"]
           },
           {
             _id: "unknown",
             message: "Custom message",
-            selector: ["Identifier[name=x9]"],
+            selector: ["Identifier[name=xB]"],
             typeIsOneOf: ["unknown"]
           }
         ]

@@ -47,7 +47,10 @@ export const noRestrictedSyntax = utils.createRule({
             return type.getFlags() === ts.TypeFlags.Any;
 
           case "array":
-            return context.checker.isArrayType(type);
+            return (
+              checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+              isArray()
+            );
 
           case "boolean":
             return checkType(
@@ -66,6 +69,18 @@ export const noRestrictedSyntax = utils.createRule({
               ts.TypeFlags.Number,
               ts.TypeFlags.NumberLike,
               ts.TypeFlags.NumberLiteral
+            );
+
+          case "function":
+            return (
+              checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+              isFunction()
+            );
+
+          case "object":
+            return (
+              checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+              isObject()
             );
 
           case "string":
@@ -92,6 +107,18 @@ export const noRestrictedSyntax = utils.createRule({
         }
 
       return true;
+
+      function isArray(): boolean {
+        return context.checker.isArrayType(type);
+      }
+
+      function isFunction(): boolean {
+        return type.getCallSignatures().length > 0;
+      }
+
+      function isObject(): boolean {
+        return !isArray() && !isFunction();
+      }
     }
 
     function checkTypeIsNoneOf(type: ts.Type, expected?: Types): boolean {
@@ -182,8 +209,10 @@ export const noRestrictedSyntax = utils.createRule({
       any: "any",
       array: "array",
       boolean: "boolean",
+      function: "function",
       null: "null",
       number: "number",
+      object: "object",
       string: "string",
       symbol: "symbol",
       undefined: "undefined",
@@ -235,8 +264,10 @@ type Type =
   | "any"
   | "array"
   | "boolean"
+  | "function"
   | "null"
   | "number"
+  | "object"
   | "string"
   | "symbol"
   | "undefined"
