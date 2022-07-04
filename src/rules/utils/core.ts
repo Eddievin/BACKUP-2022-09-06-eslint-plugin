@@ -272,7 +272,6 @@ export interface Package {
 export type ReadonlyRange = readonly [number, number];
 
 export interface SortOptions {
-  readonly _id: string;
   readonly key?: string;
   readonly sendToBottom?: string;
   readonly sendToTop?: string;
@@ -604,7 +603,6 @@ export function sort(
     ]);
 
     context.report({
-      data: { _id: options._id },
       fix: () => fixes,
       loc,
       messageId: "incorrectSortingOrder"

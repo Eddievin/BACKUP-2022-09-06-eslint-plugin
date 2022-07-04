@@ -21,7 +21,7 @@ utils.testRule("sort-array", rules, [
       }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ _id: "id", selector: "ArrayExpression" }] }],
+    options: [{ selector: "ArrayExpression" }],
     output: `
       const x = [
       {},
@@ -55,15 +55,10 @@ utils.testRule("sort-array", rules, [
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
-        rules: [
-          {
-            _id: "id",
-            key: "key",
-            selector: "ArrayExpression",
-            sendToBottom: /^bottom:/u.source,
-            sendToTop: /^top:/u.source
-          }
-        ]
+        key: "key",
+        selector: "ArrayExpression",
+        sendToBottom: /^bottom:/u.source,
+        sendToTop: /^top:/u.source
       }
     ],
     output: `
@@ -89,6 +84,6 @@ utils.testRule("sort-array", rules, [
       }
     ],
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ rules: [{ _id: "id", selector: "Identifier" }] }]
+    options: [{ selector: "Identifier" }]
   }
 ]);
