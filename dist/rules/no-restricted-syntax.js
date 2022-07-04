@@ -90,50 +90,45 @@ exports.noRestrictedSyntax = utils.createRule({
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
         function getVisitors() {
-            return functions_1.o.fromEntries(context.subOptionsArray.map(subOptions => {
-                const { _id, message, replacement, search, selector: mixed, typeHas, typeHasNoneOf, typeHasNot, typeHasOneOf, typeIs, typeIsNoneOf, typeIsNot, typeIsOneOf } = subOptions;
-                const selector = functions_1.a.fromMixed(mixed).join(", ");
-                return [
-                    selector,
-                    (node) => {
-                        const tsNode = context.toTsNode(node);
-                        const type = context.checker.getTypeAtLocation(tsNode);
-                        if (checkTypeIs(type, typeIs) &&
-                            checkTypeHasNot(type, typeHasNot) &&
-                            checkTypeIsNot(type, typeIsNot) &&
-                            checkTypeHas(type, typeHas) &&
-                            checkTypeHasNoneOf(type, typeHasNoneOf) &&
-                            checkTypeHasOneOf(type, typeHasOneOf) &&
-                            checkTypeIsNoneOf(type, typeIsNoneOf) &&
-                            checkTypeIsOneOf(type, typeIsOneOf))
-                            context.report({
-                                data: {
-                                    _id,
-                                    message: message !== null && message !== void 0 ? message : `This syntax is not allowed: ${selector}`
-                                },
-                                fix: () => functions_1.is.not.empty(replacement)
-                                    ? [
-                                        {
-                                            range: node.range,
-                                            text: functions_1.is.not.empty(search)
-                                                ? context.getText(node).replace(
-                                                // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-                                                new RegExp(search, "u"), replacement)
-                                                : replacement
-                                        }
-                                    ]
-                                    : [],
-                                loc: context.getLocFromRange(node.range),
-                                messageId: "customMessage"
-                            });
-                    }
-                ];
-            }));
+            const { message, replacement, search, selector: mixed, typeHas, typeHasNoneOf, typeHasNot, typeHasOneOf, typeIs, typeIsNoneOf, typeIsNot, typeIsOneOf } = context.options;
+            const selector = functions_1.a.fromMixed(mixed).join(", ");
+            return {
+                [selector]: (node) => {
+                    const tsNode = context.toTsNode(node);
+                    const type = context.checker.getTypeAtLocation(tsNode);
+                    if (checkTypeIs(type, typeIs) &&
+                        checkTypeHasNot(type, typeHasNot) &&
+                        checkTypeIsNot(type, typeIsNot) &&
+                        checkTypeHas(type, typeHas) &&
+                        checkTypeHasNoneOf(type, typeHasNoneOf) &&
+                        checkTypeHasOneOf(type, typeHasOneOf) &&
+                        checkTypeIsNoneOf(type, typeIsNoneOf) &&
+                        checkTypeIsOneOf(type, typeIsOneOf))
+                        context.report({
+                            data: {
+                                message: message !== null && message !== void 0 ? message : `This syntax is not allowed: ${selector}`
+                            },
+                            fix: () => functions_1.is.not.empty(replacement)
+                                ? [
+                                    {
+                                        range: node.range,
+                                        text: functions_1.is.not.empty(search)
+                                            ? context.getText(node).replace(
+                                            // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                                            new RegExp(search, "u"), replacement)
+                                            : replacement
+                                    }
+                                ]
+                                : [],
+                            loc: context.getLocFromRange(node.range),
+                            messageId: "customMessage"
+                        });
+                }
+            };
         }
     },
     fixable: "code",
-    isRuleOptions: functions_1.is.object,
-    isSubOptions: (0, functions_1.evaluate)(() => {
+    isRuleOptions: (0, functions_1.evaluate)(() => {
         const TypeVO = (0, functions_1.createValidationObject)({
             any: "any",
             array: "array",
@@ -149,7 +144,7 @@ exports.noRestrictedSyntax = utils.createRule({
         });
         const isType = functions_1.is.factory(functions_1.is.enumeration, TypeVO);
         const isTypes = functions_1.is.factory(functions_1.is.array.of, isType);
-        return functions_1.is.object.factory({ _id: functions_1.is.string, selector: functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings) }, {
+        return functions_1.is.object.factory({ selector: functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings) }, {
             message: functions_1.is.string,
             replacement: functions_1.is.string,
             search: functions_1.is.string,
@@ -163,7 +158,7 @@ exports.noRestrictedSyntax = utils.createRule({
             typeIsOneOf: isTypes
         });
     }),
-    messages: { customMessage: "{{ message }} ({{ _id }})" },
+    messages: { customMessage: "{{ message }}" },
     name: "no-restricted-syntax"
 });
 //# sourceMappingURL=no-restricted-syntax.js.map

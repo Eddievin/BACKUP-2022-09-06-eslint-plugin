@@ -198,7 +198,6 @@ function isAdjacentNodes(node1, node2, childNodesMap) {
     const id2 = getNodeId(node2.parent);
     if (id1 === id2) {
         const siblings = childNodesMap.get(id1);
-        functions_1.assert.not.empty(siblings, "Expecting siblings");
         const index1 = siblings.indexOf(node1);
         const index2 = siblings.indexOf(node2);
         return index1 !== -1 && index2 !== -1 && index2 - index1 === 1;
@@ -239,14 +238,12 @@ function sort(nodes, options, context) {
     const sendToTop = new RegExp((_b = options.sendToTop) !== null && _b !== void 0 ? _b : ".", "u");
     const items = nodes.map((node, index) => {
         var _a;
-        // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
         switch (node.type) {
             case utils_1.AST_NODE_TYPES.ObjectExpression: {
                 return {
                     index,
                     key: wrapKey((_a = node.properties
                         .map(property => {
-                        // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
                         switch (property.type) {
                             case utils_1.AST_NODE_TYPES.Property:
                                 return nodeToString(property.key, context) === options.key
@@ -291,7 +288,6 @@ function sort(nodes, options, context) {
             functions_1.a.get(items, functions_1.as.not.empty(max)).node.range[1]
         ]);
         context.report({
-            data: { _id: options._id },
             fix: () => fixes,
             loc,
             messageId: "incorrectSortingOrder"
@@ -385,8 +381,8 @@ function createBetterContext(context, ruleOptionsArray, options) {
         scriptVisitor
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
         ) => {
-            functions_1.assert.indexedObject(context.parserServices, "Missing Vue parser");
-            const defineTemplateBodyVisitor = context.parserServices["defineTemplateBodyVisitor"];
+            functions_1.assert.not.empty(context.parserServices, "Missing Vue parser");
+            const defineTemplateBodyVisitor = functions_1.o.get(context.parserServices, "defineTemplateBodyVisitor");
             functions_1.assert.callable(defineTemplateBodyVisitor, "Missing Vue parser");
             return defineTemplateBodyVisitor(templateVisitor, scriptVisitor);
         },

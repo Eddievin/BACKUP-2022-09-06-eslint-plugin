@@ -7,21 +7,18 @@ const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.disallowImport = utils.createRule({
     create: context => {
-        const matchers = context.subOptionsArray.map(subOptions => utils.createFileMatcher.disallowAllow(subOptions.disallow, subOptions.allow, true, { dot: true }));
+        const matcher = utils.createFileMatcher.disallowAllow(context.options.disallow, context.options.allow, true, { dot: true });
         return {
             [utils_1.AST_NODE_TYPES.ImportDeclaration]: (node) => {
                 const source = functions_1.as.string(node.source.value);
-                if (matchers.some(matcher => matcher(source)))
+                if (matcher(source))
                     context.report({ messageId: "disallowedSource", node });
             }
         };
     },
-    defaultSubOptions: { allow: [], disallow: [] },
-    isRuleOptions: functions_1.is.object,
-    isSubOptions: functions_1.is.object.factory({ allow: functions_1.is.strings, disallow: functions_1.is.strings }, { _id: functions_1.is.string }),
-    messages: {
-        disallowedSource: "Import from this source is not allowed ({{ _id }})"
-    },
+    defaultOptions: { allow: [], disallow: [] },
+    isRuleOptions: functions_1.is.object.factory({ allow: functions_1.is.strings, disallow: functions_1.is.strings }, {}),
+    messages: { disallowedSource: "Import from this source is not allowed" },
     name: "disallow-import"
 });
 //# sourceMappingURL=disallow-import.js.map

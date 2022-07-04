@@ -185,7 +185,6 @@ function nodeInfo(node, parentNode, index, order) {
     var _a;
     switch (node.type) {
         case utils_1.AST_NODE_TYPES.ExportAllDeclaration:
-            functions_1.assert.not.empty(node.source, "Expecting source");
             return buildResult("ExportAllDeclaration", `${node.source.value} ${node.exportKind}`);
         case utils_1.AST_NODE_TYPES.ExportDefaultDeclaration:
             return buildResult("ExportDefaultDeclaration");

@@ -171,7 +171,6 @@ export interface Package {
 }
 export declare type ReadonlyRange = readonly [number, number];
 export interface SortOptions {
-    readonly _id: string;
     readonly key?: string;
     readonly sendToBottom?: string;
     readonly sendToTop?: string;

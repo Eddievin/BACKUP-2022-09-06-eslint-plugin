@@ -1,7 +1,6 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rules = exports.configs = exports.utils = void 0;
+exports.rules = exports.utils = void 0;
 const tslib_1 = require("tslib");
 const array_callback_return_type_1 = require("./array-callback-return-type");
 const class_member_typedef_1 = require("./class-member-typedef");
@@ -41,10 +40,11 @@ const sort_keys_1 = require("./sort-keys");
 const statements_order_1 = require("./statements-order");
 const switch_case_empty_lines_1 = require("./switch-case-empty-lines");
 const template_literal_format_1 = require("./template-literal-format");
+const utils_1 = require("./utils");
 const vue_component_name_1 = require("./vue-component-name");
 const functions_1 = require("@skylib/functions");
 exports.utils = tslib_1.__importStar(require("./utils"));
-_a = (0, functions_1.evaluate)(() => {
+exports.rules = (0, functions_1.evaluate)(() => {
     const core = {
         "array-callback-return-type": array_callback_return_type_1.arrayCallbackReturnType,
         "class-member-typedef": class_member_typedef_1.classMemberTypedef,
@@ -86,22 +86,6 @@ _a = (0, functions_1.evaluate)(() => {
         "template-literal-format": template_literal_format_1.templateLiteralFormat,
         "vue-component-name": vue_component_name_1.vueComponentName
     };
-    const copies = {};
-    for (const [name, rule] of functions_1.o.entries(core)) {
-        copies[`facades/${name}`] = rule;
-        copies[`framework/${name}`] = rule;
-        copies[`functions/${name}`] = rule;
-        copies[`project/${name}`] = rule;
-        copies[`quasar-extension/${name}`] = rule;
-    }
-    return {
-        configs: {
-            all: {
-                plugins: ["@skylib/eslint-plugin"],
-                rules: functions_1.o.fromEntries(functions_1.o.keys(core).map(name => [`@skylib/${name}`, "warn"]))
-            }
-        },
-        rules: Object.assign(Object.assign({}, core), copies)
-    };
-}), exports.configs = _a.configs, exports.rules = _a.rules;
+    return Object.assign(Object.assign({}, core), (0, utils_1.getSynonyms)("./.eslintrc.synonyms.js", core));
+});
 //# sourceMappingURL=index.js.map
