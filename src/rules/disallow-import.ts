@@ -5,37 +5,32 @@ import type { strings } from "@skylib/functions";
 
 export const disallowImport = utils.createRule({
   create: context => {
-    const matchers = context.subOptionsArray.map(subOptions =>
-      utils.createFileMatcher.disallowAllow(
-        subOptions.disallow,
-        subOptions.allow,
-        true,
-        { dot: true }
-      )
+    const matcher = utils.createFileMatcher.disallowAllow(
+      context.options.disallow,
+      context.options.allow,
+      true,
+      { dot: true }
     );
 
     return {
       [AST_NODE_TYPES.ImportDeclaration]: (node): void => {
         const source = as.string(node.source.value);
 
-        if (matchers.some(matcher => matcher(source)))
+        if (matcher(source))
           context.report({ messageId: "disallowedSource", node });
       }
     };
   },
-  defaultSubOptions: { allow: [], disallow: [] },
-  isRuleOptions: is.object,
-  isSubOptions: is.object.factory<SubOptions>(
+  defaultOptions: { allow: [], disallow: [] },
+  isRuleOptions: is.object.factory<RuleOptions>(
     { allow: is.strings, disallow: is.strings },
-    { _id: is.string }
+    {}
   ),
-  messages: {
-    disallowedSource: "Import from this source is not allowed ({{ _id }})"
-  },
+  messages: { disallowedSource: "Import from this source is not allowed" },
   name: "disallow-import"
 });
 
-interface SubOptions {
+interface RuleOptions {
   readonly allow: strings;
   readonly disallow: strings;
 }
