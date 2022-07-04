@@ -535,11 +535,15 @@ export function sort(
   options: SortOptions,
   context: Context<"incorrectSortingOrder", object, object>
 ): void {
-  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-  const sendToBottom = new RegExp(options.sendToBottom ?? ".", "u");
+  const sendToBottom = is.not.empty(options.sendToBottom)
+    ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+      new RegExp(options.sendToBottom, "u")
+    : undefined;
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-  const sendToTop = new RegExp(options.sendToTop ?? ".", "u");
+  const sendToTop = is.not.empty(options.sendToTop)
+    ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+      new RegExp(options.sendToTop, "u")
+    : undefined;
 
   const items = nodes.map<Item>((node, index) => {
     switch (node.type) {
@@ -616,9 +620,9 @@ export function sort(
   }
 
   function wrapKey(key: string): string {
-    if (sendToTop.test(key)) return `1:${key}`;
+    if (sendToTop && sendToTop.test(key)) return `1:${key}`;
 
-    if (sendToBottom.test(key)) return `3:${key}`;
+    if (sendToBottom && sendToBottom.test(key)) return `3:${key}`;
 
     return `2:${key}`;
   }
