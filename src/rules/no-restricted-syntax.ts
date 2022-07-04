@@ -13,6 +13,13 @@ export const noRestrictedSyntax = utils.createRule({
     return context.defineTemplateBodyVisitor(listener, listener);
 
     function checkType(type: ts.Type, ...flags: ts.TypeFlags[]): boolean {
+      if (type.isTypeParameter()) {
+        const constraint = type.getConstraint();
+
+        if (is.not.empty(constraint)) type = constraint;
+        else return flags.includes(ts.TypeFlags.Unknown);
+      }
+
       return (
         flags.includes(type.getFlags()) ||
         (type.isUnion() &&
@@ -44,7 +51,7 @@ export const noRestrictedSyntax = utils.createRule({
       if (expected)
         switch (expected) {
           case "any":
-            return type.getFlags() === ts.TypeFlags.Any;
+            return checkType(type, ts.TypeFlags.Any);
 
           case "array":
             return (
@@ -61,7 +68,7 @@ export const noRestrictedSyntax = utils.createRule({
             );
 
           case "null":
-            return type.getFlags() === ts.TypeFlags.Null;
+            return checkType(type, ts.TypeFlags.Null);
 
           case "number":
             return checkType(
@@ -100,10 +107,10 @@ export const noRestrictedSyntax = utils.createRule({
             );
 
           case "undefined":
-            return type.getFlags() === ts.TypeFlags.Undefined;
+            return checkType(type, ts.TypeFlags.Undefined);
 
           case "unknown":
-            return type.getFlags() === ts.TypeFlags.Unknown;
+            return checkType(type, ts.TypeFlags.Unknown);
         }
 
       return true;

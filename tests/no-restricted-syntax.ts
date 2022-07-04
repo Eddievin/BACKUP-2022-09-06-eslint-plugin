@@ -317,5 +317,57 @@ utils.testRule("no-restricted-syntax", rules, [
         ]
       }
     ]
+  },
+  {
+    code: `
+      function f<T extends object>(x: T) {}
+      function f<T extends string>(x: T) {}
+    `,
+    errors: [
+      {
+        data: { _id: "id", message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        rules: [
+          {
+            _id: "id",
+            message: "Custom message",
+            selector: ["Identifier[name=x]"],
+            typeIs: "object"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    code: `
+      function f<T>(x: T) {}
+      function f<T extends string>(x: T) {}
+    `,
+    errors: [
+      {
+        data: { _id: "id", message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        rules: [
+          {
+            _id: "id",
+            message: "Custom message",
+            selector: ["Identifier[name=x]"],
+            typeIs: "unknown"
+          }
+        ]
+      }
+    ]
   }
 ]);
