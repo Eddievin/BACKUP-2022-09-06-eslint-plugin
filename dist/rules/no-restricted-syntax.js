@@ -12,6 +12,13 @@ exports.noRestrictedSyntax = utils.createRule({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
         return context.defineTemplateBodyVisitor(listener, listener);
         function checkType(type, ...flags) {
+            if (type.isTypeParameter()) {
+                const constraint = type.getConstraint();
+                if (functions_1.is.not.empty(constraint))
+                    type = constraint;
+                else
+                    return flags.includes(ts.TypeFlags.Unknown);
+            }
             return (flags.includes(type.getFlags()) ||
                 (type.isUnion() &&
                     type.types.every(subtype => flags.includes(subtype.getFlags()))));
@@ -36,14 +43,14 @@ exports.noRestrictedSyntax = utils.createRule({
             if (expected)
                 switch (expected) {
                     case "any":
-                        return type.getFlags() === ts.TypeFlags.Any;
+                        return checkType(type, ts.TypeFlags.Any);
                     case "array":
                         return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
                             isArray());
                     case "boolean":
                         return checkType(type, ts.TypeFlags.Boolean, ts.TypeFlags.BooleanLike, ts.TypeFlags.BooleanLiteral);
                     case "null":
-                        return type.getFlags() === ts.TypeFlags.Null;
+                        return checkType(type, ts.TypeFlags.Null);
                     case "number":
                         return checkType(type, ts.TypeFlags.Number, ts.TypeFlags.NumberLike, ts.TypeFlags.NumberLiteral);
                     case "function":
@@ -57,9 +64,9 @@ exports.noRestrictedSyntax = utils.createRule({
                     case "symbol":
                         return checkType(type, ts.TypeFlags.ESSymbol, ts.TypeFlags.ESSymbolLike, ts.TypeFlags.UniqueESSymbol);
                     case "undefined":
-                        return type.getFlags() === ts.TypeFlags.Undefined;
+                        return checkType(type, ts.TypeFlags.Undefined);
                     case "unknown":
-                        return type.getFlags() === ts.TypeFlags.Unknown;
+                        return checkType(type, ts.TypeFlags.Unknown);
                 }
             return true;
             function isArray() {
