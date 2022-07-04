@@ -38,13 +38,20 @@ exports.noRestrictedSyntax = utils.createRule({
                     case "any":
                         return type.getFlags() === ts.TypeFlags.Any;
                     case "array":
-                        return context.checker.isArrayType(type);
+                        return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+                            isArray());
                     case "boolean":
                         return checkType(type, ts.TypeFlags.Boolean, ts.TypeFlags.BooleanLike, ts.TypeFlags.BooleanLiteral);
                     case "null":
                         return type.getFlags() === ts.TypeFlags.Null;
                     case "number":
                         return checkType(type, ts.TypeFlags.Number, ts.TypeFlags.NumberLike, ts.TypeFlags.NumberLiteral);
+                    case "function":
+                        return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+                            isFunction());
+                    case "object":
+                        return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+                            isObject());
                     case "string":
                         return checkType(type, ts.TypeFlags.String, ts.TypeFlags.StringLike, ts.TypeFlags.StringLiteral);
                     case "symbol":
@@ -55,6 +62,15 @@ exports.noRestrictedSyntax = utils.createRule({
                         return type.getFlags() === ts.TypeFlags.Unknown;
                 }
             return true;
+            function isArray() {
+                return context.checker.isArrayType(type);
+            }
+            function isFunction() {
+                return type.getCallSignatures().length > 0;
+            }
+            function isObject() {
+                return !isArray() && !isFunction();
+            }
         }
         function checkTypeIsNoneOf(type, expected) {
             return expected ? expected.every(x => checkTypeIsNot(type, x)) : true;
@@ -115,8 +131,10 @@ exports.noRestrictedSyntax = utils.createRule({
             any: "any",
             array: "array",
             boolean: "boolean",
+            function: "function",
             null: "null",
             number: "number",
+            object: "object",
             string: "string",
             symbol: "symbol",
             undefined: "undefined",
