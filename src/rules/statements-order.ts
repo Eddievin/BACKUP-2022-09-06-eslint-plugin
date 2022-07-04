@@ -295,8 +295,6 @@ function nodeInfo(
 ): Item {
   switch (node.type) {
     case AST_NODE_TYPES.ExportAllDeclaration:
-      assert.not.empty(node.source, "Expecting source");
-
       return buildResult(
         "ExportAllDeclaration",
         `${node.source.value} ${node.exportKind}`

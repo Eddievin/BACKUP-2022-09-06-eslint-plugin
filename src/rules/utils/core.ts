@@ -491,8 +491,6 @@ export function isAdjacentNodes(
   if (id1 === id2) {
     const siblings = childNodesMap.get(id1);
 
-    assert.not.empty(siblings, "Expecting siblings");
-
     const index1 = siblings.indexOf(node1);
 
     const index2 = siblings.indexOf(node2);
@@ -545,7 +543,6 @@ export function sort(
   const sendToTop = new RegExp(options.sendToTop ?? ".", "u");
 
   const items = nodes.map<Item>((node, index) => {
-    // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
     switch (node.type) {
       case AST_NODE_TYPES.ObjectExpression: {
         return {
@@ -553,7 +550,6 @@ export function sort(
           key: wrapKey(
             node.properties
               .map(property => {
-                // eslint-disable-next-line sonarjs/no-small-switch -- Wait for @skylib/config update
                 switch (property.type) {
                   case AST_NODE_TYPES.Property:
                     return nodeToString(property.key, context) === options.key
@@ -769,10 +765,12 @@ function createBetterContext<
       scriptVisitor?: any
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
     ): any => {
-      assert.indexedObject(context.parserServices, "Missing Vue parser");
+      assert.not.empty(context.parserServices, "Missing Vue parser");
 
-      const defineTemplateBodyVisitor =
-        context.parserServices["defineTemplateBodyVisitor"];
+      const defineTemplateBodyVisitor = o.get(
+        context.parserServices,
+        "defineTemplateBodyVisitor"
+      );
 
       assert.callable<DefineTemplateBodyVisitor>(
         defineTemplateBodyVisitor,
