@@ -53,6 +53,12 @@ export const noRestrictedSyntax = utils.createRule({
     function checkTypeIs(type: ts.Type, expected?: Type): boolean {
       if (expected)
         switch (expected) {
+          case "anonymous-function":
+            return type.getSymbol()?.name === "__function";
+
+          case "anonymous-object":
+            return type.getSymbol()?.name === "__object";
+
           case "any":
             return checkType(type, ts.TypeFlags.Any);
 
@@ -207,17 +213,19 @@ export const noRestrictedSyntax = utils.createRule({
   fixable: "code",
   isRuleOptions: evaluate(() => {
     const TypeVO = createValidationObject<Type>({
-      any: "any",
-      array: "array",
-      boolean: "boolean",
-      function: "function",
-      null: "null",
-      number: "number",
-      object: "object",
-      string: "string",
-      symbol: "symbol",
-      undefined: "undefined",
-      unknown: "unknown"
+      "anonymous-function": "anonymous-function",
+      "anonymous-object": "anonymous-object",
+      "any": "any",
+      "array": "array",
+      "boolean": "boolean",
+      "function": "function",
+      "null": "null",
+      "number": "number",
+      "object": "object",
+      "string": "string",
+      "symbol": "symbol",
+      "undefined": "undefined",
+      "unknown": "unknown"
     });
 
     const isType = is.factory(is.enumeration, TypeVO);
@@ -261,6 +269,8 @@ export const noRestrictedSyntax = utils.createRule({
 });
 
 type Type =
+  | "anonymous-function"
+  | "anonymous-object"
   | "any"
   | "array"
   | "boolean"

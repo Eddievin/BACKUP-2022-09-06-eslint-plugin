@@ -338,5 +338,57 @@ utils.testRule("no-restricted-syntax", rules, [
         typeIs: "unknown"
       }
     ]
+  },
+  {
+    code: `
+      const x1 = () => {};
+      const x2: F = () => {};
+      const x3 = 1;
+      const x4 = "";
+      const x5 = false;
+      const x6 = [1, 2, 3];
+      type F = () => void;
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=/^x\\d$/u]"],
+        typeIs: "anonymous-function"
+      }
+    ]
+  },
+  {
+    code: `
+      const x1 = { a: 1, b: 2, c: 3 };
+      const x2: I = { a: 1, b: 2, c: 3 };
+      const x3 = 1;
+      const x4 = "";
+      const x5 = false;
+      const x6 = [1, 2, 3];
+      interface I { a: 1, b: 2, c: 3 };
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=/^x\\d$/u]"],
+        typeIs: "anonymous-object"
+      }
+    ]
   }
 ]);
