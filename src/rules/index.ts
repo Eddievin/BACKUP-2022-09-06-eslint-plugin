@@ -14,18 +14,14 @@ import { functionPropertiesStyle } from "./function-properties-style";
 import { noExpressionEmptyLine } from "./no-expression-empty-line";
 import { noInferrableTypes } from "./no-inferrable-types";
 import { noMultiTypeTuples } from "./no-multi-type-tuples";
-import { noMutableSignature } from "./no-mutable-signature";
 import { noNegatedCondition } from "./no-negated-condition";
 import { noRestrictedSyntax } from "./no-restricted-syntax";
-import { noUnnecessaryReadonly } from "./no-unnecessary-readonly";
-import { noUnnecessaryWritable } from "./no-unnecessary-writable";
 import { noUnsafeObjectAssignment } from "./no-unsafe-object-assignment";
 import { noUnusedImport } from "./no-unused-import";
 import { objectFormat } from "./object-format";
 import { onlyExportName } from "./only-export-name";
 import { optionalPropertyStyle } from "./optional-property-style";
 import { preferAliasForArrayTypes } from "./prefer-alias-for-array-types";
-import { preferReadonly } from "./prefer-readonly";
 import { preferTsToolbelt } from "./prefer-ts-toolbelt";
 import { primaryExportOnly } from "./primary-export-only";
 import { requireJsdoc } from "./require-jsdoc";
@@ -61,18 +57,14 @@ export const rules = evaluate(() => {
     "no-expression-empty-line": noExpressionEmptyLine,
     "no-inferrable-types": noInferrableTypes,
     "no-multi-type-tuples": noMultiTypeTuples,
-    "no-mutable-signature": noMutableSignature,
     "no-negated-condition": noNegatedCondition,
     "no-restricted-syntax": noRestrictedSyntax,
-    "no-unnecessary-readonly": noUnnecessaryReadonly,
-    "no-unnecessary-writable": noUnnecessaryWritable,
     "no-unsafe-object-assignment": noUnsafeObjectAssignment,
     "no-unused-import": noUnusedImport,
     "object-format": objectFormat,
     "only-export-name": onlyExportName,
     "optional-property-style": optionalPropertyStyle,
     "prefer-alias-for-array-types": preferAliasForArrayTypes,
-    "prefer-readonly": preferReadonly,
     "prefer-ts-toolbelt": preferTsToolbelt,
     "primary-export-only": primaryExportOnly,
     "require-jsdoc": requireJsdoc,
