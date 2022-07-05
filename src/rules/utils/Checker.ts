@@ -3,6 +3,7 @@ import { as, cast, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
+import type { Context } from "./types";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
@@ -346,7 +347,7 @@ export namespace Checker {
     O extends object,
     S extends object
   > {
-    readonly context: utils.Context<M, O, S>;
+    readonly context: Context<M, O, S>;
     readonly ignoreClasses: boolean;
     readonly ignoreInterfaces: boolean;
     readonly ignoreTypeParameters: boolean;

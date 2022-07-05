@@ -2,7 +2,7 @@ import { as, createValidationObject, is, o } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
-import type * as utils from "./core";
+import type { Context } from "./types";
 import type { NumStrU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
@@ -16,7 +16,7 @@ import type { TSESTree } from "@typescript-eslint/utils";
 export const getTypeParts = o.extend(
   <M extends string, O extends object, S extends object>(
     node: TSESTree.Node,
-    context: utils.Context<M, O, S>
+    context: Context<M, O, S>
   ): readonly TypePart[] => {
     return recurs(context.checker.getTypeAtLocation(context.toTsNode(node)));
 
@@ -41,7 +41,7 @@ export const getTypeParts = o.extend(
      */
     typeofFix: <M extends string, O extends object, S extends object>(
       node: TSESTree.Node,
-      context: utils.Context<M, O, S>
+      context: Context<M, O, S>
     ) => {
       return node.type === AST_NODE_TYPES.UnaryExpression &&
         node.operator === "typeof"
