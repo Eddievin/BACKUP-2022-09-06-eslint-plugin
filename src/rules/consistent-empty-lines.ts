@@ -7,7 +7,7 @@ import {
   is,
   s
 } from "@skylib/functions";
-import type { stringU } from "@skylib/functions";
+import type { Writable, stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
@@ -19,9 +19,9 @@ export const consistentEmptyLines = utils.createRule({
 
     const nextRuleIndexes = new Accumulator<string, number>();
 
-    const prevItems: Item[] = [];
+    const prevItems: Writable<Items> = [];
 
-    const nextItems: Item[] = [];
+    const nextItems: Writable<Items> = [];
 
     const listener: RuleListener = {
       "*": (node: TSESTree.Node) => {
@@ -153,6 +153,8 @@ interface Item {
   readonly node: TSESTree.Node;
   readonly ruleIndex: number;
 }
+
+type Items = readonly Item[];
 
 interface SubOptions {
   readonly _id: string;

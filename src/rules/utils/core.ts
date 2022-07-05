@@ -1,3 +1,7 @@
+/* eslint-disable @skylib/no-restricted-syntax/prefer-arrow-function-property -- Ok */
+
+/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
+
 import {
   a,
   as,

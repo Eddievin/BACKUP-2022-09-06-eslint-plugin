@@ -16,10 +16,9 @@ export function getSynonyms(
   core: IndexedObject
 ): void {
   if (fs.existsSync(path)) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, unicorn/prefer-module -- Wait for @skylib/config update
-    const synonyms = as.array.of(require(fs.realpathSync(path)), is.string);
+    const synonyms: unknown = require(fs.realpathSync(path));
 
-    for (const synonym of synonyms) {
+    for (const synonym of as.array.of(synonyms, is.string)) {
       assert.empty(dest[synonym], `Duplicate synonym: ${synonym}`);
       dest[synonym] = o.get(core, a.first(synonym.split("/")));
     }

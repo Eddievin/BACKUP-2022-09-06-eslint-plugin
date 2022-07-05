@@ -1,5 +1,6 @@
 import * as utils from "./utils";
 import { Accumulator, Accumulator2, a, is, num, s } from "@skylib/functions";
+import type { Writable } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
@@ -18,7 +19,7 @@ export const consistentGroupEmptyLines = utils.createRule({
           const nodesMap = nodesMap2.get(subOptions.selector);
 
           for (const nodes of nodesMap.values()) {
-            const group: TSESTree.Node[] = [];
+            const group: Writable<readonly TSESTree.Node[]> = [];
 
             for (const node of nodes)
               if (group.length > 0)

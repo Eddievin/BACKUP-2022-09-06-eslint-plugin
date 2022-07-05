@@ -10,6 +10,7 @@ export const sortKeys = utils.createRule({
   create: context => {
     return {
       [AST_NODE_TYPES.ObjectExpression]: (node): void => {
+        // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
         const group: Item[] = [];
 
         for (const property of node.properties)
@@ -85,6 +86,7 @@ function lintNodes(group: readonly Item[], context: Context): void {
   if (group.length > 1) {
     const sortedGroup = _.sortBy(group, item => item.key);
 
+    // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
     const fixes: RuleFix[] = [];
 
     let min: numberU;

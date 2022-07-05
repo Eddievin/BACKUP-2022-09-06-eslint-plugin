@@ -2,7 +2,7 @@ import * as utils from "./utils";
 import { a, is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { strings } from "@skylib/functions";
+import type { Writable, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 
@@ -61,7 +61,7 @@ export const sortClassMembers = utils.createRule({
 
         const sortedMembers = _.sortBy(members, member => member.sortingOrder);
 
-        const fixes: RuleFix[] = [];
+        const fixes: Writable<readonly RuleFix[]> = [];
 
         for (const [index, sortedMember] of sortedMembers.entries())
           if (sortedMember.index === index) {

@@ -7,6 +7,7 @@ export const noUnusedImport = utils.createRule({
   create: context => {
     const identifiers = new Set<string>();
 
+    // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array
     const importDeclarations: TSESTree.ImportDeclaration[] = [];
 
     return {

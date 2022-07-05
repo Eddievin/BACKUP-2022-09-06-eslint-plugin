@@ -12,7 +12,10 @@ export const noRestrictedSyntax = utils.createRule({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
     return context.defineTemplateBodyVisitor(listener, listener);
 
-    function checkType(type: ts.Type, ...flags: ts.TypeFlags[]): boolean {
+    function checkType(
+      type: ts.Type,
+      ...flags: readonly ts.TypeFlags[]
+    ): boolean {
       if (type.isTypeParameter()) {
         const constraint = type.getConstraint();
 

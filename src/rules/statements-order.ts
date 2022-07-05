@@ -81,6 +81,7 @@ export const statementsOrder = utils.createRule({
         for (const items of itemsMap.values()) {
           const sortedItems = _.sortBy(items, node => node.sortingOrder);
 
+          // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
           const fixes: RuleFix[] = [];
 
           for (const [index, sortedItem] of sortedItems.entries())
@@ -163,7 +164,7 @@ const defaultOrder: Rec<NodeType, number> = {
   ModuleDeclaration: 1013,
   TypeDeclaration: 1011,
   Unknown: 1010
-};
+} as const;
 
 const sortable: Rec<NodeType, boolean> = {
   ExportAllDeclaration: true,
@@ -180,7 +181,7 @@ const sortable: Rec<NodeType, boolean> = {
   ModuleDeclaration: false,
   TypeDeclaration: true,
   Unknown: false
-};
+} as const;
 
 interface Item {
   readonly id: string;

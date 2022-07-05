@@ -1,3 +1,5 @@
+/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed */
+
 import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";

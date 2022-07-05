@@ -1,3 +1,4 @@
+// eslint-disable-next-line @skylib/no-restricted-syntax/eslintrc-no-temp  -- Postponed
 module.exports = {
   rules: {
     "@skylib/consistent-filename": "off",

@@ -45,19 +45,19 @@ export class Checker<M extends string, O extends object, S extends object> {
     return this.recurs(type, restElement);
   }
 
-  protected checker: ts.TypeChecker;
+  protected readonly checker: ts.TypeChecker;
 
-  protected ignoreClasses: boolean;
+  protected readonly ignoreClasses: boolean;
 
-  protected ignoreInterfaces: boolean;
+  protected readonly ignoreInterfaces: boolean;
 
-  protected ignoreTypeParameters: boolean;
+  protected readonly ignoreTypeParameters: boolean;
 
-  protected ignoreTypes: utils.Matcher;
+  protected readonly ignoreTypes: utils.Matcher;
 
-  protected readonliness: Checker.Readonliness;
+  protected readonly readonliness: Checker.Readonliness;
 
-  protected seenTypesPool = new Set<ts.Type>();
+  protected readonly seenTypesPool = new Set<ts.Type>();
 
   /**
    * Checks mapped type nodes.
