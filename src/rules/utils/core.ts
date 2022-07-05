@@ -3,8 +3,6 @@
 /* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
 
 import {
-  a,
-  as,
   assert,
   cast,
   evaluate,
@@ -16,33 +14,24 @@ import {
   typedef
 } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  TSESLint
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
 import fs from "node:fs";
 import nodePath from "node:path";
 import * as tsutils from "tsutils";
+import type { Context, DefineTemplateBodyVisitor, Package } from "./types";
 import type {
   Accumulator,
   Rec,
-  numberU,
   objects,
   strings,
   unknowns
 } from "@skylib/functions";
-import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import type {
-  InvalidTestCase as BaseInvalidTestCase,
-  ValidTestCase as BaseValidTestCase,
-  ReportDescriptor,
   RuleContext,
-  RuleFix,
   RuleListener,
-  RuleModule,
-  SourceCode
+  RuleModule
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
 import type * as ts from "typescript";
@@ -114,109 +103,6 @@ export const createFileMatcher = o.extend(
   }
 );
 
-export interface Context<M extends string, O extends object, S extends object> {
-  readonly checker: ts.TypeChecker;
-  readonly code: string;
-  readonly defineTemplateBodyVisitor: DefineTemplateBodyVisitor;
-  readonly eol: s.Eol;
-  /**
-   * Gets leading trivia.
-   *
-   * @param node - Node.
-   * @returns Leading trivia.
-   */
-  readonly getLeadingTrivia: (node: TSESTree.Node) => string;
-  /**
-   * Gets location from range.
-   *
-   * @param range - Range.
-   * @returns Location.
-   */
-  readonly getLocFromRange: (range: ReadonlyRange) => estree.SourceLocation;
-  /**
-   * Gets member name.
-   *
-   * @param node - Node.
-   * @param context - Context.
-   * @returns Member name.
-   */
-  readonly getMemberName: (
-    node: TSESTree.ClassElement | TSESTree.TypeElement
-  ) => string;
-  /**
-   * Gets range with leading trivia.
-   *
-   * @param node - Node.
-   * @returns Range.
-   */
-  readonly getRangeWithLeadingTrivia: (node: TSESTree.Node) => TSESTree.Range;
-  /**
-   * Gets text.
-   *
-   * @param node - Node.
-   * @returns Text.
-   */
-  readonly getText: (node: TSESTree.Comment | TSESTree.Node) => string;
-  /**
-   * Gets text with leading trivia.
-   *
-   * @param node - Node.
-   * @returns Text.
-   */
-  readonly getTextWithLeadingTrivia: (node: TSESTree.Node) => string;
-  /**
-   * Gets type definitions as a string.
-   *
-   * @param types - Types.
-   * @returns Type definitions as a string.
-   */
-  readonly getTypeDefinitions: (types: readonly ts.Type[]) => string;
-  /**
-   * Checks if node has leading comment.
-   *
-   * @param node - Node.
-   * @returns _True_ if node has leading comment, _false_ otherwise.
-   */
-  readonly hasLeadingComment: (node: TSESTree.Node) => boolean;
-  /**
-   * Checks if node has leading doc comment.
-   *
-   * @param node - Node.
-   * @returns _True_ if node has leading doc comment, _false_ otherwise.
-   */
-  readonly hasLeadingDocComment: (node: TSESTree.Node) => boolean;
-  /**
-   * Checks if node has trailing comment.
-   *
-   * @param node - Node.
-   * @returns _True_ if node has trailing comment, _false_ otherwise.
-   */
-  readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
-  readonly id: string;
-  readonly locZero: TSESTree.Position;
-  /**
-   * Checks if signature or symbol is missing doc comment.
-   *
-   * @param mixed - Signature or symbol.
-   * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
-   */
-  readonly missingDocComment: (mixed: ts.Signature | ts.Symbol) => boolean;
-  readonly options: O;
-  readonly package: Package;
-  readonly path: string;
-  /**
-   * Reports error.
-   *
-   * @param descriptor - Descriptor.
-   */
-  readonly report: (descriptor: ReportDescriptor<M>) => void;
-  readonly scope: ReturnType<RuleContext<M, unknowns>["getScope"]>;
-  readonly source: SourceCode;
-  readonly subOptionsArray: readonly S[];
-  readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
-  readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
-}
-
 export interface CreateRuleOptions<
   M extends string,
   O extends object,
@@ -239,22 +125,10 @@ export interface CreateRuleOptions<
   readonly subOptionsKey?: string;
 }
 
-// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-export interface DefineTemplateBodyVisitor {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
-  (templateVisitor: any, scriptVisitor?: any, options?: any): any;
-}
-
 export interface GetSelectorsOptions {
   readonly excludeSelectors: strings;
   readonly includeSelectors: strings;
   readonly noDefaultSelectors: boolean;
-}
-
-export interface InvalidTestCase<M extends string>
-  extends BaseInvalidTestCase<M, readonly [object]> {
-  readonly filename?: SourceFile;
-  readonly name: string;
 }
 
 export interface Matcher {
@@ -268,34 +142,6 @@ export interface Matcher {
 }
 
 export type MessageId<T> = T extends RuleModule<infer I, infer _O> ? I : never;
-
-export interface Package {
-  readonly name?: string;
-}
-
-export type ReadonlyRange = readonly [number, number];
-
-export interface SortOptions {
-  readonly key?: string;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-}
-
-export type SourceFile =
-  | "camelCase.camelCase.ts"
-  | "camelCase.ts"
-  | "file.extras.ts"
-  | "kebab-case.kebab-case.ts"
-  | "kebab-case.ts"
-  | "PascalCase.PascalCase.ts"
-  | "PascalCase.ts"
-  | "subfolder/index.ts"
-  | "vue.d.ts";
-
-export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
-  readonly filename?: SourceFile;
-  readonly name: string;
-}
 
 /**
  * Adds node to child nodes map.
@@ -505,134 +351,6 @@ export function isAdjacentNodes(
 }
 
 /**
- * Returns string representing node.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns String representing node.
- */
-export function nodeToString(
-  node: TSESTree.Node,
-  context: Context<never, object, object>
-): string {
-  switch (node.type) {
-    case AST_NODE_TYPES.Identifier:
-      return node.name;
-
-    case AST_NODE_TYPES.Literal:
-      return cast.string(node.value);
-
-    default:
-      return `\u0000${context.getText(node)}`;
-  }
-}
-
-/**
- * Sorts nodes.
- *
- * @param nodes - Nodes.
- * @param options - Options.
- * @param context - Context.
- */
-export function sort(
-  nodes: readonly TSESTree.Node[],
-  options: SortOptions,
-  context: Context<"incorrectSortingOrder", object, object>
-): void {
-  const sendToBottom = is.not.empty(options.sendToBottom)
-    ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      new RegExp(options.sendToBottom, "u")
-    : undefined;
-
-  const sendToTop = is.not.empty(options.sendToTop)
-    ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      new RegExp(options.sendToTop, "u")
-    : undefined;
-
-  const items = nodes.map<Item>((node, index) => {
-    switch (node.type) {
-      case AST_NODE_TYPES.ObjectExpression: {
-        return {
-          index,
-          key: wrapKey(
-            node.properties
-              .map(property => {
-                switch (property.type) {
-                  case AST_NODE_TYPES.Property:
-                    return nodeToString(property.key, context) === options.key
-                      ? nodeToString(property.value, context)
-                      : undefined;
-
-                  default:
-                    return undefined;
-                }
-              })
-              .find(is.string) ?? nodeToString(node, context)
-          ),
-          node
-        };
-      }
-
-      default:
-        return {
-          index,
-          key: wrapKey(nodeToString(node, context)),
-          node
-        };
-    }
-  });
-
-  const sortedItems = _.sortBy(items, item => item.key);
-
-  const fixes: RuleFix[] = [];
-
-  let min: numberU;
-
-  let max: numberU;
-
-  for (const [index, sortedItem] of sortedItems.entries())
-    if (sortedItem.index === index) {
-      // Valid
-    } else {
-      const item = a.get(items, index);
-
-      min = is.not.empty(min) ? Math.min(min, index) : index;
-      max = is.not.empty(max) ? Math.max(max, index) : index;
-      fixes.push({
-        range: context.getRangeWithLeadingTrivia(item.node),
-        text: context.getTextWithLeadingTrivia(sortedItem.node)
-      });
-    }
-
-  if (fixes.length > 0) {
-    const loc = context.getLocFromRange([
-      a.get(items, as.not.empty(min)).node.range[0],
-      a.get(items, as.not.empty(max)).node.range[1]
-    ]);
-
-    context.report({
-      fix: () => fixes,
-      loc,
-      messageId: "incorrectSortingOrder"
-    });
-  }
-
-  interface Item {
-    readonly index: number;
-    readonly key: unknown;
-    readonly node: TSESTree.Node;
-  }
-
-  function wrapKey(key: string): string {
-    if (sendToTop && sendToTop.test(key)) return `1:${key}`;
-
-    if (sendToBottom && sendToBottom.test(key)) return `3:${key}`;
-
-    return `2:${key}`;
-  }
-}
-
-/**
  * Strips base path.
  *
  * @param path - Path.
@@ -646,63 +364,6 @@ export function stripBase(path: string, replacement = ""): string {
   );
 
   return `${replacement}${path.slice(base.length)}`;
-}
-
-/**
- * Runs test.
- *
- * @param name - Rule name.
- * @param rules - Rules.
- * @param invalid - Invalid tests.
- * @param valid - Valid tests.
- */
-export function testRule<K extends string, M extends string>(
-  name: K,
-  rules: Rec<K, RuleModule<M, objects>>,
-  invalid: ReadonlyArray<InvalidTestCase<M>>,
-  valid: readonly ValidTestCase[] = []
-): void {
-  const rule = rules[name];
-
-  const tester = new TSESLint.RuleTester({
-    // eslint-disable-next-line unicorn/prefer-module -- Postponed
-    parser: require.resolve("vue-eslint-parser"),
-    parserOptions: {
-      ecmaFeatures: { jsx: true },
-      ecmaVersion: 2017,
-      extraFileExtensions: [".vue"],
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
-      // @ts-expect-error
-      parser: "@typescript-eslint/parser",
-      project: "./tsconfig.json",
-      sourceType: "module",
-      tsconfigRootDir: `${base}fixtures`
-    }
-  });
-
-  tester.run(name, rule, {
-    invalid: invalid.map(invalidTest => {
-      const code = s.unpadMultiline(invalidTest.code);
-
-      const output = s.unpadMultiline(invalidTest.output ?? invalidTest.code);
-
-      return {
-        ...invalidTest,
-        code,
-        filename: `${base}fixtures/${invalidTest.filename ?? "file.ts"}`,
-        output
-      };
-    }),
-    valid: valid.map(validTest => {
-      const code = s.unpadMultiline(validTest.code);
-
-      return {
-        ...validTest,
-        code,
-        filename: `${base}fixtures/${validTest.filename ?? "file.ts"}`
-      };
-    })
-  });
 }
 
 const isSharedOptions1 = is.object.factory<SharedOptions1>(
