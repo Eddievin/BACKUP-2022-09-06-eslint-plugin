@@ -15,14 +15,7 @@ export const sortKeys = utils.createRule({
 
         for (const property of node.properties)
           if (property.type === AST_NODE_TYPES.SpreadElement) flush();
-          else {
-            if (
-              context
-                .getLeadingTrivia(property)
-                .includes("@skylib/sort-keys break")
-            )
-              flush();
-
+          else
             switch (property.key.type) {
               case AST_NODE_TYPES.Identifier:
                 group.push({
@@ -49,7 +42,6 @@ export const sortKeys = utils.createRule({
                   node: property
                 });
             }
-          }
 
         flush();
 
