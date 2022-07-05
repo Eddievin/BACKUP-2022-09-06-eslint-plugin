@@ -1,10 +1,10 @@
-import type { IndexedObject } from "@skylib/functions";
+import type { IndexedObject, WritableIndexedObject } from "@skylib/functions";
 /**
- * Returns synonyms.
+ * Gets synonyms.
  *
+ * @param dest - Dest.
  * @param path - Path.
  * @param core - Core.
- * @returns Synonyms.
  */
-export declare function getSynonyms(path: string, core: IndexedObject): IndexedObject;
+export declare function getSynonyms(dest: WritableIndexedObject, path: string, core: IndexedObject): void;
 //# sourceMappingURL=synonyms.d.ts.map

@@ -43,6 +43,7 @@ const template_literal_format_1 = require("./template-literal-format");
 const utils_1 = require("./utils");
 const vue_component_name_1 = require("./vue-component-name");
 const functions_1 = require("@skylib/functions");
+const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
 exports.utils = tslib_1.__importStar(require("./utils"));
 exports.rules = (0, functions_1.evaluate)(() => {
     const core = {
@@ -86,6 +87,12 @@ exports.rules = (0, functions_1.evaluate)(() => {
         "template-literal-format": template_literal_format_1.templateLiteralFormat,
         "vue-component-name": vue_component_name_1.vueComponentName
     };
-    return Object.assign(Object.assign({}, core), (0, utils_1.getSynonyms)("./.eslintrc.synonyms.js", core));
+    const synonyms = {};
+    (0, utils_1.getSynonyms)(synonyms, "./.eslintrc.synonyms.js", core);
+    if (node_fs_1.default.existsSync("./node_modules/@skylib"))
+        for (const pkg of node_fs_1.default.readdirSync("./node_modules/@skylib"))
+            for (const folder of ["configs", "src"])
+                (0, utils_1.getSynonyms)(synonyms, `./node_modules/@skylib/${pkg}/${folder}/eslintrc.synonyms.js`, core);
+    return Object.assign(Object.assign({}, core), synonyms);
 });
 //# sourceMappingURL=index.js.map

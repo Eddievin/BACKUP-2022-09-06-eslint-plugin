@@ -231,11 +231,14 @@ exports.nodeToString = nodeToString;
  * @param context - Context.
  */
 function sort(nodes, options, context) {
-    var _a, _b;
-    // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-    const sendToBottom = new RegExp((_a = options.sendToBottom) !== null && _a !== void 0 ? _a : ".", "u");
-    // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-    const sendToTop = new RegExp((_b = options.sendToTop) !== null && _b !== void 0 ? _b : ".", "u");
+    const sendToBottom = functions_1.is.not.empty(options.sendToBottom)
+        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+            new RegExp(options.sendToBottom, "u")
+        : undefined;
+    const sendToTop = functions_1.is.not.empty(options.sendToTop)
+        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+            new RegExp(options.sendToTop, "u")
+        : undefined;
     const items = nodes.map((node, index) => {
         var _a;
         switch (node.type) {
@@ -294,9 +297,9 @@ function sort(nodes, options, context) {
         });
     }
     function wrapKey(key) {
-        if (sendToTop.test(key))
+        if (sendToTop && sendToTop.test(key))
             return `1:${key}`;
-        if (sendToBottom.test(key))
+        if (sendToBottom && sendToBottom.test(key))
             return `3:${key}`;
         return `2:${key}`;
     }
