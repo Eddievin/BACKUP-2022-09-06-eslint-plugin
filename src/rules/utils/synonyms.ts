@@ -1,25 +1,27 @@
-import { a, as, is, o } from "@skylib/functions";
+import { a, as, assert, is, o } from "@skylib/functions";
 import fs from "node:fs";
-import type { IndexedObject } from "@skylib/functions";
+import type { IndexedObject, WritableIndexedObject } from "@skylib/functions";
 
 /**
- * Returns synonyms.
+ * Gets synonyms.
  *
+ * @param dest - Dest.
  * @param path - Path.
  * @param core - Core.
- * @returns Synonyms.
  */
 // eslint-disable-next-line @skylib/only-export-name -- Ok
-export function getSynonyms(path: string, core: IndexedObject): IndexedObject {
-  return fs.existsSync(path)
-    ? o.fromEntries(
-        as.array
-          .of(
-            // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, unicorn/prefer-module -- Wait for @skylib/config update
-            require(fs.realpathSync(path)),
-            is.string
-          )
-          .map(synonym => [synonym, o.get(core, a.first(synonym.split("/")))])
-      )
-    : {};
+export function getSynonyms(
+  dest: WritableIndexedObject,
+  path: string,
+  core: IndexedObject
+): void {
+  if (fs.existsSync(path)) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, unicorn/prefer-module -- Wait for @skylib/config update
+    const synonyms = as.array.of(require(fs.realpathSync(path)), is.string);
+
+    for (const synonym of synonyms) {
+      assert.empty(dest[synonym], `Duplicate synonym: ${synonym}`);
+      dest[synonym] = o.get(core, a.first(synonym.split("/")));
+    }
+  }
 }

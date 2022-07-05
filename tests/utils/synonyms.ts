@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-internal-modules -- Ok
 import { getSynonyms } from "@/rules/utils";
+import type { WritableIndexedObject } from "@skylib/functions";
 
 test.each([
   {
@@ -13,5 +14,8 @@ test.each([
     path: "./fixtures/synonyms.missing.js"
   }
 ])("getSynonyms", ({ core, expected, path }) => {
-  expect(getSynonyms(path, core)).toStrictEqual(expected);
+  const dest: WritableIndexedObject = {};
+
+  getSynonyms(dest, path, core);
+  expect(dest).toStrictEqual(expected);
 });

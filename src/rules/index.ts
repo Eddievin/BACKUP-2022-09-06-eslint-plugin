@@ -39,6 +39,8 @@ import { templateLiteralFormat } from "./template-literal-format";
 import { getSynonyms } from "./utils";
 import { vueComponentName } from "./vue-component-name";
 import { evaluate } from "@skylib/functions";
+import fs from "node:fs";
+import type { WritableIndexedObject } from "@skylib/functions";
 
 export * as utils from "./utils";
 
@@ -85,5 +87,18 @@ export const rules = evaluate(() => {
     "vue-component-name": vueComponentName
   };
 
-  return { ...core, ...getSynonyms("./.eslintrc.synonyms.js", core) };
+  const synonyms: WritableIndexedObject = {};
+
+  getSynonyms(synonyms, "./.eslintrc.synonyms.js", core);
+
+  if (fs.existsSync("./node_modules/@skylib"))
+    for (const pkg of fs.readdirSync("./node_modules/@skylib"))
+      for (const folder of ["configs", "src"])
+        getSynonyms(
+          synonyms,
+          `./node_modules/@skylib/${pkg}/${folder}/eslintrc.synonyms.js`,
+          core
+        );
+
+  return { ...core, ...synonyms };
 });
