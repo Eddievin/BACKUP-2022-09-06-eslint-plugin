@@ -18,9 +18,13 @@ export function getSynonyms(
   if (fs.existsSync(path)) {
     const synonyms: unknown = require(fs.realpathSync(path));
 
+    // eslint-disable-next-line no-warning-comments -- Postponed
+    // fixme - Synonym should start with "@skylib/"
     for (const synonym of as.array.of(synonyms, is.string)) {
-      assert.empty(dest[synonym], `Duplicate synonym: ${synonym}`);
-      dest[synonym] = o.get(core, a.first(synonym.split("/")));
+      const name = synonym.replace(/^@skylib\//u, "");
+
+      assert.empty(dest[name], `Duplicate synonym: ${synonym}`);
+      dest[name] = o.get(core, a.first(synonym.split("/")));
     }
   }
 }
