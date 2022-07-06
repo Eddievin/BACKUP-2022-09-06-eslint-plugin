@@ -19,7 +19,6 @@ function getSynonyms(dest, path, core) {
         // fixme - Synonym should start with "@skylib/"
         for (const synonym of functions_1.as.array.of(synonyms, functions_1.is.string)) {
             const name = synonym.replace(/^@skylib\//u, "");
-            functions_1.assert.empty(dest[name], `Duplicate synonym: ${synonym}`);
             dest[name] = functions_1.o.get(core, functions_1.a.first(name.split("/")));
         }
     }

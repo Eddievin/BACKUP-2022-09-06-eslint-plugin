@@ -10,6 +10,7 @@ const consistent_empty_lines_1 = require("./consistent-empty-lines");
 const consistent_filename_1 = require("./consistent-filename");
 const consistent_group_empty_lines_1 = require("./consistent-group-empty-lines");
 const consistent_import_1 = require("./consistent-import");
+const custom_1 = require("./custom");
 const disallow_import_1 = require("./disallow-import");
 const empty_lines_around_comment_1 = require("./empty-lines-around-comment");
 const exhaustive_switch_1 = require("./exhaustive-switch");
@@ -18,7 +19,6 @@ const no_expression_empty_line_1 = require("./no-expression-empty-line");
 const no_inferrable_types_1 = require("./no-inferrable-types");
 const no_multi_type_tuples_1 = require("./no-multi-type-tuples");
 const no_negated_condition_1 = require("./no-negated-condition");
-const no_restricted_syntax_1 = require("./no-restricted-syntax");
 const no_unsafe_object_assignment_1 = require("./no-unsafe-object-assignment");
 const no_unused_import_1 = require("./no-unused-import");
 const object_format_1 = require("./object-format");
@@ -49,6 +49,8 @@ exports.rules = (0, functions_1.evaluate)(() => {
         "consistent-filename": consistent_filename_1.consistentFilename,
         "consistent-group-empty-lines": consistent_group_empty_lines_1.consistentGroupEmptyLines,
         "consistent-import": consistent_import_1.consistentImport,
+        // eslint-disable-next-line object-shorthand -- Ok
+        "custom": custom_1.custom,
         "disallow-import": disallow_import_1.disallowImport,
         "empty-lines-around-comment": empty_lines_around_comment_1.emptyLinesAroundComment,
         "exhaustive-switch": exhaustive_switch_1.exhaustiveSwitch,
@@ -57,7 +59,6 @@ exports.rules = (0, functions_1.evaluate)(() => {
         "no-inferrable-types": no_inferrable_types_1.noInferrableTypes,
         "no-multi-type-tuples": no_multi_type_tuples_1.noMultiTypeTuples,
         "no-negated-condition": no_negated_condition_1.noNegatedCondition,
-        "no-restricted-syntax": no_restricted_syntax_1.noRestrictedSyntax,
         "no-unsafe-object-assignment": no_unsafe_object_assignment_1.noUnsafeObjectAssignment,
         "no-unused-import": no_unused_import_1.noUnusedImport,
         "object-format": object_format_1.objectFormat,

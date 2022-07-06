@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.noRestrictedSyntax = void 0;
+exports.custom = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
-exports.noRestrictedSyntax = utils.createRule({
+exports.custom = utils.createRule({
     create: context => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
         const listener = getVisitors();
@@ -180,6 +180,6 @@ exports.noRestrictedSyntax = utils.createRule({
         });
     }),
     messages: { customMessage: "{{ message }}" },
-    name: "no-restricted-syntax"
+    name: "custom"
 });
-//# sourceMappingURL=no-restricted-syntax.js.map
+//# sourceMappingURL=custom.js.map
