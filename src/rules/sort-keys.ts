@@ -27,7 +27,7 @@ export const sortKeys = utils.createRule({
       },
       ...o.fromEntries(
         context.subOptionsArray.map(subOptions => [
-          subOptions.selector,
+          a.fromMixed(subOptions.selector).join(", "),
           (node: TSESTree.Node): void => {
             if (node.type === AST_NODE_TYPES.ObjectExpression)
               items.set(utils.getNodeId(node), { node, options: subOptions });
@@ -57,7 +57,7 @@ export const sortKeys = utils.createRule({
   fixable: "code",
   isRuleOptions: is.object,
   isSubOptions: is.object.factory<SubOptions>(
-    { _id: is.string, selector: is.string },
+    { _id: is.string, selector: is.or.factory(is.string, is.strings) },
     {
       customOrder: is.strings,
       sendToBottom: is.string,
@@ -84,7 +84,7 @@ type Nodes = readonly Node[];
 interface SubOptions {
   readonly _id: string;
   readonly customOrder?: strings;
-  readonly selector: string;
+  readonly selector: strings | string;
   readonly sendToBottom?: string;
   readonly sendToTop?: string;
 }
