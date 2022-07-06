@@ -390,5 +390,26 @@ utils.testRule("no-restricted-syntax", rules, [
         typeIs: "anonymous-object"
       }
     ]
+  },
+  {
+    code: `
+      const x: { readonly a: number } = { a: 1 };
+      const y: { a: number } = { a: 1 };
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=/^[xy]$/u]"],
+        typeIs: "readonly"
+      }
+    ]
   }
 ]);

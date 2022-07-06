@@ -1,5 +1,6 @@
 import * as utils from "./utils";
 import { a, createValidationObject, evaluate, is } from "@skylib/functions";
+import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
@@ -98,6 +99,17 @@ export const noRestrictedSyntax = utils.createRule({
               checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
               isObject()
             );
+
+          case "readonly":
+            return type
+              .getProperties()
+              .some(property =>
+                tsutils.isPropertyReadonlyInType(
+                  type,
+                  property.getEscapedName(),
+                  context.checker
+                )
+              );
 
           case "string":
             return checkType(
@@ -222,6 +234,7 @@ export const noRestrictedSyntax = utils.createRule({
       "null": "null",
       "number": "number",
       "object": "object",
+      "readonly": "readonly",
       "string": "string",
       "symbol": "symbol",
       "undefined": "undefined",
@@ -278,6 +291,7 @@ type Type =
   | "null"
   | "number"
   | "object"
+  | "readonly"
   | "string"
   | "symbol"
   | "undefined"
