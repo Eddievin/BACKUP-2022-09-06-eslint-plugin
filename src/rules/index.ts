@@ -6,6 +6,7 @@ import { consistentEmptyLines } from "./consistent-empty-lines";
 import { consistentFilename } from "./consistent-filename";
 import { consistentGroupEmptyLines } from "./consistent-group-empty-lines";
 import { consistentImport } from "./consistent-import";
+import { custom } from "./custom";
 import { disallowImport } from "./disallow-import";
 import { emptyLinesAroundComment } from "./empty-lines-around-comment";
 import { exhaustiveSwitch } from "./exhaustive-switch";
@@ -14,7 +15,6 @@ import { noExpressionEmptyLine } from "./no-expression-empty-line";
 import { noInferrableTypes } from "./no-inferrable-types";
 import { noMultiTypeTuples } from "./no-multi-type-tuples";
 import { noNegatedCondition } from "./no-negated-condition";
-import { noRestrictedSyntax } from "./no-restricted-syntax";
 import { noUnsafeObjectAssignment } from "./no-unsafe-object-assignment";
 import { noUnusedImport } from "./no-unused-import";
 import { objectFormat } from "./object-format";
@@ -48,6 +48,8 @@ export const rules = evaluate(() => {
     "consistent-filename": consistentFilename,
     "consistent-group-empty-lines": consistentGroupEmptyLines,
     "consistent-import": consistentImport,
+    // eslint-disable-next-line object-shorthand -- Ok
+    "custom": custom,
     "disallow-import": disallowImport,
     "empty-lines-around-comment": emptyLinesAroundComment,
     "exhaustive-switch": exhaustiveSwitch,
@@ -56,7 +58,6 @@ export const rules = evaluate(() => {
     "no-inferrable-types": noInferrableTypes,
     "no-multi-type-tuples": noMultiTypeTuples,
     "no-negated-condition": noNegatedCondition,
-    "no-restricted-syntax": noRestrictedSyntax,
     "no-unsafe-object-assignment": noUnsafeObjectAssignment,
     "no-unused-import": noUnusedImport,
     "object-format": objectFormat,

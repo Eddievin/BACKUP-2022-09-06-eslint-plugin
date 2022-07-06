@@ -1,7 +1,7 @@
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
-utils.testRule("no-restricted-syntax", rules, [
+utils.testRule("custom", rules, [
   {
     code: `
       <template>

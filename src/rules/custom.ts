@@ -5,7 +5,7 @@ import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-export const noRestrictedSyntax = utils.createRule({
+export const custom = utils.createRule({
   create: context => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
     const listener = getVisitors();
@@ -273,7 +273,7 @@ export const noRestrictedSyntax = utils.createRule({
     );
   }),
   messages: { customMessage: "{{ message }}" },
-  name: "no-restricted-syntax"
+  name: "custom"
 });
 
 interface RuleOptions {

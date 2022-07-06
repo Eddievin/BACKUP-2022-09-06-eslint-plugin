@@ -53,7 +53,7 @@ npm install --save-dev @skylib/eslint-plugin
 - [exhaustive-switch](https://ilyub.github.io/eslint-plugin/exhaustive-switch.html)
 - [no-inferrable-types](https://ilyub.github.io/eslint-plugin/no-inferrable-types.html)
 - [no-mutable-signature](https://ilyub.github.io/eslint-plugin/no-mutable-signature.html)
-- [no-restricted-syntax](https://ilyub.github.io/eslint-plugin/no-restricted-syntax.html)
+- [custom](https://ilyub.github.io/eslint-plugin/custom.html)
 - [no-unnecessary-readonly](https://ilyub.github.io/eslint-plugin/no-unnecessary-readonly.html)
 - [no-unnecessary-writable](https://ilyub.github.io/eslint-plugin/no-unnecessary-writable.html)
 - [no-unsafe-object-assignment](https://ilyub.github.io/eslint-plugin/no-unsafe-object-assignment.html)

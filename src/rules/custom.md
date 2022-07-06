@@ -1,11 +1,11 @@
-# no-restricted-syntax
+# custom
 
 Disallows code by selectors.
 
 ## eslintrc.js
 
 ```ts
-"@skylib/no-restricted-syntax": [
+"@skylib/custom": [
   "error",
   {
     rules: [
