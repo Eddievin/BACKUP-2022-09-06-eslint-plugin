@@ -1,4 +1,4 @@
-import { a, as, assert, is, o } from "@skylib/functions";
+import { a, as, is, o } from "@skylib/functions";
 import fs from "node:fs";
 import type { IndexedObject, WritableIndexedObject } from "@skylib/functions";
 
@@ -23,7 +23,6 @@ export function getSynonyms(
     for (const synonym of as.array.of(synonyms, is.string)) {
       const name = synonym.replace(/^@skylib\//u, "");
 
-      assert.empty(dest[name], `Duplicate synonym: ${synonym}`);
       dest[name] = o.get(core, a.first(name.split("/")));
     }
   }
