@@ -67,7 +67,7 @@
     "upgrade": "npm run update-package-force & npm run npm:install"
   },
   "dependencies": {
-    "@skylib/functions": "^3.3.0",
+    "@skylib/functions": "^3.4.0",
     "@skylib/lodash-commonjs-es": "^1.0.0",
     "@skylib/typescript-types": "^1.0.0",
     "@types/estree": "^0.0.52",
@@ -77,8 +77,8 @@
     "natural-compare": "^1.4.0"
   },
   "devDependencies": {
-    "@skylib/config": "^3.18.0",
-    "@skylib/eslint-plugin": "^0.1.38",
+    "@skylib/config": "^3.21.0",
+    "@skylib/eslint-plugin": "^0.1.40",
     "get-current-line": "^6.6.0"
   },
   "peerDependencies": {
