@@ -411,5 +411,28 @@ utils.testRule("no-restricted-syntax", rules, [
         typeIs: "readonly"
       }
     ]
+  },
+  {
+    code: `
+      function f(): string {}
+      function g(): number {}
+      function h() {}
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        checkReturnType: true,
+        message: "Custom message",
+        selector: ["Identifier"],
+        typeIs: "string"
+      }
+    ]
   }
 ]);

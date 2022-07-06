@@ -31,7 +31,7 @@ export const noRestrictedSyntax = utils.createRule({
       );
     }
 
-    function checkTypeHas(type: ts.Type, expected?: Type): boolean {
+    function checkTypeHas(type: ts.Type, expected?: Test): boolean {
       return expected
         ? checkTypeIs(type, expected) ||
             (type.isUnion() &&
@@ -39,19 +39,19 @@ export const noRestrictedSyntax = utils.createRule({
         : true;
     }
 
-    function checkTypeHasNoneOf(type: ts.Type, expected?: Types): boolean {
+    function checkTypeHasNoneOf(type: ts.Type, expected?: Tests): boolean {
       return expected ? expected.every(x => checkTypeHasNot(type, x)) : true;
     }
 
-    function checkTypeHasNot(type: ts.Type, expected?: Type): boolean {
+    function checkTypeHasNot(type: ts.Type, expected?: Test): boolean {
       return expected ? !checkTypeHas(type, expected) : true;
     }
 
-    function checkTypeHasOneOf(type: ts.Type, expected?: Types): boolean {
+    function checkTypeHasOneOf(type: ts.Type, expected?: Tests): boolean {
       return expected ? expected.some(x => checkTypeHas(type, x)) : true;
     }
 
-    function checkTypeIs(type: ts.Type, expected?: Type): boolean {
+    function checkTypeIs(type: ts.Type, expected?: Test): boolean {
       if (expected)
         switch (expected) {
           case "anonymous-function":
@@ -149,21 +149,22 @@ export const noRestrictedSyntax = utils.createRule({
       }
     }
 
-    function checkTypeIsNoneOf(type: ts.Type, expected?: Types): boolean {
+    function checkTypeIsNoneOf(type: ts.Type, expected?: Tests): boolean {
       return expected ? expected.every(x => checkTypeIsNot(type, x)) : true;
     }
 
-    function checkTypeIsNot(type: ts.Type, expected?: Type): boolean {
+    function checkTypeIsNot(type: ts.Type, expected?: Test): boolean {
       return expected ? !checkTypeIs(type, expected) : true;
     }
 
-    function checkTypeIsOneOf(type: ts.Type, expected?: Types): boolean {
+    function checkTypeIsOneOf(type: ts.Type, expected?: Tests): boolean {
       return expected ? expected.some(x => checkTypeIs(type, x)) : true;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
     function getVisitors(): any {
       const {
+        checkReturnType,
         message,
         replacement,
         search,
@@ -176,25 +177,33 @@ export const noRestrictedSyntax = utils.createRule({
         typeIsNoneOf,
         typeIsNot,
         typeIsOneOf
-      } = context.options;
+      } = { checkReturnType: false, ...context.options };
 
       const selector = a.fromMixed(mixed).join(", ");
 
       return {
         [selector]: (node: TSESTree.Node): void => {
-          const tsNode = context.toTsNode(node);
+          const types = evaluate(() => {
+            const tsNode = context.toTsNode(node);
 
-          const type = context.checker.getTypeAtLocation(tsNode);
+            const type = context.checker.getTypeAtLocation(tsNode);
+
+            return checkReturnType
+              ? type
+                  .getCallSignatures()
+                  .map(signature => signature.getReturnType())
+              : [type];
+          });
 
           if (
-            checkTypeIs(type, typeIs) &&
-            checkTypeHasNot(type, typeHasNot) &&
-            checkTypeIsNot(type, typeIsNot) &&
-            checkTypeHas(type, typeHas) &&
-            checkTypeHasNoneOf(type, typeHasNoneOf) &&
-            checkTypeHasOneOf(type, typeHasOneOf) &&
-            checkTypeIsNoneOf(type, typeIsNoneOf) &&
-            checkTypeIsOneOf(type, typeIsOneOf)
+            types.some(type => checkTypeIs(type, typeIs)) &&
+            types.some(type => checkTypeHasNot(type, typeHasNot)) &&
+            types.some(type => checkTypeIsNot(type, typeIsNot)) &&
+            types.some(type => checkTypeHas(type, typeHas)) &&
+            types.some(type => checkTypeHasNoneOf(type, typeHasNoneOf)) &&
+            types.some(type => checkTypeHasOneOf(type, typeHasOneOf)) &&
+            types.some(type => checkTypeIsNoneOf(type, typeIsNoneOf)) &&
+            types.some(type => checkTypeIsOneOf(type, typeIsOneOf))
           )
             context.report({
               data: {
@@ -224,7 +233,7 @@ export const noRestrictedSyntax = utils.createRule({
   },
   fixable: "code",
   isRuleOptions: evaluate(() => {
-    const TypeVO = createValidationObject<Type>({
+    const TestVO = createValidationObject<Test>({
       "anonymous-function": "anonymous-function",
       "anonymous-object": "anonymous-object",
       "any": "any",
@@ -241,47 +250,49 @@ export const noRestrictedSyntax = utils.createRule({
       "unknown": "unknown"
     });
 
-    const isType = is.factory(is.enumeration, TypeVO);
+    const isTest = is.factory(is.enumeration, TestVO);
 
-    const isTypes = is.factory(is.array.of, isType);
+    const isTests = is.factory(is.array.of, isTest);
 
     return is.object.factory<RuleOptions>(
       { selector: is.or.factory(is.string, is.strings) },
       {
+        checkReturnType: is.boolean,
         message: is.string,
         replacement: is.string,
         search: is.string,
-        typeHas: isType,
-        typeHasNoneOf: isTypes,
-        typeHasNot: isType,
-        typeHasOneOf: isTypes,
-        typeIs: isType,
-        typeIsNoneOf: isTypes,
-        typeIsNot: isType,
-        typeIsOneOf: isTypes
+        typeHas: isTest,
+        typeHasNoneOf: isTests,
+        typeHasNot: isTest,
+        typeHasOneOf: isTests,
+        typeIs: isTest,
+        typeIsNoneOf: isTests,
+        typeIsNot: isTest,
+        typeIsOneOf: isTests
       }
     );
-
-    interface RuleOptions {
-      readonly message?: string;
-      readonly replacement?: string;
-      readonly search?: string;
-      readonly selector: strings | string;
-      readonly typeHas?: Type;
-      readonly typeHasNoneOf?: Types;
-      readonly typeHasNot?: Type;
-      readonly typeHasOneOf?: Types;
-      readonly typeIs?: Type;
-      readonly typeIsNoneOf?: Types;
-      readonly typeIsNot?: Type;
-      readonly typeIsOneOf?: Types;
-    }
   }),
   messages: { customMessage: "{{ message }}" },
   name: "no-restricted-syntax"
 });
 
-type Type =
+interface RuleOptions {
+  readonly checkReturnType?: boolean;
+  readonly message?: string;
+  readonly replacement?: string;
+  readonly search?: string;
+  readonly selector: strings | string;
+  readonly typeHas?: Test;
+  readonly typeHasNoneOf?: Tests;
+  readonly typeHasNot?: Test;
+  readonly typeHasOneOf?: Tests;
+  readonly typeIs?: Test;
+  readonly typeIsNoneOf?: Tests;
+  readonly typeIsNot?: Test;
+  readonly typeIsOneOf?: Tests;
+}
+
+type Test =
   | "anonymous-function"
   | "anonymous-object"
   | "any"
@@ -297,4 +308,4 @@ type Type =
   | "undefined"
   | "unknown";
 
-type Types = readonly Type[];
+type Tests = readonly Test[];
