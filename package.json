@@ -72,7 +72,9 @@
     "@skylib/typescript-types": "^1.0.0",
     "@types/estree": "^0.0.52",
     "@types/minimatch": "^3.0.5",
-    "minimatch": "^5.1.0"
+    "@types/natural-compare": "^1.4.1",
+    "minimatch": "^5.1.0",
+    "natural-compare": "^1.4.0"
   },
   "devDependencies": {
     "@skylib/config": "^3.18.0",

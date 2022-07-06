@@ -82,5 +82,30 @@ utils.testRule("sort-array", rules, [
     ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "Identifier" }]
+  },
+  {
+    code: `
+      const x = [
+      {},
+      "showConfirm.async: Failure",
+      "showConfirm: Failure"
+      ];
+    `,
+    errors: [
+      {
+        endLine: 4,
+        line: 3,
+        messageId: "incorrectSortingOrder"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "ArrayExpression" }],
+    output: `
+      const x = [
+      {},
+      "showConfirm: Failure",
+      "showConfirm.async: Failure"
+      ];
+    `
   }
 ]);

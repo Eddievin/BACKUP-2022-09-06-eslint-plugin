@@ -2,8 +2,8 @@
 
 /* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
 
+import { compare } from "./compare";
 import { a, as, cast, is } from "@skylib/functions";
-import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Context } from "./types";
 import type { numberU, strings } from "@skylib/functions";
@@ -76,7 +76,9 @@ export function sort<T extends TSESTree.Node>(
     };
   });
 
-  const sortedItems = _.sortBy(items, item => item.key);
+  const sortedItems = a.sort(items, (item1, item2) =>
+    compare(item1.key, item2.key)
+  );
 
   const fixes: RuleFix[] = [];
 
@@ -113,7 +115,7 @@ export function sort<T extends TSESTree.Node>(
 
   interface Item {
     readonly index: number;
-    readonly key: unknown;
+    readonly key: string;
     readonly node: TSESTree.Node;
   }
 
