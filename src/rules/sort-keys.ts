@@ -3,6 +3,7 @@ import { a, is, o } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Writable, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const sortKeys = utils.createRule({
   create: context => {
@@ -10,7 +11,7 @@ export const sortKeys = utils.createRule({
 
     const nodes: Writable<Nodes> = [];
 
-    return {
+    const listener: RuleListener = {
       [AST_NODE_TYPES.ObjectExpression]: (node): void => {
         items.set(utils.getNodeId(node), { node, options: { _id: "__main" } });
       },
@@ -40,6 +41,9 @@ export const sortKeys = utils.createRule({
         ])
       )
     };
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
+    return context.defineTemplateBodyVisitor(listener, listener);
 
     function flush(options: utils.SortOptions): void {
       utils.sort(nodes, nodeToKey, options, context);
