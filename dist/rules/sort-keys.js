@@ -4,93 +4,57 @@ exports.sortKeys = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
-const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 exports.sortKeys = utils.createRule({
     create: context => {
-        return {
-            [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {
-                const group = [];
-                for (const property of node.properties)
-                    if (property.type === utils_1.AST_NODE_TYPES.SpreadElement)
-                        flush();
-                    else {
-                        if (context
-                            .getLeadingTrivia(property)
-                            .includes("@skylib/sort-keys break"))
-                            flush();
-                        switch (property.key.type) {
-                            case utils_1.AST_NODE_TYPES.Identifier:
-                                group.push({
-                                    index: group.length,
-                                    key: property.key.name,
-                                    node: property
-                                });
-                                break;
-                            case utils_1.AST_NODE_TYPES.Literal:
-                                group.push({
-                                    index: group.length,
-                                    key: property.key.value,
-                                    node: property
-                                });
-                                break;
-                            default:
-                                group.push({
-                                    index: group.length,
-                                    key: `\u0000${context.getText(property.key)}`,
-                                    node: property
-                                });
-                        }
-                    }
-                flush();
-                function flush() {
-                    lintNodes(group, context);
-                    group.length = 0;
+        const items = new Map();
+        const nodes = [];
+        const listener = Object.assign({ [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {
+                items.set(utils.getNodeId(node), { node, options: { _id: "__main" } });
+            }, "Program:exit": () => {
+                for (const item of items.values()) {
+                    for (const property of item.node.properties)
+                        if (property.type === utils_1.AST_NODE_TYPES.SpreadElement)
+                            flush(item.options);
+                        else
+                            nodes.push(property);
+                    flush(item.options);
                 }
+            } }, functions_1.o.fromEntries(context.subOptionsArray.map(subOptions => [
+            functions_1.a.fromMixed(subOptions.selector).join(", "),
+            (node) => {
+                if (node.type === utils_1.AST_NODE_TYPES.ObjectExpression)
+                    items.set(utils.getNodeId(node), { node, options: subOptions });
+                else
+                    context.report({
+                        data: { _id: subOptions._id },
+                        messageId: "expectingObject",
+                        node
+                    });
             }
-        };
+        ])));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
+        return context.defineTemplateBodyVisitor(listener, listener);
+        function flush(options) {
+            utils.sort(nodes, nodeToKey, options, context);
+            functions_1.a.truncate(nodes);
+        }
+        function nodeToKey(node) {
+            return node.key;
+        }
     },
     fixable: "code",
     isRuleOptions: functions_1.is.object,
-    messages: { incorrectSortingOrder: "Incorrect sorting order" },
-    name: "sort-keys"
+    isSubOptions: functions_1.is.object.factory({ _id: functions_1.is.string, selector: functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings) }, {
+        customOrder: functions_1.is.strings,
+        sendToBottom: functions_1.is.string,
+        sendToTop: functions_1.is.string
+    }),
+    messages: {
+        expectingObject: "Expecting object ({{ _id }})",
+        incorrectSortingOrder: "Incorrect sorting order"
+    },
+    name: "sort-keys",
+    subOptionsKey: "overrides"
 });
-/**
- * Lints group.
- *
- * @param group - Items.
- * @param context - Context.
- */
-function lintNodes(group, context) {
-    if (group.length > 1) {
-        const sortedGroup = _.sortBy(group, item => item.key);
-        const fixes = [];
-        let min;
-        let max;
-        for (const [index, sortedItem] of sortedGroup.entries())
-            if (sortedItem.index === index) {
-                // Valid
-            }
-            else {
-                const item = functions_1.a.get(group, index);
-                min = functions_1.is.not.empty(min) ? Math.min(min, index) : index;
-                max = functions_1.is.not.empty(max) ? Math.max(max, index) : index;
-                fixes.push({
-                    range: context.getRangeWithLeadingTrivia(item.node),
-                    text: context.getTextWithLeadingTrivia(sortedItem.node)
-                });
-            }
-        if (fixes.length > 0) {
-            const loc = context.getLocFromRange([
-                functions_1.a.get(group, functions_1.as.not.empty(min)).node.range[0],
-                functions_1.a.get(group, functions_1.as.not.empty(max)).node.range[1]
-            ]);
-            context.report({
-                fix: () => fixes,
-                loc,
-                messageId: "incorrectSortingOrder"
-            });
-        }
-    }
-}
 //# sourceMappingURL=sort-keys.js.map

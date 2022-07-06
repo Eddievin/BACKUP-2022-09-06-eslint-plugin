@@ -10,6 +10,7 @@ const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.consistentImport = utils.createRule({
     create: context => {
         const identifiers = new Set();
+        // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
         const importDeclarations = [];
         return {
             [utils_1.AST_NODE_TYPES.ImportDeclaration]: (node) => {

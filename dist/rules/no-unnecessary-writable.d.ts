@@ -1,2 +1,0 @@
-export declare const noUnnecessaryWritable: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"unnecessaryWritable", import("@skylib/functions").unknowns, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-//# sourceMappingURL=no-unnecessary-writable.d.ts.map

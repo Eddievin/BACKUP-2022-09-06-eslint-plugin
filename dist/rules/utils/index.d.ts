@@ -1,6 +1,7 @@
 export * from "./core";
-export * as noUnnecessaryReadonliness from "./no-unnecessary-readonliness";
+export * from "./sort";
 export * from "./synonyms";
-export { Checker } from "./Checker";
-export { getTypeParts } from "./type-parts";
+export * from "./test";
+export * from "./type-parts";
+export * from "./types";
 //# sourceMappingURL=index.d.ts.map

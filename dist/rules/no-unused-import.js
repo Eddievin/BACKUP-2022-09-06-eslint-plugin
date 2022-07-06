@@ -8,6 +8,7 @@ const utils_1 = require("@typescript-eslint/utils");
 exports.noUnusedImport = utils.createRule({
     create: context => {
         const identifiers = new Set();
+        // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array
         const importDeclarations = [];
         return {
             [utils_1.AST_NODE_TYPES.ImportDeclaration]: (node) => {

@@ -14,23 +14,17 @@ const disallow_import_1 = require("./disallow-import");
 const empty_lines_around_comment_1 = require("./empty-lines-around-comment");
 const exhaustive_switch_1 = require("./exhaustive-switch");
 const export_all_name_1 = require("./export-all-name");
-const function_properties_style_1 = require("./function-properties-style");
 const no_expression_empty_line_1 = require("./no-expression-empty-line");
 const no_inferrable_types_1 = require("./no-inferrable-types");
 const no_multi_type_tuples_1 = require("./no-multi-type-tuples");
-const no_mutable_signature_1 = require("./no-mutable-signature");
 const no_negated_condition_1 = require("./no-negated-condition");
 const no_restricted_syntax_1 = require("./no-restricted-syntax");
-const no_unnecessary_readonly_1 = require("./no-unnecessary-readonly");
-const no_unnecessary_writable_1 = require("./no-unnecessary-writable");
 const no_unsafe_object_assignment_1 = require("./no-unsafe-object-assignment");
 const no_unused_import_1 = require("./no-unused-import");
 const object_format_1 = require("./object-format");
 const only_export_name_1 = require("./only-export-name");
 const optional_property_style_1 = require("./optional-property-style");
 const prefer_alias_for_array_types_1 = require("./prefer-alias-for-array-types");
-const prefer_readonly_1 = require("./prefer-readonly");
-const prefer_readonly_props_1 = require("./prefer-readonly-props");
 const prefer_ts_toolbelt_1 = require("./prefer-ts-toolbelt");
 const primary_export_only_1 = require("./primary-export-only");
 const require_jsdoc_1 = require("./require-jsdoc");
@@ -59,23 +53,17 @@ exports.rules = (0, functions_1.evaluate)(() => {
         "empty-lines-around-comment": empty_lines_around_comment_1.emptyLinesAroundComment,
         "exhaustive-switch": exhaustive_switch_1.exhaustiveSwitch,
         "export-all-name": export_all_name_1.exportAllName,
-        "function-properties-style": function_properties_style_1.functionPropertiesStyle,
         "no-expression-empty-line": no_expression_empty_line_1.noExpressionEmptyLine,
         "no-inferrable-types": no_inferrable_types_1.noInferrableTypes,
         "no-multi-type-tuples": no_multi_type_tuples_1.noMultiTypeTuples,
-        "no-mutable-signature": no_mutable_signature_1.noMutableSignature,
         "no-negated-condition": no_negated_condition_1.noNegatedCondition,
         "no-restricted-syntax": no_restricted_syntax_1.noRestrictedSyntax,
-        "no-unnecessary-readonly": no_unnecessary_readonly_1.noUnnecessaryReadonly,
-        "no-unnecessary-writable": no_unnecessary_writable_1.noUnnecessaryWritable,
         "no-unsafe-object-assignment": no_unsafe_object_assignment_1.noUnsafeObjectAssignment,
         "no-unused-import": no_unused_import_1.noUnusedImport,
         "object-format": object_format_1.objectFormat,
         "only-export-name": only_export_name_1.onlyExportName,
         "optional-property-style": optional_property_style_1.optionalPropertyStyle,
         "prefer-alias-for-array-types": prefer_alias_for_array_types_1.preferAliasForArrayTypes,
-        "prefer-readonly": prefer_readonly_1.preferReadonly,
-        "prefer-readonly-props": prefer_readonly_props_1.preferReadonlyProps,
         "prefer-ts-toolbelt": prefer_ts_toolbelt_1.preferTsToolbelt,
         "primary-export-only": primary_export_only_1.primaryExportOnly,
         "require-jsdoc": require_jsdoc_1.requireJsdoc,

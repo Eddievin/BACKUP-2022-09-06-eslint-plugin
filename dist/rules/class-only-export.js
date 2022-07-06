@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classOnlyExport = void 0;
 const tslib_1 = require("tslib");

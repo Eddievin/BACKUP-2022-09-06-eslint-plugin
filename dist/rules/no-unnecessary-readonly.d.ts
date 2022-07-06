@@ -1,2 +1,0 @@
-export declare const noUnnecessaryReadonly: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"unnecessaryReadonly", import("@skylib/functions").unknowns, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-//# sourceMappingURL=no-unnecessary-readonly.d.ts.map

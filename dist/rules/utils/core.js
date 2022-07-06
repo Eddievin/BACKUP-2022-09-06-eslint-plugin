@@ -1,7 +1,9 @@
 "use strict";
+/* eslint-disable @skylib/no-restricted-syntax/prefer-arrow-function-property -- Ok */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testRule = exports.stripBase = exports.sort = exports.nodeToString = exports.isAdjacentNodes = exports.getTypeNames = exports.getTypeName = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getNameFromFilename = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
+exports.stripBase = exports.isAdjacentNodes = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getNameFromFilename = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
+/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
@@ -165,27 +167,6 @@ function getSelectors(options, defaultSelectors) {
 }
 exports.getSelectors = getSelectors;
 /**
- * Gets type name.
- *
- * @param type - Type.
- * @returns Type name.
- */
-function getTypeName(type) {
-    const symbol = type.getSymbol();
-    return symbol ? symbol.name : "?";
-}
-exports.getTypeName = getTypeName;
-/**
- * Gets type names as a string.
- *
- * @param types - Types.
- * @returns Type names as a string.
- */
-function getTypeNames(types) {
-    return types.map(type => getTypeName(type)).join(" > ");
-}
-exports.getTypeNames = getTypeNames;
-/**
  * Checks if two nodes are adjacent.
  *
  * @param node1 - Node 1.
@@ -206,106 +187,6 @@ function isAdjacentNodes(node1, node2, childNodesMap) {
 }
 exports.isAdjacentNodes = isAdjacentNodes;
 /**
- * Returns string representing node.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns String representing node.
- */
-function nodeToString(node, context) {
-    switch (node.type) {
-        case utils_1.AST_NODE_TYPES.Identifier:
-            return node.name;
-        case utils_1.AST_NODE_TYPES.Literal:
-            return functions_1.cast.string(node.value);
-        default:
-            return `\u0000${context.getText(node)}`;
-    }
-}
-exports.nodeToString = nodeToString;
-/**
- * Sorts nodes.
- *
- * @param nodes - Nodes.
- * @param options - Options.
- * @param context - Context.
- */
-function sort(nodes, options, context) {
-    const sendToBottom = functions_1.is.not.empty(options.sendToBottom)
-        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-            new RegExp(options.sendToBottom, "u")
-        : undefined;
-    const sendToTop = functions_1.is.not.empty(options.sendToTop)
-        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-            new RegExp(options.sendToTop, "u")
-        : undefined;
-    const items = nodes.map((node, index) => {
-        var _a;
-        switch (node.type) {
-            case utils_1.AST_NODE_TYPES.ObjectExpression: {
-                return {
-                    index,
-                    key: wrapKey((_a = node.properties
-                        .map(property => {
-                        switch (property.type) {
-                            case utils_1.AST_NODE_TYPES.Property:
-                                return nodeToString(property.key, context) === options.key
-                                    ? nodeToString(property.value, context)
-                                    : undefined;
-                            default:
-                                return undefined;
-                        }
-                    })
-                        .find(functions_1.is.string)) !== null && _a !== void 0 ? _a : nodeToString(node, context)),
-                    node
-                };
-            }
-            default:
-                return {
-                    index,
-                    key: wrapKey(nodeToString(node, context)),
-                    node
-                };
-        }
-    });
-    const sortedItems = _.sortBy(items, item => item.key);
-    const fixes = [];
-    let min;
-    let max;
-    for (const [index, sortedItem] of sortedItems.entries())
-        if (sortedItem.index === index) {
-            // Valid
-        }
-        else {
-            const item = functions_1.a.get(items, index);
-            min = functions_1.is.not.empty(min) ? Math.min(min, index) : index;
-            max = functions_1.is.not.empty(max) ? Math.max(max, index) : index;
-            fixes.push({
-                range: context.getRangeWithLeadingTrivia(item.node),
-                text: context.getTextWithLeadingTrivia(sortedItem.node)
-            });
-        }
-    if (fixes.length > 0) {
-        const loc = context.getLocFromRange([
-            functions_1.a.get(items, functions_1.as.not.empty(min)).node.range[0],
-            functions_1.a.get(items, functions_1.as.not.empty(max)).node.range[1]
-        ]);
-        context.report({
-            fix: () => fixes,
-            loc,
-            messageId: "incorrectSortingOrder"
-        });
-    }
-    function wrapKey(key) {
-        if (sendToTop && sendToTop.test(key))
-            return `1:${key}`;
-        if (sendToBottom && sendToBottom.test(key))
-            return `3:${key}`;
-        return `2:${key}`;
-    }
-}
-exports.sort = sort;
-/**
  * Strips base path.
  *
  * @param path - Path.
@@ -317,48 +198,12 @@ function stripBase(path, replacement = "") {
     return `${replacement}${path.slice(exports.base.length)}`;
 }
 exports.stripBase = stripBase;
-/**
- * Runs test.
- *
- * @param name - Rule name.
- * @param rules - Rules.
- * @param invalid - Invalid tests.
- * @param valid - Valid tests.
- */
-function testRule(name, rules, invalid, valid = []) {
-    const rule = rules[name];
-    const tester = new utils_1.TSESLint.RuleTester({
-        // eslint-disable-next-line unicorn/prefer-module -- Postponed
-        parser: require.resolve("vue-eslint-parser"),
-        parserOptions: {
-            ecmaFeatures: { jsx: true },
-            ecmaVersion: 2017,
-            extraFileExtensions: [".vue"],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
-            // @ts-expect-error
-            parser: "@typescript-eslint/parser",
-            project: "./tsconfig.json",
-            sourceType: "module",
-            tsconfigRootDir: `${exports.base}fixtures`
-        }
-    });
-    tester.run(name, rule, {
-        invalid: invalid.map(invalidTest => {
-            var _a, _b;
-            const code = functions_1.s.unpadMultiline(invalidTest.code);
-            const output = functions_1.s.unpadMultiline((_a = invalidTest.output) !== null && _a !== void 0 ? _a : invalidTest.code);
-            return Object.assign(Object.assign({}, invalidTest), { code, filename: `${exports.base}fixtures/${(_b = invalidTest.filename) !== null && _b !== void 0 ? _b : "file.ts"}`, output });
-        }),
-        valid: valid.map(validTest => {
-            var _a;
-            const code = functions_1.s.unpadMultiline(validTest.code);
-            return Object.assign(Object.assign({}, validTest), { code, filename: `${exports.base}fixtures/${(_a = validTest.filename) !== null && _a !== void 0 ? _a : "file.ts"}` });
-        })
-    });
-}
-exports.testRule = testRule;
 const isSharedOptions1 = functions_1.is.object.factory({}, { filesToLint: functions_1.is.strings, filesToSkip: functions_1.is.strings });
-const isSharedOptions2 = functions_1.is.object.factory({ _id: functions_1.is.string }, { filesToLint: functions_1.is.strings, filesToSkip: functions_1.is.strings });
+const isSharedOptions2 = functions_1.is.object.factory({}, {
+    _id: functions_1.is.string,
+    filesToLint: functions_1.is.strings,
+    filesToSkip: functions_1.is.strings
+});
 /**
  * Creates better context.
  *
@@ -438,9 +283,6 @@ function createBetterContext(context, ruleOptionsArray, options) {
         getTextWithLeadingTrivia(node) {
             return code.slice(node.range[0] - this.getLeadingTrivia(node).length, node.range[1]);
         },
-        getTypeDefinitions(types) {
-            return types.map(type => this.checker.typeToString(type)).join(" > ");
-        },
         hasLeadingComment(node) {
             return (this.getLeadingTrivia(node).trim().startsWith("/*") ||
                 this.getLeadingTrivia(node).trim().startsWith("//"));
@@ -462,7 +304,7 @@ function createBetterContext(context, ruleOptionsArray, options) {
         report: context.report.bind(context),
         scope: context.getScope(),
         source,
-        subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, id, path, code),
+        subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, path),
         toEsNode: parser.tsNodeToESTreeNodeMap.get.bind(parser.tsNodeToESTreeNodeMap),
         toTsNode: parser.esTreeNodeToTSNodeMap.get.bind(parser.esTreeNodeToTSNodeMap)
     };
@@ -485,12 +327,10 @@ function getRuleOptions(ruleOptionsArray, options) {
  *
  * @param ruleOptionsArray - Raw rule options array.
  * @param options - Options.
- * @param ruleId - Rule id.
  * @param path - Path.
- * @param code - Code.
  * @returns Suboptions array.
  */
-function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
+function getSubOptionsArray(ruleOptionsArray, options, path) {
     var _a;
     const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
     if (isSubOptions) {
@@ -501,7 +341,7 @@ function getSubOptionsArray(ruleOptionsArray, options, ruleId, path, code) {
             .map(subOptions => {
             return Object.assign(Object.assign({}, defaultSubOptions), subOptions);
         })
-            .filter(subOptions => shouldBeLinted2(subOptions, ruleId, path, code));
+            .filter(subOptions => shouldBeLinted2(subOptions, path));
         functions_1.assert.array.of(result, isSubOptions, "Expecting valid rule options");
         return result;
     }
@@ -527,19 +367,16 @@ function shouldBeLinted1(options, path) {
  * Determines if file should be linted.
  *
  * @param options - Options.
- * @param ruleId - Rule id.
  * @param path - Path.
- * @param code - Code.
  * @returns _True_ if file should be linted, _false_ otherwise.
  */
-function shouldBeLinted2(options, ruleId, path, code) {
+function shouldBeLinted2(options, path) {
     functions_1.assert.byGuard(options, isSharedOptions2, "Expecting valid rule options");
-    const disallowById = code.includes(`/* disable ${ruleId}[${options._id}] */`);
     const disallowByPath = (0, functions_1.evaluate)(() => {
         var _a, _b;
         const matcher = exports.createFileMatcher.disallowAllow((_a = options.filesToSkip) !== null && _a !== void 0 ? _a : [], (_b = options.filesToLint) !== null && _b !== void 0 ? _b : [], false, { dot: true, matchBase: true });
         return matcher(stripBase(functions_1.s.path.canonicalize(path), "./"));
     });
-    return !disallowByPath && !disallowById;
+    return !disallowByPath;
 }
 //# sourceMappingURL=core.js.map

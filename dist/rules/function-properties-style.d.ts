@@ -1,2 +1,0 @@
-export declare const functionPropertiesStyle: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"noDistributedDefinition", import("@skylib/functions").objects, import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-//# sourceMappingURL=function-properties-style.d.ts.map

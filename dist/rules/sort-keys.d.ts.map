@@ -1,1 +1,1 @@
-{"version":3,"file":"sort-keys.d.ts","sourceRoot":"","sources":["../../src/rules/sort-keys.ts"],"names":[],"mappings":"AAQA,eAAO,MAAM,QAAQ,sMAyDnB,CAAC"}
+{"version":3,"file":"sort-keys.d.ts","sourceRoot":"","sources":["../../src/rules/sort-keys.ts"],"names":[],"mappings":"AAKA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,QAAQ,mKAiEnB,CAAC"}

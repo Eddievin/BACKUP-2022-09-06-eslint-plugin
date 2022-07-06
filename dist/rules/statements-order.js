@@ -37,6 +37,7 @@ exports.statementsOrder = utils.createRule({
             "Program:exit": () => {
                 for (const items of itemsMap.values()) {
                     const sortedItems = _.sortBy(items, node => node.sortingOrder);
+                    // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
                     const fixes = [];
                     for (const [index, sortedItem] of sortedItems.entries())
                         if (sortedItem.index === index) {

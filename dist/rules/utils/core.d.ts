@@ -1,10 +1,9 @@
-import { is, s } from "@skylib/functions";
+import { is } from "@skylib/functions";
 import minimatch from "minimatch";
-import type { Accumulator, Rec, objects, strings, unknowns } from "@skylib/functions";
-import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
-import type { InvalidTestCase as BaseInvalidTestCase, ValidTestCase as BaseValidTestCase, ReportDescriptor, RuleContext, RuleListener, RuleModule, SourceCode } from "@typescript-eslint/utils/dist/ts-eslint";
-import type * as estree from "estree";
-import type * as ts from "typescript";
+import type { Context, Package } from "./types";
+import type { Accumulator, Rec, objects, strings } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener, RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 export declare const isPackage: is.Guard<Package>;
 export declare const base: string;
 /**
@@ -27,106 +26,6 @@ export declare const createFileMatcher: {
      */
     disallowAllow: (disallow: strings, allow: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher;
 } & ((patterns: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher);
-export interface Context<M extends string, O extends object, S extends object> {
-    readonly checker: ts.TypeChecker;
-    readonly code: string;
-    readonly defineTemplateBodyVisitor: DefineTemplateBodyVisitor;
-    readonly eol: s.Eol;
-    /**
-     * Gets leading trivia.
-     *
-     * @param node - Node.
-     * @returns Leading trivia.
-     */
-    readonly getLeadingTrivia: (node: TSESTree.Node) => string;
-    /**
-     * Gets location from range.
-     *
-     * @param range - Range.
-     * @returns Location.
-     */
-    readonly getLocFromRange: (range: ReadonlyRange) => estree.SourceLocation;
-    /**
-     * Gets member name.
-     *
-     * @param node - Node.
-     * @param context - Context.
-     * @returns Member name.
-     */
-    readonly getMemberName: (node: TSESTree.ClassElement | TSESTree.TypeElement) => string;
-    /**
-     * Gets range with leading trivia.
-     *
-     * @param node - Node.
-     * @returns Range.
-     */
-    readonly getRangeWithLeadingTrivia: (node: TSESTree.Node) => TSESTree.Range;
-    /**
-     * Gets text.
-     *
-     * @param node - Node.
-     * @returns Text.
-     */
-    readonly getText: (node: TSESTree.Comment | TSESTree.Node) => string;
-    /**
-     * Gets text with leading trivia.
-     *
-     * @param node - Node.
-     * @returns Text.
-     */
-    readonly getTextWithLeadingTrivia: (node: TSESTree.Node) => string;
-    /**
-     * Gets type definitions as a string.
-     *
-     * @param types - Types.
-     * @returns Type definitions as a string.
-     */
-    readonly getTypeDefinitions: (types: readonly ts.Type[]) => string;
-    /**
-     * Checks if node has leading comment.
-     *
-     * @param node - Node.
-     * @returns _True_ if node has leading comment, _false_ otherwise.
-     */
-    readonly hasLeadingComment: (node: TSESTree.Node) => boolean;
-    /**
-     * Checks if node has leading doc comment.
-     *
-     * @param node - Node.
-     * @returns _True_ if node has leading doc comment, _false_ otherwise.
-     */
-    readonly hasLeadingDocComment: (node: TSESTree.Node) => boolean;
-    /**
-     * Checks if node has trailing comment.
-     *
-     * @param node - Node.
-     * @returns _True_ if node has trailing comment, _false_ otherwise.
-     */
-    readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
-    readonly id: string;
-    readonly locZero: TSESTree.Position;
-    /**
-     * Checks if signature or symbol is missing doc comment.
-     *
-     * @param mixed - Signature or symbol.
-     * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
-     */
-    readonly missingDocComment: (mixed: ts.Signature | ts.Symbol) => boolean;
-    readonly options: O;
-    readonly package: Package;
-    readonly path: string;
-    /**
-     * Reports error.
-     *
-     * @param descriptor - Descriptor.
-     */
-    readonly report: (descriptor: ReportDescriptor<M>) => void;
-    readonly scope: ReturnType<RuleContext<M, unknowns>["getScope"]>;
-    readonly source: SourceCode;
-    readonly subOptionsArray: readonly S[];
-    readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
-    readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
-}
 export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
     /**
      * Creates rule listener.
@@ -144,17 +43,10 @@ export interface CreateRuleOptions<M extends string, O extends object, S extends
     readonly name: string;
     readonly subOptionsKey?: string;
 }
-export interface DefineTemplateBodyVisitor {
-    (templateVisitor: any, scriptVisitor?: any, options?: any): any;
-}
 export interface GetSelectorsOptions {
     readonly excludeSelectors: strings;
     readonly includeSelectors: strings;
     readonly noDefaultSelectors: boolean;
-}
-export interface InvalidTestCase<M extends string> extends BaseInvalidTestCase<M, readonly [object]> {
-    readonly filename?: SourceFile;
-    readonly name: string;
 }
 export interface Matcher {
     /**
@@ -166,20 +58,6 @@ export interface Matcher {
     (str: string): boolean;
 }
 export declare type MessageId<T> = T extends RuleModule<infer I, infer _O> ? I : never;
-export interface Package {
-    readonly name?: string;
-}
-export declare type ReadonlyRange = readonly [number, number];
-export interface SortOptions {
-    readonly key?: string;
-    readonly sendToBottom?: string;
-    readonly sendToTop?: string;
-}
-export declare type SourceFile = "camelCase.camelCase.ts" | "camelCase.ts" | "file.extras.ts" | "kebab-case.kebab-case.ts" | "kebab-case.ts" | "PascalCase.PascalCase.ts" | "PascalCase.ts" | "subfolder/index.ts" | "vue.d.ts";
-export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
-    readonly filename?: SourceFile;
-    readonly name: string;
-}
 /**
  * Adds node to child nodes map.
  *
@@ -239,20 +117,6 @@ export declare function getPackage(path?: string): Package;
  */
 export declare function getSelectors(options: GetSelectorsOptions, defaultSelectors: strings): string;
 /**
- * Gets type name.
- *
- * @param type - Type.
- * @returns Type name.
- */
-export declare function getTypeName(type: ts.Type): string;
-/**
- * Gets type names as a string.
- *
- * @param types - Types.
- * @returns Type names as a string.
- */
-export declare function getTypeNames(types: readonly ts.Type[]): string;
-/**
  * Checks if two nodes are adjacent.
  *
  * @param node1 - Node 1.
@@ -262,22 +126,6 @@ export declare function getTypeNames(types: readonly ts.Type[]): string;
  */
 export declare function isAdjacentNodes(node1: TSESTree.Node, node2: TSESTree.Node, childNodesMap: Accumulator<string, TSESTree.Node>): boolean;
 /**
- * Returns string representing node.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns String representing node.
- */
-export declare function nodeToString(node: TSESTree.Node, context: Context<never, object, object>): string;
-/**
- * Sorts nodes.
- *
- * @param nodes - Nodes.
- * @param options - Options.
- * @param context - Context.
- */
-export declare function sort(nodes: readonly TSESTree.Node[], options: SortOptions, context: Context<"incorrectSortingOrder", object, object>): void;
-/**
  * Strips base path.
  *
  * @param path - Path.
@@ -285,13 +133,4 @@ export declare function sort(nodes: readonly TSESTree.Node[], options: SortOptio
  * @returns Stripped path.
  */
 export declare function stripBase(path: string, replacement?: string): string;
-/**
- * Runs test.
- *
- * @param name - Rule name.
- * @param rules - Rules.
- * @param invalid - Invalid tests.
- * @param valid - Valid tests.
- */
-export declare function testRule<K extends string, M extends string>(name: K, rules: Rec<K, RuleModule<M, objects>>, invalid: ReadonlyArray<InvalidTestCase<M>>, valid?: readonly ValidTestCase[]): void;
 //# sourceMappingURL=core.d.ts.map

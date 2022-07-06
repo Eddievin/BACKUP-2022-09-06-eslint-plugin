@@ -4,6 +4,7 @@ exports.noRestrictedSyntax = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
+const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 exports.noRestrictedSyntax = utils.createRule({
     create: context => {
@@ -40,8 +41,13 @@ exports.noRestrictedSyntax = utils.createRule({
             return expected ? expected.some(x => checkTypeHas(type, x)) : true;
         }
         function checkTypeIs(type, expected) {
+            var _a, _b;
             if (expected)
                 switch (expected) {
+                    case "anonymous-function":
+                        return ((_a = type.getSymbol()) === null || _a === void 0 ? void 0 : _a.name) === "__function";
+                    case "anonymous-object":
+                        return ((_b = type.getSymbol()) === null || _b === void 0 ? void 0 : _b.name) === "__object";
                     case "any":
                         return checkType(type, ts.TypeFlags.Any);
                     case "array":
@@ -59,6 +65,10 @@ exports.noRestrictedSyntax = utils.createRule({
                     case "object":
                         return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
                             isObject());
+                    case "readonly":
+                        return type
+                            .getProperties()
+                            .some(property => tsutils.isPropertyReadonlyInType(type, property.getEscapedName(), context.checker));
                     case "string":
                         return checkType(type, ts.TypeFlags.String, ts.TypeFlags.StringLike, ts.TypeFlags.StringLiteral);
                     case "symbol":
@@ -90,20 +100,27 @@ exports.noRestrictedSyntax = utils.createRule({
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
         function getVisitors() {
-            const { message, replacement, search, selector: mixed, typeHas, typeHasNoneOf, typeHasNot, typeHasOneOf, typeIs, typeIsNoneOf, typeIsNot, typeIsOneOf } = context.options;
+            const { checkReturnType, message, replacement, search, selector: mixed, typeHas, typeHasNoneOf, typeHasNot, typeHasOneOf, typeIs, typeIsNoneOf, typeIsNot, typeIsOneOf } = Object.assign({ checkReturnType: false }, context.options);
             const selector = functions_1.a.fromMixed(mixed).join(", ");
             return {
                 [selector]: (node) => {
-                    const tsNode = context.toTsNode(node);
-                    const type = context.checker.getTypeAtLocation(tsNode);
-                    if (checkTypeIs(type, typeIs) &&
-                        checkTypeHasNot(type, typeHasNot) &&
-                        checkTypeIsNot(type, typeIsNot) &&
-                        checkTypeHas(type, typeHas) &&
-                        checkTypeHasNoneOf(type, typeHasNoneOf) &&
-                        checkTypeHasOneOf(type, typeHasOneOf) &&
-                        checkTypeIsNoneOf(type, typeIsNoneOf) &&
-                        checkTypeIsOneOf(type, typeIsOneOf))
+                    const types = (0, functions_1.evaluate)(() => {
+                        const tsNode = context.toTsNode(node);
+                        const type = context.checker.getTypeAtLocation(tsNode);
+                        return checkReturnType
+                            ? type
+                                .getCallSignatures()
+                                .map(signature => signature.getReturnType())
+                            : [type];
+                    });
+                    if (types.some(type => checkTypeIs(type, typeIs)) &&
+                        types.some(type => checkTypeHasNot(type, typeHasNot)) &&
+                        types.some(type => checkTypeIsNot(type, typeIsNot)) &&
+                        types.some(type => checkTypeHas(type, typeHas)) &&
+                        types.some(type => checkTypeHasNoneOf(type, typeHasNoneOf)) &&
+                        types.some(type => checkTypeHasOneOf(type, typeHasOneOf)) &&
+                        types.some(type => checkTypeIsNoneOf(type, typeIsNoneOf)) &&
+                        types.some(type => checkTypeIsOneOf(type, typeIsOneOf)))
                         context.report({
                             data: {
                                 message: message !== null && message !== void 0 ? message : `This syntax is not allowed: ${selector}`
@@ -129,33 +146,37 @@ exports.noRestrictedSyntax = utils.createRule({
     },
     fixable: "code",
     isRuleOptions: (0, functions_1.evaluate)(() => {
-        const TypeVO = (0, functions_1.createValidationObject)({
-            any: "any",
-            array: "array",
-            boolean: "boolean",
-            function: "function",
-            null: "null",
-            number: "number",
-            object: "object",
-            string: "string",
-            symbol: "symbol",
-            undefined: "undefined",
-            unknown: "unknown"
+        const TestVO = (0, functions_1.createValidationObject)({
+            "anonymous-function": "anonymous-function",
+            "anonymous-object": "anonymous-object",
+            "any": "any",
+            "array": "array",
+            "boolean": "boolean",
+            "function": "function",
+            "null": "null",
+            "number": "number",
+            "object": "object",
+            "readonly": "readonly",
+            "string": "string",
+            "symbol": "symbol",
+            "undefined": "undefined",
+            "unknown": "unknown"
         });
-        const isType = functions_1.is.factory(functions_1.is.enumeration, TypeVO);
-        const isTypes = functions_1.is.factory(functions_1.is.array.of, isType);
+        const isTest = functions_1.is.factory(functions_1.is.enumeration, TestVO);
+        const isTests = functions_1.is.factory(functions_1.is.array.of, isTest);
         return functions_1.is.object.factory({ selector: functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings) }, {
+            checkReturnType: functions_1.is.boolean,
             message: functions_1.is.string,
             replacement: functions_1.is.string,
             search: functions_1.is.string,
-            typeHas: isType,
-            typeHasNoneOf: isTypes,
-            typeHasNot: isType,
-            typeHasOneOf: isTypes,
-            typeIs: isType,
-            typeIsNoneOf: isTypes,
-            typeIsNot: isType,
-            typeIsOneOf: isTypes
+            typeHas: isTest,
+            typeHasNoneOf: isTests,
+            typeHasNot: isTest,
+            typeHasOneOf: isTests,
+            typeIs: isTest,
+            typeIsNoneOf: isTests,
+            typeIsNot: isTest,
+            typeIsOneOf: isTests
         });
     }),
     messages: { customMessage: "{{ message }}" },
