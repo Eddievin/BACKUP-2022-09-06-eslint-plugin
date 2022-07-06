@@ -6,7 +6,7 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const sortKeys = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const items = new Map<string, Item>();
 
     const nodes: Writable<Nodes> = [];

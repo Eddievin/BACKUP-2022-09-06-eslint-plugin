@@ -1,6 +1,6 @@
-/* eslint-disable @skylib/no-restricted-syntax/prefer-arrow-function-property -- Ok */
+/* eslint-disable @skylib/custom/prefer-arrow-function-property -- Ok */
 
-/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
+/* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 
 import {
   assert,
@@ -567,6 +567,7 @@ function getSubOptionsArray<
     assert.array.of(raw, is.object, "Expecting valid rule options");
 
     const result = raw
+      // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
       .map(subOptions => {
         return { ...defaultSubOptions, ...subOptions };
       })

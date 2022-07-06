@@ -12,7 +12,7 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentEmptyLines = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
     const prevRuleIndexes = new Accumulator<string, number>();

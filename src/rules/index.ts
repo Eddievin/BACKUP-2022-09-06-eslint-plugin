@@ -38,6 +38,7 @@ import type { WritableIndexedObject } from "@skylib/functions";
 
 export * as utils from "./utils";
 
+// eslint-disable-next-line @skylib/custom/no-anonymous-return -- Ok
 export const rules = evaluate(() => {
   const core = {
     "array-callback-return-type": arrayCallbackReturnType,

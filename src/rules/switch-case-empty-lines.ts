@@ -1,9 +1,10 @@
 import * as utils from "./utils";
 import { a, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const switchCaseEmptyLines = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       [AST_NODE_TYPES.SwitchStatement]: (node): void => {
         for (const [case1, case2] of a.chain(node.cases)) {

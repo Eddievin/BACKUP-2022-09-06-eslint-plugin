@@ -4,9 +4,10 @@ import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const custom = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
     const listener = getVisitors();
 

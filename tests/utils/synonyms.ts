@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-internal-modules -- Ok
 import { getSynonyms } from "@/rules/utils";
 import type { WritableIndexedObject } from "@skylib/functions";
 

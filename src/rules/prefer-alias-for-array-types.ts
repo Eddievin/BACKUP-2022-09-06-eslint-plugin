@@ -2,9 +2,10 @@ import * as utils from "./utils";
 import { as, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const preferAliasForArrayTypes = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       [AST_NODE_TYPES.TSTypeAnnotation]: (node): void => {
         if (node.typeAnnotation.type === AST_NODE_TYPES.TSTypeReference) {

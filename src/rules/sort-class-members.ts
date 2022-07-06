@@ -4,10 +4,13 @@ import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Writable, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const sortClassMembers = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const sortingOrders = new Map(
       context.options.sortingOrder.map((name, index) => [name, index])
     );

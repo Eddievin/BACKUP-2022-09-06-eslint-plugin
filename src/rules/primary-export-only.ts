@@ -3,9 +3,10 @@ import { a, is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import path from "node:path";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const primaryExportOnly = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const exportDefaultDeclarations =
       new Set<TSESTree.ExportDefaultDeclaration>();
 

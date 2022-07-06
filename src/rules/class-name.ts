@@ -2,9 +2,10 @@ import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import path from "node:path";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const className = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       "ExportNamedDeclaration > ClassDeclaration": (
         node: TSESTree.ClassDeclaration

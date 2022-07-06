@@ -1,6 +1,6 @@
 /* eslint-disable @skylib/primary-export-only */
 
-/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
+/* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 
 import { compare } from "./compare";
 import { a, as, cast, is } from "@skylib/functions";
@@ -68,6 +68,7 @@ export function sort<T extends TSESTree.Node>(
       new RegExp(sendToBottom, "u")
     : undefined;
 
+  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
   const items = nodes.map<Item>((node, index) => {
     return {
       index,

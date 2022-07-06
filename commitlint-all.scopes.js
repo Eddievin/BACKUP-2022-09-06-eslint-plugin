@@ -1,7 +1,7 @@
 module.exports = {
   scopes: [
-    "disallow-identifier",
     "disallow-by-regexp",
+    "disallow-identifier",
     "function-properties-style",
     "no-mutable-signature",
     "no-restricted-syntax",

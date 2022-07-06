@@ -2,9 +2,10 @@ import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const noMultiTypeTuples = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       [AST_NODE_TYPES.TSTupleType]: (node): void => {
         if (_.uniq(node.elementTypes.map(context.getText)).length > 1)

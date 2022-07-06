@@ -1,9 +1,10 @@
 import * as utils from "./utils";
 import { a, evaluate, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const noExpressionEmptyLine = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       [AST_NODE_TYPES.MemberExpression]: (node): void => {
         const got = s.leadingSpaces(context.code.slice(node.object.range[1]));
@@ -20,6 +21,7 @@ export const noExpressionEmptyLine = utils.createRule({
           // Valid
         } else
           context.report({
+            // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
             fix: () => {
               return {
                 range: [

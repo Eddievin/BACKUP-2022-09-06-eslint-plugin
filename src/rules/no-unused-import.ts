@@ -2,12 +2,13 @@ import * as utils from "./utils";
 import { as, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const noUnusedImport = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const identifiers = new Set<string>();
 
-    // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array
+    // eslint-disable-next-line @skylib/custom/prefer-readonly-array
     const importDeclarations: TSESTree.ImportDeclaration[] = [];
 
     return {

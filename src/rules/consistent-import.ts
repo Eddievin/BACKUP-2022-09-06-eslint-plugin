@@ -13,12 +13,13 @@ import minimatch from "minimatch";
 import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentImport = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const identifiers = new Set<string>();
 
-    // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
+    // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
     const importDeclarations: TSESTree.ImportDeclaration[] = [];
 
     return {

@@ -12,8 +12,7 @@ export function compare(x: string, y: string): -1 | 0 | 1 {
   return naturalCompare(x.replace(re, callback), y.replace(re, callback));
 }
 
-// eslint-disable-next-line @skylib/no-restricted-syntax/prefer-const-object -- Wait for @skylib/config update
-const map: IndexedObject<string> = { ".": ":", ":": "." };
+const map: IndexedObject<string> = { ":": ".", ".": ":" };
 
 const re = /[.:]/gu;
 
@@ -24,6 +23,6 @@ const re = /[.:]/gu;
  * @returns Replacement character.
  */
 function callback(char: string): string {
-  // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style, no-type-assertion/no-type-assertion -- Ok
+  // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
   return map[char] as string;
 }

@@ -3,9 +3,10 @@ import { a, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Writable, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const emptyLinesAroundComment = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const nodes: Writable<readonly TSESTree.Node[]> = [];
 
     return {
@@ -35,6 +36,7 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (expected && !got)
                 context.report({
+                  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
                   fix: () => {
                     return {
                       range: a.clone(prefix.range),
@@ -56,6 +58,7 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (expected && !got)
                 context.report({
+                  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
                   fix: () => {
                     return {
                       range: a.clone(suffix.range),
@@ -68,6 +71,7 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (got && !expected)
                 context.report({
+                  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
                   fix: () => {
                     return {
                       range: a.clone(suffix.range),

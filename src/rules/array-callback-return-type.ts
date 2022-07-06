@@ -4,9 +4,10 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const arrayCallbackReturnType = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       [AST_NODE_TYPES.CallExpression]: (node): void => {
         if (

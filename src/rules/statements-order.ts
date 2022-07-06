@@ -12,10 +12,13 @@ import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Rec, stringU, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const statementsOrder = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const blockOrder: Rec<NodeType, number> = {
       ...defaultOrder,
       ...o.fromEntries(
@@ -81,7 +84,7 @@ export const statementsOrder = utils.createRule({
         for (const items of itemsMap.values()) {
           const sortedItems = _.sortBy(items, node => node.sortingOrder);
 
-          // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
+          // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
           const fixes: RuleFix[] = [];
 
           for (const [index, sortedItem] of sortedItems.entries())

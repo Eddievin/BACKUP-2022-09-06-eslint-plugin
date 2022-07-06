@@ -4,7 +4,7 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const objectFormat = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const listener: RuleListener = {
       [AST_NODE_TYPES.ObjectExpression]: (node): void => {
         const texts = node.properties.map(property =>

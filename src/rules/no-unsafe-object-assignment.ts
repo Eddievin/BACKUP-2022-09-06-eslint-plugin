@@ -4,9 +4,10 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const noUnsafeObjectAssignment = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       [AST_NODE_TYPES.ArrowFunctionExpression]: (node): void => {
         if (node.body.type === AST_NODE_TYPES.BlockStatement) {

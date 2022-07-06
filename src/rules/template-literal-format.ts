@@ -1,9 +1,10 @@
 import * as utils from "./utils";
 import { a, fn, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const templateLiteralFormat = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     return {
       [AST_NODE_TYPES.TemplateLiteral]: (node): void => {
         const lines = s.lines(context.getText(node));

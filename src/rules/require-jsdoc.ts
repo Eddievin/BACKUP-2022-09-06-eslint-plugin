@@ -4,10 +4,11 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as ts from "typescript";
 
 export const requireJsdoc = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const selectors = utils.getSelectors(context.options, defaultSelectors);
 
     return {

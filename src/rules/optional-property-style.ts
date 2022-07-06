@@ -4,6 +4,7 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const optionalPropertyStyle = evaluate(() => {
   const StyleVO = createValidationObject<Style>({
@@ -23,7 +24,7 @@ export const optionalPropertyStyle = evaluate(() => {
 
   return utils.createRule({
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    create: context => {
+    create: (context): RuleListener => {
       return {
         "ClassDeclaration, ClassExpression, TSInterfaceDeclaration": (
           node:

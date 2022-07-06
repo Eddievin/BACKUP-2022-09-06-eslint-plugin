@@ -4,6 +4,7 @@ import * as _ from "@skylib/lodash-commonjs-es";
 import path from "node:path";
 import type { stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentFilename = evaluate(() => {
   const FormatVO = createValidationObject<Format>({
@@ -22,7 +23,7 @@ export const consistentFilename = evaluate(() => {
   );
 
   return utils.createRule({
-    create: context => {
+    create: (context): RuleListener => {
       let className: stringU;
 
       let format = context.options.format;

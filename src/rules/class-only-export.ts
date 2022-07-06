@@ -1,13 +1,14 @@
-/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed */
+/* eslint-disable @skylib/custom/prefer-readonly-array -- Postponed */
 
 import * as utils from "./utils";
 import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const classOnlyExport = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const exportAllDeclarations: TSESTree.ExportAllDeclaration[] = [];
 
     const exportDefaultDeclaration: TSESTree.ExportDefaultDeclaration[] = [];

@@ -3,9 +3,10 @@ import { is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const sortArray = utils.createRule({
-  create: context => {
+  create: (context): RuleListener => {
     const { key, selector } = context.options;
 
     return {

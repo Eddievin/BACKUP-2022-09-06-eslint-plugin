@@ -63,6 +63,7 @@ export function testRule<K extends string, M extends string>(
   });
 
   tester.run(name, rule, {
+    // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
     invalid: invalid.map(invalidTest => {
       const code = s.unpadMultiline(invalidTest.code);
 
@@ -75,6 +76,7 @@ export function testRule<K extends string, M extends string>(
         output
       };
     }),
+    // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
     valid: valid.map(validTest => {
       const code = s.unpadMultiline(validTest.code);
 
