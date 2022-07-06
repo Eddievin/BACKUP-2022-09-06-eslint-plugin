@@ -24,7 +24,7 @@ export function getSynonyms(
       const name = synonym.replace(/^@skylib\//u, "");
 
       assert.empty(dest[name], `Duplicate synonym: ${synonym}`);
-      dest[name] = o.get(core, a.first(synonym.split("/")));
+      dest[name] = o.get(core, a.first(name.split("/")));
     }
   }
 }
