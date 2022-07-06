@@ -72,26 +72,6 @@ utils.testRule(
           ]
         }
       ]
-    },
-    {
-      code: `
-        /* disable consistent-import[id] */
-
-        source();
-      `,
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          sources: [
-            {
-              _id: "id",
-              filesToLint: ["./other/**"],
-              source: "source",
-              type: "wildcard"
-            }
-          ]
-        }
-      ]
     }
   ]
 );

@@ -94,5 +94,72 @@ utils.testRule("sort-keys", rules, [
         d: 4
       }
     `
+  },
+  {
+    code: `
+      const x = {
+        a: 1,
+        c: 3,
+        b: 2,
+        d: 4
+      };
+      const y = {
+        a: 1,
+        c: 3,
+        b: 2,
+        d: 4
+      };
+    `,
+    errors: [
+      {
+        endLine: 4,
+        line: 3,
+        messageId: "incorrectSortingOrder"
+      },
+      {
+        endLine: 11,
+        line: 9,
+        messageId: "incorrectSortingOrder"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        overrides: [
+          {
+            _id: "id",
+            customOrder: ["a", "d"],
+            selector: "VariableDeclarator[id.name=y] > ObjectExpression"
+          }
+        ]
+      }
+    ],
+    output: `
+      const x = {
+        a: 1,
+        b: 2,
+        c: 3,
+        d: 4
+      };
+      const y = {
+        a: 1,
+        d: 4,
+        b: 2,
+        c: 3
+      };
+    `
+  },
+  {
+    code: "const id = 1;",
+    errors: [
+      {
+        data: { _id: "id" },
+        endLine: 1,
+        line: 1,
+        messageId: "expectingObject"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ overrides: [{ _id: "id", selector: "Identifier" }] }]
   }
 ]);

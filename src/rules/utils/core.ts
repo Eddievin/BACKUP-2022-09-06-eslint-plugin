@@ -299,28 +299,6 @@ export function getSelectors(
 }
 
 /**
- * Gets type name.
- *
- * @param type - Type.
- * @returns Type name.
- */
-export function getTypeName(type: ts.Type): string {
-  const symbol = type.getSymbol();
-
-  return symbol ? symbol.name : "?";
-}
-
-/**
- * Gets type names as a string.
- *
- * @param types - Types.
- * @returns Type names as a string.
- */
-export function getTypeNames(types: readonly ts.Type[]): string {
-  return types.map(type => getTypeName(type)).join(" > ");
-}
-
-/**
  * Checks if two nodes are adjacent.
  *
  * @param node1 - Node 1.
@@ -372,8 +350,12 @@ const isSharedOptions1 = is.object.factory<SharedOptions1>(
 );
 
 const isSharedOptions2 = is.object.factory<SharedOptions2>(
-  { _id: is.string },
-  { filesToLint: is.strings, filesToSkip: is.strings }
+  {},
+  {
+    _id: is.string,
+    filesToLint: is.strings,
+    filesToSkip: is.strings
+  }
 );
 
 interface SharedOptions1 {
@@ -382,7 +364,7 @@ interface SharedOptions1 {
 }
 
 interface SharedOptions2 {
-  readonly _id: string;
+  readonly _id?: string;
   readonly filesToLint?: strings;
   readonly filesToSkip?: strings;
 }
@@ -505,9 +487,6 @@ function createBetterContext<
         node.range[1]
       );
     },
-    getTypeDefinitions(types): string {
-      return types.map(type => this.checker.typeToString(type)).join(" > ");
-    },
     hasLeadingComment(node): boolean {
       return (
         this.getLeadingTrivia(node).trim().startsWith("/*") ||
@@ -531,13 +510,7 @@ function createBetterContext<
     report: context.report.bind(context),
     scope: context.getScope(),
     source,
-    subOptionsArray: getSubOptionsArray(
-      ruleOptionsArray,
-      options,
-      id,
-      path,
-      code
-    ),
+    subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, path),
     toEsNode: parser.tsNodeToESTreeNodeMap.get.bind(
       parser.tsNodeToESTreeNodeMap
     ),
@@ -572,9 +545,7 @@ function getRuleOptions<M extends string, O extends object, S extends object>(
  *
  * @param ruleOptionsArray - Raw rule options array.
  * @param options - Options.
- * @param ruleId - Rule id.
  * @param path - Path.
- * @param code - Code.
  * @returns Suboptions array.
  */
 function getSubOptionsArray<
@@ -584,9 +555,7 @@ function getSubOptionsArray<
 >(
   ruleOptionsArray: unknowns,
   options: CreateRuleOptions<M, O, S>,
-  ruleId: string,
-  path: string,
-  code: string
+  path: string
 ): readonly S[] {
   const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
 
@@ -601,7 +570,7 @@ function getSubOptionsArray<
       .map(subOptions => {
         return { ...defaultSubOptions, ...subOptions };
       })
-      .filter(subOptions => shouldBeLinted2(subOptions, ruleId, path, code));
+      .filter(subOptions => shouldBeLinted2(subOptions, path));
 
     assert.array.of(result, isSubOptions, "Expecting valid rule options");
 
@@ -639,20 +608,11 @@ function shouldBeLinted1(options: unknown, path: string): boolean {
  * Determines if file should be linted.
  *
  * @param options - Options.
- * @param ruleId - Rule id.
  * @param path - Path.
- * @param code - Code.
  * @returns _True_ if file should be linted, _false_ otherwise.
  */
-function shouldBeLinted2(
-  options: unknown,
-  ruleId: string,
-  path: string,
-  code: string
-): boolean {
+function shouldBeLinted2(options: unknown, path: string): boolean {
   assert.byGuard(options, isSharedOptions2, "Expecting valid rule options");
-
-  const disallowById = code.includes(`/* disable ${ruleId}[${options._id}] */`);
 
   const disallowByPath = evaluate<boolean>(() => {
     const matcher = createFileMatcher.disallowAllow(
@@ -665,5 +625,5 @@ function shouldBeLinted2(
     return matcher(stripBase(s.path.canonicalize(path), "./"));
   });
 
-  return !disallowByPath && !disallowById;
+  return !disallowByPath;
 }

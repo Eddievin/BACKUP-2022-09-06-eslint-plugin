@@ -59,13 +59,6 @@ export interface Context<M extends string, O extends object, S extends object> {
    */
   readonly getTextWithLeadingTrivia: (node: TSESTree.Node) => string;
   /**
-   * Gets type definitions as a string.
-   *
-   * @param types - Types.
-   * @returns Type definitions as a string.
-   */
-  readonly getTypeDefinitions: (types: readonly ts.Type[]) => string;
-  /**
    * Checks if node has leading comment.
    *
    * @param node - Node.
@@ -122,9 +115,3 @@ export interface Package {
 }
 
 export type ReadonlyRange = readonly [number, number];
-
-export interface SortOptions {
-  readonly key?: string;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-}

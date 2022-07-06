@@ -42,12 +42,6 @@ npm install --save-dev @skylib/eslint-plugin
 | `filesToSkip` | Files to skip (minimatch patterns). |
 | `_id` | Suboptions ID. |
 
-### Configuration comment
-
-```ts
-/* disable @skylib/<rule-id>[<sub-options-id>] */
-```
-
 ## <a name="rules"></a>Rules
 
 - [class-member-typedef](https://ilyub.github.io/eslint-plugin/class-member-typedef.html)

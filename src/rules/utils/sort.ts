@@ -1,66 +1,79 @@
+/* eslint-disable @skylib/primary-export-only */
+
 /* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
 
 import { a, as, cast, is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { Context, SortOptions } from "./types";
-import type { numberU } from "@skylib/functions";
+import type { Context } from "./types";
+import type { numberU, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
+
+export interface SortOptions {
+  readonly customOrder?: strings;
+  readonly sendToBottom?: string;
+  readonly sendToTop?: string;
+}
+
+/**
+ * Returns string representing node.
+ *
+ * @param node - Node.
+ * @param context - Context.
+ * @returns String representing node.
+ */
+export function nodeToString(
+  node: TSESTree.Node,
+  context: Context<never, object, object>
+): string {
+  switch (node.type) {
+    case AST_NODE_TYPES.Identifier:
+      return node.name;
+
+    case AST_NODE_TYPES.Literal:
+      return cast.string(node.value);
+
+    default:
+      return `\u0000${context.getText(node)}`;
+  }
+}
 
 /**
  * Sorts nodes.
  *
  * @param nodes - Nodes.
+ * @param nodeToKey - Finds key node.
  * @param options - Options.
  * @param context - Context.
  */
-export function sort(
-  nodes: readonly TSESTree.Node[],
+export function sort<T extends TSESTree.Node>(
+  nodes: readonly T[],
+  nodeToKey: (node: T) => TSESTree.Node,
   options: SortOptions,
   context: Context<"incorrectSortingOrder", object, object>
 ): void {
-  const sendToBottom = is.not.empty(options.sendToBottom)
+  const { customOrder, sendToBottom, sendToTop } = {
+    customOrder: [],
+    ...options
+  };
+
+  const sendToTopRe = is.not.empty(sendToTop)
     ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      new RegExp(options.sendToBottom, "u")
+      new RegExp(sendToTop, "u")
     : undefined;
 
-  const sendToTop = is.not.empty(options.sendToTop)
+  const sendToBottomRe = is.not.empty(sendToBottom)
     ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      new RegExp(options.sendToTop, "u")
+      new RegExp(sendToBottom, "u")
     : undefined;
 
   const items = nodes.map<Item>((node, index) => {
-    switch (node.type) {
-      case AST_NODE_TYPES.ObjectExpression: {
-        return {
-          index,
-          key: wrapKey(
-            node.properties
-              .map(property => {
-                switch (property.type) {
-                  case AST_NODE_TYPES.Property:
-                    return nodeToString(property.key, context) === options.key
-                      ? nodeToString(property.value, context)
-                      : undefined;
-
-                  default:
-                    return undefined;
-                }
-              })
-              .find(is.string) ?? nodeToString(node, context)
-          ),
-          node
-        };
-      }
-
-      default:
-        return {
-          index,
-          key: wrapKey(nodeToString(node, context)),
-          node
-        };
-    }
+    return {
+      index,
+      key: wrapKey(nodeToString(nodeToKey(node), context)),
+      node
+    };
   });
 
   const sortedItems = _.sortBy(items, item => item.key);
@@ -105,33 +118,14 @@ export function sort(
   }
 
   function wrapKey(key: string): string {
-    if (sendToTop && sendToTop.test(key)) return `1:${key}`;
+    const index = customOrder.indexOf(key);
 
-    if (sendToBottom && sendToBottom.test(key)) return `3:${key}`;
+    if (index >= 0) return `${1000 + index}:${key}`;
 
-    return `2:${key}`;
-  }
-}
+    if (sendToTopRe && sendToTopRe.test(key)) return `2001:${key}`;
 
-/**
- * Returns string representing node.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns String representing node.
- */
-function nodeToString(
-  node: TSESTree.Node,
-  context: Context<never, object, object>
-): string {
-  switch (node.type) {
-    case AST_NODE_TYPES.Identifier:
-      return node.name;
+    if (sendToBottomRe && sendToBottomRe.test(key)) return `2003:${key}`;
 
-    case AST_NODE_TYPES.Literal:
-      return cast.string(node.value);
-
-    default:
-      return `\u0000${context.getText(node)}`;
+    return `2002:${key}`;
   }
 }

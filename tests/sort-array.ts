@@ -14,7 +14,6 @@ utils.testRule("sort-array", rules, [
     `,
     errors: [
       {
-        data: { _id: "id" },
         endLine: 6,
         line: 4,
         messageId: "incorrectSortingOrder"
@@ -46,7 +45,6 @@ utils.testRule("sort-array", rules, [
     `,
     errors: [
       {
-        data: { _id: "id" },
         endLine: 8,
         line: 3,
         messageId: "incorrectSortingOrder"
@@ -77,7 +75,6 @@ utils.testRule("sort-array", rules, [
     code: "const id = 1;",
     errors: [
       {
-        data: { _id: "id" },
         endLine: 1,
         line: 1,
         messageId: "expectingArray"
