@@ -203,6 +203,20 @@ utils.testRule("custom", rules, [
     ]
   },
   {
+    code: "function f(x: [unknown]) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=x]"],
+        typeIsOneOf: ["tuple"]
+      }
+    ]
+  },
+  {
     code: "function f(x: undefined) {}",
     errors: [
       { data: { message: "Custom message" }, messageId: "customMessage" }
@@ -457,8 +471,31 @@ utils.testRule("custom", rules, [
   },
   {
     code: `
-      const x = [{ a: 1 }, { b: 2 }];
-      const y = [{ a: 1 } as I, { b: 2 } as J];
+      const x = [true, { a: 1 }, { b: 2 }];
+      const y = [true, { a: 1 } as I, { b: 2 } as J];
+      interface I { a: number }
+      interface J { b: number }
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=/^[xy]$/u]"],
+        typeIs: "complex"
+      }
+    ]
+  },
+  {
+    code: `
+      const x = [true, { a: 1 }, { b: 2 }] as const;
+      const y = [true, { a: 1 } as I, { b: 2 } as J] as const;
       interface I { a: number }
       interface J { b: number }
     `,

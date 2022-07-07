@@ -79,7 +79,10 @@ export const custom = utils.createRule({
             );
 
           case "complex":
-            if (context.checker.isArrayType(type)) {
+            if (
+              context.checker.isArrayType(type) ||
+              context.checker.isTupleType(type)
+            ) {
               const subtypes = type.typeArguments;
 
               assert.not.empty(subtypes, "Missing type arguments");
@@ -141,6 +144,12 @@ export const custom = utils.createRule({
               ts.TypeFlags.ESSymbol,
               ts.TypeFlags.ESSymbolLike,
               ts.TypeFlags.UniqueESSymbol
+            );
+
+          case "tuple":
+            return (
+              checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+              context.checker.isTupleType(type)
             );
 
           case "undefined":
@@ -249,6 +258,7 @@ export const custom = utils.createRule({
       readonly: "readonly",
       string: "string",
       symbol: "symbol",
+      tuple: "tuple",
       undefined: "undefined",
       unknown: "unknown"
     });
@@ -307,6 +317,7 @@ type Test =
   | "readonly"
   | "string"
   | "symbol"
+  | "tuple"
   | "undefined"
   | "unknown";
 
