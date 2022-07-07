@@ -8,7 +8,7 @@ const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.vueComponentName = utils.createRule({
-    create: context => {
+    create: (context) => {
         const { prefix, suffix } = context.options;
         return {
             [utils_1.AST_NODE_TYPES.CallExpression]: (node) => {

@@ -1,1 +1,1 @@
-{"version":3,"file":"switch-case-empty-lines.d.ts","sourceRoot":"","sources":["../../src/rules/switch-case-empty-lines.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,oBAAoB,2NA0C/B,CAAC"}
+{"version":3,"file":"switch-case-empty-lines.d.ts","sourceRoot":"","sources":["../../src/rules/switch-case-empty-lines.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,oBAAoB,oKA0C/B,CAAC"}

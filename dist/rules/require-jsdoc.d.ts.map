@@ -1,1 +1,1 @@
-{"version":3,"file":"require-jsdoc.d.ts","sourceRoot":"","sources":["../../src/rules/require-jsdoc.ts"],"names":[],"mappings":"AAQA,eAAO,MAAM,YAAY,8PA2EvB,CAAC"}
+{"version":3,"file":"require-jsdoc.d.ts","sourceRoot":"","sources":["../../src/rules/require-jsdoc.ts"],"names":[],"mappings":"AAMA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAG5E,eAAO,MAAM,YAAY,uMA2EvB,CAAC"}

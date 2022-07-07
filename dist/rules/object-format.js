@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.objectFormat = utils.createRule({
-    create: context => {
+    create: (context) => {
         const listener = {
             [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {
                 const texts = node.properties.map(property => context.getTextWithLeadingTrivia(property).trim());

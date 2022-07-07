@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.sortKeys = utils.createRule({
-    create: context => {
+    create: (context) => {
         const items = new Map();
         const nodes = [];
         const listener = Object.assign({ [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {

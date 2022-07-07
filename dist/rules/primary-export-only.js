@@ -7,7 +7,7 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.primaryExportOnly = utils.createRule({
-    create: context => {
+    create: (context) => {
         const exportDefaultDeclarations = new Set();
         const identifiers = new Set();
         return {

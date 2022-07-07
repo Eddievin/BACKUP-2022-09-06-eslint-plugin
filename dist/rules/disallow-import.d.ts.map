@@ -1,1 +1,1 @@
-{"version":3,"file":"disallow-import.d.ts","sourceRoot":"","sources":["../../src/rules/disallow-import.ts"],"names":[],"mappings":"AAKA,eAAO,MAAM,cAAc,iMAyBzB,CAAC"}
+{"version":3,"file":"disallow-import.d.ts","sourceRoot":"","sources":["../../src/rules/disallow-import.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,cAAc,0IAyBzB,CAAC"}

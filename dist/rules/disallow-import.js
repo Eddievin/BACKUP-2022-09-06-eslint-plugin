@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.disallowImport = utils.createRule({
-    create: context => {
+    create: (context) => {
         const matcher = utils.createFileMatcher.disallowAllow(context.options.disallow, context.options.allow, true, { dot: true });
         return {
             [utils_1.AST_NODE_TYPES.ImportDeclaration]: (node) => {

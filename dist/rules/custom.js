@@ -7,7 +7,7 @@ const functions_1 = require("@skylib/functions");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 exports.custom = utils.createRule({
-    create: context => {
+    create: (context) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
         const listener = getVisitors();
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
@@ -41,30 +41,36 @@ exports.custom = utils.createRule({
             return expected ? expected.some(x => checkTypeHas(type, x)) : true;
         }
         function checkTypeIs(type, expected) {
-            var _a, _b;
+            var _a;
             if (expected)
                 switch (expected) {
-                    case "anonymous-function":
-                        return ((_a = type.getSymbol()) === null || _a === void 0 ? void 0 : _a.name) === "__function";
-                    case "anonymous-object":
-                        return ((_b = type.getSymbol()) === null || _b === void 0 ? void 0 : _b.name) === "__object";
                     case "any":
                         return checkType(type, ts.TypeFlags.Any);
                     case "array":
                         return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-                            isArray());
+                            context.checker.isArrayType(type));
                     case "boolean":
                         return checkType(type, ts.TypeFlags.Boolean, ts.TypeFlags.BooleanLike, ts.TypeFlags.BooleanLiteral);
+                    case "complex":
+                        if (context.checker.isArrayType(type)) {
+                            const subtypes = type.typeArguments;
+                            functions_1.assert.not.empty(subtypes, "Missing type arguments");
+                            return subtypes.some(subtype => checkTypeIs(subtype, expected));
+                        }
+                        if (type.isUnionOrIntersection())
+                            return type.types.some(subtype => checkTypeIs(subtype, expected));
+                        return ((_a = type.getSymbol()) === null || _a === void 0 ? void 0 : _a.name) === "__object";
+                    case "function":
+                        return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+                            type.getCallSignatures().length > 0);
                     case "null":
                         return checkType(type, ts.TypeFlags.Null);
                     case "number":
                         return checkType(type, ts.TypeFlags.Number, ts.TypeFlags.NumberLike, ts.TypeFlags.NumberLiteral);
-                    case "function":
-                        return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-                            isFunction());
                     case "object":
                         return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-                            isObject());
+                            !checkTypeIs(type, "array") &&
+                            !checkTypeIs(type, "function"));
                     case "readonly":
                         return type
                             .getProperties()
@@ -79,15 +85,6 @@ exports.custom = utils.createRule({
                         return checkType(type, ts.TypeFlags.Unknown);
                 }
             return true;
-            function isArray() {
-                return context.checker.isArrayType(type);
-            }
-            function isFunction() {
-                return type.getCallSignatures().length > 0;
-            }
-            function isObject() {
-                return !isArray() && !isFunction();
-            }
         }
         function checkTypeIsNoneOf(type, expected) {
             return expected ? expected.every(x => checkTypeIsNot(type, x)) : true;
@@ -147,20 +144,19 @@ exports.custom = utils.createRule({
     fixable: "code",
     isRuleOptions: (0, functions_1.evaluate)(() => {
         const TestVO = (0, functions_1.createValidationObject)({
-            "anonymous-function": "anonymous-function",
-            "anonymous-object": "anonymous-object",
-            "any": "any",
-            "array": "array",
-            "boolean": "boolean",
-            "function": "function",
-            "null": "null",
-            "number": "number",
-            "object": "object",
-            "readonly": "readonly",
-            "string": "string",
-            "symbol": "symbol",
-            "undefined": "undefined",
-            "unknown": "unknown"
+            any: "any",
+            array: "array",
+            boolean: "boolean",
+            complex: "complex",
+            function: "function",
+            null: "null",
+            number: "number",
+            object: "object",
+            readonly: "readonly",
+            string: "string",
+            symbol: "symbol",
+            undefined: "undefined",
+            unknown: "unknown"
         });
         const isTest = functions_1.is.factory(functions_1.is.enumeration, TestVO);
         const isTests = functions_1.is.factory(functions_1.is.array.of, isTest);

@@ -1,1 +1,1 @@
-{"version":3,"file":"no-negated-condition.d.ts","sourceRoot":"","sources":["../../src/rules/no-negated-condition.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,kBAAkB,mMAqB7B,CAAC"}
+{"version":3,"file":"no-negated-condition.d.ts","sourceRoot":"","sources":["../../src/rules/no-negated-condition.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,kBAAkB,4IAqB7B,CAAC"}

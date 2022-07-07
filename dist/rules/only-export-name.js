@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 exports.onlyExportName = utils.createRule({
-    create: context => {
+    create: (context) => {
         let hasDefaultExport = false;
         const nodes = new Set();
         return {

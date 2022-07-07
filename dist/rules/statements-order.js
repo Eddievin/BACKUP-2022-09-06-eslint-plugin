@@ -7,7 +7,7 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 exports.statementsOrder = utils.createRule({
-    create: context => {
+    create: (context) => {
         const blockOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.blockOrder.map((type, index) => [type, index])));
         const moduleOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.moduleOrder.map((type, index) => [type, index])));
         const rootOrder = Object.assign(Object.assign(Object.assign({}, defaultOrder), functions_1.o.fromEntries(context.options.order.map((type, index) => [type, index]))), functions_1.o.fromEntries(context.options.rootOrder.map((type, index) => [type, index])));
@@ -37,7 +37,7 @@ exports.statementsOrder = utils.createRule({
             "Program:exit": () => {
                 for (const items of itemsMap.values()) {
                     const sortedItems = _.sortBy(items, node => node.sortingOrder);
-                    // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-array -- Postponed
+                    // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
                     const fixes = [];
                     for (const [index, sortedItem] of sortedItems.entries())
                         if (sortedItem.index === index) {

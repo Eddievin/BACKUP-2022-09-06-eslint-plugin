@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.emptyLinesAroundComment = utils.createRule({
-    create: context => {
+    create: (context) => {
         const nodes = [];
         return {
             "*": (node) => {
@@ -25,6 +25,7 @@ exports.emptyLinesAroundComment = utils.createRule({
                             const expected = inBlockLike && multilineComment && !prefix.blockStart;
                             if (expected && !got)
                                 context.report({
+                                    // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
                                     fix: () => {
                                         return {
                                             range: functions_1.a.clone(prefix.range),
@@ -43,6 +44,7 @@ exports.emptyLinesAroundComment = utils.createRule({
                             const expected = inBlockLike && multilineComment && !suffix.blockEnd;
                             if (expected && !got)
                                 context.report({
+                                    // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
                                     fix: () => {
                                         return {
                                             range: functions_1.a.clone(suffix.range),
@@ -54,6 +56,7 @@ exports.emptyLinesAroundComment = utils.createRule({
                                 });
                             if (got && !expected)
                                 context.report({
+                                    // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
                                     fix: () => {
                                         return {
                                             range: functions_1.a.clone(suffix.range),

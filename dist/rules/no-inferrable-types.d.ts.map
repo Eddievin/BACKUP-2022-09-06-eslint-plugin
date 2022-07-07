@@ -1,1 +1,1 @@
-{"version":3,"file":"no-inferrable-types.d.ts","sourceRoot":"","sources":["../../src/rules/no-inferrable-types.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,iBAAiB,wMA8B5B,CAAC"}
+{"version":3,"file":"no-inferrable-types.d.ts","sourceRoot":"","sources":["../../src/rules/no-inferrable-types.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,iBAAiB,iJA8B5B,CAAC"}

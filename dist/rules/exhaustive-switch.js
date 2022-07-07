@@ -7,7 +7,7 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 exports.exhaustiveSwitch = utils.createRule({
-    create: context => {
+    create: (context) => {
         return {
             [utils_1.AST_NODE_TYPES.SwitchStatement]: (node) => {
                 const tests = node.cases.map(switchCase => switchCase.test);

@@ -8,7 +8,7 @@ const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 exports.arrayCallbackReturnType = utils.createRule({
-    create: context => {
+    create: (context) => {
         return {
             [utils_1.AST_NODE_TYPES.CallExpression]: (node) => {
                 if (node.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&

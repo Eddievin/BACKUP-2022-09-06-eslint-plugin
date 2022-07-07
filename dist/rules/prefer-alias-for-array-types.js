@@ -7,7 +7,7 @@ const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const ts = tslib_1.__importStar(require("typescript"));
 exports.preferAliasForArrayTypes = utils.createRule({
-    create: context => {
+    create: (context) => {
         return {
             [utils_1.AST_NODE_TYPES.TSTypeAnnotation]: (node) => {
                 if (node.typeAnnotation.type === utils_1.AST_NODE_TYPES.TSTypeReference) {

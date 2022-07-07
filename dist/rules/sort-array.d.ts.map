@@ -1,1 +1,1 @@
-{"version":3,"file":"sort-array.d.ts","sourceRoot":"","sources":["../../src/rules/sort-array.ts"],"names":[],"mappings":"AAMA,eAAO,MAAM,SAAS,yNA4CpB,CAAC"}
+{"version":3,"file":"sort-array.d.ts","sourceRoot":"","sources":["../../src/rules/sort-array.ts"],"names":[],"mappings":"AAKA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,SAAS,kKA4CpB,CAAC"}

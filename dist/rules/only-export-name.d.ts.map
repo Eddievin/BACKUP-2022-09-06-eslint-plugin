@@ -1,1 +1,1 @@
-{"version":3,"file":"only-export-name.d.ts","sourceRoot":"","sources":["../../src/rules/only-export-name.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,cAAc,4LAwDzB,CAAC"}
+{"version":3,"file":"only-export-name.d.ts","sourceRoot":"","sources":["../../src/rules/only-export-name.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,cAAc,qIAwDzB,CAAC"}

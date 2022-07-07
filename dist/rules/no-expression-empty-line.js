@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 exports.noExpressionEmptyLine = utils.createRule({
-    create: context => {
+    create: (context) => {
         return {
             [utils_1.AST_NODE_TYPES.MemberExpression]: (node) => {
                 const got = functions_1.s.leadingSpaces(context.code.slice(node.object.range[1]));
@@ -21,6 +21,7 @@ exports.noExpressionEmptyLine = utils.createRule({
                 }
                 else
                     context.report({
+                        // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
                         fix: () => {
                             return {
                                 range: [

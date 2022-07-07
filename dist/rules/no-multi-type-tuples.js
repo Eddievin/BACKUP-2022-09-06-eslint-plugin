@@ -7,7 +7,7 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
 exports.noMultiTypeTuples = utils.createRule({
-    create: context => {
+    create: (context) => {
         return {
             [utils_1.AST_NODE_TYPES.TSTupleType]: (node) => {
                 if (_.uniq(node.elementTypes.map(context.getText)).length > 1)

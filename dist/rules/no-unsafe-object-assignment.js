@@ -8,7 +8,7 @@ const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 const ts = tslib_1.__importStar(require("typescript"));
 exports.noUnsafeObjectAssignment = utils.createRule({
-    create: context => {
+    create: (context) => {
         return {
             [utils_1.AST_NODE_TYPES.ArrowFunctionExpression]: (node) => {
                 if (node.body.type === utils_1.AST_NODE_TYPES.BlockStatement) {

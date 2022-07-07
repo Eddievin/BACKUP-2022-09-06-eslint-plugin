@@ -1,1 +1,1 @@
-{"version":3,"file":"no-unsafe-object-assignment.d.ts","sourceRoot":"","sources":["../../src/rules/no-unsafe-object-assignment.ts"],"names":[],"mappings":"AAOA,eAAO,MAAM,wBAAwB,sOAsCnC,CAAC"}
+{"version":3,"file":"no-unsafe-object-assignment.d.ts","sourceRoot":"","sources":["../../src/rules/no-unsafe-object-assignment.ts"],"names":[],"mappings":"AAMA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,wBAAwB,+KAsCnC,CAAC"}

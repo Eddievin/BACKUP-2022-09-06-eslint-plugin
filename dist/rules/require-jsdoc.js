@@ -7,7 +7,7 @@ const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
 const tsutils = tslib_1.__importStar(require("tsutils"));
 exports.requireJsdoc = utils.createRule({
-    create: context => {
+    create: (context) => {
         const selectors = utils.getSelectors(context.options, defaultSelectors);
         return {
             [selectors]: (node) => {

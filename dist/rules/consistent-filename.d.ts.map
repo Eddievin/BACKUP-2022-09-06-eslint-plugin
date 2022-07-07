@@ -1,1 +1,1 @@
-{"version":3,"file":"consistent-filename.d.ts","sourceRoot":"","sources":["../../src/rules/consistent-filename.ts"],"names":[],"mappings":"AAOA,eAAO,MAAM,kBAAkB,gMAgF7B,CAAC"}
+{"version":3,"file":"consistent-filename.d.ts","sourceRoot":"","sources":["../../src/rules/consistent-filename.ts"],"names":[],"mappings":"AAMA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,kBAAkB,yIAgF7B,CAAC"}

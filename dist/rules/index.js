@@ -39,6 +39,7 @@ const vue_component_name_1 = require("./vue-component-name");
 const functions_1 = require("@skylib/functions");
 const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
 exports.utils = tslib_1.__importStar(require("./utils"));
+// eslint-disable-next-line @skylib/custom/no-anonymous-return -- Ok
 exports.rules = (0, functions_1.evaluate)(() => {
     const core = {
         "array-callback-return-type": array_callback_return_type_1.arrayCallbackReturnType,

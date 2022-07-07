@@ -16,7 +16,7 @@ exports.consistentFilename = (0, functions_1.evaluate)(() => {
     const isRuleOptions = functions_1.is.object.factory({ format: isFormat }, {});
     const isSubOptions = functions_1.is.object.factory({ format: isFormat, selector: functions_1.is.string }, {});
     return utils.createRule({
-        create: context => {
+        create: (context) => {
             let className;
             let format = context.options.format;
             return Object.assign(Object.assign({}, functions_1.o.fromEntries(context.subOptionsArray.map(subOptions => [

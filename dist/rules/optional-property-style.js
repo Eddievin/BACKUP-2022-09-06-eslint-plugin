@@ -20,7 +20,7 @@ exports.optionalPropertyStyle = (0, functions_1.evaluate)(() => {
     const isTarget = functions_1.is.factory(functions_1.is.enumeration, TargetVO);
     return utils.createRule({
         // eslint-disable-next-line sonarjs/cognitive-complexity
-        create: context => {
+        create: (context) => {
             return {
                 "ClassDeclaration, ClassExpression, TSInterfaceDeclaration": (node) => {
                     var _a;

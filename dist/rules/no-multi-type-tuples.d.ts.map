@@ -1,1 +1,1 @@
-{"version":3,"file":"no-multi-type-tuples.d.ts","sourceRoot":"","sources":["../../src/rules/no-multi-type-tuples.ts"],"names":[],"mappings":"AAKA,eAAO,MAAM,iBAAiB,0MAY5B,CAAC"}
+{"version":3,"file":"no-multi-type-tuples.d.ts","sourceRoot":"","sources":["../../src/rules/no-multi-type-tuples.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,yCAAyC,CAAC;AAE5E,eAAO,MAAM,iBAAiB,mJAY5B,CAAC"}

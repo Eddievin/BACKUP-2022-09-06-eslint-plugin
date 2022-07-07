@@ -1,9 +1,9 @@
 "use strict";
-/* eslint-disable @skylib/no-restricted-syntax/prefer-arrow-function-property -- Ok */
+/* eslint-disable @skylib/custom/prefer-arrow-function-property -- Ok */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.stripBase = exports.isAdjacentNodes = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getNameFromFilename = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
-/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
+/* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils_1 = require("@typescript-eslint/utils");
@@ -338,6 +338,7 @@ function getSubOptionsArray(ruleOptionsArray, options, path) {
         const raw = (_a = functions_1.o.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
         functions_1.assert.array.of(raw, functions_1.is.object, "Expecting valid rule options");
         const result = raw
+            // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
             .map(subOptions => {
             return Object.assign(Object.assign({}, defaultSubOptions), subOptions);
         })

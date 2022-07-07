@@ -30,12 +30,14 @@ function testRule(name, rules, invalid, valid = []) {
         }
     });
     tester.run(name, rule, {
+        // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
         invalid: invalid.map(invalidTest => {
             var _a, _b;
             const code = functions_1.s.unpadMultiline(invalidTest.code);
             const output = functions_1.s.unpadMultiline((_a = invalidTest.output) !== null && _a !== void 0 ? _a : invalidTest.code);
             return Object.assign(Object.assign({}, invalidTest), { code, filename: `${core_1.base}fixtures/${(_b = invalidTest.filename) !== null && _b !== void 0 ? _b : "file.ts"}`, output });
         }),
+        // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
         valid: valid.map(validTest => {
             var _a;
             const code = functions_1.s.unpadMultiline(validTest.code);

@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
 const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.className = utils.createRule({
-    create: context => {
+    create: (context) => {
         return {
             "ExportNamedDeclaration > ClassDeclaration": (node) => {
                 if (node.id)

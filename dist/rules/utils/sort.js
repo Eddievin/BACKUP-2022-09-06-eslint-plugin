@@ -2,7 +2,7 @@
 /* eslint-disable @skylib/primary-export-only */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sort = exports.nodeToString = void 0;
-/* eslint-disable @skylib/no-restricted-syntax/prefer-readonly-array -- Ok */
+/* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 const compare_1 = require("./compare");
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
@@ -42,6 +42,7 @@ function sort(nodes, nodeToKey, options, context) {
         ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
             new RegExp(sendToBottom, "u")
         : undefined;
+    // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
     const items = nodes.map((node, index) => {
         return {
             index,
