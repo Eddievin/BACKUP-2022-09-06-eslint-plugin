@@ -10,7 +10,10 @@ import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const custom = utils.createRule({
   create: (context): RuleListener => {
@@ -222,7 +225,7 @@ export const custom = utils.createRule({
               data: {
                 message: message ?? `This syntax is not allowed: ${selector}`
               },
-              fix: () =>
+              fix: (): readonly RuleFix[] =>
                 is.not.empty(replacement)
                   ? [
                       {

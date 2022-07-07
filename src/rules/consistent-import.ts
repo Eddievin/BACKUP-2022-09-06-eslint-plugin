@@ -13,7 +13,10 @@ import minimatch from "minimatch";
 import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentImport = utils.createRule({
   create: (context): RuleListener => {
@@ -131,15 +134,13 @@ function autoImportFn(program: TSESTree.Program, context: Context): void {
 
   if (fixes.size > 0)
     context.report({
-      fix: () => {
+      fix: (): RuleFix => {
         const fix = a.fromIterable(fixes).join(context.eol);
 
-        return [
-          {
-            range: program.range,
-            text: `${fix}${context.eol}${context.getText(program)}`
-          }
-        ];
+        return {
+          range: program.range,
+          text: `${fix}${context.eol}${context.getText(program)}`
+        };
       },
       loc: context.locZero,
       messageId: "autoImport"

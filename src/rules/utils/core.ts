@@ -5,6 +5,7 @@
 import {
   assert,
   cast,
+  defineFn,
   evaluate,
   fn,
   is,
@@ -48,31 +49,33 @@ export const base = fn.pipe(
   s.path.addTrailingSlash
 );
 
-/**
- * Creates file matcher.
- *
- * @param patterns - Patterns.
- * @param defVal - Default value.
- * @param options - Minimatch options.
- * @returns Matcher.
- */
-export const createFileMatcher = o.extend(
+export const createFileMatcher = defineFn(
+  /**
+   * Creates file matcher.
+   *
+   * @param patterns - Patterns.
+   * @param defVal - Default value.
+   * @param options - Minimatch options.
+   * @returns Matcher.
+   */
   (
     patterns: strings,
     defVal: boolean,
     options: Readonly<minimatch.IOptions>
   ): Matcher => {
-    if (patterns.length > 0) {
-      const matchers = patterns.map(
-        pattern =>
-          (str: string): boolean =>
-            minimatch(str, pattern, options)
-      );
+    const matchers = patterns.map(
+      pattern =>
+        (str: string): boolean =>
+          minimatch(str, pattern, options)
+    );
 
-      return (str): boolean => matchers.some(matcher => matcher(str));
-    }
-
-    return (): boolean => defVal;
+    // eslint-disable-next-line no-warning-comments -- Postponed
+    // fixme
+    return evaluate(() =>
+      matchers.length > 0
+        ? (str): boolean => matchers.some(matcher => matcher(str))
+        : (): boolean => defVal
+    );
   },
   {
     /**
@@ -567,10 +570,7 @@ function getSubOptionsArray<
     assert.array.of(raw, is.object, "Expecting valid rule options");
 
     const result = raw
-      // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-      .map(subOptions => {
-        return { ...defaultSubOptions, ...subOptions };
-      })
+      .map((subOptions): object => ({ ...defaultSubOptions, ...subOptions }))
       .filter(subOptions => shouldBeLinted2(subOptions, path));
 
     assert.array.of(result, isSubOptions, "Expecting valid rule options");

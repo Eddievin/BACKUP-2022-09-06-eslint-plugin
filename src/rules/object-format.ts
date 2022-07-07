@@ -1,7 +1,10 @@
 import * as utils from "./utils";
 import { evaluate, is, num } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const objectFormat = utils.createRule({
   create: (context): RuleListener => {
@@ -52,22 +55,20 @@ export const objectFormat = utils.createRule({
 
           if (expectMultiline && !gotMultiline)
             context.report({
-              fix: () => {
-                const propertiesText = texts.join(",\n");
-
-                return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
-              },
+              fix: (): RuleFix => ({
+                range: node.range,
+                text: `{\n${texts.join(",\n")}\n}`
+              }),
               messageId: "expectingMultiline",
               node
             });
 
           if (expectSingleLine && !gotSingleLine)
             context.report({
-              fix: () => {
-                const propertiesText = texts.join(",");
-
-                return [{ range: node.range, text: `{${propertiesText}}` }];
-              },
+              fix: (): RuleFix => ({
+                range: node.range,
+                text: `{${texts.join(",")}}`
+              }),
               messageId: "expectingSingleLine",
               node
             });

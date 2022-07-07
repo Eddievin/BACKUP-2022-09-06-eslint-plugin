@@ -38,7 +38,7 @@ import type { WritableIndexedObject } from "@skylib/functions";
 
 export * as utils from "./utils";
 
-// eslint-disable-next-line @skylib/custom/no-anonymous-return -- Ok
+// eslint-disable-next-line @skylib/custom/no-complex-type-in-call-expression, @skylib/custom/no-complex-type-in-function-return, @skylib/custom/no-complex-type-in-variable-declaration
 export const rules = evaluate(() => {
   const core = {
     "array-callback-return-type": arrayCallbackReturnType,
@@ -75,7 +75,7 @@ export const rules = evaluate(() => {
     "switch-case-empty-lines": switchCaseEmptyLines,
     "template-literal-format": templateLiteralFormat,
     "vue-component-name": vueComponentName
-  };
+  } as const;
 
   const synonyms: WritableIndexedObject = {};
 

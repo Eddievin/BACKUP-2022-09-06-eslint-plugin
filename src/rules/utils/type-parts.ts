@@ -1,4 +1,4 @@
-import { as, createValidationObject, is, o } from "@skylib/functions";
+import { as, createValidationObject, defineFn, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
@@ -6,14 +6,14 @@ import type { Context } from "./types";
 import type { NumStrU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-/**
- * Gets type parts.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns Type parts.
- */
-export const getTypeParts = o.extend(
+export const getTypeParts = defineFn(
+  /**
+   * Gets type parts.
+   *
+   * @param node - Node.
+   * @param context - Context.
+   * @returns Type parts.
+   */
   <M extends string, O extends object, S extends object>(
     node: TSESTree.Node,
     context: Context<M, O, S>

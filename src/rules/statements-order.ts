@@ -10,7 +10,7 @@ import {
 } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { Rec, stringU, strings } from "@skylib/functions";
+import type { Rec, Writable, stringU, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type {
   RuleFix,
@@ -84,8 +84,7 @@ export const statementsOrder = utils.createRule({
         for (const items of itemsMap.values()) {
           const sortedItems = _.sortBy(items, node => node.sortingOrder);
 
-          // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
-          const fixes: RuleFix[] = [];
+          const fixes: Writable<readonly RuleFix[]> = [];
 
           for (const [index, sortedItem] of sortedItems.entries())
             if (sortedItem.index === index) {
@@ -167,7 +166,7 @@ const defaultOrder: Rec<NodeType, number> = {
   ModuleDeclaration: 1013,
   TypeDeclaration: 1011,
   Unknown: 1010
-} as const;
+};
 
 const sortable: Rec<NodeType, boolean> = {
   ExportAllDeclaration: true,
@@ -184,7 +183,7 @@ const sortable: Rec<NodeType, boolean> = {
   ModuleDeclaration: false,
   TypeDeclaration: true,
   Unknown: false
-} as const;
+};
 
 interface Item {
   readonly id: string;

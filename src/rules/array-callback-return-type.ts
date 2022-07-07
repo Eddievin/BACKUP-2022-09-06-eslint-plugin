@@ -7,43 +7,41 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const arrayCallbackReturnType = utils.createRule({
-  create: (context): RuleListener => {
-    return {
-      [AST_NODE_TYPES.CallExpression]: (node): void => {
-        if (
-          node.callee.type === AST_NODE_TYPES.MemberExpression &&
-          node.callee.property.type === AST_NODE_TYPES.Identifier &&
-          methods.has(node.callee.property.name) &&
-          isArray(node.callee.object, context)
-        ) {
-          const argument = node.arguments[0];
+  create: (context): RuleListener => ({
+    [AST_NODE_TYPES.CallExpression]: (node): void => {
+      if (
+        node.callee.type === AST_NODE_TYPES.MemberExpression &&
+        node.callee.property.type === AST_NODE_TYPES.Identifier &&
+        methods.has(node.callee.property.name) &&
+        isArray(node.callee.object, context)
+      ) {
+        const argument = node.arguments[0];
 
-          if (argument) {
-            const tsArgument = context.toTsNode(argument);
+        if (argument) {
+          const tsArgument = context.toTsNode(argument);
 
-            const type = context.checker.getTypeAtLocation(tsArgument);
+          const type = context.checker.getTypeAtLocation(tsArgument);
 
-            const signatures = context.checker.getSignaturesOfType(
-              type,
-              ts.SignatureKind.Call
-            );
+          const signatures = context.checker.getSignaturesOfType(
+            type,
+            ts.SignatureKind.Call
+          );
 
-            if (
-              signatures.every(signature =>
-                isBoolean(context.checker.getReturnTypeOfSignature(signature))
-              )
-            ) {
-              // Ok
-            } else
-              context.report({
-                messageId: "expectingBooleanReturnType",
-                node: argument
-              });
-          }
+          if (
+            signatures.every(signature =>
+              isBoolean(context.checker.getReturnTypeOfSignature(signature))
+            )
+          ) {
+            // Ok
+          } else
+            context.report({
+              messageId: "expectingBooleanReturnType",
+              node: argument
+            });
         }
       }
-    };
-  },
+    }
+  }),
   isRuleOptions: is.object,
   messages: { expectingBooleanReturnType: "Expecting boolean return type" },
   name: "array-callback-return-type"

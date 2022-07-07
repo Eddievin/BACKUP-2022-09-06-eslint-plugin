@@ -53,6 +53,7 @@ export function sort<T extends TSESTree.Node>(
   options: SortOptions,
   context: Context<"incorrectSortingOrder", object, object>
 ): void {
+  // eslint-disable-next-line @skylib/custom/prefer-const-object -- Wait for @skylib/config update
   const { customOrder, sendToBottom, sendToTop } = {
     customOrder: [],
     ...options
@@ -68,14 +69,13 @@ export function sort<T extends TSESTree.Node>(
       new RegExp(sendToBottom, "u")
     : undefined;
 
-  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-  const items = nodes.map<Item>((node, index) => {
-    return {
+  const items = nodes.map(
+    (node, index): Item => ({
       index,
       key: wrapKey(nodeToString(nodeToKey(node), context)),
       node
-    };
-  });
+    })
+  );
 
   const sortedItems = a.sort(items, (item1, item2) =>
     compare(item1.key, item2.key)

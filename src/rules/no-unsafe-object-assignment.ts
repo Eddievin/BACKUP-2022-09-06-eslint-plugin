@@ -7,37 +7,35 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const noUnsafeObjectAssignment = utils.createRule({
-  create: (context): RuleListener => {
-    return {
-      [AST_NODE_TYPES.ArrowFunctionExpression]: (node): void => {
-        if (node.body.type === AST_NODE_TYPES.BlockStatement) {
-          // Should be checked by ReturnStatement
-        } else if (node.returnType)
-          lintNodes(node.returnType.typeAnnotation, node.body, context);
-        else {
-          // No return type to check
-        }
-      },
-      [AST_NODE_TYPES.AssignmentExpression]: (node): void => {
-        lintNodes(node.left, node.right, context);
-      },
-      [AST_NODE_TYPES.CallExpression]: (node): void => {
-        const tsNode = context.toTsNode(node);
-
-        for (const arg of tsNode.arguments) lintExpression(arg, context);
-      },
-      [AST_NODE_TYPES.ReturnStatement]: (node): void => {
-        const tsNode = context.toTsNode(node);
-
-        if (tsNode.expression) lintExpression(tsNode.expression, context);
-      },
-      [AST_NODE_TYPES.VariableDeclaration]: (node): void => {
-        for (const declaration of node.declarations)
-          if (declaration.init)
-            lintNodes(declaration.id, declaration.init, context);
+  create: (context): RuleListener => ({
+    [AST_NODE_TYPES.ArrowFunctionExpression]: (node): void => {
+      if (node.body.type === AST_NODE_TYPES.BlockStatement) {
+        // Should be checked by ReturnStatement
+      } else if (node.returnType)
+        lintNodes(node.returnType.typeAnnotation, node.body, context);
+      else {
+        // No return type to check
       }
-    };
-  },
+    },
+    [AST_NODE_TYPES.AssignmentExpression]: (node): void => {
+      lintNodes(node.left, node.right, context);
+    },
+    [AST_NODE_TYPES.CallExpression]: (node): void => {
+      const tsNode = context.toTsNode(node);
+
+      for (const arg of tsNode.arguments) lintExpression(arg, context);
+    },
+    [AST_NODE_TYPES.ReturnStatement]: (node): void => {
+      const tsNode = context.toTsNode(node);
+
+      if (tsNode.expression) lintExpression(tsNode.expression, context);
+    },
+    [AST_NODE_TYPES.VariableDeclaration]: (node): void => {
+      for (const declaration of node.declarations)
+        if (declaration.init)
+          lintNodes(declaration.id, declaration.init, context);
+    }
+  }),
   isRuleOptions: is.object,
   messages: {
     unsafeOptionalAssignment: "Unsafe optional assignment: {{name}}",

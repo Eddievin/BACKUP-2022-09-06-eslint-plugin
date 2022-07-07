@@ -3,7 +3,10 @@ import { a, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Writable, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const emptyLinesAroundComment = utils.createRule({
   create: (context): RuleListener => {
@@ -36,13 +39,10 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (expected && !got)
                 context.report({
-                  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-                  fix: () => {
-                    return {
-                      range: a.clone(prefix.range),
-                      text: `${eol}${eol}${a.last(prefix.spaces)}`
-                    };
-                  },
+                  fix: (): RuleFix => ({
+                    range: a.clone(prefix.range),
+                    text: `${eol}${eol}${a.last(prefix.spaces)}`
+                  }),
                   messageId: "missingEmptyLineBefore",
                   node: comment
                 });
@@ -58,26 +58,20 @@ export const emptyLinesAroundComment = utils.createRule({
 
               if (expected && !got)
                 context.report({
-                  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-                  fix: () => {
-                    return {
-                      range: a.clone(suffix.range),
-                      text: `${eol}${eol}${a.last(suffix.spaces)}`
-                    };
-                  },
+                  fix: (): RuleFix => ({
+                    range: a.clone(suffix.range),
+                    text: `${eol}${eol}${a.last(suffix.spaces)}`
+                  }),
                   messageId: "missingEmptyLineAfter",
                   node: comment
                 });
 
               if (got && !expected)
                 context.report({
-                  // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-                  fix: () => {
-                    return {
-                      range: a.clone(suffix.range),
-                      text: `${context.eol}${a.last(suffix.spaces)}`
-                    };
-                  },
+                  fix: (): RuleFix => ({
+                    range: a.clone(suffix.range),
+                    text: `${context.eol}${a.last(suffix.spaces)}`
+                  }),
                   messageId: "unexpectedEmptyLineAfter",
                   node: comment
                 });

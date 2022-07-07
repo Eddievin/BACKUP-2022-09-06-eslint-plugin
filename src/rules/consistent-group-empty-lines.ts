@@ -2,7 +2,10 @@ import * as utils from "./utils";
 import { Accumulator, Accumulator2, a, is, num, s } from "@skylib/functions";
 import type { Writable } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentGroupEmptyLines = utils.createRule({
   create: (context): RuleListener => {
@@ -137,12 +140,10 @@ function lintGroup(
         } else
           context.report({
             data: { _id: subOptions._id },
-            fix: () => [
-              {
-                range: [node.range[0] - got.length, node.range[0]],
-                text: expected
-              }
-            ],
+            fix: (): RuleFix => ({
+              range: [node.range[0] - got.length, node.range[0]],
+              text: expected
+            }),
             messageId,
             node
           });

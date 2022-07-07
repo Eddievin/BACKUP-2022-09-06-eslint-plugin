@@ -2,7 +2,10 @@ import * as utils from "./utils";
 import { as, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const noUnusedImport = utils.createRule({
   create: (context): RuleListener => {
@@ -46,18 +49,16 @@ export const noUnusedImport = utils.createRule({
             // Valid
           } else if (node.specifiers.some(used))
             context.report({
-              fix: () => [
-                {
-                  range: node.range,
-                  text: `import ${specifiers} from "${source}";`
-                }
-              ],
+              fix: (): RuleFix => ({
+                range: node.range,
+                text: `import ${specifiers} from "${source}";`
+              }),
               messageId: "unusedImport",
               node
             });
           else
             context.report({
-              fix: () =>
+              fix: (): readonly RuleFix[] =>
                 context.hasLeadingComment(node)
                   ? []
                   : [

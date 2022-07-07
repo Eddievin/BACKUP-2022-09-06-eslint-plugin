@@ -9,7 +9,10 @@ import {
 } from "@skylib/functions";
 import type { Writable, stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentEmptyLines = utils.createRule({
   create: (context): RuleListener => {
@@ -78,12 +81,10 @@ export const consistentEmptyLines = utils.createRule({
             } else
               context.report({
                 data: { _id: item._id },
-                fix: () => [
-                  {
-                    range: [node.range[0] - got.length, node.range[0]],
-                    text: expected
-                  }
-                ],
+                fix: (): RuleFix => ({
+                  range: [node.range[0] - got.length, node.range[0]],
+                  text: expected
+                }),
                 messageId,
                 node
               });

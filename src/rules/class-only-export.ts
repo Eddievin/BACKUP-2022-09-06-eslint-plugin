@@ -73,7 +73,7 @@ export const classOnlyExport = utils.createRule({
             ...exportAllDeclarations,
             ...exportDefaultDeclaration,
             ...identifiers.filter(node => node.name !== className)
-          ];
+          ] as const;
 
           if (nodes.length > 0)
             for (const node of nodes)
