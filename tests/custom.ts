@@ -341,32 +341,6 @@ utils.testRule("custom", rules, [
   },
   {
     code: `
-      const x1 = () => {};
-      const x2: F = () => {};
-      const x3 = 1;
-      const x4 = "";
-      const x5 = false;
-      const x6 = [1, 2, 3];
-      type F = () => void;
-    `,
-    errors: [
-      {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
-      }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [
-      {
-        message: "Custom message",
-        selector: ["Identifier[name=/^x\\d$/u]"],
-        typeIs: "anonymous-function"
-      }
-    ]
-  },
-  {
-    code: `
       const x1 = { a: 1, b: 2, c: 3 };
       const x2: I = { a: 1, b: 2, c: 3 };
       const x3 = 1;
@@ -387,7 +361,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=/^x\\d$/u]"],
-        typeIs: "anonymous-object"
+        typeIs: "complex"
       }
     ]
   },
@@ -432,6 +406,75 @@ utils.testRule("custom", rules, [
         message: "Custom message",
         selector: ["Identifier"],
         typeIs: "string"
+      }
+    ]
+  },
+  {
+    code: `
+      Object.assign({ a: 1 }, { b: 2 });
+      Object.assign({ a: 1 } as I, { b: 2 } as J);
+      interface I { a: number }
+      interface J { b: number }
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["CallExpression"],
+        typeIs: "complex"
+      }
+    ]
+  },
+  {
+    code: `
+      const x = Object.assign({ a: 1 }, { b: 2 });
+      const y = Object.assign({ a: 1 } as I, { b: 2 } as J);
+      interface I { a: number }
+      interface J { b: number }
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=/^[xy]$/u]"],
+        typeIs: "complex"
+      }
+    ]
+  },
+  {
+    code: `
+      const x = [{ a: 1 }, { b: 2 }];
+      const y = [{ a: 1 } as I, { b: 2 } as J];
+      interface I { a: number }
+      interface J { b: number }
+    `,
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=/^[xy]$/u]"],
+        typeIs: "complex"
       }
     ]
   }

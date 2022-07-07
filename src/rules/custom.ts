@@ -1,5 +1,11 @@
 import * as utils from "./utils";
-import { a, createValidationObject, evaluate, is } from "@skylib/functions";
+import {
+  a,
+  assert,
+  createValidationObject,
+  evaluate,
+  is
+} from "@skylib/functions";
 import * as tsutils from "tsutils";
 import * as ts from "typescript";
 import type { strings } from "@skylib/functions";
@@ -55,19 +61,13 @@ export const custom = utils.createRule({
     function checkTypeIs(type: ts.Type, expected?: Test): boolean {
       if (expected)
         switch (expected) {
-          case "anonymous-function":
-            return type.getSymbol()?.name === "__function";
-
-          case "anonymous-object":
-            return type.getSymbol()?.name === "__object";
-
           case "any":
             return checkType(type, ts.TypeFlags.Any);
 
           case "array":
             return (
               checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-              isArray()
+              context.checker.isArrayType(type)
             );
 
           case "boolean":
@@ -76,6 +76,26 @@ export const custom = utils.createRule({
               ts.TypeFlags.Boolean,
               ts.TypeFlags.BooleanLike,
               ts.TypeFlags.BooleanLiteral
+            );
+
+          case "complex":
+            if (context.checker.isArrayType(type)) {
+              const subtypes = type.typeArguments;
+
+              assert.not.empty(subtypes, "Missing type arguments");
+
+              return subtypes.some(subtype => checkTypeIs(subtype, expected));
+            }
+
+            if (type.isUnionOrIntersection())
+              return type.types.some(subtype => checkTypeIs(subtype, expected));
+
+            return type.getSymbol()?.name === "__object";
+
+          case "function":
+            return (
+              checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+              type.getCallSignatures().length > 0
             );
 
           case "null":
@@ -89,16 +109,11 @@ export const custom = utils.createRule({
               ts.TypeFlags.NumberLiteral
             );
 
-          case "function":
-            return (
-              checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-              isFunction()
-            );
-
           case "object":
             return (
               checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-              isObject()
+              !checkTypeIs(type, "array") &&
+              !checkTypeIs(type, "function")
             );
 
           case "readonly":
@@ -136,18 +151,6 @@ export const custom = utils.createRule({
         }
 
       return true;
-
-      function isArray(): boolean {
-        return context.checker.isArrayType(type);
-      }
-
-      function isFunction(): boolean {
-        return type.getCallSignatures().length > 0;
-      }
-
-      function isObject(): boolean {
-        return !isArray() && !isFunction();
-      }
     }
 
     function checkTypeIsNoneOf(type: ts.Type, expected?: Tests): boolean {
@@ -235,20 +238,19 @@ export const custom = utils.createRule({
   fixable: "code",
   isRuleOptions: evaluate(() => {
     const TestVO = createValidationObject<Test>({
-      "anonymous-function": "anonymous-function",
-      "anonymous-object": "anonymous-object",
-      "any": "any",
-      "array": "array",
-      "boolean": "boolean",
-      "function": "function",
-      "null": "null",
-      "number": "number",
-      "object": "object",
-      "readonly": "readonly",
-      "string": "string",
-      "symbol": "symbol",
-      "undefined": "undefined",
-      "unknown": "unknown"
+      any: "any",
+      array: "array",
+      boolean: "boolean",
+      complex: "complex",
+      function: "function",
+      null: "null",
+      number: "number",
+      object: "object",
+      readonly: "readonly",
+      string: "string",
+      symbol: "symbol",
+      undefined: "undefined",
+      unknown: "unknown"
     });
 
     const isTest = is.factory(is.enumeration, TestVO);
@@ -294,11 +296,10 @@ interface RuleOptions {
 }
 
 type Test =
-  | "anonymous-function"
-  | "anonymous-object"
   | "any"
   | "array"
   | "boolean"
+  | "complex"
   | "function"
   | "null"
   | "number"
