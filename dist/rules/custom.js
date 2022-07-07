@@ -52,7 +52,8 @@ exports.custom = utils.createRule({
                     case "boolean":
                         return checkType(type, ts.TypeFlags.Boolean, ts.TypeFlags.BooleanLike, ts.TypeFlags.BooleanLiteral);
                     case "complex":
-                        if (context.checker.isArrayType(type)) {
+                        if (context.checker.isArrayType(type) ||
+                            context.checker.isTupleType(type)) {
                             const subtypes = type.typeArguments;
                             functions_1.assert.not.empty(subtypes, "Missing type arguments");
                             return subtypes.some(subtype => checkTypeIs(subtype, expected));
@@ -79,6 +80,9 @@ exports.custom = utils.createRule({
                         return checkType(type, ts.TypeFlags.String, ts.TypeFlags.StringLike, ts.TypeFlags.StringLiteral);
                     case "symbol":
                         return checkType(type, ts.TypeFlags.ESSymbol, ts.TypeFlags.ESSymbolLike, ts.TypeFlags.UniqueESSymbol);
+                    case "tuple":
+                        return (checkType(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+                            context.checker.isTupleType(type));
                     case "undefined":
                         return checkType(type, ts.TypeFlags.Undefined);
                     case "unknown":
@@ -155,6 +159,7 @@ exports.custom = utils.createRule({
             readonly: "readonly",
             string: "string",
             symbol: "symbol",
+            tuple: "tuple",
             undefined: "undefined",
             unknown: "unknown"
         });
