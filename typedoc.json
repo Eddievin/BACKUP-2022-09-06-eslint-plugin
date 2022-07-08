@@ -1,6 +1,0 @@
-{
-  "extends": "@skylib/config/src/typedoc",
-  "name": "ESLint plugin",
-  "out": "docs",
-  "tsconfig": "tsconfig-typedoc.json"
-}
