@@ -1,8 +1,8 @@
 import * as utils from "./utils";
 import { as, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { strings } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { strings } from "@skylib/functions";
 
 export const disallowImport = utils.createRule({
   create: (context): RuleListener => {

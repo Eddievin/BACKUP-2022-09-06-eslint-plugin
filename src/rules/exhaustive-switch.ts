@@ -1,8 +1,8 @@
-import * as utils from "./utils";
-import { is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
+import * as utils from "./utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import { is } from "@skylib/functions";
 
 export const exhaustiveSwitch = utils.createRule({
   create: (context): RuleListener => ({

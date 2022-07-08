@@ -7,12 +7,12 @@ import {
   is,
   s
 } from "@skylib/functions";
-import type { Writable, stringU } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { Writable, stringU } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const consistentEmptyLines = utils.createRule({
   create: (context): RuleListener => {

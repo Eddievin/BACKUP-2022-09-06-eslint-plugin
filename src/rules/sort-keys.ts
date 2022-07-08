@@ -1,9 +1,9 @@
 import * as utils from "./utils";
+import type { Writable, strings } from "@skylib/functions";
 import { a, is, o } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { Writable, strings } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const sortKeys = utils.createRule({
   create: (context): RuleListener => {

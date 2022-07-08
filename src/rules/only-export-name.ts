@@ -1,7 +1,7 @@
 import * as utils from "./utils";
-import { is } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import { is } from "@skylib/functions";
 
 export const onlyExportName = utils.createRule({
   create: (context): RuleListener => {

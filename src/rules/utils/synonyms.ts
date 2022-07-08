@@ -1,6 +1,6 @@
+import type { IndexedObject, WritableIndexedObject } from "@skylib/functions";
 import { a, as, is, o } from "@skylib/functions";
 import fs from "node:fs";
-import type { IndexedObject, WritableIndexedObject } from "@skylib/functions";
 
 /**
  * Gets synonyms.

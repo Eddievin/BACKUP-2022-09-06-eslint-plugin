@@ -1,10 +1,10 @@
-import * as utils from "./utils";
-import { is } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as tsutils from "tsutils";
 import * as ts from "typescript";
-import type { TSESTree } from "@typescript-eslint/utils";
+import * as tsutils from "tsutils";
+import * as utils from "./utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import { is } from "@skylib/functions";
 
 export const noUnsafeObjectAssignment = utils.createRule({
   create: (context): RuleListener => ({

@@ -1,3 +1,4 @@
+import type { WritableIndexedObject } from "@skylib/functions";
 import { arrayCallbackReturnType } from "./array-callback-return-type";
 import { classMemberTypedef } from "./class-member-typedef";
 import { className } from "./class-name";
@@ -9,8 +10,11 @@ import { consistentImport } from "./consistent-import";
 import { custom } from "./custom";
 import { disallowImport } from "./disallow-import";
 import { emptyLinesAroundComment } from "./empty-lines-around-comment";
+import { evaluate } from "@skylib/functions";
 import { exhaustiveSwitch } from "./exhaustive-switch";
 import { exportAllName } from "./export-all-name";
+import fs from "node:fs";
+import { getSynonyms } from "./utils";
 import { noExpressionEmptyLine } from "./no-expression-empty-line";
 import { noInferrableTypes } from "./no-inferrable-types";
 import { noMultiTypeTuples } from "./no-multi-type-tuples";
@@ -30,15 +34,11 @@ import { sortKeys } from "./sort-keys";
 import { statementsOrder } from "./statements-order";
 import { switchCaseEmptyLines } from "./switch-case-empty-lines";
 import { templateLiteralFormat } from "./template-literal-format";
-import { getSynonyms } from "./utils";
 import { vueComponentName } from "./vue-component-name";
-import { evaluate } from "@skylib/functions";
-import fs from "node:fs";
-import type { WritableIndexedObject } from "@skylib/functions";
 
 export * as utils from "./utils";
 
-// eslint-disable-next-line @skylib/custom/no-complex-type-in-call-expression, @skylib/custom/no-complex-type-in-function-return, @skylib/custom/no-complex-type-in-variable-declaration
+// eslint-disable-next-line @skylib/custom/no-complex-type-in-function-return, @skylib/custom/no-complex-type-in-variable-declaration
 export const rules = evaluate(() => {
   const core = {
     "array-callback-return-type": arrayCallbackReturnType,

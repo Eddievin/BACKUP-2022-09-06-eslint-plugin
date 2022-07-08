@@ -1,3 +1,4 @@
+import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
 import {
   Accumulator,
@@ -8,14 +9,13 @@ import {
   is,
   o
 } from "@skylib/functions";
-import * as _ from "@skylib/lodash-commonjs-es";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Rec, Writable, stringU, strings } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export const statementsOrder = utils.createRule({
   create: (context): RuleListener => {

@@ -2,13 +2,13 @@
 
 /* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 
-import { compare } from "./compare";
 import { a, as, cast, is } from "@skylib/functions";
+import type { numberU, strings } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Context } from "./types";
-import type { numberU, strings } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import { compare } from "./compare";
 
 export interface SortOptions {
   readonly customOrder?: strings;

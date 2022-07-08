@@ -1,6 +1,7 @@
-// eslint-disable-next-line import/no-internal-modules -- Ok
-import { getSynonyms } from "@/rules/utils";
+/* eslint-disable import/no-internal-modules -- Ok */
+
 import type { WritableIndexedObject } from "@skylib/functions";
+import { getSynonyms } from "@/rules/utils";
 
 test.each([
   {

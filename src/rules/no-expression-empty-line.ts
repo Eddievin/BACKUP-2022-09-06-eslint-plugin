@@ -1,10 +1,10 @@
 import * as utils from "./utils";
-import { a, evaluate, is, s } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import { a, evaluate, is, s } from "@skylib/functions";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const noExpressionEmptyLine = utils.createRule({
   create: (context): RuleListener => ({

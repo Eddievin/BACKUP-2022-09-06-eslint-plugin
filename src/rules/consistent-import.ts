@@ -1,4 +1,8 @@
 import * as utils from "./utils";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 import {
   a,
   as,
@@ -9,14 +13,10 @@ import {
   s
 } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
 import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
-import type {
-  RuleFix,
-  RuleListener
-} from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const consistentImport = utils.createRule({
   create: (context): RuleListener => {

@@ -1,12 +1,12 @@
-import type { s, unknowns } from "@skylib/functions";
+import type * as estree from "estree";
+import type * as ts from "typescript";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type {
   ReportDescriptor,
   RuleContext,
   SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type * as estree from "estree";
-import type * as ts from "typescript";
+import type { s, unknowns } from "@skylib/functions";
 
 export interface Context<M extends string, O extends object, S extends object> {
   readonly checker: ts.TypeChecker;

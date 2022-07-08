@@ -1,9 +1,9 @@
-import * as utils from "./utils";
-import { is } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
+import * as utils from "./utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import path from "node:path";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import { is } from "@skylib/functions";
+import path from "node:path";
 
 export const vueComponentName = utils.createRule({
   create: (context): RuleListener => {

@@ -1,7 +1,7 @@
+import * as ts from "typescript";
+import * as tsutils from "tsutils";
 import { as, createValidationObject, defineFn, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as tsutils from "tsutils";
-import * as ts from "typescript";
 import type { Context } from "./types";
 import type { NumStrU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";

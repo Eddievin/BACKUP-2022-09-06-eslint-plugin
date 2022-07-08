@@ -1,9 +1,9 @@
+import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
 import { a, is } from "@skylib/functions";
-import * as _ from "@skylib/lodash-commonjs-es";
-import path from "node:path";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import path from "node:path";
 
 export const primaryExportOnly = utils.createRule({
   create: (context): RuleListener => {

@@ -1,11 +1,11 @@
+import type * as ts from "typescript";
+import * as tsutils from "tsutils";
 import * as utils from "./utils";
 import { createValidationObject, evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import * as tsutils from "tsutils";
-import type { strings } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import type * as ts from "typescript";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { strings } from "@skylib/functions";
 
 export const requireJsdoc = utils.createRule({
   create: (context): RuleListener => {

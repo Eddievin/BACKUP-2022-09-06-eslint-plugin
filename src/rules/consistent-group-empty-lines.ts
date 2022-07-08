@@ -1,11 +1,11 @@
 import * as utils from "./utils";
 import { Accumulator, Accumulator2, a, is, num, s } from "@skylib/functions";
-import type { Writable } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { Writable } from "@skylib/functions";
 
 export const consistentGroupEmptyLines = utils.createRule({
   create: (context): RuleListener => {

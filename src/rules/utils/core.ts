@@ -2,6 +2,24 @@
 
 /* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 
+import * as _ from "@skylib/lodash-commonjs-es";
+import type * as estree from "estree";
+import type * as ts from "typescript";
+import * as tsutils from "tsutils";
+import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
+import type {
+  Accumulator,
+  Rec,
+  objects,
+  strings,
+  unknowns
+} from "@skylib/functions";
+import type { Context, DefineTemplateBodyVisitor, Package } from "./types";
+import type {
+  RuleContext,
+  RuleListener,
+  RuleModule
+} from "@typescript-eslint/utils/dist/ts-eslint";
 import {
   assert,
   cast,
@@ -14,28 +32,10 @@ import {
   s,
   typedef
 } from "@skylib/functions";
-import * as _ from "@skylib/lodash-commonjs-es";
-import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
-import minimatch from "minimatch";
-import fs from "node:fs";
-import nodePath from "node:path";
-import * as tsutils from "tsutils";
-import type { Context, DefineTemplateBodyVisitor, Package } from "./types";
-import type {
-  Accumulator,
-  Rec,
-  objects,
-  strings,
-  unknowns
-} from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type {
-  RuleContext,
-  RuleListener,
-  RuleModule
-} from "@typescript-eslint/utils/dist/ts-eslint";
-import type * as estree from "estree";
-import type * as ts from "typescript";
+import fs from "node:fs";
+import minimatch from "minimatch";
+import nodePath from "node:path";
 
 export const isPackage: is.Guard<Package> = is.factory(
   is.object.of,

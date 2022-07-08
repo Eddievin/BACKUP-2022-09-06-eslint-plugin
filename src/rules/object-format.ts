@@ -1,10 +1,10 @@
 import * as utils from "./utils";
-import { evaluate, is, num } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import { evaluate, is, num } from "@skylib/functions";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const objectFormat = utils.createRule({
   create: (context): RuleListener => {

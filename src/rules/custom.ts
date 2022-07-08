@@ -1,4 +1,10 @@
+import * as ts from "typescript";
+import * as tsutils from "tsutils";
 import * as utils from "./utils";
+import type {
+  RuleFix,
+  RuleListener
+} from "@typescript-eslint/utils/dist/ts-eslint";
 import {
   a,
   assert,
@@ -6,14 +12,8 @@ import {
   evaluate,
   is
 } from "@skylib/functions";
-import * as tsutils from "tsutils";
-import * as ts from "typescript";
-import type { strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type {
-  RuleFix,
-  RuleListener
-} from "@typescript-eslint/utils/dist/ts-eslint";
+import type { strings } from "@skylib/functions";
 
 export const custom = utils.createRule({
   create: (context): RuleListener => {

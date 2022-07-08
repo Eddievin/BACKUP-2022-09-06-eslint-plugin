@@ -1,5 +1,5 @@
-import naturalCompare from "natural-compare";
 import type { IndexedObject } from "@skylib/functions";
+import naturalCompare from "natural-compare";
 
 /**
  * Compares two strings.
