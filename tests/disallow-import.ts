@@ -108,5 +108,14 @@ utils.testRule("disallow-import", rules, [
     ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ disallow: ["@/*", "./*", "../*"] }]
+  },
+  {
+    code: `
+      import "./source1";
+      import "./source2";
+    `,
+    errors: [{ line: 1, messageId: "disallowedSource" }],
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ disallow: ["./*"], exclusions: [{ allow: ["./source2"] }] }]
   }
 ]);
