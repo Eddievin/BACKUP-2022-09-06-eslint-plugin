@@ -6,6 +6,10 @@ import { is } from "@skylib/functions";
 import path from "node:path";
 
 export const vueComponentName = utils.createRule({
+  name: "vue-component-name",
+  isOptions: is.object.factory({ prefix: is.string, suffix: is.string }, {}),
+  defaultOptions: { prefix: "", suffix: "" },
+  messages: { invalidName: "Export name should match file name" },
   create: (context): RuleListener => {
     const { prefix, suffix } = context.options;
 
@@ -38,12 +42,5 @@ export const vueComponentName = utils.createRule({
         }
       }
     };
-  },
-  defaultOptions: { prefix: "", suffix: "" },
-  isRuleOptions: is.object.factory(
-    { prefix: is.string, suffix: is.string },
-    {}
-  ),
-  messages: { invalidName: "Export name should match file name" },
-  name: "vue-component-name"
+  }
 });

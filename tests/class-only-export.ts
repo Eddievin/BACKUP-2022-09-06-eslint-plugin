@@ -6,14 +6,15 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C extends D {}
         export default 1;
       `,
-      errors: [{ line: 2, messageId: "exportNotAllowed" }],
-      name: `Test at line ${getCurrentLine().line}`
+      errors: [{ line: 2, messageId: "exportNotAllowed" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C {}
         export const x = 1;
@@ -28,55 +29,54 @@ utils.testRule(
         { line: 4, messageId: "exportNotAllowed" },
         { line: 5, messageId: "exportNotAllowed" },
         { line: 6, messageId: "exportNotAllowed" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export default class C {}
         const x = 1;
         export { x };
       `,
-      errors: [{ line: 3, messageId: "exportNotAllowed" }],
-      name: `Test at line ${getCurrentLine().line}`
+      errors: [{ line: 3, messageId: "exportNotAllowed" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C {}
         export * from "lodash";
       `,
-      errors: [{ line: 2, messageId: "exportNotAllowed" }],
-      name: `Test at line ${getCurrentLine().line}`
+      errors: [{ line: 2, messageId: "exportNotAllowed" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C {}
         export * as _ from "lodash";
       `,
-      errors: [{ line: 2, messageId: "exportNotAllowed" }],
-      name: `Test at line ${getCurrentLine().line}`
+      errors: [{ line: 2, messageId: "exportNotAllowed" }]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C {}
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C {}
         namespace Ns { export const x = 1; }
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C {}
         export namespace C {}
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

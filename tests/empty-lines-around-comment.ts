@@ -6,6 +6,7 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         /** Comment */
 
@@ -18,6 +19,23 @@ utils.testRule(
 
         // Comment
 
+        function h(): void {}
+
+        /*
+        Comment
+        */
+      `,
+      output: `
+        /** Comment */
+        function f(): void {}
+
+        /*
+        Comment
+        */
+
+        function g(): void {}
+
+        // Comment
         function h(): void {}
 
         /*
@@ -28,27 +46,10 @@ utils.testRule(
         { line: 1, messageId: "unexpectedEmptyLineAfter" },
         { line: 5, messageId: "missingEmptyLineAfter" },
         { line: 10, messageId: "unexpectedEmptyLineAfter" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      output: `
-        /** Comment */
-        function f(): void {}
-
-        /*
-        Comment
-        */
-
-        function g(): void {}
-
-        // Comment
-        function h(): void {}
-
-        /*
-        Comment
-        */
-      `
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         function f(): void {} // Comment
 
@@ -72,65 +73,65 @@ utils.testRule(
           Comment
           */
 
+        }
+      `,
+      output: `
+        function f(): void {} // Comment
+
+        async function g(): Promise<void> {
+          await import(
+            /* webpackChunkName: "chunk-name" */
+            "source"
+          );
+        }
+
+        class C {
+          /*
+          Comment
+          */
+
+          protected x;
+        }
+
+        {
+          /*
+          Comment
+          */
         }
       `,
       errors: [
         { line: 5, messageId: "unexpectedEmptyLineAfter" },
         { line: 12, messageId: "missingEmptyLineAfter" },
         { line: 19, messageId: "unexpectedEmptyLineAfter" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      output: `
-        function f(): void {} // Comment
-
-        async function g(): Promise<void> {
-          await import(
-            /* webpackChunkName: "chunk-name" */
-            "source"
-          );
-        }
-
-        class C {
-          /*
-          Comment
-          */
-
-          protected x;
-        }
-
-        {
-          /*
-          Comment
-          */
-        }
-      `
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         /* eslint-disable: rule1 */
         /* eslint-disable: rule2 */
         /* eslint-disable: rule3 */
+        function f(): void {}
+      `,
+      output: `
+        /* eslint-disable: rule1 */
+
+        /* eslint-disable: rule2 */
+
+        /* eslint-disable: rule3 */
+
         function f(): void {}
       `,
       errors: [
         { line: 2, messageId: "missingEmptyLineBefore" },
         { line: 3, messageId: "missingEmptyLineBefore" },
         { line: 3, messageId: "missingEmptyLineAfter" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      output: `
-        /* eslint-disable: rule1 */
-
-        /* eslint-disable: rule2 */
-
-        /* eslint-disable: rule3 */
-
-        function f(): void {}
-      `
+      ]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         /* eslint-disable: rule1 */
 
@@ -139,8 +140,7 @@ utils.testRule(
         /* eslint-disable: rule3 */
 
         function f(): void {}
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

@@ -18,6 +18,47 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const statementsOrder = utils.createRule({
+  name: "statements-order",
+  fixable: "code",
+  isOptions: evaluate(() => {
+    const NodeTypeVO = createValidationObject<NodeType>({
+      ExportAllDeclaration: "ExportAllDeclaration",
+      ExportDeclaration: "ExportDeclaration",
+      ExportDefaultDeclaration: "ExportDefaultDeclaration",
+      ExportFunctionDeclaration: "ExportFunctionDeclaration",
+      ExportModuleDeclaration: "ExportModuleDeclaration",
+      ExportTypeDeclaration: "ExportTypeDeclaration",
+      ExportUnknown: "ExportUnknown",
+      FunctionDeclaration: "FunctionDeclaration",
+      GlobalModuleDeclaration: "GlobalModuleDeclaration",
+      ImportDeclaration: "ImportDeclaration",
+      JestTest: "JestTest",
+      ModuleDeclaration: "ModuleDeclaration",
+      TypeDeclaration: "TypeDeclaration",
+      Unknown: "Unknown"
+    });
+
+    const isNodeType = is.factory(is.enumeration, NodeTypeVO);
+
+    const isNodeTypes = is.factory(is.array.of, isNodeType);
+
+    return is.object.factory<RuleOptions>(
+      {
+        blockOrder: isNodeTypes,
+        moduleOrder: isNodeTypes,
+        order: isNodeTypes,
+        rootOrder: isNodeTypes
+      },
+      {}
+    );
+  }),
+  defaultOptions: {
+    blockOrder: [],
+    moduleOrder: [],
+    order: [],
+    rootOrder: []
+  },
+  messages: { incorrectStatementsOrder: "Incorrect statements order" },
   create: (context): RuleListener => {
     const blockOrder: Rec<NodeType, number> = {
       ...defaultOrder,
@@ -107,48 +148,7 @@ export const statementsOrder = utils.createRule({
         }
       }
     };
-  },
-  defaultOptions: {
-    blockOrder: [],
-    moduleOrder: [],
-    order: [],
-    rootOrder: []
-  },
-  fixable: "code",
-  isRuleOptions: evaluate(() => {
-    const NodeTypeVO = createValidationObject<NodeType>({
-      ExportAllDeclaration: "ExportAllDeclaration",
-      ExportDeclaration: "ExportDeclaration",
-      ExportDefaultDeclaration: "ExportDefaultDeclaration",
-      ExportFunctionDeclaration: "ExportFunctionDeclaration",
-      ExportModuleDeclaration: "ExportModuleDeclaration",
-      ExportTypeDeclaration: "ExportTypeDeclaration",
-      ExportUnknown: "ExportUnknown",
-      FunctionDeclaration: "FunctionDeclaration",
-      GlobalModuleDeclaration: "GlobalModuleDeclaration",
-      ImportDeclaration: "ImportDeclaration",
-      JestTest: "JestTest",
-      ModuleDeclaration: "ModuleDeclaration",
-      TypeDeclaration: "TypeDeclaration",
-      Unknown: "Unknown"
-    });
-
-    const isNodeType = is.factory(is.enumeration, NodeTypeVO);
-
-    const isNodeTypes = is.factory(is.array.of, isNodeType);
-
-    return is.object.factory<RuleOptions>(
-      {
-        blockOrder: isNodeTypes,
-        moduleOrder: isNodeTypes,
-        order: isNodeTypes,
-        rootOrder: isNodeTypes
-      },
-      {}
-    );
-  }),
-  messages: { incorrectStatementsOrder: "Incorrect statements order" },
-  name: "statements-order"
+  }
 });
 
 const defaultOrder: Rec<NodeType, number> = {

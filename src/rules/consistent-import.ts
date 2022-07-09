@@ -19,32 +19,10 @@ import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 
 export const consistentImport = utils.createRule({
-  create: (context): RuleListener => {
-    const identifiers = new Set<string>();
-
-    // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
-    const importDeclarations: TSESTree.ImportDeclaration[] = [];
-
-    return {
-      [AST_NODE_TYPES.ImportDeclaration]: (node): void => {
-        importDeclarations.push(node);
-      },
-      ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)":
-        (node: TSESTree.Identifier): void => {
-          identifiers.add(node.name);
-        },
-      "Program:exit": (program: TSESTree.Program): void => {
-        autoImportFn(program, context);
-        checkImport(importDeclarations, identifiers, context);
-      },
-      "Property > Identifier.value": (node: TSESTree.Identifier): void => {
-        identifiers.add(node.name);
-      }
-    };
-  },
-  defaultSubOptions: { altLocalNames: [] },
+  name: "consistent-import",
   fixable: "code",
-  isRuleOptions: is.object,
+  isOptions: is.object,
+  subOptionsKey: "sources",
   isSubOptions: evaluate(() => {
     const TypeVO = createValidationObject<Type>({
       default: "default",
@@ -68,6 +46,7 @@ export const consistentImport = utils.createRule({
       }
     );
   }),
+  defaultSubOptions: { altLocalNames: [] },
   messages: {
     autoImport: 'Run "eslint --fix" to add missing import statement(s)',
     invalidLocalName:
@@ -76,8 +55,29 @@ export const consistentImport = utils.createRule({
     wildcardImportDisallowed: "Wildcard import disallowed ({{ _id }})",
     wildcardImportRequired: "Wildcard import required ({{ _id }})"
   },
-  name: "consistent-import",
-  subOptionsKey: "sources"
+  create: (context): RuleListener => {
+    const identifiers = new Set<string>();
+
+    // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
+    const importDeclarations: TSESTree.ImportDeclaration[] = [];
+
+    return {
+      [AST_NODE_TYPES.ImportDeclaration]: (node): void => {
+        importDeclarations.push(node);
+      },
+      ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)":
+        (node: TSESTree.Identifier): void => {
+          identifiers.add(node.name);
+        },
+      "Program:exit": (program: TSESTree.Program): void => {
+        autoImportFn(program, context);
+        checkImport(importDeclarations, identifiers, context);
+      },
+      "Property > Identifier.value": (node: TSESTree.Identifier): void => {
+        identifiers.add(node.name);
+      }
+    };
+  }
 });
 
 type Context = utils.Context<MessageId, object, SubOptions>;

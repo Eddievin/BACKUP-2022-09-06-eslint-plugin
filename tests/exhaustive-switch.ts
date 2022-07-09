@@ -3,6 +3,7 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("exhaustive-switch", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       const symbol = Symbol("Test");
 
@@ -45,10 +46,10 @@ utils.testRule("exhaustive-switch", rules, [
       { line: 4, messageId: "inexhaustiveSwitch" },
       { line: 11, messageId: "inexhaustiveSwitch" },
       { line: 18, messageId: "inexhaustiveSwitch" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       const symbol = Symbol("Test");
 
@@ -176,10 +177,10 @@ utils.testRule("exhaustive-switch", rules, [
       { line: 64, messageId: "inexhaustiveSwitch" },
       { line: 76, messageId: "inexhaustiveSwitch" },
       { line: 88, messageId: "inexhaustiveSwitch" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       const symbol = Symbol("Test");
 
@@ -307,7 +308,6 @@ utils.testRule("exhaustive-switch", rules, [
       { line: 64, messageId: "inexhaustiveSwitch" },
       { line: 76, messageId: "inexhaustiveSwitch" },
       { line: 88, messageId: "inexhaustiveSwitch" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`
+    ]
   }
 ]);

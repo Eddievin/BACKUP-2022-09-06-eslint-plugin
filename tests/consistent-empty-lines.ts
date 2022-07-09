@@ -3,16 +3,6 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("consistent-empty-lines", rules, [
   {
-    code: `
-      import x from "source1";
-
-      import y from "source2";
-      export = 1;
-    `,
-    errors: [
-      { line: 3, messageId: "unexpectedEmptyLine" },
-      { line: 4, messageId: "expectingEmptyLine" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -32,21 +22,24 @@ utils.testRule("consistent-empty-lines", rules, [
         ]
       }
     ],
-    output: `
-      import x from "source1";
-      import y from "source2";
-
-      export = 1;
-    `
-  },
-  {
     code: `
       import x from "source1";
 
       import y from "source2";
       export = 1;
     `,
-    errors: [{ line: 4, messageId: "expectingEmptyLine" }],
+    output: `
+      import x from "source1";
+      import y from "source2";
+
+      export = 1;
+    `,
+    errors: [
+      { line: 3, messageId: "unexpectedEmptyLine" },
+      { line: 4, messageId: "expectingEmptyLine" }
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -66,26 +59,22 @@ utils.testRule("consistent-empty-lines", rules, [
         ]
       }
     ],
+    code: `
+      import x from "source1";
+
+      import y from "source2";
+      export = 1;
+    `,
     output: `
       import x from "source1";
 
       import y from "source2";
 
       export = 1;
-    `
+    `,
+    errors: [{ line: 4, messageId: "expectingEmptyLine" }]
   },
   {
-    code: `
-      const x = 1;
-      {
-        const y = 2;
-        const z = 3;
-      }
-    `,
-    errors: [
-      { line: 2, messageId: "expectingEmptyLine" },
-      { line: 4, messageId: "expectingEmptyLine" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -99,6 +88,13 @@ utils.testRule("consistent-empty-lines", rules, [
         ]
       }
     ],
+    code: `
+      const x = 1;
+      {
+        const y = 2;
+        const z = 3;
+      }
+    `,
     output: `
       const x = 1;
 
@@ -107,6 +103,10 @@ utils.testRule("consistent-empty-lines", rules, [
 
         const z = 3;
       }
-    `
+    `,
+    errors: [
+      { line: 2, messageId: "expectingEmptyLine" },
+      { line: 4, messageId: "expectingEmptyLine" }
+    ]
   }
 ]);

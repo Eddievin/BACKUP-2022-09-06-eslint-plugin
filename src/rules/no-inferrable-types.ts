@@ -4,6 +4,11 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
 
 export const noInferrableTypes = utils.createRule({
+  name: "no-inferrable-types",
+  isOptions: is.object,
+  messages: {
+    triviallyInferrableType: "Type can be trivially inferred from initializer"
+  },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.VariableDeclarator]: (node): void => {
       const { id, init } = node;
@@ -25,10 +30,5 @@ export const noInferrableTypes = utils.createRule({
           context.report({ messageId: "triviallyInferrableType", node });
       }
     }
-  }),
-  isRuleOptions: is.object,
-  messages: {
-    triviallyInferrableType: "Type can be trivially inferred from initializer"
-  },
-  name: "no-inferrable-types"
+  })
 });

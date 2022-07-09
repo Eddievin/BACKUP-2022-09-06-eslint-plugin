@@ -6,6 +6,7 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         import "I1";
         namespace PN1 {}
@@ -35,8 +36,6 @@ utils.testRule(
         import "I2";
         declare global {}
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
-      name: `Test at line ${getCurrentLine().line}`,
       output: `
         import "I1";
         import "I2";
@@ -65,21 +64,10 @@ utils.testRule(
         function PF1() {}
         function PF2();
         namespace PN1 {}
-      `
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
     },
     {
-      code: `
-        import "I1";
-        function PF2();
-        function PF1() {}
-        const PU3 = 1;
-        class PU2 {}
-        var PU1 = 1;
-        type PT2 = 1;
-        interface PT1 {}
-        import "I2";
-      `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -97,19 +85,6 @@ utils.testRule(
           ]
         }
       ],
-      output: `
-        import "I1";
-        import "I2";
-        function PF1() {}
-        function PF2();
-        interface PT1 {}
-        type PT2 = 1;
-        const PU3 = 1;
-        class PU2 {}
-        var PU1 = 1;
-      `
-    },
-    {
       code: `
         import "I1";
         function PF2();
@@ -121,7 +96,20 @@ utils.testRule(
         interface PT1 {}
         import "I2";
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
+      output: `
+        import "I1";
+        import "I2";
+        function PF1() {}
+        function PF2();
+        interface PT1 {}
+        type PT2 = 1;
+        const PU3 = 1;
+        class PU2 {}
+        var PU1 = 1;
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+    },
+    {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -139,6 +127,17 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        import "I1";
+        function PF2();
+        function PF1() {}
+        const PU3 = 1;
+        class PU2 {}
+        var PU1 = 1;
+        type PT2 = 1;
+        interface PT1 {}
+        import "I2";
+      `,
       output: `
         import "I1";
         import "I2";
@@ -149,9 +148,11 @@ utils.testRule(
         const PU3 = 1;
         class PU2 {}
         var PU1 = 1;
-      `
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         function f() {
           function PF2();
@@ -163,8 +164,6 @@ utils.testRule(
           interface PT1 {}
         }
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
-      name: `Test at line ${getCurrentLine().line}`,
       output: `
         function f() {
           const PU3 = 1;
@@ -175,21 +174,10 @@ utils.testRule(
           function PF1() {}
           function PF2();
         }
-      `
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
     },
     {
-      code: `
-        function f() {
-          function PF2();
-          function PF1() {}
-          const PU3 = 1;
-          class PU2 {}
-          var PU1 = 1;
-          type PT2 = 1;
-          interface PT1 {}
-        }
-      `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -207,6 +195,17 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        function f() {
+          function PF2();
+          function PF1() {}
+          const PU3 = 1;
+          class PU2 {}
+          var PU1 = 1;
+          type PT2 = 1;
+          interface PT1 {}
+        }
+      `,
       output: `
         function f() {
           function PF1() {}
@@ -217,9 +216,11 @@ utils.testRule(
           class PU2 {}
           var PU1 = 1;
         }
-      `
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         namespace NS {
           function PF2();
@@ -231,8 +232,6 @@ utils.testRule(
           interface PT1 {}
         }
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
-      name: `Test at line ${getCurrentLine().line}`,
       output: `
         namespace NS {
           const PU3 = 1;
@@ -243,21 +242,10 @@ utils.testRule(
           function PF1() {}
           function PF2();
         }
-      `
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
     },
     {
-      code: `
-        namespace NS {
-          function PF2();
-          function PF1() {}
-          const PU3 = 1;
-          class PU2 {}
-          var PU1 = 1;
-          type PT2 = 1;
-          interface PT1 {}
-        }
-      `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -275,6 +263,17 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        namespace NS {
+          function PF2();
+          function PF1() {}
+          const PU3 = 1;
+          class PU2 {}
+          var PU1 = 1;
+          type PT2 = 1;
+          interface PT1 {}
+        }
+      `,
       output: `
         namespace NS {
           function PF1() {}
@@ -285,9 +284,11 @@ utils.testRule(
           class PU2 {}
           var PU1 = 1;
         }
-      `
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         import "I1";
         test.only.each([])("testA", () => {});
@@ -303,8 +304,6 @@ utils.testRule(
         console.log(1);
         import "I2";
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }],
-      name: `Test at line ${getCurrentLine().line}`,
       output: `
         import "I1";
         import "I2";
@@ -319,29 +318,26 @@ utils.testRule(
         test.each([])("test8", () => {});
         test.only("test9", () => {});
         test.only.each([])("testA", () => {});
-      `
+      `,
+      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         const x = 1;
         export = x;
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         const x = 1;
         test("sample", () => {});
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     },
     {
-      code: `
-        const x = 1;
-        test("sample", () => {});
-      `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -362,14 +358,18 @@ utils.testRule(
             "JestTest"
           ]
         }
-      ]
+      ],
+      code: `
+        const x = 1;
+        test("sample", () => {});
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         test.each([])("prop: selected", async () => {});
         test.each([])("prop: selected (multi-select)", async () => {});
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

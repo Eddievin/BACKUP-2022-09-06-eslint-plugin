@@ -6,6 +6,7 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         class C {
           x?: string | undefined;
@@ -20,10 +21,11 @@ utils.testRule(
       errors: [
         { line: 3, messageId: "expectingCombinedStyle" },
         { line: 4, messageId: "expectingCombinedStyle" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ classes: "optional" }],
       code: `
         export default class {
           x?: string | undefined;
@@ -38,11 +40,11 @@ utils.testRule(
       errors: [
         { line: 2, messageId: "expectingOptionalStyle" },
         { line: 4, messageId: "expectingOptionalStyle" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ classes: "optional" }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ classes: "undefined" }],
       code: `
         const C = class {
           x?: string | undefined;
@@ -59,26 +61,9 @@ utils.testRule(
         { line: 3, messageId: "expectingUndefinedStyle" },
         { line: 7, messageId: "expectingUndefinedStyle" },
         { line: 8, messageId: "expectingUndefinedStyle" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ classes: "undefined" }]
+      ]
     },
     {
-      code: `
-        class C {
-          x?: string | undefined;
-          y?: string | undefined;
-        }
-        class D {
-          x?: string | undefined;
-          y?: string | undefined;
-        }
-      `,
-      errors: [
-        { line: 2, messageId: "expectingUndefinedStyle" },
-        { line: 3, messageId: "expectingUndefinedStyle" },
-        { line: 6, messageId: "expectingUndefinedStyle" }
-      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -97,9 +82,25 @@ utils.testRule(
             }
           ]
         }
+      ],
+      code: `
+        class C {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+        class D {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+      `,
+      errors: [
+        { line: 2, messageId: "expectingUndefinedStyle" },
+        { line: 3, messageId: "expectingUndefinedStyle" },
+        { line: 6, messageId: "expectingUndefinedStyle" }
       ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         interface I {
           x?: string | undefined;
@@ -114,10 +115,11 @@ utils.testRule(
       errors: [
         { line: 3, messageId: "expectingCombinedStyle" },
         { line: 4, messageId: "expectingCombinedStyle" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ interfaces: "optional" }],
       code: `
         interface I {
           x?: string | undefined;
@@ -132,11 +134,11 @@ utils.testRule(
       errors: [
         { line: 2, messageId: "expectingOptionalStyle" },
         { line: 4, messageId: "expectingOptionalStyle" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: "optional" }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ interfaces: "undefined" }],
       code: `
         interface I {
           x?: string | undefined;
@@ -153,26 +155,9 @@ utils.testRule(
         { line: 3, messageId: "expectingUndefinedStyle" },
         { line: 7, messageId: "expectingUndefinedStyle" },
         { line: 8, messageId: "expectingUndefinedStyle" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: "undefined" }]
+      ]
     },
     {
-      code: `
-        interface I {
-          x?: string | undefined;
-          y?: string | undefined;
-        }
-        interface J {
-          x?: string | undefined;
-          y?: string | undefined;
-        }
-      `,
-      errors: [
-        { line: 2, messageId: "expectingUndefinedStyle" },
-        { line: 3, messageId: "expectingUndefinedStyle" },
-        { line: 6, messageId: "expectingUndefinedStyle" }
-      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -191,11 +176,27 @@ utils.testRule(
             }
           ]
         }
+      ],
+      code: `
+        interface I {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+        interface J {
+          x?: string | undefined;
+          y?: string | undefined;
+        }
+      `,
+      errors: [
+        { line: 2, messageId: "expectingUndefinedStyle" },
+        { line: 3, messageId: "expectingUndefinedStyle" },
+        { line: 6, messageId: "expectingUndefinedStyle" }
       ]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         class C {
           x: string;
@@ -205,8 +206,7 @@ utils.testRule(
           x: string;
           f();
         }
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

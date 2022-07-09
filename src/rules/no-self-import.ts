@@ -7,6 +7,10 @@ import path from "node:path";
 import type { strings } from "@skylib/functions";
 
 export const noSelfImport = utils.createRule({
+  name: "no-self-import",
+  isOptions: is.object.factory<RuleOptions>({ extensions: is.strings }, {}),
+  defaultOptions: { extensions: [".js", ".ts"] },
+  messages: { selfImportDisallowed: "Self-import is not allowed" },
   create: (context): RuleListener => {
     const expected = [
       path.basename(context.path),
@@ -52,11 +56,7 @@ export const noSelfImport = utils.createRule({
       if (dir === "." && expected.includes(basename))
         context.report({ messageId: "selfImportDisallowed", node });
     }
-  },
-  defaultOptions: { extensions: [".js", ".ts"] },
-  isRuleOptions: is.object.factory<RuleOptions>({ extensions: is.strings }, {}),
-  messages: { selfImportDisallowed: "Self-import is not allowed" },
-  name: "no-self-import"
+  }
 });
 
 interface RuleOptions {

@@ -3,6 +3,7 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("template-literal-format", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       const x = \`template literal\`;
 
@@ -15,10 +16,10 @@ utils.testRule("template-literal-format", rules, [
     errors: [
       { line: 3, messageId: "invalidTemplateLiteralFormat" },
       { line: 6, messageId: "invalidTemplateLiteralFormat" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       const x = \`
           template literal
@@ -26,17 +27,17 @@ utils.testRule("template-literal-format", rules, [
           template literal
           \`;
     `,
-    errors: [{ line: 1, messageId: "invalidTemplateLiteralFormat" }],
-    name: `Test at line ${getCurrentLine().line}`,
     output: `
       const x = \`
         template literal
 
         template literal
       \`;
-    `
+    `,
+    errors: [{ line: 1, messageId: "invalidTemplateLiteralFormat" }]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       {
         const y = \`
@@ -46,8 +47,6 @@ utils.testRule("template-literal-format", rules, [
       \`;
       }
     `,
-    errors: [{ line: 2, messageId: "invalidTemplateLiteralFormat" }],
-    name: `Test at line ${getCurrentLine().line}`,
     output: `
       {
         const y = \`
@@ -56,6 +55,7 @@ utils.testRule("template-literal-format", rules, [
           template literal
         \`;
       }
-    `
+    `,
+    errors: [{ line: 2, messageId: "invalidTemplateLiteralFormat" }]
   }
 ]);

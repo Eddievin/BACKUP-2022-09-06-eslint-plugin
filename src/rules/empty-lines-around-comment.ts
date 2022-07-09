@@ -9,6 +9,14 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const emptyLinesAroundComment = utils.createRule({
+  name: "empty-lines-around-comment",
+  fixable: "whitespace",
+  isOptions: is.object,
+  messages: {
+    missingEmptyLineAfter: "Missing empty line after comment",
+    missingEmptyLineBefore: "Missing empty line before comment",
+    unexpectedEmptyLineAfter: "Unexpected empty line after comment"
+  },
   create: (context): RuleListener => {
     const nodes: Writable<readonly TSESTree.Node[]> = [];
 
@@ -80,15 +88,7 @@ export const emptyLinesAroundComment = utils.createRule({
         }
       }
     };
-  },
-  fixable: "whitespace",
-  isRuleOptions: is.object,
-  messages: {
-    missingEmptyLineAfter: "Missing empty line after comment",
-    missingEmptyLineBefore: "Missing empty line before comment",
-    unexpectedEmptyLineAfter: "Unexpected empty line after comment"
-  },
-  name: "empty-lines-around-comment"
+  }
 });
 
 const blockLikeTypes: ReadonlySet<string> = new Set([

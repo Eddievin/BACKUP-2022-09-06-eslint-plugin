@@ -6,30 +6,30 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         []
         .map(x => x)
 
         .map(x => x);
       `,
-      errors: [{ line: 1, messageId: "unexpectedEmptyLine" }],
-      name: `Test at line ${getCurrentLine().line}`,
       output: `
         []
         .map(x => x)
         .map(x => x);
-      `
+      `,
+      errors: [{ line: 1, messageId: "unexpectedEmptyLine" }]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         []
         .map(x => x)
         // Comment
         .map(x => x);
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

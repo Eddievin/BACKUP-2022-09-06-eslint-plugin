@@ -6,6 +6,10 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        { rules: [{ _id: "id", selector: "Program > ExpressionStatement" }] }
+      ],
       code: `
         x++;
 
@@ -15,11 +19,6 @@ utils.testRule(
 
         x++;
       `,
-      errors: [{ line: 3, messageId: "unexpectedEmptyLine" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        { rules: [{ _id: "id", selector: "Program > ExpressionStatement" }] }
-      ],
       output: `
         x++;
         x++;
@@ -27,16 +26,10 @@ utils.testRule(
         const a = 1;
 
         x++;
-      `
+      `,
+      errors: [{ line: 3, messageId: "unexpectedEmptyLine" }]
     },
     {
-      code: `
-        x;
-        x+
-        y+
-        z;
-      `,
-      errors: [{ line: 2, messageId: "expectingEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -49,22 +42,22 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        x;
+        x+
+        y+
+        z;
+      `,
       output: `
         x;
 
         x+
         y+
         z;
-      `
+      `,
+      errors: [{ line: 2, messageId: "expectingEmptyLine" }]
     },
     {
-      code: `
-        x+
-        y;
-        x+
-        y;
-      `,
-      errors: [{ line: 3, messageId: "expectingEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -77,22 +70,22 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        x+
+        y;
+        x+
+        y;
+      `,
       output: `
         x+
         y;
 
         x+
         y;
-      `
+      `,
+      errors: [{ line: 3, messageId: "expectingEmptyLine" }]
     },
     {
-      code: `
-        x;
-        x+
-        y+
-        z;
-      `,
-      errors: [{ line: 2, messageId: "expectingEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -105,23 +98,22 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        x;
+        x+
+        y+
+        z;
+      `,
       output: `
         x;
 
         x+
         y+
         z;
-      `
+      `,
+      errors: [{ line: 2, messageId: "expectingEmptyLine" }]
     },
     {
-      code: `
-        {
-          x++;
-
-          x++;
-        }
-      `,
-      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -130,14 +122,24 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        {
+          x++;
+
+          x++;
+        }
+      `,
       output: `
         {
           x++;
           x++;
         }
-      `
+      `,
+      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ rules: [{ _id: "id", selector: "TSInterfaceBody > *" }] }],
       code: `
         interface I {
           x: string;
@@ -145,25 +147,15 @@ utils.testRule(
           y: string;
         }
       `,
-      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ rules: [{ _id: "id", selector: "TSInterfaceBody > *" }] }],
       output: `
         interface I {
           x: string;
           y: string;
         }
-      `
+      `,
+      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }]
     },
     {
-      code: `
-        interface I {
-          x: string;
-          /** Comment */
-          y: string;
-        }
-      `,
-      errors: [{ line: 4, messageId: "expectingEmptyLine" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -176,6 +168,13 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        interface I {
+          x: string;
+          /** Comment */
+          y: string;
+        }
+      `,
       output: `
         interface I {
           x: string;
@@ -183,9 +182,12 @@ utils.testRule(
           /** Comment */
           y: string;
         }
-      `
+      `,
+      errors: [{ line: 4, messageId: "expectingEmptyLine" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ rules: [{ _id: "id", selector: "ArrayExpression > *" }] }],
       code: `
         const x = [
           1,
@@ -196,9 +198,6 @@ utils.testRule(
 
         const y = [1, 2];
       `,
-      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ rules: [{ _id: "id", selector: "ArrayExpression > *" }] }],
       output: `
         const x = [
           1,
@@ -207,9 +206,12 @@ utils.testRule(
         ];
 
         const y = [1, 2];
-      `
+      `,
+      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ rules: [{ _id: "id", selector: "ArrayExpression > *" }] }],
       code: `
         const x = [
           {
@@ -221,9 +223,6 @@ utils.testRule(
           }
         ];
       `,
-      errors: [{ line: 6, messageId: "unexpectedEmptyLine" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ rules: [{ _id: "id", selector: "ArrayExpression > *" }] }],
       output: `
         const x = [
           {
@@ -233,26 +232,10 @@ utils.testRule(
             value: [1]
           }
         ];
-      `
+      `,
+      errors: [{ line: 6, messageId: "unexpectedEmptyLine" }]
     },
     {
-      code: `
-        {
-          x++;
-
-          x++;
-        }
-
-        {
-          x++;
-
-          x++;
-        }
-      `,
-      errors: [
-        { line: 4, messageId: "unexpectedEmptyLine" },
-        { line: 10, messageId: "unexpectedEmptyLine" }
-      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -261,6 +244,19 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        {
+          x++;
+
+          x++;
+        }
+
+        {
+          x++;
+
+          x++;
+        }
+      `,
       output: `
         {
           x++;
@@ -271,18 +267,22 @@ utils.testRule(
           x++;
           x++;
         }
-      `
+      `,
+      errors: [
+        { line: 4, messageId: "unexpectedEmptyLine" },
+        { line: 10, messageId: "unexpectedEmptyLine" }
+      ]
     }
   ],
   [
     {
-      code: `
-        const a = 1;
-      `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         { rules: [{ _id: "id", selector: "Program > ExpressionStatement" }] }
-      ]
+      ],
+      code: `
+        const a = 1;
+      `
     }
   ]
 );

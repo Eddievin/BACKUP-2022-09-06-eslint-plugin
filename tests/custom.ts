@@ -3,6 +3,8 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("custom", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "VElement[name=p]" }],
     code: `
       <template>
         <p>Text</p>
@@ -17,11 +19,11 @@ utils.testRule("custom", rules, [
         line: 2,
         messageId: "customMessage"
       }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "VElement[name=p]" }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "Identifier" }],
     code: `
       <script lang="ts">
         const id1 = [];
@@ -33,12 +35,15 @@ utils.testRule("custom", rules, [
         line: 2,
         messageId: "customMessage"
       }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "Identifier" }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      { replacement: "id2", selector: ["Identifier", "Identifier[name=id1]"] }
+    ],
     code: "const id1 = [];",
+    output: "const id2 = [];",
     errors: [
       {
         data: {
@@ -49,22 +54,9 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [
-      { replacement: "id2", selector: ["Identifier", "Identifier[name=id1]"] }
-    ],
-    output: "const id2 = [];"
+    ]
   },
   {
-    code: "const id1 = [];",
-    errors: [
-      {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
-      }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -74,13 +66,17 @@ utils.testRule("custom", rules, [
         selector: ["Identifier"]
       }
     ],
-    output: "const ie1 = [];"
+    code: "const id1 = [];",
+    output: "const ie1 = [];",
+    errors: [
+      {
+        data: { message: "Custom message" },
+        line: 1,
+        messageId: "customMessage"
+      }
+    ]
   },
   {
-    code: "function f(x: any) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -88,13 +84,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["any"]
       }
+    ],
+    code: "function f(x: any) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: unknown[]) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -102,13 +98,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["array"]
       }
+    ],
+    code: "function f(x: unknown[]) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: boolean) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -116,13 +112,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["boolean"]
       }
+    ],
+    code: "function f(x: boolean) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: () => void) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -130,13 +126,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["function"]
       }
+    ],
+    code: "function f(x: () => void) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: null) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -144,13 +140,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["null"]
       }
+    ],
+    code: "function f(x: null) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: number) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -158,13 +154,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["number"]
       }
+    ],
+    code: "function f(x: number) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: object) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -172,13 +168,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["object"]
       }
+    ],
+    code: "function f(x: object) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: string) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -186,13 +182,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["string"]
       }
+    ],
+    code: "function f(x: string) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: symbol) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -200,13 +196,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["symbol"]
       }
+    ],
+    code: "function f(x: symbol) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: [unknown]) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -214,13 +210,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["tuple"]
       }
+    ],
+    code: "function f(x: [unknown]) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: undefined) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -228,13 +224,13 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["undefined"]
       }
+    ],
+    code: "function f(x: undefined) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
-    code: "function f(x: unknown) {}",
-    errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
-    ],
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -242,9 +238,21 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=x]"],
         typeIsOneOf: ["unknown"]
       }
+    ],
+    code: "function f(x: unknown) {}",
+    errors: [
+      { data: { message: "Custom message" }, messageId: "customMessage" }
     ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["Identifier[name=/s$/u]"],
+        typeIsNoneOf: ["array"]
+      }
+    ],
     code: `
       const cats = "";
       const dogs = [];
@@ -255,17 +263,17 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=/s$/u]"],
-        typeIsNoneOf: ["array"]
+        selector: ["CallExpression[callee.name=g] > .arguments"],
+        typeHasNoneOf: ["undefined"]
       }
-    ]
-  },
-  {
+    ],
     code: `
       function f(x: string,  y: string | undefined) {
         g(x);
@@ -278,17 +286,17 @@ utils.testRule("custom", rules, [
         line: 2,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
         message: "Custom message",
         selector: ["CallExpression[callee.name=g] > .arguments"],
-        typeHasNoneOf: ["undefined"]
+        typeHasOneOf: ["undefined"]
       }
-    ]
-  },
-  {
+    ],
     code: `
       function f(x: string,  y: string | undefined) {
         g(x);
@@ -301,17 +309,17 @@ utils.testRule("custom", rules, [
         line: 3,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
         message: "Custom message",
-        selector: ["CallExpression[callee.name=g] > .arguments"],
-        typeHasOneOf: ["undefined"]
+        selector: ["Identifier[name=x]"],
+        typeIs: "object"
       }
-    ]
-  },
-  {
+    ],
     code: `
       function f<T extends object>(x: T) {}
       function f<T extends string>(x: T) {}
@@ -322,17 +330,17 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIs: "object"
+        typeIs: "unknown"
       }
-    ]
-  },
-  {
+    ],
     code: `
       function f<T>(x: T) {}
       function f<T extends string>(x: T) {}
@@ -343,17 +351,17 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=x]"],
-        typeIs: "unknown"
+        selector: ["Identifier[name=/^x\\d$/u]"],
+        typeIs: "complex"
       }
-    ]
-  },
-  {
+    ],
     code: `
       const x1 = { a: 1, b: 2, c: 3 };
       const x2: I = { a: 1, b: 2, c: 3 };
@@ -369,17 +377,17 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=/^x\\d$/u]"],
-        typeIs: "complex"
+        selector: ["Identifier[name=/^[xy]$/u]"],
+        typeIs: "readonly"
       }
-    ]
-  },
-  {
+    ],
     code: `
       const x: { readonly a: number } = { a: 1 };
       const y: { a: number } = { a: 1 };
@@ -390,17 +398,18 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [
-      {
-        message: "Custom message",
-        selector: ["Identifier[name=/^[xy]$/u]"],
-        typeIs: "readonly"
-      }
     ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        checkReturnType: true,
+        message: "Custom message",
+        selector: ["Identifier"],
+        typeIs: "string"
+      }
+    ],
     code: `
       function f(): string {}
       function g(): number {}
@@ -412,18 +421,17 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [
-      {
-        checkReturnType: true,
-        message: "Custom message",
-        selector: ["Identifier"],
-        typeIs: "string"
-      }
     ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        message: "Custom message",
+        selector: ["CallExpression"],
+        typeIs: "complex"
+      }
+    ],
     code: `
       Object.assign({ a: 1 }, { b: 2 });
       Object.assign({ a: 1 } as I, { b: 2 } as J);
@@ -436,17 +444,17 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
         message: "Custom message",
-        selector: ["CallExpression"],
+        selector: ["Identifier[name=/^[xy]$/u]"],
         typeIs: "complex"
       }
-    ]
-  },
-  {
+    ],
     code: `
       const x = Object.assign({ a: 1 }, { b: 2 });
       const y = Object.assign({ a: 1 } as I, { b: 2 } as J);
@@ -459,7 +467,9 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -467,9 +477,7 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=/^[xy]$/u]"],
         typeIs: "complex"
       }
-    ]
-  },
-  {
+    ],
     code: `
       const x = [true, { a: 1 }, { b: 2 }];
       const y = [true, { a: 1 } as I, { b: 2 } as J];
@@ -482,7 +490,9 @@ utils.testRule("custom", rules, [
         line: 1,
         messageId: "customMessage"
       }
-    ],
+    ]
+  },
+  {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
@@ -490,9 +500,7 @@ utils.testRule("custom", rules, [
         selector: ["Identifier[name=/^[xy]$/u]"],
         typeIs: "complex"
       }
-    ]
-  },
-  {
+    ],
     code: `
       const x = [true, { a: 1 }, { b: 2 }] as const;
       const y = [true, { a: 1 } as I, { b: 2 } as J] as const;
@@ -504,14 +512,6 @@ utils.testRule("custom", rules, [
         data: { message: "Custom message" },
         line: 1,
         messageId: "customMessage"
-      }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [
-      {
-        message: "Custom message",
-        selector: ["Identifier[name=/^[xy]$/u]"],
-        typeIs: "complex"
       }
     ]
   }

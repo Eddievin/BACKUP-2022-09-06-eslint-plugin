@@ -6,6 +6,9 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "camelCase.ts",
+      options: [{ format: "PascalCase" }],
       code: "export const x = 1;",
       errors: [
         {
@@ -13,12 +16,12 @@ utils.testRule(
           line: 1,
           messageId: "invalidFilename"
         }
-      ],
-      filename: "camelCase.ts",
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ format: "PascalCase" }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "camelCase.camelCase.ts",
+      options: [{ format: "kebab-case" }],
       code: "export const x = 1;",
       errors: [
         {
@@ -26,12 +29,12 @@ utils.testRule(
           line: 1,
           messageId: "invalidFilename"
         }
-      ],
-      filename: "camelCase.camelCase.ts",
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ format: "kebab-case" }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "PascalCase.ts",
+      options: [{ format: "camelCase" }],
       code: "export const x = 1;",
       errors: [
         {
@@ -39,12 +42,12 @@ utils.testRule(
           line: 1,
           messageId: "invalidFilename"
         }
-      ],
-      filename: "PascalCase.ts",
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ format: "camelCase" }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "PascalCase.PascalCase.ts",
+      options: [{ format: "kebab-case" }],
       code: "export const x = 1;",
       errors: [
         {
@@ -52,12 +55,12 @@ utils.testRule(
           line: 1,
           messageId: "invalidFilename"
         }
-      ],
-      filename: "PascalCase.PascalCase.ts",
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ format: "kebab-case" }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "kebab-case.ts",
+      options: [{ format: "PascalCase" }],
       code: "export const x = 1;",
       errors: [
         {
@@ -65,12 +68,12 @@ utils.testRule(
           line: 1,
           messageId: "invalidFilename"
         }
-      ],
-      filename: "kebab-case.ts",
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ format: "PascalCase" }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "kebab-case.kebab-case.ts",
+      options: [{ format: "camelCase" }],
       code: "export const x = 1;",
       errors: [
         {
@@ -78,51 +81,47 @@ utils.testRule(
           line: 1,
           messageId: "invalidFilename"
         }
-      ],
-      filename: "kebab-case.kebab-case.ts",
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ format: "camelCase" }]
+      ]
     }
   ],
   [
     {
-      code: "export const x = 1;",
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: "export const x = 1;",
-      filename: "file.extras.ts",
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: "export const x = 1;",
-      filename: "kebab-case.ts",
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: "export const x = 1;",
-      filename: "kebab-case.kebab-case.ts",
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: "export const x = 1;",
-      filename: "vue.d.ts",
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: "export default class PascalCase {}",
-      filename: "PascalCase.ts",
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: "export class PascalCase {}",
-      filename: "PascalCase.ts",
-      name: `Test at line ${getCurrentLine().line}`
-    },
-    {
-      code: "export default defineComponent({});",
-      filename: "PascalCase.ts",
       name: `Test at line ${getCurrentLine().line}`,
+      code: "export const x = 1;"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "file.extras.ts",
+      code: "export const x = 1;"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "kebab-case.ts",
+      code: "export const x = 1;"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "kebab-case.kebab-case.ts",
+      code: "export const x = 1;"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "vue.d.ts",
+      code: "export const x = 1;"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "PascalCase.ts",
+      code: "export default class PascalCase {}"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "PascalCase.ts",
+      code: "export class PascalCase {}"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "PascalCase.ts",
       options: [
         {
           overrides: [
@@ -134,7 +133,8 @@ utils.testRule(
             }
           ]
         }
-      ]
+      ],
+      code: "export default defineComponent({});"
     }
   ]
 );

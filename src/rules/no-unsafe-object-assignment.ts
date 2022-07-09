@@ -7,6 +7,12 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 
 export const noUnsafeObjectAssignment = utils.createRule({
+  name: "no-unsafe-object-assignment",
+  isOptions: is.object,
+  messages: {
+    unsafeOptionalAssignment: "Unsafe optional assignment: {{name}}",
+    unsafeReadonlyAssignment: "Unsafe readonly-to-mutable assignment: {{name}}"
+  },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.ArrowFunctionExpression]: (node): void => {
       if (node.body.type === AST_NODE_TYPES.BlockStatement) {
@@ -35,13 +41,7 @@ export const noUnsafeObjectAssignment = utils.createRule({
         if (declaration.init)
           lintNodes(declaration.id, declaration.init, context);
     }
-  }),
-  isRuleOptions: is.object,
-  messages: {
-    unsafeOptionalAssignment: "Unsafe optional assignment: {{name}}",
-    unsafeReadonlyAssignment: "Unsafe readonly-to-mutable assignment: {{name}}"
-  },
-  name: "no-unsafe-object-assignment"
+  })
 });
 
 type Context = utils.Context<MessageId, object, object>;

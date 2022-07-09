@@ -6,6 +6,7 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         class C {
           x;
@@ -14,30 +15,31 @@ utils.testRule(
           }
         }
       `,
-      errors: [{ line: 2, messageId: "typedefRequired" }],
-      name: `Test at line ${getCurrentLine().line}`
+      errors: [{ line: 2, messageId: "typedefRequired" }]
     },
     {
-      code: `
-        class C {
-          x;
-          constructor() {
-            this.x = 1;
-          }
-        }
-      `,
-      errors: [{ line: 2, messageId: "typedefRequired" }],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           filesToLint: ["./fixtures/file.ts"],
           filesToSkip: ["./fixtures/**", "./other/**"]
         }
-      ]
+      ],
+      code: `
+        class C {
+          x;
+          constructor() {
+            this.x = 1;
+          }
+        }
+      `,
+      errors: [{ line: 2, messageId: "typedefRequired" }]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ filesToSkip: ["./fixtures/**"] }],
       code: `
         class C {
           x;
@@ -45,11 +47,11 @@ utils.testRule(
             this.x = 1;
           }
         }
-      `,
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ filesToSkip: ["./fixtures/**"] }]
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ filesToLint: ["./other/**"] }],
       code: `
         class C {
           x;
@@ -57,9 +59,7 @@ utils.testRule(
             this.x = 1;
           }
         }
-      `,
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ filesToLint: ["./other/**"] }]
+      `
     }
   ]
 );

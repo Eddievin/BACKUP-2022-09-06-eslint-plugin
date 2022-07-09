@@ -6,27 +6,29 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         function f(): void {}
 
         /** Comment */
         function g(): void {}
       `,
-      errors: [{ line: 1, messageId: "undocumented" }],
-      name: `Test at line ${getCurrentLine().line}`
+      errors: [{ line: 1, messageId: "undocumented" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ interfaces: ["interface"] }],
       code: `
         /** Comment */
         interface I {}
 
         interface J extends I {}
       `,
-      errors: [{ line: 4, messageId: "undocumented" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: ["interface"] }]
+      errors: [{ line: 4, messageId: "undocumented" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ interfaces: ["callSignatures"] }],
       code: `
         interface I {
           /** Comment */
@@ -37,11 +39,11 @@ utils.testRule(
           (): void;
         }
       `,
-      errors: [{ line: 6, messageId: "undocumentedCallSignature" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: ["callSignatures"] }]
+      errors: [{ line: 6, messageId: "undocumentedCallSignature" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ interfaces: ["constructSignatures"] }],
       code: `
         interface I {
           /** Comment */
@@ -52,11 +54,10 @@ utils.testRule(
           new (): object;
         }
       `,
-      errors: [{ line: 6, messageId: "undocumentedConstructSignature" }],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: ["constructSignatures"] }]
+      errors: [{ line: 6, messageId: "undocumentedConstructSignature" }]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         class C {
           public constructor()  {}
@@ -95,10 +96,11 @@ utils.testRule(
         { line: 6, messageId: "undocumented" },
         { line: 8, messageId: "undocumented" },
         { line: 10, messageId: "undocumented" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ properties: ["function"] }],
       code: `
         class C {
           f1: () => void;
@@ -114,11 +116,11 @@ utils.testRule(
       errors: [
         { line: 1, messageId: "undocumented" },
         { line: 2, messageId: "undocumented" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ properties: ["function"] }]
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ properties: ["nonFunction"] }],
       code: `
         class C {
           x1: string;
@@ -134,16 +136,14 @@ utils.testRule(
       errors: [
         { line: 1, messageId: "undocumented" },
         { line: 2, messageId: "undocumented" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ properties: ["nonFunction"] }]
+      ]
     }
   ],
   [
     {
-      code: "class C {}",
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ includeSelectors: ["Literal"], noDefaultSelectors: true }]
+      options: [{ includeSelectors: ["Literal"], noDefaultSelectors: true }],
+      code: "class C {}"
     }
   ]
 );

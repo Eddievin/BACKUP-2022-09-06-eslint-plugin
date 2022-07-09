@@ -3,6 +3,8 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("disallow-import", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ allow: ["source1", "*/source1"], disallow: ["**/source1"] }],
     code: `
       import "source1";
       import "a/source1";
@@ -11,11 +13,11 @@ utils.testRule("disallow-import", rules, [
       import "a/source2";
       import "a/b/source2";
     `,
-    errors: [{ line: 3, messageId: "disallowedSource" }],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ allow: ["source1", "*/source1"], disallow: ["**/source1"] }]
+    errors: [{ line: 3, messageId: "disallowedSource" }]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ allow: ["*/source1"] }],
     code: `
       import "source1";
       import "a/source1";
@@ -30,11 +32,11 @@ utils.testRule("disallow-import", rules, [
       { line: 4, messageId: "disallowedSource" },
       { line: 5, messageId: "disallowedSource" },
       { line: 6, messageId: "disallowedSource" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ allow: ["*/source1"] }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ disallow: ["@/*", "./*", "../*"] }],
     code: `
       import "@/source";
       import "./source";
@@ -45,11 +47,11 @@ utils.testRule("disallow-import", rules, [
       { line: 1, messageId: "disallowedSource" },
       { line: 2, messageId: "disallowedSource" },
       { line: 3, messageId: "disallowedSource" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ disallow: ["@/*", "./*", "../*"] }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ disallow: ["@/*", "./*", "../*"] }],
     code: `
       const x1 = import("@/source");
       const x2 = import("./source");
@@ -60,11 +62,11 @@ utils.testRule("disallow-import", rules, [
       { line: 1, messageId: "disallowedSource" },
       { line: 2, messageId: "disallowedSource" },
       { line: 3, messageId: "disallowedSource" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ disallow: ["@/*", "./*", "../*"] }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ disallow: ["@/*", "./*", "../*"] }],
     code: `
       const x1 = require("@/source");
       const x2 = require("./source");
@@ -75,11 +77,11 @@ utils.testRule("disallow-import", rules, [
       { line: 1, messageId: "disallowedSource" },
       { line: 2, messageId: "disallowedSource" },
       { line: 3, messageId: "disallowedSource" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ disallow: ["@/*", "./*", "../*"] }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ disallow: ["@/*", "./*", "../*"] }],
     code: `
       export * from "@/source";
       export * from "./source";
@@ -90,11 +92,11 @@ utils.testRule("disallow-import", rules, [
       { line: 1, messageId: "disallowedSource" },
       { line: 2, messageId: "disallowedSource" },
       { line: 3, messageId: "disallowedSource" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ disallow: ["@/*", "./*", "../*"] }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ disallow: ["@/*", "./*", "../*"] }],
     code: `
       export { x1 } from "@/source";
       export { x2 } from "./source";
@@ -105,17 +107,15 @@ utils.testRule("disallow-import", rules, [
       { line: 1, messageId: "disallowedSource" },
       { line: 2, messageId: "disallowedSource" },
       { line: 3, messageId: "disallowedSource" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ disallow: ["@/*", "./*", "../*"] }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ disallow: ["./*"], exclusions: [{ allow: ["./source2"] }] }],
     code: `
       import "./source1";
       import "./source2";
     `,
-    errors: [{ line: 1, messageId: "disallowedSource" }],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ disallow: ["./*"], exclusions: [{ allow: ["./source2"] }] }]
+    errors: [{ line: 1, messageId: "disallowedSource" }]
   }
 ]);

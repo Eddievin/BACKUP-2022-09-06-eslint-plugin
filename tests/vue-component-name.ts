@@ -6,41 +6,41 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export default defineComponent({
           name: "name"
         });
       `,
-      errors: [{ line: 2, messageId: "invalidName" }],
-      name: `Test at line ${getCurrentLine().line}`
+      errors: [{ line: 2, messageId: "invalidName" }]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export default defineComponent({
           name: "file"
         });
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ prefix: "prefix-" }],
       code: `
         export default defineComponent({
           name: "prefix-file"
         });
-      `,
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ prefix: "prefix-" }]
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ suffix: "-suffix" }],
       code: `
         export default defineComponent({
           name: "file-suffix"
         });
-      `,
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [{ suffix: "-suffix" }]
+      `
     }
   ]
 );

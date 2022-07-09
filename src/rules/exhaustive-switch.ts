@@ -5,6 +5,9 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
 
 export const exhaustiveSwitch = utils.createRule({
+  name: "exhaustive-switch",
+  isOptions: is.object,
+  messages: { inexhaustiveSwitch: "Inexhaustive switch" },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.SwitchStatement]: (node): void => {
       const tests = node.cases.map(switchCase => switchCase.test);
@@ -26,8 +29,5 @@ export const exhaustiveSwitch = utils.createRule({
           context.report({ messageId: "inexhaustiveSwitch", node });
       }
     }
-  }),
-  isRuleOptions: is.object,
-  messages: { inexhaustiveSwitch: "Inexhaustive switch" },
-  name: "exhaustive-switch"
+  })
 });

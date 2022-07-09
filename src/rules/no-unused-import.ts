@@ -8,6 +8,10 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const noUnusedImport = utils.createRule({
+  name: "no-unused-import",
+  fixable: "code",
+  isOptions: is.object,
+  messages: { unusedImport: "Unused import" },
   create: (context): RuleListener => {
     const identifiers = new Set<string>();
 
@@ -80,9 +84,5 @@ export const noUnusedImport = utils.createRule({
         identifiers.add(node.name);
       }
     };
-  },
-  fixable: "code",
-  isRuleOptions: is.object,
-  messages: { unusedImport: "Unused import" },
-  name: "no-unused-import"
+  }
 });

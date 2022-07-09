@@ -8,43 +8,8 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
 export const requireJsdoc = utils.createRule({
-  create: (context): RuleListener => {
-    const selectors = utils.getSelectors(context.options, defaultSelectors);
-
-    return {
-      [selectors]: (node: TSESTree.Node): void => {
-        switch (node.type) {
-          case AST_NODE_TYPES.TSInterfaceDeclaration:
-            lintInterface(node, context);
-
-            break;
-
-          case AST_NODE_TYPES.MethodDefinition:
-          case AST_NODE_TYPES.TSMethodSignature:
-            lintMethod(node, context);
-
-            break;
-
-          case AST_NODE_TYPES.PropertyDefinition:
-          case AST_NODE_TYPES.TSPropertySignature:
-            lintProperty(node, context);
-
-            break;
-
-          default:
-            lintNodeByTypeSymbol(node, context);
-        }
-      }
-    };
-  },
-  defaultOptions: {
-    excludeSelectors: [],
-    includeSelectors: [],
-    interfaces: ["callSignatures", "constructSignatures", "interface"],
-    noDefaultSelectors: false,
-    properties: ["function", "nonFunction"]
-  },
-  isRuleOptions: evaluate(() => {
+  name: "require-jsdoc",
+  isOptions: evaluate(() => {
     const InterfaceOptionVO = createValidationObject<InterfaceOption>({
       callSignatures: "callSignatures",
       constructSignatures: "constructSignatures",
@@ -75,13 +40,48 @@ export const requireJsdoc = utils.createRule({
       {}
     );
   }),
+  defaultOptions: {
+    excludeSelectors: [],
+    includeSelectors: [],
+    interfaces: ["callSignatures", "constructSignatures", "interface"],
+    noDefaultSelectors: false,
+    properties: ["function", "nonFunction"]
+  },
   messages: {
     undocumented: "Missing documentation",
     undocumentedCallSignature: "Missing documentation for call signature",
     undocumentedConstructSignature:
       "Missing documentation for constructor signature"
   },
-  name: "require-jsdoc"
+  create: (context): RuleListener => {
+    const selectors = utils.getSelectors(context.options, defaultSelectors);
+
+    return {
+      [selectors]: (node: TSESTree.Node): void => {
+        switch (node.type) {
+          case AST_NODE_TYPES.TSInterfaceDeclaration:
+            lintInterface(node, context);
+
+            break;
+
+          case AST_NODE_TYPES.MethodDefinition:
+          case AST_NODE_TYPES.TSMethodSignature:
+            lintMethod(node, context);
+
+            break;
+
+          case AST_NODE_TYPES.PropertyDefinition:
+          case AST_NODE_TYPES.TSPropertySignature:
+            lintProperty(node, context);
+
+            break;
+
+          default:
+            lintNodeByTypeSymbol(node, context);
+        }
+      }
+    };
+  }
 });
 
 const defaultSelectors: strings = [

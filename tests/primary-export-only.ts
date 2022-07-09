@@ -6,6 +6,7 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export const file = 1;
         export default 1;
@@ -26,17 +27,16 @@ utils.testRule(
         { line: 7, messageId: "invalidExport" },
         { line: 8, messageId: "invalidExport" },
         { line: 9, messageId: "invalidExport" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         export default 1;
         export const x = 1;
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

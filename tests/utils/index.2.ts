@@ -6,14 +6,6 @@ utils.testRule(
   rules,
   [
     {
-      code: 'import source from "source"',
-      errors: [
-        {
-          data: { _id: "id" },
-          line: 1,
-          messageId: "wildcardImportRequired"
-        }
-      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -25,9 +17,7 @@ utils.testRule(
             }
           ]
         }
-      ]
-    },
-    {
+      ],
       code: 'import source from "source"',
       errors: [
         {
@@ -35,7 +25,9 @@ utils.testRule(
           line: 1,
           messageId: "wildcardImportRequired"
         }
-      ],
+      ]
+    },
+    {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -49,12 +41,19 @@ utils.testRule(
             }
           ]
         }
+      ],
+      code: 'import source from "source"',
+      errors: [
+        {
+          data: { _id: "id" },
+          line: 1,
+          messageId: "wildcardImportRequired"
+        }
       ]
     }
   ],
   [
     {
-      code: 'import source from "source"',
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -67,10 +66,10 @@ utils.testRule(
             }
           ]
         }
-      ]
+      ],
+      code: 'import source from "source"'
     },
     {
-      code: 'import source from "source"',
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -83,7 +82,8 @@ utils.testRule(
             }
           ]
         }
-      ]
+      ],
+      code: 'import source from "source"'
     }
   ]
 );

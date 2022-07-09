@@ -4,6 +4,9 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
 
 export const exportAllName = utils.createRule({
+  name: "export-all-name",
+  isOptions: is.object,
+  messages: { invalidName: "Export name should match file name" },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.ExportAllDeclaration]: (node): void => {
       if (node.exported) {
@@ -17,8 +20,5 @@ export const exportAllName = utils.createRule({
         } else context.report({ messageId: "invalidName", node });
       }
     }
-  }),
-  isRuleOptions: is.object,
-  messages: { invalidName: "Export name should match file name" },
-  name: "export-all-name"
+  })
 });

@@ -7,6 +7,13 @@ import { a, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const switchCaseEmptyLines = utils.createRule({
+  name: "switch-case-empty-lines",
+  fixable: "whitespace",
+  isOptions: is.object,
+  messages: {
+    expectingEmptyLine: "Expecting empty line before",
+    unexpectedEmptyLine: "Unexpected empty line before"
+  },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.SwitchStatement]: (node): void => {
       for (const [case1, case2] of a.chain(node.cases)) {
@@ -34,12 +41,5 @@ export const switchCaseEmptyLines = utils.createRule({
           });
       }
     }
-  }),
-  fixable: "whitespace",
-  isRuleOptions: is.object,
-  messages: {
-    expectingEmptyLine: "Expecting empty line before",
-    unexpectedEmptyLine: "Unexpected empty line before"
-  },
-  name: "switch-case-empty-lines"
+  })
 });

@@ -6,6 +6,21 @@ import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
 
 export const sortArray = utils.createRule({
+  name: "sort-array",
+  fixable: "code",
+  isOptions: is.object.factory<RuleOptions>(
+    { selector: is.string },
+    {
+      customOrder: is.strings,
+      key: is.string,
+      sendToBottom: is.string,
+      sendToTop: is.string
+    }
+  ),
+  messages: {
+    expectingArray: "Expecting array",
+    incorrectSortingOrder: "Incorrect sorting order"
+  },
   create: (context): RuleListener => {
     const { key, selector } = context.options;
 
@@ -33,22 +48,7 @@ export const sortArray = utils.createRule({
 
       return node;
     }
-  },
-  fixable: "code",
-  isRuleOptions: is.object.factory<RuleOptions>(
-    { selector: is.string },
-    {
-      customOrder: is.strings,
-      key: is.string,
-      sendToBottom: is.string,
-      sendToTop: is.string
-    }
-  ),
-  messages: {
-    expectingArray: "Expecting array",
-    incorrectSortingOrder: "Incorrect sorting order"
-  },
-  name: "sort-array"
+  }
 });
 
 interface RuleOptions {

@@ -8,6 +8,9 @@ import { is } from "@skylib/functions";
 import type { stringU } from "@skylib/functions";
 
 export const classOnlyExport = utils.createRule({
+  name: "class-only-export",
+  isOptions: is.object,
+  messages: { exportNotAllowed: "Export except class is not allowed" },
   create: (context): RuleListener => {
     const exportAllDeclarations: TSESTree.ExportAllDeclaration[] = [];
 
@@ -81,8 +84,5 @@ export const classOnlyExport = utils.createRule({
         }
       }
     };
-  },
-  isRuleOptions: is.object,
-  messages: { exportNotAllowed: "Export except class is not allowed" },
-  name: "class-only-export"
+  }
 });

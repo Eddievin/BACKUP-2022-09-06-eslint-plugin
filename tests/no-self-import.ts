@@ -3,6 +3,7 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("no-self-import", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       import * as x from "./file.ts";
       import * as x from "./file";
@@ -14,10 +15,11 @@ utils.testRule("no-self-import", rules, [
     errors: [
       { line: 1, messageId: "selfImportDisallowed" },
       { line: 2, messageId: "selfImportDisallowed" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    filename: "file.extras.ts",
     code: `
       import * as x from "./file.extras.ts";
       import * as x from "./file.extras";
@@ -29,8 +31,6 @@ utils.testRule("no-self-import", rules, [
     errors: [
       { line: 1, messageId: "selfImportDisallowed" },
       { line: 2, messageId: "selfImportDisallowed" }
-    ],
-    filename: "file.extras.ts",
-    name: `Test at line ${getCurrentLine().line}`
+    ]
   }
 ]);

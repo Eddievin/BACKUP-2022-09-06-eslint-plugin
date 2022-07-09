@@ -4,6 +4,9 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 
 export const onlyExportName = utils.createRule({
+  name: "only-export-name",
+  isOptions: is.object,
+  messages: { invalidName: "Only export should match file name" },
   create: (context): RuleListener => {
     let hasDefaultExport = false;
 
@@ -55,8 +58,5 @@ export const onlyExportName = utils.createRule({
           }
       }
     };
-  },
-  isRuleOptions: is.object,
-  messages: { invalidName: "Only export should match file name" },
-  name: "only-export-name"
+  }
 });

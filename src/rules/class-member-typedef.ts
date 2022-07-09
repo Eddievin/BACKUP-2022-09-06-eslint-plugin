@@ -4,14 +4,14 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
 
 export const classMemberTypedef = utils.createRule({
+  name: "class-member-typedef",
+  isOptions: is.object,
+  messages: { typedefRequired: "Type definition required" },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.PropertyDefinition]: (node): void => {
       if (node.typeAnnotation || node.value) {
         // Valid
       } else context.report({ messageId: "typedefRequired", node });
     }
-  }),
-  isRuleOptions: is.object,
-  messages: { typedefRequired: "Type definition required" },
-  name: "class-member-typedef"
+  })
 });

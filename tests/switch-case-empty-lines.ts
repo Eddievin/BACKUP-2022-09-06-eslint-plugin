@@ -3,6 +3,7 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("switch-case-empty-lines", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       switch (x) {
         case 1:
@@ -12,11 +13,6 @@ utils.testRule("switch-case-empty-lines", rules, [
         case 3:
       }
     `,
-    errors: [
-      { line: 4, messageId: "unexpectedEmptyLine" },
-      { line: 6, messageId: "expectingEmptyLine" }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
     output: `
       switch (x) {
         case 1:
@@ -25,6 +21,10 @@ utils.testRule("switch-case-empty-lines", rules, [
 
         case 3:
       }
-    `
+    `,
+    errors: [
+      { line: 4, messageId: "unexpectedEmptyLine" },
+      { line: 6, messageId: "expectingEmptyLine" }
+    ]
   }
 ]);

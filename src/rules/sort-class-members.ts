@@ -10,6 +10,11 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const sortClassMembers = utils.createRule({
+  name: "sort-class-members",
+  fixable: "code",
+  isOptions: is.object.factory<RuleOptions>({ sortingOrder: is.strings }, {}),
+  defaultOptions: { sortingOrder: [] },
+  messages: { incorrectSortingOrder: "Incorrect sorting order" },
   create: (context): RuleListener => {
     const sortingOrders = new Map(
       context.options.sortingOrder.map((name, index) => [name, index])
@@ -86,15 +91,7 @@ export const sortClassMembers = utils.createRule({
           });
       }
     };
-  },
-  defaultOptions: { sortingOrder: [] },
-  fixable: "code",
-  isRuleOptions: is.object.factory<RuleOptions>(
-    { sortingOrder: is.strings },
-    {}
-  ),
-  messages: { incorrectSortingOrder: "Incorrect sorting order" },
-  name: "sort-class-members"
+  }
 });
 
 type AccessorType = "get" | "none" | "set";

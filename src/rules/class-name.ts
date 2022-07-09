@@ -5,6 +5,9 @@ import { is } from "@skylib/functions";
 import path from "node:path";
 
 export const className = utils.createRule({
+  name: "class-name",
+  isOptions: is.object,
+  messages: { invalidClassName: "Class name should match file name" },
   create: (context): RuleListener => ({
     "ExportNamedDeclaration > ClassDeclaration": (
       node: TSESTree.ClassDeclaration
@@ -14,8 +17,5 @@ export const className = utils.createRule({
           // Valid
         } else context.report({ messageId: "invalidClassName", node: node.id });
     }
-  }),
-  isRuleOptions: is.object,
-  messages: { invalidClassName: "Class name should match file name" },
-  name: "class-name"
+  })
 });

@@ -23,6 +23,29 @@ export const optionalPropertyStyle = evaluate(() => {
   const isTarget = is.factory(is.enumeration, TargetVO);
 
   return utils.createRule({
+    name: "optional-property-style",
+    isOptions: is.object.factory<RuleOptions>(
+      { classes: isStyle, interfaces: isStyle },
+      {}
+    ),
+    defaultOptions: { classes: "combined", interfaces: "combined" },
+    subOptionsKey: "overrides",
+    isSubOptions: is.object.factory<SubOptions>(
+      { _id: is.string, style: isStyle },
+      {
+        patterns: is.strings,
+        propertyPatterns: is.strings,
+        target: isTarget
+      }
+    ),
+    messages: {
+      expectingCombinedStyle:
+        "Expecting combined style for optional property (e.g. x?: string | undefined) ({{ _id }})",
+      expectingOptionalStyle:
+        "Expecting optional style for optional property (e.g. x?: string) ({{ _id }})",
+      expectingUndefinedStyle:
+        "Expecting undefined style for optional property (e.g. x: string | undefined) ({{ _id }})"
+    },
     // eslint-disable-next-line sonarjs/cognitive-complexity
     create: (context): RuleListener => {
       return {
@@ -147,30 +170,7 @@ export const optionalPropertyStyle = evaluate(() => {
           }
         }
       }
-    },
-    defaultOptions: { classes: "combined", interfaces: "combined" },
-    isRuleOptions: is.object.factory<RuleOptions>(
-      { classes: isStyle, interfaces: isStyle },
-      {}
-    ),
-    isSubOptions: is.object.factory<SubOptions>(
-      { _id: is.string, style: isStyle },
-      {
-        patterns: is.strings,
-        propertyPatterns: is.strings,
-        target: isTarget
-      }
-    ),
-    messages: {
-      expectingCombinedStyle:
-        "Expecting combined style for optional property (e.g. x?: string | undefined) ({{ _id }})",
-      expectingOptionalStyle:
-        "Expecting optional style for optional property (e.g. x?: string) ({{ _id }})",
-      expectingUndefinedStyle:
-        "Expecting undefined style for optional property (e.g. x: string | undefined) ({{ _id }})"
-    },
-    name: "optional-property-style",
-    subOptionsKey: "overrides"
+    }
   });
 
   interface RuleOptions {

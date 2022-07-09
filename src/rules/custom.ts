@@ -16,11 +16,53 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
 export const custom = utils.createRule({
+  name: "custom",
+  fixable: "code",
+  isOptions: evaluate(() => {
+    const TestVO = createValidationObject<Test>({
+      any: "any",
+      array: "array",
+      boolean: "boolean",
+      complex: "complex",
+      function: "function",
+      null: "null",
+      number: "number",
+      object: "object",
+      readonly: "readonly",
+      string: "string",
+      symbol: "symbol",
+      tuple: "tuple",
+      undefined: "undefined",
+      unknown: "unknown"
+    });
+
+    const isTest = is.factory(is.enumeration, TestVO);
+
+    const isTests = is.factory(is.array.of, isTest);
+
+    return is.object.factory<RuleOptions>(
+      { selector: is.or.factory(is.string, is.strings) },
+      {
+        checkReturnType: is.boolean,
+        message: is.string,
+        replacement: is.string,
+        search: is.string,
+        typeHas: isTest,
+        typeHasNoneOf: isTests,
+        typeHasNot: isTest,
+        typeHasOneOf: isTests,
+        typeIs: isTest,
+        typeIsNoneOf: isTests,
+        typeIsNot: isTest,
+        typeIsOneOf: isTests
+      }
+    );
+  }),
+  messages: { customMessage: "{{ message }}" },
   create: (context): RuleListener => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
     const listener = getVisitors();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
     return context.defineTemplateBodyVisitor(listener, listener);
 
     function checkType(
@@ -246,50 +288,7 @@ export const custom = utils.createRule({
         }
       };
     }
-  },
-  fixable: "code",
-  isRuleOptions: evaluate(() => {
-    const TestVO = createValidationObject<Test>({
-      any: "any",
-      array: "array",
-      boolean: "boolean",
-      complex: "complex",
-      function: "function",
-      null: "null",
-      number: "number",
-      object: "object",
-      readonly: "readonly",
-      string: "string",
-      symbol: "symbol",
-      tuple: "tuple",
-      undefined: "undefined",
-      unknown: "unknown"
-    });
-
-    const isTest = is.factory(is.enumeration, TestVO);
-
-    const isTests = is.factory(is.array.of, isTest);
-
-    return is.object.factory<RuleOptions>(
-      { selector: is.or.factory(is.string, is.strings) },
-      {
-        checkReturnType: is.boolean,
-        message: is.string,
-        replacement: is.string,
-        search: is.string,
-        typeHas: isTest,
-        typeHasNoneOf: isTests,
-        typeHasNot: isTest,
-        typeHasOneOf: isTests,
-        typeIs: isTest,
-        typeIsNoneOf: isTests,
-        typeIsNot: isTest,
-        typeIsOneOf: isTests
-      }
-    );
-  }),
-  messages: { customMessage: "{{ message }}" },
-  name: "custom"
+  }
 });
 
 interface RuleOptions {

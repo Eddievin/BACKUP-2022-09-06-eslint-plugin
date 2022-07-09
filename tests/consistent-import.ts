@@ -6,32 +6,6 @@ utils.testRule(
   rules,
   [
     {
-      code: `
-        localName1;
-        localName1;
-
-        localName2;
-        localName2;
-
-        const obj = {};
-
-        obj.localName3;
-
-        const localName4 = 1;
-
-        function localName5() {}
-
-        class localName6 {}
-
-        namespace localName7 {}
-      `,
-      errors: [
-        { line: 1, messageId: "missingImport" },
-        { line: 1, messageId: "autoImport" },
-        { line: 2, messageId: "missingImport" },
-        { line: 4, messageId: "missingImport" },
-        { line: 5, messageId: "missingImport" }
-      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -95,6 +69,25 @@ utils.testRule(
           ]
         }
       ],
+      code: `
+        localName1;
+        localName1;
+
+        localName2;
+        localName2;
+
+        const obj = {};
+
+        obj.localName3;
+
+        const localName4 = 1;
+
+        function localName5() {}
+
+        class localName6 {}
+
+        namespace localName7 {}
+      `,
       output: `
         import localName1 from "source1";
         import * as localName2 from "source2";
@@ -115,14 +108,16 @@ utils.testRule(
         class localName6 {}
 
         namespace localName7 {}
-      `
-    },
-    {
-      code: "source;",
+      `,
       errors: [
         { line: 1, messageId: "missingImport" },
-        { line: 1, messageId: "autoImport" }
-      ],
+        { line: 1, messageId: "autoImport" },
+        { line: 2, messageId: "missingImport" },
+        { line: 4, messageId: "missingImport" },
+        { line: 5, messageId: "missingImport" }
+      ]
+    },
+    {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -138,17 +133,17 @@ utils.testRule(
           ]
         }
       ],
+      code: "source;",
       output: `
         import * as source from "@/source";
         source;
-      `
+      `,
+      errors: [
+        { line: 1, messageId: "missingImport" },
+        { line: 1, messageId: "autoImport" }
+      ]
     },
     {
-      code: "const x = { source };",
-      errors: [
-        { line: 1, messageId: "autoImport" },
-        { line: 1, messageId: "missingImport" }
-      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -164,35 +159,17 @@ utils.testRule(
           ]
         }
       ],
+      code: "const x = { source };",
       output: `
         import * as source from "@/source";
         const x = { source };
-      `
-    },
-    {
-      code: `
-        import localName1 from "source1";
-        import { localName2 } from "source2";
-        import * as localName3 from "source3";
-        import * as localName4 from "source4";
       `,
       errors: [
-        {
-          data: { _id: "id1" },
-          line: 1,
-          messageId: "wildcardImportRequired"
-        },
-        {
-          data: { _id: "id2" },
-          line: 2,
-          messageId: "wildcardImportRequired"
-        },
-        {
-          data: { _id: "id3" },
-          line: 3,
-          messageId: "wildcardImportDisallowed"
-        }
-      ],
+        { line: 1, messageId: "autoImport" },
+        { line: 1, messageId: "missingImport" }
+      ]
+    },
+    {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -217,25 +194,32 @@ utils.testRule(
             }
           ]
         }
-      ]
-    },
-    {
+      ],
       code: `
-        import wrongName1 from "source1";
-        import * as wrongName2 from "source2";
+        import localName1 from "source1";
+        import { localName2 } from "source2";
+        import * as localName3 from "source3";
+        import * as localName4 from "source4";
       `,
       errors: [
         {
-          data: { _id: "id1", expectedLocalName: '"localName1"' },
+          data: { _id: "id1" },
           line: 1,
-          messageId: "invalidLocalName"
+          messageId: "wildcardImportRequired"
         },
         {
-          data: { _id: "id2", expectedLocalName: '"localName2"' },
+          data: { _id: "id2" },
           line: 2,
-          messageId: "invalidLocalName"
+          messageId: "wildcardImportRequired"
+        },
+        {
+          data: { _id: "id3" },
+          line: 3,
+          messageId: "wildcardImportDisallowed"
         }
-      ],
+      ]
+    },
+    {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -254,34 +238,25 @@ utils.testRule(
             }
           ]
         }
-      ]
-    },
-    {
+      ],
       code: `
         import wrongName1 from "source1";
-        import localName2 from "source2";
-        import altName3 from "source3";
-        import * as wrongName4 from "source4";
-        import * as localName5 from "source5";
-        import * as altName6 from "source6";
-
-        const localName1 = 1;
-        const localName3 = 1;
-        const localName4 = 1;
-        const localName6 = 1;
+        import * as wrongName2 from "source2";
       `,
       errors: [
         {
-          data: { _id: "id1", expectedLocalName: '"altName1"' },
+          data: { _id: "id1", expectedLocalName: '"localName1"' },
           line: 1,
           messageId: "invalidLocalName"
         },
         {
-          data: { _id: "id4", expectedLocalName: '"altName4"' },
-          line: 4,
+          data: { _id: "id2", expectedLocalName: '"localName2"' },
+          line: 2,
           messageId: "invalidLocalName"
         }
-      ],
+      ]
+    },
+    {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -330,15 +305,36 @@ utils.testRule(
             }
           ]
         }
+      ],
+      code: `
+        import wrongName1 from "source1";
+        import localName2 from "source2";
+        import altName3 from "source3";
+        import * as wrongName4 from "source4";
+        import * as localName5 from "source5";
+        import * as altName6 from "source6";
+
+        const localName1 = 1;
+        const localName3 = 1;
+        const localName4 = 1;
+        const localName6 = 1;
+      `,
+      errors: [
+        {
+          data: { _id: "id1", expectedLocalName: '"altName1"' },
+          line: 1,
+          messageId: "invalidLocalName"
+        },
+        {
+          data: { _id: "id4", expectedLocalName: '"altName4"' },
+          line: 4,
+          messageId: "invalidLocalName"
+        }
       ]
     }
   ],
   [
     {
-      code: `
-        import localName1, { anyName1, anyName2 } from "source1";
-        import * as localName2 from "source2";
-      `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -357,15 +353,13 @@ utils.testRule(
             }
           ]
         }
-      ]
+      ],
+      code: `
+        import localName1, { anyName1, anyName2 } from "source1";
+        import * as localName2 from "source2";
+      `
     },
     {
-      code: `
-        import * as index from "@";
-        import * as source1 from "@/source2";
-        import * as source2 from "./source3";
-        import * as source3 from "../source4";
-      `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -393,12 +387,15 @@ utils.testRule(
             }
           ]
         }
-      ]
+      ],
+      code: `
+        import * as index from "@";
+        import * as source1 from "@/source2";
+        import * as source2 from "./source3";
+        import * as source3 from "../source4";
+      `
     },
     {
-      code: `
-        import * as someSource from "@/some-source";
-      `,
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -410,10 +407,12 @@ utils.testRule(
             }
           ]
         }
-      ]
+      ],
+      code: `
+        import * as someSource from "@/some-source";
+      `
     },
     {
-      code: 'import * as fixtures from ".";',
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -426,14 +425,15 @@ utils.testRule(
             }
           ]
         }
-      ]
+      ],
+      code: 'import * as fixtures from ".";'
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         import wrongName from "source1";
         import source2 from "source2";
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

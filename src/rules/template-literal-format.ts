@@ -7,6 +7,10 @@ import { a, fn, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const templateLiteralFormat = utils.createRule({
+  name: "template-literal-format",
+  fixable: "code",
+  isOptions: is.object,
+  messages: { invalidTemplateLiteralFormat: "Invalid template literal format" },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.TemplateLiteral]: (node): void => {
       const lines = s.lines(context.getText(node));
@@ -59,11 +63,7 @@ export const templateLiteralFormat = utils.createRule({
           context.report({ messageId: "invalidTemplateLiteralFormat", node });
       }
     }
-  }),
-  fixable: "code",
-  isRuleOptions: is.object,
-  messages: { invalidTemplateLiteralFormat: "Invalid template literal format" },
-  name: "template-literal-format"
+  })
 });
 
 /**

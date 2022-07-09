@@ -3,6 +3,8 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("sort-array", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "ArrayExpression" }],
     code: `
       const x = [
       {},
@@ -12,15 +14,6 @@ utils.testRule("sort-array", rules, [
       "b"
       ];
     `,
-    errors: [
-      {
-        endLine: 6,
-        line: 4,
-        messageId: "incorrectSortingOrder"
-      }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "ArrayExpression" }],
     output: `
       const x = [
       {},
@@ -29,9 +22,25 @@ utils.testRule("sort-array", rules, [
       "b",
       "c"
       ];
-    `
+    `,
+    errors: [
+      {
+        endLine: 6,
+        line: 4,
+        messageId: "incorrectSortingOrder"
+      }
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        key: "key",
+        selector: "ArrayExpression",
+        sendToBottom: /^bottom:/u.source,
+        sendToTop: /^top:/u.source
+      }
+    ],
     code: `
       const x = [
       { ...{}, a: 1, key: "top:x" },
@@ -43,22 +52,6 @@ utils.testRule("sort-array", rules, [
       { ...{}, a: 7, key: "top:y" }
       ];
     `,
-    errors: [
-      {
-        endLine: 8,
-        line: 3,
-        messageId: "incorrectSortingOrder"
-      }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [
-      {
-        key: "key",
-        selector: "ArrayExpression",
-        sendToBottom: /^bottom:/u.source,
-        sendToTop: /^top:/u.source
-      }
-    ],
     output: `
       const x = [
       { ...{}, a: 1, key: "top:x" },
@@ -69,9 +62,18 @@ utils.testRule("sort-array", rules, [
       { ...{}, a: 3, key: "bottom:x" },
       { ...{}, a: 2, key: "bottom:y" }
       ];
-    `
+    `,
+    errors: [
+      {
+        endLine: 8,
+        line: 3,
+        messageId: "incorrectSortingOrder"
+      }
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "Identifier" }],
     code: "const id = 1;",
     errors: [
       {
@@ -79,16 +81,23 @@ utils.testRule("sort-array", rules, [
         line: 1,
         messageId: "expectingArray"
       }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "Identifier" }]
+    ]
   },
   {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "ArrayExpression" }],
     code: `
       const x = [
       {},
       "showConfirm.async: Failure",
       "showConfirm: Failure"
+      ];
+    `,
+    output: `
+      const x = [
+      {},
+      "showConfirm: Failure",
+      "showConfirm.async: Failure"
       ];
     `,
     errors: [
@@ -97,15 +106,6 @@ utils.testRule("sort-array", rules, [
         line: 3,
         messageId: "incorrectSortingOrder"
       }
-    ],
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "ArrayExpression" }],
-    output: `
-      const x = [
-      {},
-      "showConfirm: Failure",
-      "showConfirm.async: Failure"
-      ];
-    `
+    ]
   }
 ]);

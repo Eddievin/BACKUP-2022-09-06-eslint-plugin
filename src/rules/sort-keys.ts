@@ -6,6 +6,22 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const sortKeys = utils.createRule({
+  name: "sort-keys",
+  fixable: "code",
+  isOptions: is.object,
+  subOptionsKey: "overrides",
+  isSubOptions: is.object.factory<SubOptions>(
+    { _id: is.string, selector: is.or.factory(is.string, is.strings) },
+    {
+      customOrder: is.strings,
+      sendToBottom: is.string,
+      sendToTop: is.string
+    }
+  ),
+  messages: {
+    expectingObject: "Expecting object ({{ _id }})",
+    incorrectSortingOrder: "Incorrect sorting order"
+  },
   create: (context): RuleListener => {
     const items = new Map<string, Item>();
 
@@ -42,7 +58,6 @@ export const sortKeys = utils.createRule({
       )
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
     return context.defineTemplateBodyVisitor(listener, listener);
 
     function flush(options: utils.SortOptions): void {
@@ -53,23 +68,7 @@ export const sortKeys = utils.createRule({
     function nodeToKey(node: Node): TSESTree.Node {
       return node.key;
     }
-  },
-  fixable: "code",
-  isRuleOptions: is.object,
-  isSubOptions: is.object.factory<SubOptions>(
-    { _id: is.string, selector: is.or.factory(is.string, is.strings) },
-    {
-      customOrder: is.strings,
-      sendToBottom: is.string,
-      sendToTop: is.string
-    }
-  ),
-  messages: {
-    expectingObject: "Expecting object ({{ _id }})",
-    incorrectSortingOrder: "Incorrect sorting order"
-  },
-  name: "sort-keys",
-  subOptionsKey: "overrides"
+  }
 });
 
 interface Item {

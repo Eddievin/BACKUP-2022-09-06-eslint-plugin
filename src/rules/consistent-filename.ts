@@ -15,7 +15,7 @@ export const consistentFilename = evaluate(() => {
 
   const isFormat = is.factory(is.enumeration, FormatVO);
 
-  const isRuleOptions = is.object.factory({ format: isFormat }, {});
+  const isOptions = is.object.factory({ format: isFormat }, {});
 
   const isSubOptions = is.object.factory(
     { format: isFormat, selector: is.string },
@@ -23,6 +23,12 @@ export const consistentFilename = evaluate(() => {
   );
 
   return utils.createRule({
+    name: "consistent-filename",
+    isOptions,
+    defaultOptions: { format: "kebab-case" },
+    subOptionsKey: "overrides",
+    isSubOptions,
+    messages: { invalidFilename: "Expecting file name to be: {{ expected }}" },
     create: (context): RuleListener => {
       let className: stringU;
 
@@ -76,13 +82,7 @@ export const consistentFilename = evaluate(() => {
             });
         }
       };
-    },
-    defaultOptions: { format: "kebab-case" },
-    isRuleOptions,
-    isSubOptions,
-    messages: { invalidFilename: "Expecting file name to be: {{ expected }}" },
-    name: "consistent-filename",
-    subOptionsKey: "overrides"
+    }
   });
 
   type Format = "camelCase" | "kebab-case" | "PascalCase";

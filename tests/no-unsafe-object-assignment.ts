@@ -6,6 +6,7 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         interface R { readonly value: number; }
         interface W { value: number; }
@@ -25,10 +26,10 @@ utils.testRule(
           line: 7,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type R = { readonly [K: string]: number };
         type W = { [K: string]: number };
@@ -48,10 +49,10 @@ utils.testRule(
           line: 7,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type R = { readonly [K: number]: number };
         type W = { [K: number]: number };
@@ -71,10 +72,10 @@ utils.testRule(
           line: 7,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type R = { readonly value: number };
         type W = { value: number };
@@ -89,10 +90,10 @@ utils.testRule(
           line: 4,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type R = { readonly value: number };
         type W = { value: number };
@@ -108,10 +109,10 @@ utils.testRule(
           line: 4,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type R = { readonly value: number };
         type W = { value: number };
@@ -128,10 +129,10 @@ utils.testRule(
           line: 7,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type R = { readonly value: number };
         type W = { value: number };
@@ -151,10 +152,10 @@ utils.testRule(
           line: 10,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type R = readonly [number, number];
         type W = [number, number];
@@ -168,10 +169,10 @@ utils.testRule(
           line: 5,
           messageId: "unsafeReadonlyAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         const x: {} = { value: 1 };
 
@@ -183,20 +184,20 @@ utils.testRule(
           line: 3,
           messageId: "unsafeOptionalAssignment"
         }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         function f() {
           return {};
         }
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     },
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         const x: I = {};
 
@@ -207,8 +208,7 @@ utils.testRule(
         }
 
         function f(x: I) {}
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

@@ -15,6 +15,32 @@ import type { Writable, stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export const consistentEmptyLines = utils.createRule({
+  name: "consistent-empty-lines",
+  fixable: "whitespace",
+  isOptions: is.object,
+  isSubOptions: evaluate(() => {
+    const EmptyLineVO = createValidationObject<EmptyLine>({
+      always: "always",
+      any: "any",
+      never: "never"
+    });
+
+    const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
+
+    return is.object.factory<SubOptions>(
+      {
+        _id: is.string,
+        emptyLine: isEmptyLine,
+        next: is.string,
+        prev: is.string
+      },
+      {}
+    );
+  }),
+  messages: {
+    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
+    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
+  },
   create: (context): RuleListener => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
@@ -117,33 +143,7 @@ export const consistentEmptyLines = utils.createRule({
         };
 
     return listener;
-  },
-  fixable: "whitespace",
-  isRuleOptions: is.object,
-  isSubOptions: evaluate(() => {
-    const EmptyLineVO = createValidationObject<EmptyLine>({
-      always: "always",
-      any: "any",
-      never: "never"
-    });
-
-    const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
-
-    return is.object.factory<SubOptions>(
-      {
-        _id: is.string,
-        emptyLine: isEmptyLine,
-        next: is.string,
-        prev: is.string
-      },
-      {}
-    );
-  }),
-  messages: {
-    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
-    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
-  },
-  name: "consistent-empty-lines"
+  }
 });
 
 type EmptyLine = "always" | "any" | "never";

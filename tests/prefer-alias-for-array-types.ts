@@ -6,6 +6,7 @@ utils.testRule(
   rules,
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type Type = () => string[];
         function f(x: string[]): void {}
@@ -16,12 +17,12 @@ utils.testRule(
         { line: 1, messageId: "preferAlias" },
         { line: 2, messageId: "preferAlias" },
         { line: 3, messageId: "preferAlias" }
-      ],
-      name: `Test at line ${getCurrentLine().line}`
+      ]
     }
   ],
   [
     {
+      name: `Test at line ${getCurrentLine().line}`,
       code: `
         type Type = string[];
         function f1<T>(x: []): void {}
@@ -31,8 +32,7 @@ utils.testRule(
         function f5<T>(x: readonly T[]): void {}
         function f6<T>(x: readonly any[]): void {}
         function f7(x: Type): void {}
-      `,
-      name: `Test at line ${getCurrentLine().line}`
+      `
     }
   ]
 );

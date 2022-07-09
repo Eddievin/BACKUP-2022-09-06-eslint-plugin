@@ -7,6 +7,10 @@ import { a, evaluate, is, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const noExpressionEmptyLine = utils.createRule({
+  name: "no-expression-empty-line",
+  fixable: "whitespace",
+  isOptions: is.object,
+  messages: { unexpectedEmptyLine: "Unexpected empty line" },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.MemberExpression]: (node): void => {
       const got = s.leadingSpaces(context.code.slice(node.object.range[1]));
@@ -29,9 +33,5 @@ export const noExpressionEmptyLine = utils.createRule({
           node
         });
     }
-  }),
-  fixable: "whitespace",
-  isRuleOptions: is.object,
-  messages: { unexpectedEmptyLine: "Unexpected empty line" },
-  name: "no-expression-empty-line"
+  })
 });

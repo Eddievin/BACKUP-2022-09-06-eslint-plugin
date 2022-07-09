@@ -6,6 +6,12 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import path from "node:path";
 
 export const primaryExportOnly = utils.createRule({
+  name: "primary-export-only",
+  isOptions: is.object,
+  messages: {
+    invalidExport:
+      "Additional export is not allowed when there is export matching file name"
+  },
   create: (context): RuleListener => {
     const exportDefaultDeclarations =
       new Set<TSESTree.ExportDefaultDeclaration>();
@@ -67,11 +73,5 @@ export const primaryExportOnly = utils.createRule({
         }
       }
     };
-  },
-  isRuleOptions: is.object,
-  messages: {
-    invalidExport:
-      "Additional export is not allowed when there is export matching file name"
-  },
-  name: "primary-export-only"
+  }
 });

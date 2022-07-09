@@ -5,6 +5,9 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export const preferAliasForArrayTypes = utils.createRule({
+  name: "prefer-alias-for-array-types",
+  isOptions: is.object,
+  messages: { preferAlias: "Define alias for array type" },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.TSTypeAnnotation]: (node): void => {
       if (node.typeAnnotation.type === AST_NODE_TYPES.TSTypeReference) {
@@ -26,8 +29,5 @@ export const preferAliasForArrayTypes = utils.createRule({
         }
       }
     }
-  }),
-  isRuleOptions: is.object,
-  messages: { preferAlias: "Define alias for array type" },
-  name: "prefer-alias-for-array-types"
+  })
 });

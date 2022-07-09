@@ -8,6 +8,30 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 
 export const consistentGroupEmptyLines = utils.createRule({
+  name: "consistent-group-empty-lines",
+  fixable: "whitespace",
+  isOptions: is.object,
+  isSubOptions: is.object.factory<SubOptions>(
+    {
+      _id: is.string,
+      averageLinesGte: is.number,
+      everyLinesGte: is.number,
+      selector: is.string,
+      someHasDocComment: is.boolean,
+      someLinesGte: is.number
+    },
+    {}
+  ),
+  defaultSubOptions: {
+    averageLinesGte: 1_000_000,
+    everyLinesGte: 1_000_000,
+    someHasDocComment: false,
+    someLinesGte: 1_000_000
+  },
+  messages: {
+    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
+    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
+  },
   create: (context): RuleListener => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
@@ -51,31 +75,7 @@ export const consistentGroupEmptyLines = utils.createRule({
       };
 
     return listener;
-  },
-  defaultSubOptions: {
-    averageLinesGte: 1_000_000,
-    everyLinesGte: 1_000_000,
-    someHasDocComment: false,
-    someLinesGte: 1_000_000
-  },
-  fixable: "whitespace",
-  isRuleOptions: is.object,
-  isSubOptions: is.object.factory<SubOptions>(
-    {
-      _id: is.string,
-      averageLinesGte: is.number,
-      everyLinesGte: is.number,
-      selector: is.string,
-      someHasDocComment: is.boolean,
-      someLinesGte: is.number
-    },
-    {}
-  ),
-  messages: {
-    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
-    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
-  },
-  name: "consistent-group-empty-lines"
+  }
 });
 
 type Context = utils.Context<MessageId, object, SubOptions>;

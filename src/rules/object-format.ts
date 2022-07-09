@@ -7,6 +7,17 @@ import { evaluate, is, num } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 export const objectFormat = utils.createRule({
+  name: "object-format",
+  fixable: "code",
+  isOptions: is.object.factory<RuleOptions>(
+    { maxLineLength: is.number, maxObjectSize: is.number },
+    {}
+  ),
+  defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
+  messages: {
+    expectingMultiline: "Expecting multiline object literal",
+    expectingSingleLine: "Expecting single-line object literal"
+  },
   create: (context): RuleListener => {
     const listener: RuleListener = {
       [AST_NODE_TYPES.ObjectExpression]: (node): void => {
@@ -76,20 +87,8 @@ export const objectFormat = utils.createRule({
       }
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
     return context.defineTemplateBodyVisitor(listener, listener);
-  },
-  defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
-  fixable: "code",
-  isRuleOptions: is.object.factory<RuleOptions>(
-    { maxLineLength: is.number, maxObjectSize: is.number },
-    {}
-  ),
-  messages: {
-    expectingMultiline: "Expecting multiline object literal",
-    expectingSingleLine: "Expecting single-line object literal"
-  },
-  name: "object-format"
+  }
 });
 
 interface RuleOptions {

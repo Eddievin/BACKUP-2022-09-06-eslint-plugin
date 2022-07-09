@@ -4,6 +4,9 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
 
 export const noNegatedCondition = utils.createRule({
+  name: "no-negated-condition",
+  isOptions: is.object,
+  messages: { noNegatedCondition: "Negated condition is not allowed" },
   create: (context): RuleListener => ({
     [AST_NODE_TYPES.IfStatement]: (node): void => {
       if (
@@ -18,8 +21,5 @@ export const noNegatedCondition = utils.createRule({
       )
         context.report({ messageId: "noNegatedCondition", node });
     }
-  }),
-  isRuleOptions: is.object,
-  messages: { noNegatedCondition: "Negated condition is not allowed" },
-  name: "no-negated-condition"
+  })
 });

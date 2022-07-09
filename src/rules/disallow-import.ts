@@ -6,6 +6,18 @@ import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
 
 export const disallowImport = utils.createRule({
+  name: "disallow-import",
+  isOptions: is.object.factory<RuleOptions>(
+    { allow: is.strings, disallow: is.strings },
+    {}
+  ),
+  defaultOptions: { allow: [], disallow: [] },
+  subOptionsKey: "exclusions",
+  isSubOptions: is.object.factory<SubOptions>(
+    {},
+    { allow: is.strings, disallow: is.strings }
+  ),
+  messages: { disallowedSource: "Import from this source is not allowed" },
   create: (context): RuleListener => {
     const matcher = utils.createFileMatcher.disallowAllow(
       [
@@ -67,19 +79,7 @@ export const disallowImport = utils.createRule({
       if (matcher(source))
         context.report({ messageId: "disallowedSource", node });
     }
-  },
-  defaultOptions: { allow: [], disallow: [] },
-  isRuleOptions: is.object.factory<RuleOptions>(
-    { allow: is.strings, disallow: is.strings },
-    {}
-  ),
-  isSubOptions: is.object.factory<SubOptions>(
-    {},
-    { allow: is.strings, disallow: is.strings }
-  ),
-  messages: { disallowedSource: "Import from this source is not allowed" },
-  name: "disallow-import",
-  subOptionsKey: "exclusions"
+  }
 });
 
 interface RuleOptions {

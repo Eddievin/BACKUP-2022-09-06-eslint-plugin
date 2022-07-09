@@ -3,6 +3,7 @@ import getCurrentLine from "get-current-line";
 
 utils.testRule("no-inferrable-types", rules, [
   {
+    name: `Test at line ${getCurrentLine().line}`,
     code: `
       function f<T>(): T {
         const result: T = {} as T;
@@ -19,7 +20,6 @@ utils.testRule("no-inferrable-types", rules, [
         return result;
       }
     `,
-    errors: [{ line: 2, messageId: "triviallyInferrableType" }],
-    name: `Test at line ${getCurrentLine().line}`
+    errors: [{ line: 2, messageId: "triviallyInferrableType" }]
   }
 ]);
