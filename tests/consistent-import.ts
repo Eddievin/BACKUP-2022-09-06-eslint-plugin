@@ -177,9 +177,21 @@ utils.testRule(
         import * as localName4 from "source4";
       `,
       errors: [
-        { line: 1, messageId: "wildcardImportRequired" },
-        { line: 2, messageId: "wildcardImportRequired" },
-        { line: 3, messageId: "wildcardImportDisallowed" }
+        {
+          data: { _id: "id1" },
+          line: 1,
+          messageId: "wildcardImportRequired"
+        },
+        {
+          data: { _id: "id2" },
+          line: 2,
+          messageId: "wildcardImportRequired"
+        },
+        {
+          data: { _id: "id3" },
+          line: 3,
+          messageId: "wildcardImportDisallowed"
+        }
       ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [

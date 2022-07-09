@@ -69,11 +69,10 @@ export const consistentImport = utils.createRule({
     );
   }),
   messages: {
-    autoImport:
-      'Run "eslint --fix" to add missing import statement(s) ({{ _id }})',
+    autoImport: 'Run "eslint --fix" to add missing import statement(s)',
     invalidLocalName:
       "Expecting local name to be {{ expectedLocalName }} ({{ _id }})",
-    missingImport: "Missing import statement ({{ _id }})",
+    missingImport: "Missing import statement",
     wildcardImportDisallowed: "Wildcard import disallowed ({{ _id }})",
     wildcardImportRequired: "Wildcard import required ({{ _id }})"
   },
@@ -204,7 +203,11 @@ function checkImport(
               });
 
           if (wildcardSpecifier)
-            context.report({ messageId: "wildcardImportDisallowed", node });
+            context.report({
+              data: { _id: subOptions._id },
+              messageId: "wildcardImportDisallowed",
+              node
+            });
 
           break;
 
@@ -230,7 +233,12 @@ function checkImport(
                 messageId: "invalidLocalName",
                 node
               });
-          else context.report({ messageId: "wildcardImportRequired", node });
+          else
+            context.report({
+              data: { _id: subOptions._id },
+              messageId: "wildcardImportRequired",
+              node
+            });
       }
     }
   }

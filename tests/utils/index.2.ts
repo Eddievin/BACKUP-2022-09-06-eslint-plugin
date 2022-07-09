@@ -7,7 +7,13 @@ utils.testRule(
   [
     {
       code: 'import source from "source"',
-      errors: [{ line: 1, messageId: "wildcardImportRequired" }],
+      errors: [
+        {
+          data: { _id: "id" },
+          line: 1,
+          messageId: "wildcardImportRequired"
+        }
+      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
@@ -23,7 +29,13 @@ utils.testRule(
     },
     {
       code: 'import source from "source"',
-      errors: [{ line: 1, messageId: "wildcardImportRequired" }],
+      errors: [
+        {
+          data: { _id: "id" },
+          line: 1,
+          messageId: "wildcardImportRequired"
+        }
+      ],
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
