@@ -19,6 +19,7 @@ import { noExpressionEmptyLine } from "./no-expression-empty-line";
 import { noInferrableTypes } from "./no-inferrable-types";
 import { noMultiTypeTuples } from "./no-multi-type-tuples";
 import { noNegatedCondition } from "./no-negated-condition";
+import { noSelfImport } from "./no-self-import";
 import { noUnsafeObjectAssignment } from "./no-unsafe-object-assignment";
 import { noUnusedImport } from "./no-unused-import";
 import { objectFormat } from "./object-format";
@@ -59,6 +60,7 @@ export const rules = evaluate(() => {
     "no-inferrable-types": noInferrableTypes,
     "no-multi-type-tuples": noMultiTypeTuples,
     "no-negated-condition": noNegatedCondition,
+    "no-self-import": noSelfImport,
     "no-unsafe-object-assignment": noUnsafeObjectAssignment,
     "no-unused-import": noUnusedImport,
     "object-format": objectFormat,
