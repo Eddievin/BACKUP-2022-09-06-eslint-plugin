@@ -1,15 +1,9 @@
+/* eslint-disable @typescript-eslint/naming-convention -- Wait for @skylib/config update */
+
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
-import {
-  Accumulator,
-  a,
-  assert,
-  createValidationObject,
-  evaluate,
-  is,
-  o
-} from "@skylib/functions";
-import type { Rec, Writable, stringU, strings } from "@skylib/functions";
+import { Accumulator, a, assert, evaluate, is, o } from "@skylib/functions";
+import type { Rec, stringU, strings } from "@skylib/functions";
 import type {
   RuleFix,
   RuleListener
@@ -17,48 +11,59 @@ import type {
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
+export interface Options {
+  readonly blockOrder: NodeTypes;
+  readonly moduleOrder: NodeTypes;
+  readonly order: NodeTypes;
+  readonly rootOrder: NodeTypes;
+}
+
+export enum NodeType {
+  ExportAllDeclaration = "ExportAllDeclaration",
+  ExportDeclaration = "ExportDeclaration",
+  ExportDefaultDeclaration = "ExportDefaultDeclaration",
+  ExportFunctionDeclaration = "ExportFunctionDeclaration",
+  ExportModuleDeclaration = "ExportModuleDeclaration",
+  ExportTypeDeclaration = "ExportTypeDeclaration",
+  ExportUnknown = "ExportUnknown",
+  FunctionDeclaration = "FunctionDeclaration",
+  GlobalModuleDeclaration = "GlobalModuleDeclaration",
+  ImportDeclaration = "ImportDeclaration",
+  JestTest = "JestTest",
+  ModuleDeclaration = "ModuleDeclaration",
+  TypeDeclaration = "TypeDeclaration",
+  Unknown = "Unknown"
+}
+
+export const isNodeType = is.factory(is.enumeration, NodeType);
+
+export const isNodeTypes = is.factory(is.array.of, isNodeType);
+
+export enum MessageId {
+  incorrectStatementsOrder = "incorrectStatementsOrder"
+}
+
 export const statementsOrder = utils.createRule({
   name: "statements-order",
-  fixable: "code",
-  isOptions: evaluate(() => {
-    const NodeTypeVO = createValidationObject<NodeType>({
-      ExportAllDeclaration: "ExportAllDeclaration",
-      ExportDeclaration: "ExportDeclaration",
-      ExportDefaultDeclaration: "ExportDefaultDeclaration",
-      ExportFunctionDeclaration: "ExportFunctionDeclaration",
-      ExportModuleDeclaration: "ExportModuleDeclaration",
-      ExportTypeDeclaration: "ExportTypeDeclaration",
-      ExportUnknown: "ExportUnknown",
-      FunctionDeclaration: "FunctionDeclaration",
-      GlobalModuleDeclaration: "GlobalModuleDeclaration",
-      ImportDeclaration: "ImportDeclaration",
-      JestTest: "JestTest",
-      ModuleDeclaration: "ModuleDeclaration",
-      TypeDeclaration: "TypeDeclaration",
-      Unknown: "Unknown"
-    });
-
-    const isNodeType = is.factory(is.enumeration, NodeTypeVO);
-
-    const isNodeTypes = is.factory(is.array.of, isNodeType);
-
-    return is.object.factory<RuleOptions>(
-      {
-        blockOrder: isNodeTypes,
-        moduleOrder: isNodeTypes,
-        order: isNodeTypes,
-        rootOrder: isNodeTypes
-      },
-      {}
-    );
-  }),
+  fixable: utils.Fixable.code,
+  isOptions: is.object.factory<Options>(
+    {
+      blockOrder: isNodeTypes,
+      moduleOrder: isNodeTypes,
+      order: isNodeTypes,
+      rootOrder: isNodeTypes
+    },
+    {}
+  ),
   defaultOptions: {
     blockOrder: [],
     moduleOrder: [],
     order: [],
     rootOrder: []
   },
-  messages: { incorrectStatementsOrder: "Incorrect statements order" },
+  messages: {
+    [MessageId.incorrectStatementsOrder]: "Incorrect statements order"
+  },
   create: (context): RuleListener => {
     const blockOrder: Rec<NodeType, number> = {
       ...defaultOrder,
@@ -125,24 +130,22 @@ export const statementsOrder = utils.createRule({
         for (const items of itemsMap.values()) {
           const sortedItems = _.sortBy(items, node => node.sortingOrder);
 
-          const fixes: Writable<readonly RuleFix[]> = [];
-
-          for (const [index, sortedItem] of sortedItems.entries())
-            if (sortedItem.index === index) {
-              // Valid
-            } else {
+          const fixes: utils.RuleFixes = a
+            .fromIterable(sortedItems.entries())
+            .filter(([index, sortedItem]) => sortedItem.index !== index)
+            .map(([index, sortedItem]): RuleFix => {
               const item = a.get(items, index);
 
-              fixes.push({
+              return {
                 range: context.getRangeWithLeadingTrivia(item.node),
                 text: context.getTextWithLeadingTrivia(sortedItem.node)
-              });
-            }
+              };
+            });
 
-          if (fixes.length > 0)
+          if (fixes.length)
             context.report({
               fix: () => fixes,
-              messageId: "incorrectStatementsOrder",
+              messageId: MessageId.incorrectStatementsOrder,
               node: a.first(items).parentNode
             });
         }
@@ -195,30 +198,7 @@ interface Item {
   readonly type: NodeType;
 }
 
-type NodeType =
-  | "ExportAllDeclaration"
-  | "ExportDeclaration"
-  | "ExportDefaultDeclaration"
-  | "ExportFunctionDeclaration"
-  | "ExportModuleDeclaration"
-  | "ExportTypeDeclaration"
-  | "ExportUnknown"
-  | "FunctionDeclaration"
-  | "GlobalModuleDeclaration"
-  | "ImportDeclaration"
-  | "JestTest"
-  | "ModuleDeclaration"
-  | "TypeDeclaration"
-  | "Unknown";
-
 type NodeTypes = readonly NodeType[];
-
-interface RuleOptions {
-  readonly blockOrder: NodeTypes;
-  readonly moduleOrder: NodeTypes;
-  readonly order: NodeTypes;
-  readonly rootOrder: NodeTypes;
-}
 
 /**
  * Returns Jest test name.
@@ -227,38 +207,34 @@ interface RuleOptions {
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
 function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
-  if (node.expression.type === AST_NODE_TYPES.CallExpression) {
+  if (node.expression.type === "CallExpression") {
     const argument = node.expression.arguments[0];
 
-    if (
-      argument &&
-      argument.type === AST_NODE_TYPES.Literal &&
-      is.string(argument.value)
-    ) {
+    if (argument && argument.type === "Literal" && is.string(argument.value)) {
       const { callee } = node.expression;
 
-      if (callee.type === AST_NODE_TYPES.Identifier && callee.name === "test")
+      if (callee.type === "Identifier" && callee.name === "test")
         return argument.value;
 
       if (
-        callee.type === AST_NODE_TYPES.MemberExpression &&
+        callee.type === "MemberExpression" &&
         isIdentifier(callee.object, "test") &&
         isIdentifier(callee.property, "only", "skip")
       )
         return argument.value;
 
       if (
-        callee.type === AST_NODE_TYPES.CallExpression &&
-        callee.callee.type === AST_NODE_TYPES.MemberExpression &&
+        callee.type === "CallExpression" &&
+        callee.callee.type === "MemberExpression" &&
         isIdentifier(callee.callee.object, "test") &&
         isIdentifier(callee.callee.property, "each")
       )
         return argument.value;
 
       if (
-        callee.type === AST_NODE_TYPES.CallExpression &&
-        callee.callee.type === AST_NODE_TYPES.MemberExpression &&
-        callee.callee.object.type === AST_NODE_TYPES.MemberExpression &&
+        callee.type === "CallExpression" &&
+        callee.callee.type === "MemberExpression" &&
+        callee.callee.object.type === "MemberExpression" &&
         isIdentifier(callee.callee.object.object, "test") &&
         isIdentifier(callee.callee.object.property, "only", "skip") &&
         isIdentifier(callee.callee.property, "each")
@@ -278,7 +254,7 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
  * @returns _True_ if node is an identifier, _false_ otherwise.
  */
 function isIdentifier(node: TSESTree.Node, ...names: strings): boolean {
-  return node.type === AST_NODE_TYPES.Identifier && names.includes(node.name);
+  return node.type === "Identifier" && names.includes(node.name);
 }
 
 /**
@@ -299,12 +275,12 @@ function nodeInfo(
   switch (node.type) {
     case AST_NODE_TYPES.ExportAllDeclaration:
       return buildResult(
-        "ExportAllDeclaration",
+        NodeType.ExportAllDeclaration,
         `${node.source.value} ${node.exportKind}`
       );
 
     case AST_NODE_TYPES.ExportDefaultDeclaration:
-      return buildResult("ExportDefaultDeclaration");
+      return buildResult(NodeType.ExportDefaultDeclaration);
 
     case AST_NODE_TYPES.ExportNamedDeclaration:
       if (node.declaration)
@@ -314,26 +290,26 @@ function nodeInfo(
             assert.not.empty(node.declaration.id, "Expecting declaration ID");
 
             return buildResult(
-              "ExportFunctionDeclaration",
+              NodeType.ExportFunctionDeclaration,
               node.declaration.id.name
             );
 
           case AST_NODE_TYPES.TSInterfaceDeclaration:
           case AST_NODE_TYPES.TSTypeAliasDeclaration:
             return buildResult(
-              "ExportTypeDeclaration",
+              NodeType.ExportTypeDeclaration,
               node.declaration.id.name
             );
 
           case AST_NODE_TYPES.TSModuleDeclaration:
-            return buildResult("ExportModuleDeclaration");
+            return buildResult(NodeType.ExportModuleDeclaration);
 
           default:
-            return buildResult("ExportUnknown");
+            return buildResult(NodeType.ExportUnknown);
         }
 
       return buildResult(
-        "ExportDeclaration",
+        NodeType.ExportDeclaration,
         node.source ? `${node.source.value} ${node.exportKind}` : "~"
       );
 
@@ -341,31 +317,31 @@ function nodeInfo(
       {
         const id = getJestTestName(node);
 
-        if (is.not.empty(id)) return buildResult("JestTest", id);
+        if (is.not.empty(id)) return buildResult(NodeType.JestTest, id);
       }
 
-      return buildResult("Unknown");
+      return buildResult(NodeType.Unknown);
 
     case AST_NODE_TYPES.FunctionDeclaration:
     case AST_NODE_TYPES.TSDeclareFunction:
       assert.not.empty(node.id, "Expecting node ID");
 
-      return buildResult("FunctionDeclaration", node.id.name);
+      return buildResult(NodeType.FunctionDeclaration, node.id.name);
 
     case AST_NODE_TYPES.ImportDeclaration:
-      return buildResult("ImportDeclaration");
+      return buildResult(NodeType.ImportDeclaration);
 
     case AST_NODE_TYPES.TSInterfaceDeclaration:
     case AST_NODE_TYPES.TSTypeAliasDeclaration:
-      return buildResult("TypeDeclaration", node.id.name);
+      return buildResult(NodeType.TypeDeclaration, node.id.name);
 
     case AST_NODE_TYPES.TSModuleDeclaration:
       return node.global ?? false
-        ? buildResult("GlobalModuleDeclaration")
-        : buildResult("ModuleDeclaration");
+        ? buildResult(NodeType.GlobalModuleDeclaration)
+        : buildResult(NodeType.ModuleDeclaration);
 
     default:
-      return buildResult("Unknown");
+      return buildResult(NodeType.Unknown);
   }
 
   function buildResult(type: NodeType, id = ""): Item {

@@ -1,9 +1,10 @@
-import { rules, utils } from "@";
+import { MessageId, objectFormat } from "@/rules/object-format";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "object-format",
-  rules,
+  objectFormat,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -19,7 +20,13 @@ utils.testRule(
         <p :value="{x: 1}"></p>
         </template>
       `,
-      errors: [{ line: 2, messageId: "expectingSingleLine" }]
+      errors: [
+        {
+          line: 2,
+          endLine: 4,
+          messageId: MessageId.expectingSingleLine
+        }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -29,7 +36,7 @@ utils.testRule(
         };
       `,
       output: "const obj = {x: 1};",
-      errors: [{ line: 1, messageId: "expectingSingleLine" }]
+      errors: [{ endLine: 3, messageId: MessageId.expectingSingleLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -39,7 +46,7 @@ utils.testRule(
         });
       `,
       output: "const obj = f({x: 1});",
-      errors: [{ line: 1, messageId: "expectingSingleLine" }]
+      errors: [{ endLine: 3, messageId: MessageId.expectingSingleLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -50,7 +57,7 @@ utils.testRule(
         };
       `,
       output: "const obj = {x: 1,y: 2};",
-      errors: [{ line: 1, messageId: "expectingSingleLine" }]
+      errors: [{ endLine: 4, messageId: MessageId.expectingSingleLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -62,7 +69,7 @@ utils.testRule(
         y: 3
         };
       `,
-      errors: [{ line: 1, messageId: "expectingMultiline" }]
+      errors: [{ messageId: MessageId.expectingMultiline }]
     }
   ],
   [

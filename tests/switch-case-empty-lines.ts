@@ -1,7 +1,11 @@
-import { rules, utils } from "@";
+import {
+  MessageId,
+  switchCaseEmptyLines
+} from "@/rules/switch-case-empty-lines";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("switch-case-empty-lines", rules, [
+utils.testRule("switch-case-empty-lines", switchCaseEmptyLines, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
@@ -23,8 +27,12 @@ utils.testRule("switch-case-empty-lines", rules, [
       }
     `,
     errors: [
-      { line: 4, messageId: "unexpectedEmptyLine" },
-      { line: 6, messageId: "expectingEmptyLine" }
+      {
+        line: 4,
+        endLine: 5,
+        messageId: MessageId.removeEmptyLine
+      },
+      { line: 6, messageId: MessageId.addEmptyLine }
     ]
   }
 ]);

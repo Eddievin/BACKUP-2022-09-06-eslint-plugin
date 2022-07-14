@@ -29,11 +29,6 @@
     "clear-cache": "cf cache node_modules/.cache",
     "commitlint": "commitlint --edit",
     "commitlint-all": "commitlint --config commitlint-all.config.js --from=",
-    "composer:bump": "composer bump",
-    "composer:dump-autoload": "composer dump-autoload",
-    "composer:outdated": "composer outdated",
-    "composer:reinstall": "composer reinstall *",
-    "composer:update": "composer update",
     "config-lint": "node node_modules/@skylib/config/bin/config-lint.js",
     "delete-tags": "php node_modules/@skylib/config/bin/delete-tags.php",
     "full-check": "php node_modules/@skylib/config/bin/full-check.php",
@@ -52,9 +47,6 @@
     "npm:regenerate-lock-file": "npm install --no-audit --package-lock-only --strict-peer-deps",
     "npm:update": "npm update --no-audit --strict-peer-deps",
     "package-json-lint": "npmPkgJsonLint ./package.json",
-    "php-cs-fixer": "php vendor/bin/php-cs-fixer fix --verbose",
-    "phpstan": "php vendor/bin/phpstan analyse -c phpstan.neon",
-    "phpstan-quiet": "php vendor/bin/phpstan analyse -c phpstan.neon --quiet",
     "prepare": "husky install",
     "sonar": "sonar-scanner",
     "test": "cf ./lcov-report && jest",
@@ -65,24 +57,26 @@
     "upgrade": "npm run update-package-force && npm run npm:install"
   },
   "dependencies": {
-    "@skylib/functions": "^3.4.0",
+    "@skylib/functions": "^4.0.0",
     "@skylib/lodash-commonjs-es": "^1.0.0",
     "@skylib/typescript-types": "^1.0.0",
-    "@types/estree": "^0.0.52",
+    "@types/estree": "^1.0.0",
     "@types/minimatch": "^3.0.5",
     "@types/natural-compare": "^1.4.1",
     "minimatch": "^5.1.0",
     "natural-compare": "^1.4.0"
   },
   "devDependencies": {
-    "@skylib/config": "^3.24.0",
+    "@skylib/config": "^3.28.0",
     "@skylib/eslint-plugin": "^0.1.42",
     "get-current-line": "^6.6.0"
   },
   "peerDependencies": {
+    "@typescript-eslint/parser": ">=5",
     "@typescript-eslint/utils": ">=5",
     "tsutils": ">=3",
-    "typescript": ">=4"
+    "typescript": ">=4",
+    "vue-eslint-parser": ">=9"
   },
   "engines": {
     "node": ">=14.0.0",

@@ -1,15 +1,18 @@
+/* eslint-disable @skylib/custom/no-literal-union-type -- Ok */
+
 import type {
   InvalidTestCase as BaseInvalidTestCase,
   ValidTestCase as BaseValidTestCase,
-  RuleModule
+  RuleModule,
+  TestCaseError
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { Rec, objects } from "@skylib/functions";
 import { TSESLint } from "@typescript-eslint/utils";
 import { base } from "./core";
 import { s } from "@skylib/functions";
 
-export interface InvalidTestCase<M extends string>
-  extends BaseInvalidTestCase<M, readonly [object]> {
+export interface InvalidTestCase<M extends string, O extends readonly unknown[]>
+  extends BaseInvalidTestCase<M, O> {
+  readonly errors: ReadonlyArray<TestCaseError<M>>;
   readonly filename?: SourceFile;
   readonly name: string;
 }
@@ -17,6 +20,7 @@ export interface InvalidTestCase<M extends string>
 export type SourceFile =
   | "camelCase.camelCase.ts"
   | "camelCase.ts"
+  | "Component.vue"
   | "file.extras.ts"
   | "kebab-case.kebab-case.ts"
   | "kebab-case.ts"
@@ -25,29 +29,35 @@ export type SourceFile =
   | "subfolder/index.ts"
   | "vue.d.ts";
 
-export interface ValidTestCase extends BaseValidTestCase<readonly [object]> {
+export interface ValidTestCase<O extends readonly unknown[]>
+  extends BaseValidTestCase<O> {
   readonly filename?: SourceFile;
   readonly name: string;
 }
 
+export type ValidTestCases<O extends readonly unknown[]> = ReadonlyArray<
+  ValidTestCase<O>
+>;
+
 /**
  * Runs test.
  *
- * @param name - Rule name.
- * @param rules - Rules.
+ * @param name - Name.
+ * @param rule - Rule.
  * @param invalid - Invalid tests.
  * @param valid - Valid tests.
  */
-export function testRule<K extends string, M extends string>(
+export function testRule<
+  K extends string,
+  M extends string,
+  O extends readonly unknown[]
+>(
   name: K,
-  rules: Rec<K, RuleModule<M, objects>>,
-  invalid: ReadonlyArray<InvalidTestCase<M>>,
-  valid: readonly ValidTestCase[] = []
+  rule: RuleModule<M, O>,
+  invalid: ReadonlyArray<InvalidTestCase<M, O>>,
+  valid: ValidTestCases<O> = []
 ): void {
-  const rule = rules[name];
-
   const tester = new TSESLint.RuleTester({
-    // eslint-disable-next-line node/no-extraneous-require, unicorn/prefer-module -- Postponed
     parser: require.resolve("vue-eslint-parser"),
     parserOptions: {
       ecmaFeatures: { jsx: true },
@@ -63,21 +73,24 @@ export function testRule<K extends string, M extends string>(
   });
 
   tester.run(name, rule, {
-    // eslint-disable-next-line @skylib/custom/no-complex-type-in-function-return
-    invalid: invalid.map(invalidTest => {
+    invalid: invalid.map((invalidTest): BaseInvalidTestCase<M, O> => {
       const code = s.unpadMultiline(invalidTest.code);
 
       const output = s.unpadMultiline(invalidTest.output ?? invalidTest.code);
 
+      const errors = invalidTest.errors.map(
+        (error): TestCaseError<M> => ({ endLine: error.line ?? 1, ...error })
+      );
+
       return {
         ...invalidTest,
         code,
+        errors,
         filename: `${base}fixtures/${invalidTest.filename ?? "file.ts"}`,
         output
       };
     }),
-    // eslint-disable-next-line @skylib/custom/no-complex-type-in-function-return
-    valid: valid.map(validTest => {
+    valid: valid.map((validTest): BaseValidTestCase<O> => {
       const code = s.unpadMultiline(validTest.code);
 
       return {

@@ -1,9 +1,10 @@
-import { rules, utils } from "@";
+import { MessageId, Type, consistentImport } from "@/rules/consistent-import";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "consistent-import",
-  rules,
+  consistentImport,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -16,7 +17,7 @@ utils.testRule(
               autoImportSource: "source1",
               localName: "localName1",
               source: "source1",
-              type: "default"
+              type: Type.default
             },
             {
               _id: "id2",
@@ -24,7 +25,7 @@ utils.testRule(
               autoImportSource: "source2",
               localName: "localName2",
               source: "source2",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id3",
@@ -32,7 +33,7 @@ utils.testRule(
               autoImportSource: "source3",
               localName: "localName3",
               source: "source3",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id4",
@@ -40,7 +41,7 @@ utils.testRule(
               autoImportSource: "source4",
               localName: "localName4",
               source: "source4",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id5",
@@ -48,7 +49,7 @@ utils.testRule(
               autoImportSource: "source5",
               localName: "localName5",
               source: "source5",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id6",
@@ -56,7 +57,7 @@ utils.testRule(
               autoImportSource: "source6",
               localName: "localName6",
               source: "source6",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id7",
@@ -64,7 +65,7 @@ utils.testRule(
               autoImportSource: "source7",
               localName: "localName7",
               source: "source7",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -110,11 +111,11 @@ utils.testRule(
         namespace localName7 {}
       `,
       errors: [
-        { line: 1, messageId: "missingImport" },
-        { line: 1, messageId: "autoImport" },
-        { line: 2, messageId: "missingImport" },
-        { line: 4, messageId: "missingImport" },
-        { line: 5, messageId: "missingImport" }
+        { messageId: MessageId.missingImport },
+        { messageId: MessageId.autoImport },
+        { line: 2, messageId: MessageId.missingImport },
+        { line: 4, messageId: MessageId.missingImport },
+        { line: 5, messageId: MessageId.missingImport }
       ]
     },
     {
@@ -128,7 +129,7 @@ utils.testRule(
               autoImportSource: "@/source",
               localName: "source",
               source: "@skylib/eslint-plugin/src/source",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -139,8 +140,8 @@ utils.testRule(
         source;
       `,
       errors: [
-        { line: 1, messageId: "missingImport" },
-        { line: 1, messageId: "autoImport" }
+        { messageId: MessageId.missingImport },
+        { messageId: MessageId.autoImport }
       ]
     },
     {
@@ -154,7 +155,7 @@ utils.testRule(
               autoImportSource: "@/source",
               localName: "source",
               source: "@skylib/eslint-plugin/src/source",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -165,8 +166,8 @@ utils.testRule(
         const x = { source };
       `,
       errors: [
-        { line: 1, messageId: "autoImport" },
-        { line: 1, messageId: "missingImport" }
+        { messageId: MessageId.autoImport },
+        { messageId: MessageId.missingImport }
       ]
     },
     {
@@ -178,19 +179,19 @@ utils.testRule(
               _id: "id1",
               localName: "localName1",
               source: "source1",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id2",
               localName: "localName2",
               source: "source2",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id3",
               localName: "localName3",
               source: "source3",
-              type: "default"
+              type: Type.default
             }
           ]
         }
@@ -202,20 +203,16 @@ utils.testRule(
         import * as localName4 from "source4";
       `,
       errors: [
+        { messageId: MessageId.wildcardImportRequired, data: { _id: "id1" } },
         {
-          data: { _id: "id1" },
-          line: 1,
-          messageId: "wildcardImportRequired"
-        },
-        {
-          data: { _id: "id2" },
           line: 2,
-          messageId: "wildcardImportRequired"
+          messageId: MessageId.wildcardImportRequired,
+          data: { _id: "id2" }
         },
         {
-          data: { _id: "id3" },
           line: 3,
-          messageId: "wildcardImportDisallowed"
+          messageId: MessageId.wildcardImportDisallowed,
+          data: { _id: "id3" }
         }
       ]
     },
@@ -228,13 +225,13 @@ utils.testRule(
               _id: "id1",
               localName: "localName1",
               source: "source1",
-              type: "default"
+              type: Type.default
             },
             {
               _id: "id2",
               localName: "localName2",
               source: "source2",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -245,14 +242,13 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { _id: "id1", expectedLocalName: '"localName1"' },
-          line: 1,
-          messageId: "invalidLocalName"
+          messageId: MessageId.invalidLocalName,
+          data: { _id: "id1", expectedLocalName: '"localName1"' }
         },
         {
-          data: { _id: "id2", expectedLocalName: '"localName2"' },
           line: 2,
-          messageId: "invalidLocalName"
+          messageId: MessageId.invalidLocalName,
+          data: { _id: "id2", expectedLocalName: '"localName2"' }
         }
       ]
     },
@@ -266,42 +262,42 @@ utils.testRule(
               altLocalNames: ["altName1"],
               localName: "localName1",
               source: "source1",
-              type: "default"
+              type: Type.default
             },
             {
               _id: "id2",
               altLocalNames: ["altName2"],
               localName: "localName2",
               source: "source2",
-              type: "default"
+              type: Type.default
             },
             {
               _id: "id3",
               altLocalNames: ["altName3"],
               localName: "localName3",
               source: "source3",
-              type: "default"
+              type: Type.default
             },
             {
               _id: "id4",
               altLocalNames: ["altName4"],
               localName: "localName4",
               source: "source4",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id5",
               altLocalNames: ["altName5"],
               localName: "localName5",
               source: "source5",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id6",
               altLocalNames: ["altName6"],
               localName: "localName6",
               source: "source6",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -321,14 +317,13 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { _id: "id1", expectedLocalName: '"altName1"' },
-          line: 1,
-          messageId: "invalidLocalName"
+          messageId: MessageId.invalidLocalName,
+          data: { _id: "id1", expectedLocalName: '"altName1"' }
         },
         {
-          data: { _id: "id4", expectedLocalName: '"altName4"' },
           line: 4,
-          messageId: "invalidLocalName"
+          messageId: MessageId.invalidLocalName,
+          data: { _id: "id4", expectedLocalName: '"altName4"' }
         }
       ]
     }
@@ -343,13 +338,13 @@ utils.testRule(
               _id: "id1",
               localName: "localName1",
               source: "source1",
-              type: "default"
+              type: Type.default
             },
             {
               _id: "id2",
               localName: "localName2",
               source: "source2",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -368,22 +363,22 @@ utils.testRule(
               _id: "id0",
               localName: "index",
               source: "@skylib/eslint-plugin",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id1",
               source: "@skylib/eslint-plugin/src/source1",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id2",
               source: "@skylib/eslint-plugin/fixtures/source2",
-              type: "wildcard"
+              type: Type.wildcard
             },
             {
               _id: "id3",
               source: "@skylib/eslint-plugin/source3",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -403,7 +398,7 @@ utils.testRule(
             {
               _id: "id",
               source: "@skylib/eslint-plugin/src/some-source",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }
@@ -421,7 +416,7 @@ utils.testRule(
               _id: "id",
               source: "@skylib/eslint-plugin/fixtures",
               sourcePattern: "@skylib/*/fixtures",
-              type: "wildcard"
+              type: Type.wildcard
             }
           ]
         }

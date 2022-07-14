@@ -4,28 +4,37 @@ import type {
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import { evaluate, is, num } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
+export interface Options {
+  readonly maxLineLength: number;
+  readonly maxObjectSize: number;
+}
+
+export enum MessageId {
+  expectingMultiline = "expectingMultiline",
+  expectingSingleLine = "expectingSingleLine"
+}
 
 export const objectFormat = utils.createRule({
   name: "object-format",
-  fixable: "code",
-  isOptions: is.object.factory<RuleOptions>(
+  fixable: utils.Fixable.code,
+  isOptions: is.object.factory<Options>(
     { maxLineLength: is.number, maxObjectSize: is.number },
     {}
   ),
   defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
   messages: {
-    expectingMultiline: "Expecting multiline object literal",
-    expectingSingleLine: "Expecting single-line object literal"
+    [MessageId.expectingMultiline]: "Expecting multiline object literal",
+    [MessageId.expectingSingleLine]: "Expecting single-line object literal"
   },
   create: (context): RuleListener => {
     const listener: RuleListener = {
-      [AST_NODE_TYPES.ObjectExpression]: (node): void => {
+      ObjectExpression: (node): void => {
         const texts = node.properties.map(property =>
           context.getTextWithLeadingTrivia(property).trim()
         );
 
-        if (texts.length > 0) {
+        if (texts.length) {
           const predictedLength = evaluate(() => {
             const headLength = context.getLocFromRange(node.range).start.column;
 
@@ -70,7 +79,7 @@ export const objectFormat = utils.createRule({
                 range: node.range,
                 text: `{\n${texts.join(",\n")}\n}`
               }),
-              messageId: "expectingMultiline",
+              messageId: MessageId.expectingMultiline,
               node
             });
 
@@ -80,7 +89,7 @@ export const objectFormat = utils.createRule({
                 range: node.range,
                 text: `{${texts.join(",")}}`
               }),
-              messageId: "expectingSingleLine",
+              messageId: MessageId.expectingSingleLine,
               node
             });
         }
@@ -91,21 +100,16 @@ export const objectFormat = utils.createRule({
   }
 });
 
-interface RuleOptions {
-  readonly maxLineLength: number;
-  readonly maxObjectSize: number;
-}
-
-// eslint-disable-next-line no-warning-comments
+// eslint-disable-next-line no-warning-comments -- Postponed
 // fixme: use @skylib/functions
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 function isMultiline(str: string): boolean {
   return str.includes("\n");
 }
 
-// eslint-disable-next-line no-warning-comments
+// eslint-disable-next-line no-warning-comments -- Postponed
 // fixme: use @skylib/functions
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 function isSingleLine(str: string): boolean {
   return !str.includes("\n");
 }

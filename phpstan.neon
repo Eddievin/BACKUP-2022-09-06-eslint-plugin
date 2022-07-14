@@ -1,8 +1,0 @@
-includes:
-  - node_modules/@skylib/config/src/phpstan.neon
-parameters:
-  paths:
-    - chore
-  scanDirectories:
-    - node_modules/@skylib/config/api
-  tmpDir: cache/phpstan

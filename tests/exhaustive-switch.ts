@@ -1,11 +1,12 @@
-import { rules, utils } from "@";
+import { MessageId, exhaustiveSwitch } from "@/rules/exhaustive-switch";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("exhaustive-switch", rules, [
+utils.testRule("exhaustive-switch", exhaustiveSwitch, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      const symbol = Symbol("Test");
+      const symbol = Symbol("test-symbol");
 
       function f01(x: 1 | "a" | typeof symbol): void {
         switch (x) {
@@ -43,17 +44,17 @@ utils.testRule("exhaustive-switch", rules, [
       }
     `,
     errors: [
-      { line: 4, messageId: "inexhaustiveSwitch" },
-      { line: 11, messageId: "inexhaustiveSwitch" },
-      { line: 18, messageId: "inexhaustiveSwitch" }
+      { line: 4, messageId: MessageId.inexhaustiveSwitch },
+      { line: 11, messageId: MessageId.inexhaustiveSwitch },
+      { line: 18, messageId: MessageId.inexhaustiveSwitch }
     ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      const symbol = Symbol("Test");
+      const symbol = Symbol("test-symbol");
 
-      function f01(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f01(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "boolean":
           case "function":
@@ -65,7 +66,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f02(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f02(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "function":
@@ -77,7 +78,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f03(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f03(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -89,7 +90,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f04(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f04(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -101,7 +102,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f05(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f05(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -113,7 +114,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f06(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f06(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -125,7 +126,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f07(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f07(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -137,7 +138,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f08(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f08(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -149,7 +150,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f09(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f09(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -162,29 +163,29 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f10(x: 1n | true | (() => void) | 1 | null | "a" | typeof symbol | undefined): void {
+      function f10(x: typeof symbol | "a" | 1 | 1n | true | (() => void) | null | undefined): void {
         switch (typeof x) {
           default:
         }
       }
     `,
     errors: [
-      { line: 4, messageId: "inexhaustiveSwitch" },
-      { line: 16, messageId: "inexhaustiveSwitch" },
-      { line: 28, messageId: "inexhaustiveSwitch" },
-      { line: 40, messageId: "inexhaustiveSwitch" },
-      { line: 52, messageId: "inexhaustiveSwitch" },
-      { line: 64, messageId: "inexhaustiveSwitch" },
-      { line: 76, messageId: "inexhaustiveSwitch" },
-      { line: 88, messageId: "inexhaustiveSwitch" }
+      { line: 4, messageId: MessageId.inexhaustiveSwitch },
+      { line: 16, messageId: MessageId.inexhaustiveSwitch },
+      { line: 28, messageId: MessageId.inexhaustiveSwitch },
+      { line: 40, messageId: MessageId.inexhaustiveSwitch },
+      { line: 52, messageId: MessageId.inexhaustiveSwitch },
+      { line: 64, messageId: MessageId.inexhaustiveSwitch },
+      { line: 76, messageId: MessageId.inexhaustiveSwitch },
+      { line: 88, messageId: MessageId.inexhaustiveSwitch }
     ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      const symbol = Symbol("Test");
+      const symbol = Symbol("test-symbol");
 
-      function f01(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f01(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "boolean":
           case "function":
@@ -196,7 +197,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f02(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f02(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "function":
@@ -208,7 +209,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f03(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f03(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -220,7 +221,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f04(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f04(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -232,7 +233,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f05(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f05(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -244,7 +245,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f06(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f06(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -256,7 +257,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f07(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f07(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -268,7 +269,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f08(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f08(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -280,7 +281,7 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f09(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f09(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           case "bigint":
           case "boolean":
@@ -293,21 +294,21 @@ utils.testRule("exhaustive-switch", rules, [
         }
       }
 
-      function f10(x: bigint | boolean | (new () => object) | number | {} | string | symbol | void): void {
+      function f10(x: bigint | boolean | number | string | symbol | (new () => object) | {} | void): void {
         switch (typeof x) {
           default:
         }
       }
     `,
     errors: [
-      { line: 4, messageId: "inexhaustiveSwitch" },
-      { line: 16, messageId: "inexhaustiveSwitch" },
-      { line: 28, messageId: "inexhaustiveSwitch" },
-      { line: 40, messageId: "inexhaustiveSwitch" },
-      { line: 52, messageId: "inexhaustiveSwitch" },
-      { line: 64, messageId: "inexhaustiveSwitch" },
-      { line: 76, messageId: "inexhaustiveSwitch" },
-      { line: 88, messageId: "inexhaustiveSwitch" }
+      { line: 4, messageId: MessageId.inexhaustiveSwitch },
+      { line: 16, messageId: MessageId.inexhaustiveSwitch },
+      { line: 28, messageId: MessageId.inexhaustiveSwitch },
+      { line: 40, messageId: MessageId.inexhaustiveSwitch },
+      { line: 52, messageId: MessageId.inexhaustiveSwitch },
+      { line: 64, messageId: MessageId.inexhaustiveSwitch },
+      { line: 76, messageId: MessageId.inexhaustiveSwitch },
+      { line: 88, messageId: MessageId.inexhaustiveSwitch }
     ]
   }
 ]);

@@ -1,25 +1,15 @@
-import { rules, utils } from "@";
+import { MessageId, noInferrableTypes } from "@/rules/no-inferrable-types";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("no-inferrable-types", rules, [
+utils.testRule("no-inferrable-types", noInferrableTypes, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      function f<T>(): T {
-        const result: T = {} as T;
-        return result;
-      }
-
-      function g<T>(): T {
-        const result = {} as T;
-        return result;
-      }
-
-      function h<T extends object>(): object {
-        const result: object = {} as T;
-        return result;
-      }
+      function f<T>() { const result: T = {} as T; }
+      function g<T>() { const result = {} as T; }
+      function h<T extends object>() { const result: object = {} as T; }
     `,
-    errors: [{ line: 2, messageId: "triviallyInferrableType" }]
+    errors: [{ line: 1, messageId: MessageId.triviallyInferrableType }]
   }
 ]);

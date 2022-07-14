@@ -1,134 +1,121 @@
-/* eslint-disable @skylib/primary-export-only */
-
 /* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 
-import { a, as, cast, is } from "@skylib/functions";
-import type { numberU, strings } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import { a, as, defineFn, is } from "@skylib/functions";
 import type { Context } from "./types";
+import { MessageId } from "./sort.internal";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { compare } from "./compare";
+import { nodeToString } from "./core";
+import type { numberU } from "@skylib/functions";
 
-export interface SortOptions {
-  readonly customOrder?: strings;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-}
+export const sort = defineFn(
+  /**
+   * Sorts nodes.
+   *
+   * @param nodes - Nodes.
+   * @param keyNode - Finds key node.
+   * @param options - Options.
+   * @param context - Context.
+   */
+  <T extends TSESTree.Node>(
+    nodes: readonly T[],
+    keyNode: (node: T) => TSESTree.Node,
+    options: sort.Options,
+    context: Context<MessageId, object, object>
+  ): void => {
+    const { customOrder, sendToBottom, sendToTop } = {
+      customOrder: [],
+      ...options
+    } as const;
 
-/**
- * Returns string representing node.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns String representing node.
- */
-export function nodeToString(
-  node: TSESTree.Node,
-  context: Context<never, object, object>
-): string {
-  switch (node.type) {
-    case AST_NODE_TYPES.Identifier:
-      return node.name;
+    const sendToTopRe = is.not.empty(sendToTop)
+      ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+        new RegExp(sendToTop, "u")
+      : undefined;
 
-    case AST_NODE_TYPES.Literal:
-      return cast.string(node.value);
+    const sendToBottomRe = is.not.empty(sendToBottom)
+      ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+        new RegExp(sendToBottom, "u")
+      : undefined;
 
-    default:
-      return `\u0000${context.getText(node)}`;
-  }
-}
+    const items = nodes.map(
+      (node, index): Item => ({
+        index,
+        key: wrapKey(nodeToString(keyNode(node), context)),
+        node
+      })
+    );
 
-/**
- * Sorts nodes.
- *
- * @param nodes - Nodes.
- * @param nodeToKey - Finds key node.
- * @param options - Options.
- * @param context - Context.
- */
-export function sort<T extends TSESTree.Node>(
-  nodes: readonly T[],
-  nodeToKey: (node: T) => TSESTree.Node,
-  options: SortOptions,
-  context: Context<"incorrectSortingOrder", object, object>
-): void {
-  // eslint-disable-next-line @skylib/custom/prefer-const-object -- Wait for @skylib/config update
-  const { customOrder, sendToBottom, sendToTop } = {
-    customOrder: [],
-    ...options
-  };
+    const sortedItems = a.sort(items, (item1, item2) =>
+      compare(item1.key, item2.key)
+    );
 
-  const sendToTopRe = is.not.empty(sendToTop)
-    ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      new RegExp(sendToTop, "u")
-    : undefined;
+    const fixes: RuleFix[] = [];
 
-  const sendToBottomRe = is.not.empty(sendToBottom)
-    ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      new RegExp(sendToBottom, "u")
-    : undefined;
+    let min: numberU;
 
-  const items = nodes.map(
-    (node, index): Item => ({
-      index,
-      key: wrapKey(nodeToString(nodeToKey(node), context)),
-      node
-    })
-  );
+    let max: numberU;
 
-  const sortedItems = a.sort(items, (item1, item2) =>
-    compare(item1.key, item2.key)
-  );
+    for (const [index, sortedItem] of sortedItems.entries())
+      if (sortedItem.index === index) {
+        // Valid
+      } else {
+        const item = a.get(items, index);
 
-  const fixes: RuleFix[] = [];
+        min = is.not.empty(min) ? Math.min(min, index) : index;
+        max = is.not.empty(max) ? Math.max(max, index) : index;
+        fixes.push({
+          range: context.getRangeWithLeadingTrivia(item.node),
+          text: context.getTextWithLeadingTrivia(sortedItem.node)
+        });
+      }
 
-  let min: numberU;
+    if (fixes.length) {
+      const loc = context.getLocFromRange([
+        a.get(items, as.not.empty(min)).node.range[0],
+        a.get(items, as.not.empty(max)).node.range[1]
+      ]);
 
-  let max: numberU;
-
-  for (const [index, sortedItem] of sortedItems.entries())
-    if (sortedItem.index === index) {
-      // Valid
-    } else {
-      const item = a.get(items, index);
-
-      min = is.not.empty(min) ? Math.min(min, index) : index;
-      max = is.not.empty(max) ? Math.max(max, index) : index;
-      fixes.push({
-        range: context.getRangeWithLeadingTrivia(item.node),
-        text: context.getTextWithLeadingTrivia(sortedItem.node)
-      });
+      if (is.not.empty(options._id))
+        context.report({
+          data: { _id: options._id },
+          fix: () => fixes,
+          loc,
+          messageId: sort.MessageId.incorrectSortingOrderId
+        });
+      else
+        context.report({
+          fix: () => fixes,
+          loc,
+          messageId: sort.MessageId.incorrectSortingOrder
+        });
     }
 
-  if (fixes.length > 0) {
-    const loc = context.getLocFromRange([
-      a.get(items, as.not.empty(min)).node.range[0],
-      a.get(items, as.not.empty(max)).node.range[1]
-    ]);
+    interface Item {
+      readonly index: number;
+      readonly key: string;
+      readonly node: TSESTree.Node;
+    }
 
-    context.report({
-      fix: () => fixes,
-      loc,
-      messageId: "incorrectSortingOrder"
-    });
-  }
+    function wrapKey(key: string): string {
+      const index = customOrder.indexOf(key);
 
-  interface Item {
-    readonly index: number;
-    readonly key: string;
-    readonly node: TSESTree.Node;
-  }
+      if (index >= 0) return `${1000 + index}:${key}`;
 
-  function wrapKey(key: string): string {
-    const index = customOrder.indexOf(key);
+      if (sendToTopRe && sendToTopRe.test(key)) return `2001:${key}`;
 
-    if (index >= 0) return `${1000 + index}:${key}`;
+      if (sendToBottomRe && sendToBottomRe.test(key)) return `2003:${key}`;
 
-    if (sendToTopRe && sendToTopRe.test(key)) return `2001:${key}`;
+      return `2002:${key}`;
+    }
+  },
+  { MessageId }
+);
 
-    if (sendToBottomRe && sendToBottomRe.test(key)) return `2003:${key}`;
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Ok
+export namespace sort {
+  export type MessageId = import("./sort.internal").MessageId;
 
-    return `2002:${key}`;
-  }
+  export type Options = import("./sort.internal").Options;
 }

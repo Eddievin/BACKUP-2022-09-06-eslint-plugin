@@ -1,7 +1,20 @@
-import { rules, utils } from "@";
+import { MessageId as BaseMessageId, sortArray } from "@/rules/sort-array";
+import type { Rec } from "@skylib/functions";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("sort-array", rules, [
+const MessageId: Rec<
+  BaseMessageId | utils.sort.MessageId,
+  BaseMessageId | utils.sort.MessageId
+> = { ...BaseMessageId, ...utils.sort.MessageId };
+
+utils.testRule("sort-array", sortArray, [
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "Identifier" }],
+    code: "const id = 1;",
+    errors: [{ messageId: MessageId.expectingArray }]
+  },
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "ArrayExpression" }],
@@ -25,9 +38,9 @@ utils.testRule("sort-array", rules, [
     `,
     errors: [
       {
-        endLine: 6,
         line: 4,
-        messageId: "incorrectSortingOrder"
+        endLine: 6,
+        messageId: MessageId.incorrectSortingOrder
       }
     ]
   },
@@ -65,21 +78,9 @@ utils.testRule("sort-array", rules, [
     `,
     errors: [
       {
-        endLine: 8,
         line: 3,
-        messageId: "incorrectSortingOrder"
-      }
-    ]
-  },
-  {
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "Identifier" }],
-    code: "const id = 1;",
-    errors: [
-      {
-        endLine: 1,
-        line: 1,
-        messageId: "expectingArray"
+        endLine: 8,
+        messageId: MessageId.incorrectSortingOrder
       }
     ]
   },
@@ -102,9 +103,9 @@ utils.testRule("sort-array", rules, [
     `,
     errors: [
       {
-        endLine: 4,
         line: 3,
-        messageId: "incorrectSortingOrder"
+        endLine: 4,
+        messageId: MessageId.incorrectSortingOrder
       }
     ]
   }

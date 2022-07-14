@@ -1,9 +1,10 @@
-import { rules, utils } from "@";
+import { MessageId, NodeType, statementsOrder } from "@/rules/statements-order";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "statements-order",
-  rules,
+  statementsOrder,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -65,23 +66,23 @@ utils.testRule(
         function PF2();
         namespace PN1 {}
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 27, messageId: MessageId.incorrectStatementsOrder }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           order: [
-            "ImportDeclaration",
-            "ModuleDeclaration",
-            "ExportDefaultDeclaration",
-            "ExportDeclaration",
-            "ExportUnknown",
-            "ExportTypeDeclaration",
-            "ExportFunctionDeclaration",
-            "FunctionDeclaration",
-            "TypeDeclaration",
-            "Unknown"
+            NodeType.ImportDeclaration,
+            NodeType.ModuleDeclaration,
+            NodeType.ExportDefaultDeclaration,
+            NodeType.ExportDeclaration,
+            NodeType.ExportUnknown,
+            NodeType.ExportTypeDeclaration,
+            NodeType.ExportFunctionDeclaration,
+            NodeType.FunctionDeclaration,
+            NodeType.TypeDeclaration,
+            NodeType.Unknown
           ]
         }
       ],
@@ -107,23 +108,23 @@ utils.testRule(
         class PU2 {}
         var PU1 = 1;
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           rootOrder: [
-            "ImportDeclaration",
-            "ModuleDeclaration",
-            "ExportDefaultDeclaration",
-            "ExportDeclaration",
-            "ExportUnknown",
-            "ExportTypeDeclaration",
-            "ExportFunctionDeclaration",
-            "FunctionDeclaration",
-            "TypeDeclaration",
-            "Unknown"
+            NodeType.ImportDeclaration,
+            NodeType.ModuleDeclaration,
+            NodeType.ExportDefaultDeclaration,
+            NodeType.ExportDeclaration,
+            NodeType.ExportUnknown,
+            NodeType.ExportTypeDeclaration,
+            NodeType.ExportFunctionDeclaration,
+            NodeType.FunctionDeclaration,
+            NodeType.TypeDeclaration,
+            NodeType.Unknown
           ]
         }
       ],
@@ -149,7 +150,7 @@ utils.testRule(
         class PU2 {}
         var PU1 = 1;
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -175,23 +176,23 @@ utils.testRule(
           function PF2();
         }
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           blockOrder: [
-            "ImportDeclaration",
-            "ModuleDeclaration",
-            "ExportDefaultDeclaration",
-            "ExportDeclaration",
-            "ExportUnknown",
-            "ExportTypeDeclaration",
-            "ExportFunctionDeclaration",
-            "FunctionDeclaration",
-            "TypeDeclaration",
-            "Unknown"
+            NodeType.ImportDeclaration,
+            NodeType.ModuleDeclaration,
+            NodeType.ExportDefaultDeclaration,
+            NodeType.ExportDeclaration,
+            NodeType.ExportUnknown,
+            NodeType.ExportTypeDeclaration,
+            NodeType.ExportFunctionDeclaration,
+            NodeType.FunctionDeclaration,
+            NodeType.TypeDeclaration,
+            NodeType.Unknown
           ]
         }
       ],
@@ -217,7 +218,7 @@ utils.testRule(
           var PU1 = 1;
         }
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -243,23 +244,23 @@ utils.testRule(
           function PF2();
         }
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
         {
           moduleOrder: [
-            "ImportDeclaration",
-            "ModuleDeclaration",
-            "ExportDefaultDeclaration",
-            "ExportDeclaration",
-            "ExportUnknown",
-            "ExportTypeDeclaration",
-            "ExportFunctionDeclaration",
-            "FunctionDeclaration",
-            "TypeDeclaration",
-            "Unknown"
+            NodeType.ImportDeclaration,
+            NodeType.ModuleDeclaration,
+            NodeType.ExportDefaultDeclaration,
+            NodeType.ExportDeclaration,
+            NodeType.ExportUnknown,
+            NodeType.ExportTypeDeclaration,
+            NodeType.ExportFunctionDeclaration,
+            NodeType.FunctionDeclaration,
+            NodeType.TypeDeclaration,
+            NodeType.Unknown
           ]
         }
       ],
@@ -285,7 +286,7 @@ utils.testRule(
           var PU1 = 1;
         }
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -319,7 +320,7 @@ utils.testRule(
         test.only("test9", () => {});
         test.only.each([])("testA", () => {});
       `,
-      errors: [{ line: 1, messageId: "incorrectStatementsOrder" }]
+      errors: [{ endLine: 13, messageId: MessageId.incorrectStatementsOrder }]
     }
   ],
   [
@@ -342,20 +343,20 @@ utils.testRule(
       options: [
         {
           rootOrder: [
-            "ImportDeclaration",
-            "GlobalModuleDeclaration",
-            "ExportAllDeclaration",
-            "ExportDeclaration",
-            "ExportDefaultDeclaration",
-            "ExportUnknown",
-            "ExportTypeDeclaration",
-            "ExportFunctionDeclaration",
-            "ExportModuleDeclaration",
-            "Unknown",
-            "TypeDeclaration",
-            "FunctionDeclaration",
-            "ModuleDeclaration",
-            "JestTest"
+            NodeType.ImportDeclaration,
+            NodeType.GlobalModuleDeclaration,
+            NodeType.ExportAllDeclaration,
+            NodeType.ExportDeclaration,
+            NodeType.ExportDefaultDeclaration,
+            NodeType.ExportUnknown,
+            NodeType.ExportTypeDeclaration,
+            NodeType.ExportFunctionDeclaration,
+            NodeType.ExportModuleDeclaration,
+            NodeType.Unknown,
+            NodeType.TypeDeclaration,
+            NodeType.FunctionDeclaration,
+            NodeType.ModuleDeclaration,
+            NodeType.JestTest
           ]
         }
       ],

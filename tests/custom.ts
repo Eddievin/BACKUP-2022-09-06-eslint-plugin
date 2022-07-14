@@ -1,7 +1,8 @@
-import { rules, utils } from "@";
+import { MessageId, custom } from "@/rules/custom";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("custom", rules, [
+utils.testRule("custom", custom, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "VElement[name=p]" }],
@@ -12,12 +13,12 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
+        line: 2,
+        messageId: MessageId.customMessage,
         data: {
           _id: "id",
           message: "This syntax is not allowed: VElement[name=p]"
-        },
-        line: 2,
-        messageId: "customMessage"
+        }
       }
     ]
   },
@@ -31,9 +32,9 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "This syntax is not allowed: Identifier" },
         line: 2,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "This syntax is not allowed: Identifier" }
       }
     ]
   },
@@ -46,13 +47,12 @@ utils.testRule("custom", rules, [
     output: "const id2 = [];",
     errors: [
       {
+        messageId: MessageId.customMessage,
         data: {
           _id: "id",
           message:
             "This syntax is not allowed: Identifier, Identifier[name=id1]"
-        },
-        line: 1,
-        messageId: "customMessage"
+        }
       }
     ]
   },
@@ -70,9 +70,8 @@ utils.testRule("custom", rules, [
     output: "const ie1 = [];",
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -82,12 +81,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["any"]
+        typeIsOneOf: [utils.TypeGroup.any]
       }
     ],
     code: "function f(x: any) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -96,12 +98,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["array"]
+        typeIsOneOf: [utils.TypeGroup.array]
       }
     ],
     code: "function f(x: unknown[]) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -110,12 +115,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["boolean"]
+        typeIsOneOf: [utils.TypeGroup.boolean]
       }
     ],
     code: "function f(x: boolean) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -124,12 +132,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["function"]
+        typeIsOneOf: [utils.TypeGroup.function]
       }
     ],
     code: "function f(x: () => void) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -138,12 +149,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["null"]
+        typeIsOneOf: [utils.TypeGroup.null]
       }
     ],
     code: "function f(x: null) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -152,12 +166,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["number"]
+        typeIsOneOf: [utils.TypeGroup.number]
       }
     ],
     code: "function f(x: number) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -166,12 +183,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["object"]
+        typeIsOneOf: [utils.TypeGroup.object]
       }
     ],
     code: "function f(x: object) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -180,12 +200,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["string"]
+        typeIsOneOf: [utils.TypeGroup.string]
       }
     ],
     code: "function f(x: string) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -194,12 +217,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["symbol"]
+        typeIsOneOf: [utils.TypeGroup.symbol]
       }
     ],
     code: "function f(x: symbol) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -208,12 +234,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["tuple"]
+        typeIsOneOf: [utils.TypeGroup.tuple]
       }
     ],
     code: "function f(x: [unknown]) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -222,12 +251,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["undefined"]
+        typeIsOneOf: [utils.TypeGroup.undefined]
       }
     ],
     code: "function f(x: undefined) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -236,12 +268,15 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIsOneOf: ["unknown"]
+        typeIsOneOf: [utils.TypeGroup.unknown]
       }
     ],
     code: "function f(x: unknown) {}",
     errors: [
-      { data: { message: "Custom message" }, messageId: "customMessage" }
+      {
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
     ]
   },
   {
@@ -250,7 +285,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=/s$/u]"],
-        typeIsNoneOf: ["array"]
+        typeIsNoneOf: [utils.TypeGroup.array]
       }
     ],
     code: `
@@ -259,9 +294,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -271,7 +305,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["CallExpression[callee.name=g] > .arguments"],
-        typeHasNoneOf: ["undefined"]
+        typeHasNoneOf: [utils.TypeGroup.undefined]
       }
     ],
     code: `
@@ -282,9 +316,9 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
         line: 2,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -294,7 +328,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["CallExpression[callee.name=g] > .arguments"],
-        typeHasOneOf: ["undefined"]
+        typeHasOneOf: [utils.TypeGroup.undefined]
       }
     ],
     code: `
@@ -305,9 +339,9 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
         line: 3,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -317,7 +351,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIs: "object"
+        typeIs: utils.TypeGroup.object
       }
     ],
     code: `
@@ -326,9 +360,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -338,7 +371,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=x]"],
-        typeIs: "unknown"
+        typeIs: utils.TypeGroup.unknown
       }
     ],
     code: `
@@ -347,9 +380,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -359,7 +391,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=/^x\\d$/u]"],
-        typeIs: "complex"
+        typeIs: utils.TypeGroup.complex
       }
     ],
     code: `
@@ -373,9 +405,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -385,7 +416,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=/^[xy]$/u]"],
-        typeIs: "readonly"
+        typeIs: utils.TypeGroup.readonly
       }
     ],
     code: `
@@ -394,9 +425,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -407,7 +437,7 @@ utils.testRule("custom", rules, [
         checkReturnType: true,
         message: "Custom message",
         selector: ["Identifier"],
-        typeIs: "string"
+        typeIs: utils.TypeGroup.string
       }
     ],
     code: `
@@ -417,9 +447,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -429,7 +458,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["CallExpression"],
-        typeIs: "complex"
+        typeIs: utils.TypeGroup.complex
       }
     ],
     code: `
@@ -440,9 +469,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -452,7 +480,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=/^[xy]$/u]"],
-        typeIs: "complex"
+        typeIs: utils.TypeGroup.complex
       }
     ],
     code: `
@@ -463,9 +491,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -475,7 +502,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=/^[xy]$/u]"],
-        typeIs: "complex"
+        typeIs: utils.TypeGroup.complex
       }
     ],
     code: `
@@ -486,9 +513,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   },
@@ -498,7 +524,7 @@ utils.testRule("custom", rules, [
       {
         message: "Custom message",
         selector: ["Identifier[name=/^[xy]$/u]"],
-        typeIs: "complex"
+        typeIs: utils.TypeGroup.complex
       }
     ],
     code: `
@@ -509,9 +535,8 @@ utils.testRule("custom", rules, [
     `,
     errors: [
       {
-        data: { message: "Custom message" },
-        line: 1,
-        messageId: "customMessage"
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
       }
     ]
   }

@@ -44,7 +44,6 @@ npm install --save-dev @skylib/eslint-plugin
 
 ## <a name="rules"></a>Rules
 
-- [class-member-typedef](https://ilyub.github.io/eslint-plugin/class-member-typedef.html)
 - [consistent-empty-lines](https://ilyub.github.io/eslint-plugin/consistent-empty-lines.html)
 - [consistent-group-empty-lines](https://ilyub.github.io/eslint-plugin/consistent-group-empty-lines.html)
 - [consistent-import](https://ilyub.github.io/eslint-plugin/consistent-import.html)
@@ -58,10 +57,8 @@ npm install --save-dev @skylib/eslint-plugin
 - [no-unnecessary-readonly](https://ilyub.github.io/eslint-plugin/no-unnecessary-readonly.html)
 - [no-unnecessary-writable](https://ilyub.github.io/eslint-plugin/no-unnecessary-writable.html)
 - [no-unsafe-object-assignment](https://ilyub.github.io/eslint-plugin/no-unsafe-object-assignment.html)
-- [no-unused-import](https://ilyub.github.io/eslint-plugin/no-unused-import.html)
 - [object-format](https://ilyub.github.io/eslint-plugin/object-format.html)
 - [prefer-readonly](https://ilyub.github.io/eslint-plugin/prefer-readonly.html)
-- [prefer-ts-toolbelt](https://ilyub.github.io/eslint-plugin/prefer-ts-toolbelt.html)
 - [require-jsdoc](https://ilyub.github.io/eslint-plugin/require-jsdoc.html)
 - [sort-array](https://ilyub.github.io/eslint-plugin/sort-array.html)
 - [sort-class-members](https://ilyub.github.io/eslint-plugin/sort-class-members.html)

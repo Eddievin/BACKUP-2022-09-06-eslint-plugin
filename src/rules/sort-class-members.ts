@@ -1,27 +1,35 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
+import { ReadonlyMap, a, evaluate, is } from "@skylib/functions";
 import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { Writable, strings } from "@skylib/functions";
-import { a, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { strings } from "@skylib/functions";
+
+export interface Options {
+  readonly sortingOrder: strings;
+}
+
+export enum MessageId {
+  incorrectSortingOrder = "incorrectSortingOrder"
+}
 
 export const sortClassMembers = utils.createRule({
   name: "sort-class-members",
-  fixable: "code",
-  isOptions: is.object.factory<RuleOptions>({ sortingOrder: is.strings }, {}),
+  fixable: utils.Fixable.code,
+  isOptions: is.object.factory<Options>({ sortingOrder: is.strings }, {}),
   defaultOptions: { sortingOrder: [] },
-  messages: { incorrectSortingOrder: "Incorrect sorting order" },
+  messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
   create: (context): RuleListener => {
-    const sortingOrders = new Map(
+    const sortingOrders = new ReadonlyMap(
       context.options.sortingOrder.map((name, index) => [name, index])
     );
 
     return {
-      [AST_NODE_TYPES.ClassBody]: (node): void => {
+      ClassBody: (node): void => {
         const members = node.body.map((member, index): Member => {
           const x = getMemberAccessibility(member);
 
@@ -69,24 +77,22 @@ export const sortClassMembers = utils.createRule({
 
         const sortedMembers = _.sortBy(members, member => member.sortingOrder);
 
-        const fixes: Writable<readonly RuleFix[]> = [];
-
-        for (const [index, sortedMember] of sortedMembers.entries())
-          if (sortedMember.index === index) {
-            // Valid
-          } else {
+        const fixes = a
+          .fromIterable(sortedMembers.entries())
+          .filter(([index, sortedMember]) => sortedMember.index !== index)
+          .map(([index, sortedMember]): RuleFix => {
             const member = a.get(members, index);
 
-            fixes.push({
+            return {
               range: context.getRangeWithLeadingTrivia(member.node),
               text: context.getTextWithLeadingTrivia(sortedMember.node)
-            });
-          }
+            };
+          });
 
-        if (fixes.length > 0)
+        if (fixes.length)
           context.report({
             fix: () => fixes,
-            messageId: "incorrectSortingOrder",
+            messageId: MessageId.incorrectSortingOrder,
             node
           });
       }
@@ -94,9 +100,28 @@ export const sortClassMembers = utils.createRule({
   }
 });
 
-type AccessorType = "get" | "none" | "set";
+enum DynamicStatic {
+  dynamic = "dynamic",
+  static = "static"
+}
 
-type DynamicStatic = "dynamic" | "static";
+enum Type {
+  accessor = "accessor",
+  block = "block",
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+  constructor = "constructor",
+  field = "field",
+  get = "get",
+  method = "method",
+  set = "set",
+  signature = "signature"
+}
+
+enum AccessorType {
+  get = "get",
+  none = "none",
+  set = "set"
+}
 
 interface Member {
   readonly index: number;
@@ -104,19 +129,7 @@ interface Member {
   readonly sortingOrder: string;
 }
 
-interface RuleOptions {
-  readonly sortingOrder: strings;
-}
-
-type Type =
-  | "accessor"
-  | "block"
-  | "constructor"
-  | "field"
-  | "get"
-  | "method"
-  | "set"
-  | "signature";
+type Types = readonly Type[];
 
 /**
  * Gets member accessibility.
@@ -150,15 +163,17 @@ function getMemberAccessorType(node: TSESTree.ClassElement): AccessorType {
     case AST_NODE_TYPES.TSAbstractMethodDefinition:
       switch (node.kind) {
         case "get":
+          return AccessorType.get;
+
         case "set":
-          return node.kind;
+          return AccessorType.set;
 
         default:
-          return "none";
+          return AccessorType.none;
       }
 
     default:
-      return "none";
+      return AccessorType.none;
   }
 }
 
@@ -175,10 +190,12 @@ function getMemberDynamicStatic(node: TSESTree.ClassElement): DynamicStatic {
     case AST_NODE_TYPES.TSAbstractMethodDefinition:
     case AST_NODE_TYPES.TSAbstractPropertyDefinition:
     case AST_NODE_TYPES.TSIndexSignature:
-      return node.static ?? false ? "static" : "dynamic";
+      return node.static ?? false
+        ? DynamicStatic.static
+        : DynamicStatic.dynamic;
 
     case AST_NODE_TYPES.StaticBlock:
-      return "static";
+      return DynamicStatic.static;
   }
 }
 
@@ -188,27 +205,34 @@ function getMemberDynamicStatic(node: TSESTree.ClassElement): DynamicStatic {
  * @param node - Node.
  * @returns Member types.
  */
-function getMemberTypes(node: TSESTree.ClassElement): readonly Type[] {
+function getMemberTypes(node: TSESTree.ClassElement): Types {
   switch (node.type) {
     case AST_NODE_TYPES.MethodDefinition:
     case AST_NODE_TYPES.TSAbstractMethodDefinition:
-      switch (node.kind) {
-        case "get":
-        case "set":
-          return ["accessor", node.kind];
+      return evaluate(() => {
+        switch (node.kind) {
+          case "constructor":
+            return [Type.constructor];
 
-        default:
-          return [node.kind];
-      }
+          case "get":
+            return [Type.accessor, Type.get];
+
+          case "method":
+            return [Type.method];
+
+          case "set":
+            return [Type.accessor, Type.set];
+        }
+      });
 
     case AST_NODE_TYPES.PropertyDefinition:
     case AST_NODE_TYPES.TSAbstractPropertyDefinition:
-      return ["field"];
+      return [Type.field];
 
     case AST_NODE_TYPES.TSIndexSignature:
-      return ["signature"];
+      return [Type.signature];
 
     case AST_NODE_TYPES.StaticBlock:
-      return ["block"];
+      return [Type.block];
   }
 }

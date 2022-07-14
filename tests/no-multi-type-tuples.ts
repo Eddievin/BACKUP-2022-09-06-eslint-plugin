@@ -1,13 +1,14 @@
-import { rules, utils } from "@";
+import { MessageId, noMultiTypeTuples } from "@/rules/no-multi-type-tuples";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("no-multi-type-tuples", rules, [
+utils.testRule("no-multi-type-tuples", noMultiTypeTuples, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
       type T1 = [string, number];
       type T2 = [string, string];
     `,
-    errors: [{ line: 1, messageId: "multiTypeTuplesDisallowed" }]
+    errors: [{ messageId: MessageId.noMultiTypeTuples }]
   }
 ]);

@@ -1,9 +1,15 @@
-import { rules, utils } from "@";
+import {
+  InterfaceOption,
+  MessageId,
+  PropertyOption,
+  requireJsdoc
+} from "@/rules/require-jsdoc";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "require-jsdoc",
-  rules,
+  requireJsdoc,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -13,22 +19,22 @@ utils.testRule(
         /** Comment */
         function g(): void {}
       `,
-      errors: [{ line: 1, messageId: "undocumented" }]
+      errors: [{ messageId: MessageId.undocumented }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: ["interface"] }],
+      options: [{ interfaces: [InterfaceOption.interface] }],
       code: `
         /** Comment */
         interface I {}
 
         interface J extends I {}
       `,
-      errors: [{ line: 4, messageId: "undocumented" }]
+      errors: [{ line: 4, messageId: MessageId.undocumented }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: ["callSignatures"] }],
+      options: [{ interfaces: [InterfaceOption.callSignatures] }],
       code: `
         interface I {
           /** Comment */
@@ -39,11 +45,17 @@ utils.testRule(
           (): void;
         }
       `,
-      errors: [{ line: 6, messageId: "undocumentedCallSignature" }]
+      errors: [
+        {
+          line: 6,
+          endLine: 8,
+          messageId: MessageId.undocumentedCallSignature
+        }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ interfaces: ["constructSignatures"] }],
+      options: [{ interfaces: [InterfaceOption.constructSignatures] }],
       code: `
         interface I {
           /** Comment */
@@ -54,7 +66,13 @@ utils.testRule(
           new (): object;
         }
       `,
-      errors: [{ line: 6, messageId: "undocumentedConstructSignature" }]
+      errors: [
+        {
+          line: 6,
+          endLine: 8,
+          messageId: MessageId.undocumentedConstructSignature
+        }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -90,17 +108,17 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 1, messageId: "undocumented" },
-        { line: 2, messageId: "undocumentedConstructSignature" },
-        { line: 4, messageId: "undocumented" },
-        { line: 6, messageId: "undocumented" },
-        { line: 8, messageId: "undocumented" },
-        { line: 10, messageId: "undocumented" }
+        { endLine: 11, messageId: MessageId.undocumented },
+        { line: 2, messageId: MessageId.undocumentedConstructSignature },
+        { line: 4, messageId: MessageId.undocumented },
+        { line: 6, messageId: MessageId.undocumented },
+        { line: 8, messageId: MessageId.undocumented },
+        { line: 10, messageId: MessageId.undocumented }
       ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ properties: ["function"] }],
+      options: [{ properties: [PropertyOption.function] }],
       code: `
         class C {
           f1: () => void;
@@ -114,13 +132,13 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 1, messageId: "undocumented" },
-        { line: 2, messageId: "undocumented" }
+        { endLine: 10, messageId: MessageId.undocumented },
+        { line: 2, messageId: MessageId.undocumented }
       ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ properties: ["nonFunction"] }],
+      options: [{ properties: [PropertyOption.nonFunction] }],
       code: `
         class C {
           x1: string;
@@ -134,8 +152,8 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 1, messageId: "undocumented" },
-        { line: 2, messageId: "undocumented" }
+        { endLine: 10, messageId: MessageId.undocumented },
+        { line: 2, messageId: MessageId.undocumented }
       ]
     }
   ],

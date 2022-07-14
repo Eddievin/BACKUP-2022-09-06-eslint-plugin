@@ -1,21 +1,18 @@
-import { rules, utils } from "@";
+import {
+  MessageId,
+  arrayCallbackReturnType
+} from "@/rules/array-callback-return-type";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
-  "class-member-typedef",
-  rules,
+  "array-callback-return-type",
+  arrayCallbackReturnType,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        class C {
-          x;
-          constructor() {
-            this.x = 1;
-          }
-        }
-      `,
-      errors: [{ line: 2, messageId: "typedefRequired" }]
+      code: "[1, true].every(x => x);",
+      errors: [{ messageId: MessageId.invalidType }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -25,41 +22,20 @@ utils.testRule(
           filesToSkip: ["./fixtures/**", "./other/**"]
         }
       ],
-      code: `
-        class C {
-          x;
-          constructor() {
-            this.x = 1;
-          }
-        }
-      `,
-      errors: [{ line: 2, messageId: "typedefRequired" }]
+      code: "[1, true].every(x => x);",
+      errors: [{ messageId: MessageId.invalidType }]
     }
   ],
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ filesToSkip: ["./fixtures/**"] }],
-      code: `
-        class C {
-          x;
-          constructor() {
-            this.x = 1;
-          }
-        }
-      `
+      code: "[1, true].every(x => x);"
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ filesToLint: ["./other/**"] }],
-      code: `
-        class C {
-          x;
-          constructor() {
-            this.x = 1;
-          }
-        }
-      `
+      code: "[1, true].every(x => x);"
     }
   ]
 );

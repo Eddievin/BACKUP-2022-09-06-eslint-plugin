@@ -1,37 +1,38 @@
-import { rules, utils } from "@";
+import { MessageId, disallowImport } from "@/rules/disallow-import";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("disallow-import", rules, [
+utils.testRule("disallow-import", disallowImport, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ allow: ["source1", "*/source1"], disallow: ["**/source1"] }],
     code: `
       import "source1";
-      import "a/source1";
-      import "a/b/source1";
       import "source2";
+      import "a/source1";
       import "a/source2";
+      import "a/b/source1";
       import "a/b/source2";
     `,
-    errors: [{ line: 3, messageId: "disallowedSource" }]
+    errors: [{ line: 5, messageId: MessageId.disallowedSource }]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ allow: ["*/source1"] }],
     code: `
       import "source1";
-      import "a/source1";
-      import "a/b/source1";
       import "source2";
+      import "a/source1";
       import "a/source2";
+      import "a/b/source1";
       import "a/b/source2";
     `,
     errors: [
-      { line: 1, messageId: "disallowedSource" },
-      { line: 3, messageId: "disallowedSource" },
-      { line: 4, messageId: "disallowedSource" },
-      { line: 5, messageId: "disallowedSource" },
-      { line: 6, messageId: "disallowedSource" }
+      { line: 1, messageId: MessageId.disallowedSource },
+      { line: 2, messageId: MessageId.disallowedSource },
+      { line: 4, messageId: MessageId.disallowedSource },
+      { line: 5, messageId: MessageId.disallowedSource },
+      { line: 6, messageId: MessageId.disallowedSource }
     ]
   },
   {
@@ -44,39 +45,39 @@ utils.testRule("disallow-import", rules, [
       import "source";
     `,
     errors: [
-      { line: 1, messageId: "disallowedSource" },
-      { line: 2, messageId: "disallowedSource" },
-      { line: 3, messageId: "disallowedSource" }
+      { messageId: MessageId.disallowedSource },
+      { line: 2, messageId: MessageId.disallowedSource },
+      { line: 3, messageId: MessageId.disallowedSource }
     ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ disallow: ["@/*", "./*", "../*"] }],
     code: `
-      const x1 = import("@/source");
-      const x2 = import("./source");
-      const x3 = import("../source");
-      const x4 = import("source");
+      import("@/source");
+      import("./source");
+      import("../source");
+      import("source");
     `,
     errors: [
-      { line: 1, messageId: "disallowedSource" },
-      { line: 2, messageId: "disallowedSource" },
-      { line: 3, messageId: "disallowedSource" }
+      { messageId: MessageId.disallowedSource },
+      { line: 2, messageId: MessageId.disallowedSource },
+      { line: 3, messageId: MessageId.disallowedSource }
     ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ disallow: ["@/*", "./*", "../*"] }],
     code: `
-      const x1 = require("@/source");
-      const x2 = require("./source");
-      const x3 = require("../source");
-      const x4 = require("source");
+      require("@/source");
+      require("./source");
+      require("../source");
+      require("source");
     `,
     errors: [
-      { line: 1, messageId: "disallowedSource" },
-      { line: 2, messageId: "disallowedSource" },
-      { line: 3, messageId: "disallowedSource" }
+      { messageId: MessageId.disallowedSource },
+      { line: 2, messageId: MessageId.disallowedSource },
+      { line: 3, messageId: MessageId.disallowedSource }
     ]
   },
   {
@@ -89,9 +90,9 @@ utils.testRule("disallow-import", rules, [
       export * from "source";
     `,
     errors: [
-      { line: 1, messageId: "disallowedSource" },
-      { line: 2, messageId: "disallowedSource" },
-      { line: 3, messageId: "disallowedSource" }
+      { messageId: MessageId.disallowedSource },
+      { line: 2, messageId: MessageId.disallowedSource },
+      { line: 3, messageId: MessageId.disallowedSource }
     ]
   },
   {
@@ -104,9 +105,9 @@ utils.testRule("disallow-import", rules, [
       export { x4 } from "source";
     `,
     errors: [
-      { line: 1, messageId: "disallowedSource" },
-      { line: 2, messageId: "disallowedSource" },
-      { line: 3, messageId: "disallowedSource" }
+      { messageId: MessageId.disallowedSource },
+      { line: 2, messageId: MessageId.disallowedSource },
+      { line: 3, messageId: MessageId.disallowedSource }
     ]
   },
   {
@@ -116,6 +117,6 @@ utils.testRule("disallow-import", rules, [
       import "./source1";
       import "./source2";
     `,
-    errors: [{ line: 1, messageId: "disallowedSource" }]
+    errors: [{ messageId: MessageId.disallowedSource }]
   }
 ]);

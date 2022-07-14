@@ -5,40 +5,54 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
+export interface SubOptions {
+  readonly _id: string;
+  readonly customOrder?: strings;
+  readonly selector: utils.Selector;
+  readonly sendToBottom?: string;
+  readonly sendToTop?: string;
+}
+
+export enum MessageId {
+  expectingObject = "expectingObject"
+}
+
 export const sortKeys = utils.createRule({
   name: "sort-keys",
-  fixable: "code",
-  isOptions: is.object,
-  subOptionsKey: "overrides",
+  fixable: utils.Fixable.code,
+  vue: true,
   isSubOptions: is.object.factory<SubOptions>(
-    { _id: is.string, selector: is.or.factory(is.string, is.strings) },
+    { _id: is.string, selector: utils.isSelector },
     {
       customOrder: is.strings,
       sendToBottom: is.string,
       sendToTop: is.string
     }
   ),
+  subOptionsKey: "overrides",
   messages: {
-    expectingObject: "Expecting object ({{ _id }})",
-    incorrectSortingOrder: "Incorrect sorting order"
+    [MessageId.expectingObject]: "Expecting object ({{ _id }})",
+    [utils.sort.MessageId.incorrectSortingOrder]: "Incorrect sorting order",
+    [utils.sort.MessageId.incorrectSortingOrderId]:
+      "Incorrect sorting order ({{ _id }})"
   },
   create: (context): RuleListener => {
-    const items = new Map<string, Item>();
+    const objectExpressions = new Map<string, ObjectExpression>();
 
-    const nodes: Writable<Nodes> = [];
+    const objectMembers: Writable<ObjectMembers> = [];
 
-    const listener: RuleListener = {
-      [AST_NODE_TYPES.ObjectExpression]: (node): void => {
-        items.set(utils.getNodeId(node), { node, options: { _id: "__main" } });
+    return {
+      "ObjectExpression": (node): void => {
+        objectExpressions.set(utils.getNodeId(node), { node, options: {} });
       },
       "Program:exit": (): void => {
-        for (const item of items.values()) {
-          for (const property of item.node.properties)
+        for (const objectExpression of objectExpressions.values()) {
+          for (const property of objectExpression.node.properties)
             if (property.type === AST_NODE_TYPES.SpreadElement)
-              flush(item.options);
-            else nodes.push(property);
+              lintNodes(objectExpression.options);
+            else objectMembers.push(property);
 
-          flush(item.options);
+          lintNodes(objectExpression.options);
         }
       },
       ...o.fromEntries(
@@ -46,11 +60,14 @@ export const sortKeys = utils.createRule({
           a.fromMixed(subOptions.selector).join(", "),
           (node: TSESTree.Node): void => {
             if (node.type === AST_NODE_TYPES.ObjectExpression)
-              items.set(utils.getNodeId(node), { node, options: subOptions });
+              objectExpressions.set(utils.getNodeId(node), {
+                node,
+                options: subOptions
+              });
             else
               context.report({
                 data: { _id: subOptions._id },
-                messageId: "expectingObject",
+                messageId: MessageId.expectingObject,
                 node
               });
           }
@@ -58,32 +75,22 @@ export const sortKeys = utils.createRule({
       )
     };
 
-    return context.defineTemplateBodyVisitor(listener, listener);
-
-    function flush(options: utils.SortOptions): void {
-      utils.sort(nodes, nodeToKey, options, context);
-      a.truncate(nodes);
+    function keyNode(node: ObjectMember): TSESTree.Node {
+      return node.key;
     }
 
-    function nodeToKey(node: Node): TSESTree.Node {
-      return node.key;
+    function lintNodes(options: utils.sort.Options): void {
+      utils.sort(objectMembers, keyNode, options, context);
+      a.truncate(objectMembers);
     }
   }
 });
 
-interface Item {
+interface ObjectExpression {
   readonly node: TSESTree.ObjectExpression;
-  readonly options: Omit<SubOptions, "selector">;
+  readonly options: utils.sort.Options;
 }
 
-type Node = TSESTree.MethodDefinition | TSESTree.Property;
+type ObjectMember = TSESTree.MethodDefinition | TSESTree.Property;
 
-type Nodes = readonly Node[];
-
-interface SubOptions {
-  readonly _id: string;
-  readonly customOrder?: strings;
-  readonly selector: strings | string;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-}
+type ObjectMembers = readonly ObjectMember[];

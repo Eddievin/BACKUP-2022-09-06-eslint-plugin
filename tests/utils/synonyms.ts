@@ -1,7 +1,5 @@
-/* eslint-disable import/no-internal-modules -- Ok */
-
+import * as utils from "@/rules/utils";
 import type { WritableIndexedObject } from "@skylib/functions";
-import { getSynonyms } from "@/rules/utils";
 
 test.each([
   {
@@ -17,6 +15,6 @@ test.each([
 ])("getSynonyms", ({ core, expected, path }) => {
   const dest: WritableIndexedObject = {};
 
-  getSynonyms(dest, path, core);
+  utils.getSynonyms(dest, path, core);
   expect(dest).toStrictEqual(expected);
 });

@@ -1,24 +1,29 @@
 import * as utils from "./utils";
+import { ReadonlySet, a, s } from "@skylib/functions";
 import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { Writable, strings } from "@skylib/functions";
-import { a, is, s } from "@skylib/functions";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { strings } from "@skylib/functions";
+
+export enum MessageId {
+  missingEmptyLineAfter = "missingEmptyLineAfter",
+  missingEmptyLineBefore = "missingEmptyLineBefore",
+  unexpectedEmptyLineAfter = "unexpectedEmptyLineAfter"
+}
 
 export const emptyLinesAroundComment = utils.createRule({
   name: "empty-lines-around-comment",
-  fixable: "whitespace",
-  isOptions: is.object,
+  fixable: utils.Fixable.whitespace,
   messages: {
-    missingEmptyLineAfter: "Missing empty line after comment",
-    missingEmptyLineBefore: "Missing empty line before comment",
-    unexpectedEmptyLineAfter: "Unexpected empty line after comment"
+    [MessageId.missingEmptyLineAfter]: "Missing empty line after comment",
+    [MessageId.missingEmptyLineBefore]: "Missing empty line before comment",
+    [MessageId.unexpectedEmptyLineAfter]: "Unexpected empty line after comment"
   },
   create: (context): RuleListener => {
-    const nodes: Writable<readonly TSESTree.Node[]> = [];
+    // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
+    const nodes: TSESTree.Node[] = [];
 
     return {
       "*": (node: TSESTree.Node): void => {
@@ -34,7 +39,7 @@ export const emptyLinesAroundComment = utils.createRule({
             onSeparateLine,
             prefix,
             suffix
-          } = explodeComment(comment, program, nodes, context);
+          } = explodeComment(comment, program, nodes);
 
           if (onSeparateLine) {
             if (prefix.programStart) {
@@ -51,7 +56,7 @@ export const emptyLinesAroundComment = utils.createRule({
                     range: a.clone(prefix.range),
                     text: `${eol}${eol}${a.last(prefix.spaces)}`
                   }),
-                  messageId: "missingEmptyLineBefore",
+                  messageId: MessageId.missingEmptyLineBefore,
                   node: comment
                 });
             }
@@ -70,7 +75,7 @@ export const emptyLinesAroundComment = utils.createRule({
                     range: a.clone(suffix.range),
                     text: `${eol}${eol}${a.last(suffix.spaces)}`
                   }),
-                  messageId: "missingEmptyLineAfter",
+                  messageId: MessageId.missingEmptyLineAfter,
                   node: comment
                 });
 
@@ -80,7 +85,7 @@ export const emptyLinesAroundComment = utils.createRule({
                     range: a.clone(suffix.range),
                     text: `${context.eol}${a.last(suffix.spaces)}`
                   }),
-                  messageId: "unexpectedEmptyLineAfter",
+                  messageId: MessageId.unexpectedEmptyLineAfter,
                   node: comment
                 });
             }
@@ -88,13 +93,61 @@ export const emptyLinesAroundComment = utils.createRule({
         }
       }
     };
+
+    function explodeComment(
+      comment: TSESTree.Comment,
+      program: TSESTree.Program,
+      programNodes: readonly TSESTree.Node[]
+    ): CommentInfo {
+      const range = comment.range;
+
+      const programRange = context.getRangeWithLeadingTrivia(program);
+
+      const node = getNodeContainingRange(range, programNodes);
+
+      const nodeType = node ? node.type : "Program";
+
+      const text = context.getText(comment);
+
+      const prefix = context.code.slice(programRange[0], range[0]);
+
+      const prefixSpaces = s.trailingSpaces(prefix);
+
+      const prefixText = prefix.trimEnd();
+
+      const suffix = context.code.slice(range[1], programRange[1]);
+
+      const suffixSpaces = s.leadingSpaces(suffix);
+
+      const suffixText = suffix.trimStart();
+
+      return {
+        inBlockLike: blockLikeTypes.has(nodeType),
+        multilineComment: text.startsWith("/*") && !text.startsWith("/**"),
+        onSeparateLine: prefixSpaces.includes("\n") || prefixText === "",
+        prefix: {
+          blockStart: prefixText.endsWith("{"),
+          programStart: prefixText === "",
+          range: [range[0] - prefixSpaces.length, range[0]],
+          spaces: s.lines(prefixSpaces)
+        },
+        suffix: {
+          blockEnd: suffixText.startsWith("}"),
+          programEnd: suffixText === "",
+          range: [range[1], range[1] + suffixSpaces.length],
+          spaces: s.lines(suffixSpaces),
+          startsWithComment:
+            suffixText.startsWith("/*") || suffixText.startsWith("//")
+        }
+      };
+    }
   }
 });
 
-const blockLikeTypes: ReadonlySet<string> = new Set([
-  AST_NODE_TYPES.BlockStatement,
-  AST_NODE_TYPES.ClassBody,
-  AST_NODE_TYPES.Program
+const blockLikeTypes = new ReadonlySet<string>([
+  "BlockStatement",
+  "ClassBody",
+  "Program"
 ]);
 
 interface CommentInfo {
@@ -113,68 +166,6 @@ interface CommentInfo {
     readonly range: utils.ReadonlyRange;
     readonly spaces: strings;
     readonly startsWithComment: boolean;
-  };
-}
-
-type Context = utils.Context<MessageId, object, object>;
-
-type MessageId = utils.MessageId<typeof emptyLinesAroundComment>;
-
-/**
- * Explodes comment.
- *
- * @param comment - Comment.
- * @param program - Program node.
- * @param programNodes - All nodes.
- * @param context - Context.
- * @returns Comment info.
- */
-function explodeComment(
-  comment: TSESTree.Comment,
-  program: TSESTree.Program,
-  programNodes: readonly TSESTree.Node[],
-  context: Context
-): CommentInfo {
-  const range = comment.range;
-
-  const programRange = context.getRangeWithLeadingTrivia(program);
-
-  const node = getNodeContainingRange(range, programNodes);
-
-  const nodeType = node ? node.type : AST_NODE_TYPES.Program;
-
-  const text = context.getText(comment);
-
-  const prefix = context.code.slice(programRange[0], range[0]);
-
-  const prefixSpaces = s.trailingSpaces(prefix);
-
-  const prefixText = prefix.trimEnd();
-
-  const suffix = context.code.slice(range[1], programRange[1]);
-
-  const suffixSpaces = s.leadingSpaces(suffix);
-
-  const suffixText = suffix.trimStart();
-
-  return {
-    inBlockLike: blockLikeTypes.has(nodeType),
-    multilineComment: text.startsWith("/*") && !text.startsWith("/**"),
-    onSeparateLine: prefixSpaces.includes("\n") || prefixText === "",
-    prefix: {
-      blockStart: prefixText.endsWith("{"),
-      programStart: prefixText === "",
-      range: [range[0] - prefixSpaces.length, range[0]],
-      spaces: s.lines(prefixSpaces)
-    },
-    suffix: {
-      blockEnd: suffixText.startsWith("}"),
-      programEnd: suffixText === "",
-      range: [range[1], range[1] + suffixSpaces.length],
-      spaces: s.lines(suffixSpaces),
-      startsWithComment:
-        suffixText.startsWith("/*") || suffixText.startsWith("//")
-    }
   };
 }
 

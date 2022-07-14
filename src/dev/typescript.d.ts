@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-unassigned-import
+// eslint-disable-next-line @skylib/consistent-import, import/no-unassigned-import -- Ok
 import "typescript";
 
 declare module "typescript" {

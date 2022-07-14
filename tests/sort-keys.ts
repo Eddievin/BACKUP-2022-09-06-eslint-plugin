@@ -1,12 +1,23 @@
-import { rules, utils } from "@";
+import { MessageId as BaseMessageId, sortKeys } from "@/rules/sort-keys";
+import type { Rec } from "@skylib/functions";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("sort-keys", rules, [
+const MessageId: Rec<
+  BaseMessageId | utils.sort.MessageId,
+  BaseMessageId | utils.sort.MessageId
+> = { ...BaseMessageId, ...utils.sort.MessageId };
+
+utils.testRule("sort-keys", sortKeys, [
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ overrides: [{ _id: "id", selector: "Identifier" }] }],
+    code: "const id = 1;",
+    errors: [{ messageId: MessageId.expectingObject, data: { _id: "id" } }]
+  },
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      const key = "key";
-      const c = false;
       const x = {
         [key]: 6,
         e: 5,
@@ -20,8 +31,6 @@ utils.testRule("sort-keys", rules, [
       }
     `,
     output: `
-      const key = "key";
-      const c = false;
       const x = {
         ["f" as string]: 4,
         d(): string {},
@@ -36,14 +45,14 @@ utils.testRule("sort-keys", rules, [
     `,
     errors: [
       {
-        endLine: 7,
-        line: 4,
-        messageId: "incorrectSortingOrder"
+        line: 2,
+        endLine: 5,
+        messageId: MessageId.incorrectSortingOrder
       },
       {
-        endLine: 12,
-        line: 9,
-        messageId: "incorrectSortingOrder"
+        line: 7,
+        endLine: 10,
+        messageId: MessageId.incorrectSortingOrder
       }
     ]
   },
@@ -63,9 +72,9 @@ utils.testRule("sort-keys", rules, [
     `,
     errors: [
       {
-        endLine: 3,
         line: 2,
-        messageId: "incorrectSortingOrder"
+        endLine: 3,
+        messageId: MessageId.incorrectSortingOrder
       }
     ]
   },
@@ -89,9 +98,9 @@ utils.testRule("sort-keys", rules, [
     `,
     errors: [
       {
-        endLine: 4,
         line: 3,
-        messageId: "incorrectSortingOrder"
+        endLine: 4,
+        messageId: MessageId.incorrectSortingOrder
       }
     ]
   },
@@ -138,27 +147,15 @@ utils.testRule("sort-keys", rules, [
     `,
     errors: [
       {
-        endLine: 4,
         line: 3,
-        messageId: "incorrectSortingOrder"
+        endLine: 4,
+        messageId: MessageId.incorrectSortingOrder
       },
       {
-        endLine: 11,
         line: 9,
-        messageId: "incorrectSortingOrder"
-      }
-    ]
-  },
-  {
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ overrides: [{ _id: "id", selector: "Identifier" }] }],
-    code: "const id = 1;",
-    errors: [
-      {
-        data: { _id: "id" },
-        endLine: 1,
-        line: 1,
-        messageId: "expectingObject"
+        endLine: 11,
+        messageId: MessageId.incorrectSortingOrderId,
+        data: { _id: "id" }
       }
     ]
   }

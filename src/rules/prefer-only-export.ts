@@ -1,16 +1,20 @@
 /* eslint-disable @skylib/custom/prefer-readonly-array -- Postponed */
 
 import * as utils from "./utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 import type { stringU } from "@skylib/functions";
 
-export const classOnlyExport = utils.createRule({
-  name: "class-only-export",
-  isOptions: is.object,
-  messages: { exportNotAllowed: "Export except class is not allowed" },
+export enum MessageId {
+  exportNotAllowed = "exportNotAllowed"
+}
+
+export const preferOnlyExport = utils.createRule({
+  name: "prefer-only-export",
+  messages: {
+    [MessageId.exportNotAllowed]: "Export except class is not allowed"
+  },
   create: (context): RuleListener => {
     const exportAllDeclarations: TSESTree.ExportAllDeclaration[] = [];
 
@@ -34,10 +38,7 @@ export const classOnlyExport = utils.createRule({
       "Program > ExportDefaultDeclaration": (
         node: TSESTree.ExportDefaultDeclaration
       ): void => {
-        if (
-          node.declaration.type === AST_NODE_TYPES.ClassDeclaration &&
-          node.declaration.id
-        )
+        if (node.declaration.type === "ClassDeclaration" && node.declaration.id)
           className = node.declaration.id.name;
         else exportDefaultDeclaration.push(node);
       },
@@ -78,9 +79,9 @@ export const classOnlyExport = utils.createRule({
             ...identifiers.filter(node => node.name !== className)
           ] as const;
 
-          if (nodes.length > 0)
+          if (nodes.length)
             for (const node of nodes)
-              context.report({ messageId: "exportNotAllowed", node });
+              context.report({ messageId: MessageId.exportNotAllowed, node });
         }
       }
     };

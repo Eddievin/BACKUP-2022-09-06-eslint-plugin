@@ -1,12 +1,6 @@
+import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
-import {
-  Accumulator,
-  a,
-  createValidationObject,
-  evaluate,
-  is,
-  s
-} from "@skylib/functions";
+import { Accumulator, a, evaluate, is, s } from "@skylib/functions";
 import type {
   RuleFix,
   RuleListener
@@ -14,32 +8,42 @@ import type {
 import type { Writable, stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
+export interface SubOptions {
+  readonly _id: string;
+  readonly emptyLine: EmptyLine;
+  readonly next: string;
+  readonly prev: string;
+}
+
+export enum EmptyLine {
+  always = "always",
+  any = "any",
+  never = "never"
+}
+
+export const isEmptyLine = is.factory(is.enumeration, EmptyLine);
+
+export enum MessageId {
+  expectingEmptyLine = "expectingEmptyLine",
+  unexpectedEmptyLine = "unexpectedEmptyLine"
+}
+
 export const consistentEmptyLines = utils.createRule({
   name: "consistent-empty-lines",
-  fixable: "whitespace",
-  isOptions: is.object,
-  isSubOptions: evaluate(() => {
-    const EmptyLineVO = createValidationObject<EmptyLine>({
-      always: "always",
-      any: "any",
-      never: "never"
-    });
-
-    const isEmptyLine = is.factory(is.enumeration, EmptyLineVO);
-
-    return is.object.factory<SubOptions>(
-      {
-        _id: is.string,
-        emptyLine: isEmptyLine,
-        next: is.string,
-        prev: is.string
-      },
-      {}
-    );
-  }),
+  fixable: utils.Fixable.whitespace,
+  isSubOptions: is.object.factory<SubOptions>(
+    {
+      _id: is.string,
+      emptyLine: isEmptyLine,
+      next: is.string,
+      prev: is.string
+    },
+    {}
+  ),
+  subOptionsKey: "rules",
   messages: {
-    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
-    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
+    [MessageId.expectingEmptyLine]: "Expecting empty line before ({{ _id }})",
+    [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
   },
   create: (context): RuleListener => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
@@ -57,20 +61,28 @@ export const consistentEmptyLines = utils.createRule({
         utils.buildChildNodesMap(node, childNodesMap);
       },
       "Program:exit": () => {
-        const items = new Map<string, Item>();
-
         prevItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
         nextItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
 
-        for (const prevItem of prevItems)
-          for (const nextItem of nextItems)
-            if (
-              prevItem.ruleIndex === nextItem.ruleIndex &&
-              utils.isAdjacentNodes(prevItem.node, nextItem.node, childNodesMap)
-            )
-              items.set(utils.getNodeId(nextItem.node), nextItem);
+        const items = _.uniq(
+          a.fromIterable(
+            evaluate(function* (): Generator<Item> {
+              for (const prevItem of prevItems)
+                for (const nextItem of nextItems)
+                  if (
+                    prevItem.ruleIndex === nextItem.ruleIndex &&
+                    utils.isAdjacentNodes(
+                      prevItem.node,
+                      nextItem.node,
+                      childNodesMap
+                    )
+                  )
+                    yield nextItem;
+            })
+          )
+        );
 
-        for (const item of items.values()) {
+        for (const item of items) {
           const emptyLine = a.get(
             context.subOptionsArray,
             item.ruleIndex
@@ -83,10 +95,10 @@ export const consistentEmptyLines = utils.createRule({
 
             const spread = evaluate(() => {
               switch (emptyLine) {
-                case "always":
+                case EmptyLine.always:
                   return true;
 
-                case "never":
+                case EmptyLine.never:
                   return false;
               }
             });
@@ -94,8 +106,8 @@ export const consistentEmptyLines = utils.createRule({
             const count = spread ? 2 : 1;
 
             const messageId = spread
-              ? "expectingEmptyLine"
-              : "unexpectedEmptyLine";
+              ? MessageId.expectingEmptyLine
+              : MessageId.unexpectedEmptyLine;
 
             const got = context.getLeadingTrivia(node);
 
@@ -143,23 +155,14 @@ export const consistentEmptyLines = utils.createRule({
         };
 
     return listener;
+
+    interface Item {
+      // eslint-disable-next-line @skylib/optional-property-style -- Temp
+      readonly _id: stringU;
+      readonly node: TSESTree.Node;
+      readonly ruleIndex: number;
+    }
+
+    type Items = readonly Item[];
   }
 });
-
-type EmptyLine = "always" | "any" | "never";
-
-interface Item {
-  // eslint-disable-next-line @skylib/optional-property-style -- Temp
-  readonly _id: stringU;
-  readonly node: TSESTree.Node;
-  readonly ruleIndex: number;
-}
-
-type Items = readonly Item[];
-
-interface SubOptions {
-  readonly _id: string;
-  readonly emptyLine: EmptyLine;
-  readonly next: string;
-  readonly prev: string;
-}

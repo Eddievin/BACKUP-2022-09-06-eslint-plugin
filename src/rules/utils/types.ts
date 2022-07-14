@@ -4,9 +4,40 @@ import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type {
   ReportDescriptor,
   RuleContext,
+  RuleFix,
+  RuleListener,
   SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { s, unknowns } from "@skylib/functions";
+import type { TypeCheck } from "./TypeCheck";
+import { is } from "@skylib/functions";
+
+export enum Fixable {
+  code = "code",
+  whitespace = "whitespace"
+}
+
+export enum TypeGroup {
+  any = "any",
+  array = "array",
+  boolean = "boolean",
+  complex = "complex",
+  function = "function",
+  null = "null",
+  number = "number",
+  object = "object",
+  readonly = "readonly",
+  string = "string",
+  symbol = "symbol",
+  tuple = "tuple",
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
+  undefined = "undefined",
+  unknown = "unknown"
+}
+
+export const isTypeGroup = is.factory(is.enumeration, TypeGroup);
+
+export const isTypeGroups = is.factory(is.array.of, isTypeGroup);
 
 export interface Context<M extends string, O extends object, S extends object> {
   readonly checker: ts.TypeChecker;
@@ -59,13 +90,6 @@ export interface Context<M extends string, O extends object, S extends object> {
    */
   readonly getTextWithLeadingTrivia: (node: TSESTree.Node) => string;
   /**
-   * Checks if node has leading comment.
-   *
-   * @param node - Node.
-   * @returns _True_ if node has leading comment, _false_ otherwise.
-   */
-  readonly hasLeadingComment: (node: TSESTree.Node) => boolean;
-  /**
    * Checks if node has leading doc comment.
    *
    * @param node - Node.
@@ -80,7 +104,7 @@ export interface Context<M extends string, O extends object, S extends object> {
    */
   readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
   readonly id: string;
-  readonly locZero: TSESTree.Position;
+  readonly locZero: TSESTree.SourceLocation;
   /**
    * Checks if signature or symbol is missing doc comment.
    *
@@ -102,12 +126,13 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly subOptionsArray: readonly S[];
   readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
   readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
+  readonly typeCheck: TypeCheck;
 }
 
 // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 export interface DefineTemplateBodyVisitor {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
-  (templateVisitor: any, scriptVisitor?: any, options?: any): any;
+  (templateVisitor: any, scriptVisitor?: any, options?: any): RuleListener;
 }
 
 export interface Package {
@@ -115,3 +140,7 @@ export interface Package {
 }
 
 export type ReadonlyRange = readonly [number, number];
+
+export type RuleFixes = readonly RuleFix[];
+
+export type TypeGroups = readonly TypeGroup[];

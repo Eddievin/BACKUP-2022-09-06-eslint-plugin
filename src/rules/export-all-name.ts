@@ -1,23 +1,23 @@
 import * as utils from "./utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import { is } from "@skylib/functions";
+
+export enum MessageId {
+  invalidName = "invalidName"
+}
 
 export const exportAllName = utils.createRule({
   name: "export-all-name",
-  isOptions: is.object,
-  messages: { invalidName: "Export name should match file name" },
+  messages: { [MessageId.invalidName]: "Export name should match file name" },
   create: (context): RuleListener => ({
-    [AST_NODE_TYPES.ExportAllDeclaration]: (node): void => {
+    ExportAllDeclaration: (node): void => {
       if (node.exported) {
-        const expected = utils.getNameFromFilename(
-          node.source.value,
-          node.exported.name
-        );
+        const got = node.exported.name;
 
-        if (node.exported.name === expected) {
+        const expected = utils.getIdentifierFromPath(node.source.value, got);
+
+        if (got === expected) {
           // Valid
-        } else context.report({ messageId: "invalidName", node });
+        } else context.report({ messageId: MessageId.invalidName, node });
       }
     }
   })

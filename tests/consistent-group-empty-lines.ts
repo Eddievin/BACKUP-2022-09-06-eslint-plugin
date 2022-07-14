@@ -1,9 +1,13 @@
-import { rules, utils } from "@";
+import {
+  MessageId,
+  consistentGroupEmptyLines
+} from "@/rules/consistent-group-empty-lines";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "consistent-group-empty-lines",
-  rules,
+  consistentGroupEmptyLines,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -27,7 +31,7 @@ utils.testRule(
 
         x++;
       `,
-      errors: [{ line: 3, messageId: "unexpectedEmptyLine" }]
+      errors: [{ line: 3, messageId: MessageId.unexpectedEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -55,7 +59,13 @@ utils.testRule(
         y+
         z;
       `,
-      errors: [{ line: 2, messageId: "expectingEmptyLine" }]
+      errors: [
+        {
+          line: 2,
+          endLine: 4,
+          messageId: MessageId.expectingEmptyLine
+        }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -83,7 +93,13 @@ utils.testRule(
         x+
         y;
       `,
-      errors: [{ line: 3, messageId: "expectingEmptyLine" }]
+      errors: [
+        {
+          line: 3,
+          endLine: 4,
+          messageId: MessageId.expectingEmptyLine
+        }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -111,7 +127,13 @@ utils.testRule(
         y+
         z;
       `,
-      errors: [{ line: 2, messageId: "expectingEmptyLine" }]
+      errors: [
+        {
+          line: 2,
+          endLine: 4,
+          messageId: MessageId.expectingEmptyLine
+        }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -135,7 +157,7 @@ utils.testRule(
           x++;
         }
       `,
-      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }]
+      errors: [{ line: 4, messageId: MessageId.unexpectedEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -153,7 +175,7 @@ utils.testRule(
           y: string;
         }
       `,
-      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }]
+      errors: [{ line: 4, messageId: MessageId.unexpectedEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -183,7 +205,7 @@ utils.testRule(
           y: string;
         }
       `,
-      errors: [{ line: 4, messageId: "expectingEmptyLine" }]
+      errors: [{ line: 4, messageId: MessageId.expectingEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -207,7 +229,7 @@ utils.testRule(
 
         const y = [1, 2];
       `,
-      errors: [{ line: 4, messageId: "unexpectedEmptyLine" }]
+      errors: [{ line: 4, messageId: MessageId.unexpectedEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -233,7 +255,13 @@ utils.testRule(
           }
         ];
       `,
-      errors: [{ line: 6, messageId: "unexpectedEmptyLine" }]
+      errors: [
+        {
+          line: 6,
+          endLine: 8,
+          messageId: MessageId.unexpectedEmptyLine
+        }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -269,8 +297,8 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 4, messageId: "unexpectedEmptyLine" },
-        { line: 10, messageId: "unexpectedEmptyLine" }
+        { line: 4, messageId: MessageId.unexpectedEmptyLine },
+        { line: 10, messageId: MessageId.unexpectedEmptyLine }
       ]
     }
   ],

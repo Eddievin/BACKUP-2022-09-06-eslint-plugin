@@ -1,7 +1,12 @@
-import { rules, utils } from "@";
+import {
+  EmptyLine,
+  MessageId,
+  consistentEmptyLines
+} from "@/rules/consistent-empty-lines";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("consistent-empty-lines", rules, [
+utils.testRule("consistent-empty-lines", consistentEmptyLines, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
@@ -9,13 +14,13 @@ utils.testRule("consistent-empty-lines", rules, [
         rules: [
           {
             _id: "id1",
-            emptyLine: "always",
+            emptyLine: EmptyLine.always,
             next: ":statement, TSExportAssignment",
             prev: ":statement, TSExportAssignment"
           },
           {
             _id: "id2",
-            emptyLine: "never",
+            emptyLine: EmptyLine.never,
             next: "ImportDeclaration",
             prev: "ImportDeclaration"
           }
@@ -35,8 +40,8 @@ utils.testRule("consistent-empty-lines", rules, [
       export = 1;
     `,
     errors: [
-      { line: 3, messageId: "unexpectedEmptyLine" },
-      { line: 4, messageId: "expectingEmptyLine" }
+      { line: 3, messageId: MessageId.unexpectedEmptyLine },
+      { line: 4, messageId: MessageId.expectingEmptyLine }
     ]
   },
   {
@@ -46,13 +51,13 @@ utils.testRule("consistent-empty-lines", rules, [
         rules: [
           {
             _id: "id1",
-            emptyLine: "always",
+            emptyLine: EmptyLine.always,
             next: ":statement, TSExportAssignment",
             prev: ":statement, TSExportAssignment"
           },
           {
             _id: "id2",
-            emptyLine: "any",
+            emptyLine: EmptyLine.any,
             next: "ImportDeclaration",
             prev: "ImportDeclaration"
           }
@@ -72,7 +77,7 @@ utils.testRule("consistent-empty-lines", rules, [
 
       export = 1;
     `,
-    errors: [{ line: 4, messageId: "expectingEmptyLine" }]
+    errors: [{ line: 4, messageId: MessageId.expectingEmptyLine }]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -81,7 +86,7 @@ utils.testRule("consistent-empty-lines", rules, [
         rules: [
           {
             _id: "id",
-            emptyLine: "always",
+            emptyLine: EmptyLine.always,
             next: ":statement",
             prev: ":statement"
           }
@@ -105,8 +110,12 @@ utils.testRule("consistent-empty-lines", rules, [
       }
     `,
     errors: [
-      { line: 2, messageId: "expectingEmptyLine" },
-      { line: 4, messageId: "expectingEmptyLine" }
+      {
+        line: 2,
+        endLine: 5,
+        messageId: MessageId.expectingEmptyLine
+      },
+      { line: 4, messageId: MessageId.expectingEmptyLine }
     ]
   }
 ]);

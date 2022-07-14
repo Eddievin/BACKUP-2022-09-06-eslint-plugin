@@ -1,89 +1,103 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
-import { createValidationObject, evaluate, is, o, s } from "@skylib/functions";
+import { is, o } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import path from "node:path";
 import type { stringU } from "@skylib/functions";
 
-export const consistentFilename = evaluate(() => {
-  const FormatVO = createValidationObject<Format>({
-    "PascalCase": "PascalCase",
-    "camelCase": "camelCase",
-    "kebab-case": "kebab-case"
-  });
+export interface Options {
+  readonly format: utils.casing.Format;
+}
 
-  const isFormat = is.factory(is.enumeration, FormatVO);
+export interface SubOptions {
+  readonly _id: string;
+  readonly format?: utils.casing.Format;
+  readonly match?: boolean;
+  readonly selector: string;
+}
 
-  const isOptions = is.object.factory({ format: isFormat }, {});
+export enum MessageId {
+  invalidFilename = "invalidFilename",
+  invalidFilenameId = "invalidFilenameId"
+}
 
-  const isSubOptions = is.object.factory(
-    { format: isFormat, selector: is.string },
-    {}
-  );
+export const consistentFilename = utils.createRule({
+  name: "consistent-filename",
+  vue: true,
+  isOptions: is.object.factory<Options>({ format: utils.casing.isFormat }, {}),
+  defaultOptions: { format: utils.casing.Format.kebabCase },
+  isSubOptions: is.object.factory<SubOptions>(
+    { _id: is.string, selector: is.string },
+    { format: utils.casing.isFormat, match: is.boolean }
+  ),
+  subOptionsKey: "overrides",
+  messages: {
+    [MessageId.invalidFilename]: "Expecting file name to be: {{ expected }}",
+    [MessageId.invalidFilenameId]:
+      "Expecting file name to be: {{ expected }} ({{ id }})"
+  },
+  create: (context): RuleListener => {
+    let _id: stringU;
 
-  return utils.createRule({
-    name: "consistent-filename",
-    isOptions,
-    defaultOptions: { format: "kebab-case" },
-    subOptionsKey: "overrides",
-    isSubOptions,
-    messages: { invalidFilename: "Expecting file name to be: {{ expected }}" },
-    create: (context): RuleListener => {
-      let className: stringU;
+    let format = context.options.format;
 
-      let format = context.options.format;
+    let name: stringU;
 
-      return {
-        ...o.fromEntries(
-          context.subOptionsArray.map(subOptions => [
-            subOptions.selector,
-            () => {
-              format = subOptions.format;
+    return {
+      ...o.fromEntries(
+        context.subOptionsArray.map(subOptions => {
+          const {
+            _id: newId,
+            format: newFormat,
+            match,
+            selector
+          } = {
+            format,
+            match: false,
+            ...subOptions
+          };
+
+          return [
+            selector,
+            (node: TSESTree.Node) => {
+              _id = newId;
+              format = newFormat;
+
+              if (match) name = utils.nodeToString(node, context);
             }
-          ])
-        ),
-        "Program > :matches(ExportDefaultDeclaration, ExportNamedDeclaration) > ClassDeclaration > Identifier.id":
-          (node: TSESTree.Identifier): void => {
-            className = node.name;
-          },
-        "Program:exit": (): void => {
-          const { base } = path.parse(context.path);
+          ];
+        })
+      ),
+      "Program:exit": (): void => {
+        const { base } = path.parse(context.path);
 
-          const expected = base
-            .split(".")
-            .map((part, index) => {
-              if (index === 0) {
-                if (is.not.empty(className)) return className;
+        const expected = base
+          .split(".")
+          .map((part, index) =>
+            index === 0
+              ? utils.casing.format(name ?? part, format)
+              : _.kebabCase(part)
+          )
+          .join(".");
 
-                switch (format) {
-                  case "PascalCase":
-                    return s.ucFirst(_.camelCase(part));
-
-                  case "camelCase":
-                    return _.camelCase(part);
-
-                  case "kebab-case":
-                    return _.kebabCase(part);
+        if (base === expected) {
+          // Valid
+        } else
+          context.report(
+            is.not.empty(_id)
+              ? {
+                  data: { _id, expected },
+                  loc: context.locZero,
+                  messageId: MessageId.invalidFilenameId
                 }
-              }
-
-              return _.kebabCase(part);
-            })
-            .join(".");
-
-          if (base === expected) {
-            // Valid
-          } else
-            context.report({
-              data: { expected },
-              loc: context.locZero,
-              messageId: "invalidFilename"
-            });
-        }
-      };
-    }
-  });
-
-  type Format = "camelCase" | "kebab-case" | "PascalCase";
+              : {
+                  data: { expected },
+                  loc: context.locZero,
+                  messageId: MessageId.invalidFilename
+                }
+          );
+      }
+    };
+  }
 });

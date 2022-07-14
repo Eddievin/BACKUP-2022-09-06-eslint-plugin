@@ -1,9 +1,13 @@
-import { rules, utils } from "@";
+import {
+  MessageId,
+  emptyLinesAroundComment
+} from "@/rules/empty-lines-around-comment";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "empty-lines-around-comment",
-  rules,
+  emptyLinesAroundComment,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -43,9 +47,13 @@ utils.testRule(
         */
       `,
       errors: [
-        { line: 1, messageId: "unexpectedEmptyLineAfter" },
-        { line: 5, messageId: "missingEmptyLineAfter" },
-        { line: 10, messageId: "unexpectedEmptyLineAfter" }
+        { messageId: MessageId.unexpectedEmptyLineAfter },
+        {
+          line: 5,
+          endLine: 7,
+          messageId: MessageId.missingEmptyLineAfter
+        },
+        { line: 10, messageId: MessageId.unexpectedEmptyLineAfter }
       ]
     },
     {
@@ -100,9 +108,17 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 5, messageId: "unexpectedEmptyLineAfter" },
-        { line: 12, messageId: "missingEmptyLineAfter" },
-        { line: 19, messageId: "unexpectedEmptyLineAfter" }
+        { line: 5, messageId: MessageId.unexpectedEmptyLineAfter },
+        {
+          line: 12,
+          endLine: 14,
+          messageId: MessageId.missingEmptyLineAfter
+        },
+        {
+          line: 19,
+          endLine: 21,
+          messageId: MessageId.unexpectedEmptyLineAfter
+        }
       ]
     },
     {
@@ -123,9 +139,9 @@ utils.testRule(
         function f(): void {}
       `,
       errors: [
-        { line: 2, messageId: "missingEmptyLineBefore" },
-        { line: 3, messageId: "missingEmptyLineBefore" },
-        { line: 3, messageId: "missingEmptyLineAfter" }
+        { line: 2, messageId: MessageId.missingEmptyLineBefore },
+        { line: 3, messageId: MessageId.missingEmptyLineBefore },
+        { line: 3, messageId: MessageId.missingEmptyLineAfter }
       ]
     }
   ],

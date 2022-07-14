@@ -1,23 +1,21 @@
 import * as utils from "./utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import { is } from "@skylib/functions";
+
+export enum MessageId {
+  triviallyInferrableType = "triviallyInferrableType"
+}
 
 export const noInferrableTypes = utils.createRule({
   name: "no-inferrable-types",
-  isOptions: is.object,
   messages: {
-    triviallyInferrableType: "Type can be trivially inferred from initializer"
+    [MessageId.triviallyInferrableType]:
+      "Type can be trivially inferred from initializer"
   },
   create: (context): RuleListener => ({
-    [AST_NODE_TYPES.VariableDeclarator]: (node): void => {
+    VariableDeclarator: (node): void => {
       const { id, init } = node;
 
-      if (
-        id.typeAnnotation &&
-        init &&
-        init.type === AST_NODE_TYPES.TSAsExpression
-      ) {
+      if (id.typeAnnotation && init && init.type === "TSAsExpression") {
         const type1 = id.typeAnnotation.typeAnnotation;
 
         const type2 = init.typeAnnotation;
@@ -27,7 +25,10 @@ export const noInferrableTypes = utils.createRule({
         const text2 = context.getText(type2);
 
         if (text1 === text2)
-          context.report({ messageId: "triviallyInferrableType", node });
+          context.report({
+            messageId: MessageId.triviallyInferrableType,
+            node
+          });
       }
     }
   })

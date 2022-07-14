@@ -1,27 +1,20 @@
-import { rules, utils } from "@";
+import { MessageId, exportAllName } from "@/rules/export-all-name";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "export-all-name",
-  rules,
+  exportAllName,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
       code: `
         export * as a from "b";
       `,
-      errors: [{ line: 1, messageId: "invalidName" }]
+      errors: [{ messageId: MessageId.invalidName }]
     }
   ],
   [
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        export * as aaaBbbCcc1 from "aaa-bbb-ccc1";
-        export * as aaaBbbCcc2 from "aaa-bbb-ccc2.ts";
-        export * as aaaBbbCcc3 from "index.aaa-bbb-ccc3";
-      `
-    },
     {
       name: `Test at line ${getCurrentLine().line}`,
       code: `
@@ -36,6 +29,14 @@ utils.testRule(
         export * as aaaBbbCcc1 from "aaaBbbCcc1";
         export * as aaaBbbCcc2 from "aaaBbbCcc2.ts";
         export * as aaaBbbCcc3 from "index.aaaBbbCcc3";
+      `
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      code: `
+        export * as aaaBbbCcc1 from "aaa-bbb-ccc1";
+        export * as aaaBbbCcc2 from "aaa-bbb-ccc2.ts";
+        export * as aaaBbbCcc3 from "index.aaa-bbb-ccc3";
       `
     }
   ]

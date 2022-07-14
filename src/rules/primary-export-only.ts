@@ -1,77 +1,24 @@
-import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
-import { a, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { TSESTree } from "@typescript-eslint/utils";
-import path from "node:path";
+
+export enum MessageId {
+  invalidExport = "invalidExport"
+}
 
 export const primaryExportOnly = utils.createRule({
   name: "primary-export-only",
-  isOptions: is.object,
-  messages: {
-    invalidExport:
-      "Additional export is not allowed when there is export matching file name"
-  },
-  create: (context): RuleListener => {
-    const exportDefaultDeclarations =
-      new Set<TSESTree.ExportDefaultDeclaration>();
+  messages: { [MessageId.invalidExport]: "Primary export should be only one" },
+  create: (context): RuleListener =>
+    utils.ruleTemplates.export.create(ctx => {
+      const primary = ctx.identifiers.find(
+        node =>
+          node.name === utils.getIdentifierFromPath(context.path, node.name)
+      );
 
-    const identifiers = new Set<TSESTree.Identifier>();
-
-    return {
-      "Program > ExportDefaultDeclaration": (
-        node: TSESTree.ExportDefaultDeclaration
-      ): void => {
-        exportDefaultDeclarations.add(node);
-      },
-      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id": (
-        node: TSESTree.Identifier
-      ): void => {
-        identifiers.add(node);
-      },
-      "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported":
-        (node: TSESTree.Identifier): void => {
-          identifiers.add(node);
-        },
-      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.add(node);
-        },
-      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.add(node);
-        },
-      "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.add(node);
-        },
-      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.add(node);
-        },
-      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.add(node);
-        },
-      "Program:exit": (): void => {
-        const primary = a
-          .fromIterable(identifiers.values())
-          .find(
-            node =>
-              _.kebabCase(node.name) ===
-              _.kebabCase(path.parse(context.path).name)
-          );
-
-        if (primary) {
-          for (const node of exportDefaultDeclarations)
-            context.report({ messageId: "invalidExport", node });
-
-          for (const node of identifiers)
-            if (node.name === primary.name) {
-              // Valid
-            } else context.report({ messageId: "invalidExport", node });
-        }
-      }
-    };
-  }
+      if (primary)
+        if (ctx.onlyExport) {
+          // Valid
+        } else
+          context.report({ messageId: MessageId.invalidExport, node: primary });
+    })
 });

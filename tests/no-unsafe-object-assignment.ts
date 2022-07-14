@@ -1,9 +1,13 @@
-import { rules, utils } from "@";
+import {
+  MessageId,
+  noUnsafeObjectAssignment
+} from "@/rules/no-unsafe-object-assignment";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
 utils.testRule(
   "no-unsafe-object-assignment",
-  rules,
+  noUnsafeObjectAssignment,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -22,9 +26,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "value" },
           line: 7,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "value" }
         }
       ]
     },
@@ -45,9 +49,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "Index signature" },
           line: 7,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "Index signature" }
         }
       ]
     },
@@ -68,9 +72,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "Index signature" },
           line: 7,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "Index signature" }
         }
       ]
     },
@@ -86,9 +90,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "value" },
           line: 4,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "value" }
         }
       ]
     },
@@ -105,9 +109,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "value" },
           line: 4,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "value" }
         }
       ]
     },
@@ -125,9 +129,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "value" },
           line: 7,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "value" }
         }
       ]
     },
@@ -148,9 +152,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "value" },
           line: 10,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "value" }
         }
       ]
     },
@@ -165,9 +169,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "0" },
           line: 5,
-          messageId: "unsafeReadonlyAssignment"
+          messageId: MessageId.unsafeReadonlyAssignment,
+          data: { name: "0" }
         }
       ]
     },
@@ -180,9 +184,9 @@ utils.testRule(
       `,
       errors: [
         {
-          data: { name: "value" },
           line: 3,
-          messageId: "unsafeOptionalAssignment"
+          messageId: MessageId.unsafeOptionalAssignment,
+          data: { name: "value" }
         }
       ]
     }

@@ -2,4 +2,4 @@
 
 # array-callback-return-type
 
-Enforces safe return type in array callbacks.
+Requires safe return type in array callbacks.

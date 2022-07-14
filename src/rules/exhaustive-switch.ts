@@ -1,32 +1,34 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
 
+export enum MessageId {
+  inexhaustiveSwitch = "inexhaustiveSwitch"
+}
+
 export const exhaustiveSwitch = utils.createRule({
   name: "exhaustive-switch",
-  isOptions: is.object,
-  messages: { inexhaustiveSwitch: "Inexhaustive switch" },
+  messages: { [MessageId.inexhaustiveSwitch]: "Inexhaustive switch" },
   create: (context): RuleListener => ({
-    [AST_NODE_TYPES.SwitchStatement]: (node): void => {
-      const tests = node.cases.map(switchCase => switchCase.test);
-
-      // eslint-disable-next-line unicorn/no-null
-      if (tests.includes(null)) {
+    SwitchStatement: (node): void => {
+      if (node.cases.some(switchCase => is.null(switchCase.test))) {
         // Has default
       } else {
-        const got = tests
+        const got = node.cases
+          .map(switchCase => switchCase.test)
           .filter(is.not.empty)
-          .flatMap(expression => utils.getTypeParts(expression, context));
+          .flatMap(expression => context.typeCheck.parseUnionType(expression));
 
-        const expected = utils.getTypeParts.typeofFix(
-          node.discriminant,
-          context
+        const expected = context.typeCheck.parseUnionTypeTypeofFix(
+          node.discriminant
         );
 
-        if (_.difference(expected, got).length > 0)
-          context.report({ messageId: "inexhaustiveSwitch", node });
+        if (_.difference(expected, got).length)
+          context.report({
+            messageId: MessageId.inexhaustiveSwitch,
+            node: node.discriminant
+          });
       }
     }
   })

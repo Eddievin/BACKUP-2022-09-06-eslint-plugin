@@ -5,12 +5,24 @@ import type {
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { Writable } from "@skylib/functions";
+
+export interface SubOptions {
+  readonly _id: string;
+  readonly averageLinesGte: number;
+  readonly everyLinesGte: number;
+  readonly selector: string;
+  readonly someHasDocComment: boolean;
+  readonly someLinesGte: number;
+}
+
+export enum MessageId {
+  expectingEmptyLine = "expectingEmptyLine",
+  unexpectedEmptyLine = "unexpectedEmptyLine"
+}
 
 export const consistentGroupEmptyLines = utils.createRule({
   name: "consistent-group-empty-lines",
-  fixable: "whitespace",
-  isOptions: is.object,
+  fixable: utils.Fixable.whitespace,
   isSubOptions: is.object.factory<SubOptions>(
     {
       _id: is.string,
@@ -28,9 +40,10 @@ export const consistentGroupEmptyLines = utils.createRule({
     someHasDocComment: false,
     someLinesGte: 1_000_000
   },
+  subOptionsKey: "rules",
   messages: {
-    expectingEmptyLine: "Expecting empty line before ({{ _id }})",
-    unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
+    [MessageId.expectingEmptyLine]: "Expecting empty line before ({{ _id }})",
+    [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
   },
   create: (context): RuleListener => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
@@ -46,20 +59,21 @@ export const consistentGroupEmptyLines = utils.createRule({
           const nodesMap = nodesMap2.get(subOptions.selector);
 
           for (const nodes of nodesMap.values()) {
-            const group: Writable<readonly TSESTree.Node[]> = [];
+            // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
+            const group: TSESTree.Node[] = [];
 
             for (const node of nodes)
-              if (group.length > 0)
+              if (group.length)
                 if (utils.isAdjacentNodes(a.last(group), node, childNodesMap))
                   group.push(node);
                 else {
-                  lintGroup(group, subOptions, context);
+                  lintGroup(group, subOptions);
                   a.truncate(group);
                   group.push(node);
                 }
               else group.push(node);
 
-            lintGroup(group, subOptions, context);
+            lintGroup(group, subOptions);
           }
         }
       }
@@ -75,79 +89,60 @@ export const consistentGroupEmptyLines = utils.createRule({
       };
 
     return listener;
-  }
-});
 
-type Context = utils.Context<MessageId, object, SubOptions>;
+    function lintGroup(
+      group: readonly TSESTree.Node[],
+      subOptions: SubOptions
+    ): void {
+      if (group.length > 1) {
+        const hasDocComment = subOptions.someHasDocComment
+          ? group.some(node => context.hasLeadingDocComment(node))
+          : false;
 
-type MessageId = utils.MessageId<typeof consistentGroupEmptyLines>;
+        const linesPerNode = group
+          .map(node => context.getText(node))
+          .map(text => s.lines(text).length);
 
-interface SubOptions {
-  readonly _id: string;
-  readonly averageLinesGte: number;
-  readonly everyLinesGte: number;
-  readonly selector: string;
-  readonly someHasDocComment: boolean;
-  readonly someLinesGte: number;
-}
+        const averageLines = num.average(...linesPerNode);
 
-/**
- * Lints group.
- *
- * @param group - Nodes.
- * @param subOptions - Suboptions.
- * @param context - Context.
- */
-function lintGroup(
-  group: readonly TSESTree.Node[],
-  subOptions: SubOptions,
-  context: Context
-): void {
-  if (group.length > 1) {
-    const hasDocComment = subOptions.someHasDocComment
-      ? group.some(node => context.hasLeadingDocComment(node))
-      : false;
+        const minLines = Math.min(...linesPerNode);
 
-    const linesPerNode = group
-      .map(node => context.getText(node))
-      .map(text => s.lines(text).length);
+        const maxLines = Math.max(...linesPerNode);
 
-    const averageLines = num.average(...linesPerNode);
+        const spread =
+          hasDocComment ||
+          averageLines >= subOptions.averageLinesGte ||
+          minLines >= subOptions.everyLinesGte ||
+          maxLines >= subOptions.someLinesGte;
 
-    const minLines = Math.min(...linesPerNode);
+        const count = spread ? 2 : 1;
 
-    const maxLines = Math.max(...linesPerNode);
+        const messageId = spread
+          ? MessageId.expectingEmptyLine
+          : MessageId.unexpectedEmptyLine;
 
-    const spread =
-      hasDocComment ||
-      averageLines >= subOptions.averageLinesGte ||
-      minLines >= subOptions.everyLinesGte ||
-      maxLines >= subOptions.someLinesGte;
+        for (const node of group.slice(1)) {
+          const got = context.getLeadingTrivia(node);
 
-    const count = spread ? 2 : 1;
+          if (got.includes("\n")) {
+            const expected =
+              context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
 
-    const messageId = spread ? "expectingEmptyLine" : "unexpectedEmptyLine";
-
-    for (const node of group.slice(1)) {
-      const got = context.getLeadingTrivia(node);
-
-      if (got.includes("\n")) {
-        const expected =
-          context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
-
-        if (got === expected) {
-          // Valid
-        } else
-          context.report({
-            data: { _id: subOptions._id },
-            fix: (): RuleFix => ({
-              range: [node.range[0] - got.length, node.range[0]],
-              text: expected
-            }),
-            messageId,
-            node
-          });
+            if (got === expected) {
+              // Valid
+            } else
+              context.report({
+                data: { _id: subOptions._id },
+                fix: (): RuleFix => ({
+                  range: [node.range[0] - got.length, node.range[0]],
+                  text: expected
+                }),
+                messageId,
+                node
+              });
+          }
+        }
       }
     }
   }
-}
+});

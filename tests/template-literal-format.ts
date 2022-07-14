@@ -1,7 +1,11 @@
-import { rules, utils } from "@";
+import {
+  MessageId,
+  templateLiteralFormat
+} from "@/rules/template-literal-format";
 import getCurrentLine from "get-current-line";
+import { utils } from "@";
 
-utils.testRule("template-literal-format", rules, [
+utils.testRule("template-literal-format", templateLiteralFormat, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
@@ -14,8 +18,16 @@ utils.testRule("template-literal-format", rules, [
         template literal\`;
     `,
     errors: [
-      { line: 3, messageId: "invalidTemplateLiteralFormat" },
-      { line: 6, messageId: "invalidTemplateLiteralFormat" }
+      {
+        line: 3,
+        endLine: 4,
+        messageId: MessageId.invalidTemplateLiteralFormat
+      },
+      {
+        line: 6,
+        endLine: 7,
+        messageId: MessageId.invalidTemplateLiteralFormat
+      }
     ]
   },
   {
@@ -34,7 +46,7 @@ utils.testRule("template-literal-format", rules, [
         template literal
       \`;
     `,
-    errors: [{ line: 1, messageId: "invalidTemplateLiteralFormat" }]
+    errors: [{ endLine: 5, messageId: MessageId.invalidTemplateLiteralFormat }]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -56,6 +68,12 @@ utils.testRule("template-literal-format", rules, [
         \`;
       }
     `,
-    errors: [{ line: 2, messageId: "invalidTemplateLiteralFormat" }]
+    errors: [
+      {
+        line: 2,
+        endLine: 6,
+        messageId: MessageId.invalidTemplateLiteralFormat
+      }
+    ]
   }
 ]);
