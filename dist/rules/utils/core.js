@@ -151,7 +151,7 @@ exports.getIdentifierFromPath = getIdentifierFromPath;
  * @returns Node ID.
  */
 function getNodeId(node) {
-    return node ? node.range.join("-") : ".";
+    return node ? `${node.type}-${node.range[0]}-${node.range[1]}` : ".";
 }
 exports.getNodeId = getNodeId;
 /**

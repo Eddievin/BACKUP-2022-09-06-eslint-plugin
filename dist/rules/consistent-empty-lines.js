@@ -32,28 +32,41 @@ exports.consistentEmptyLines = utils.createRule({
         [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
     },
     create: (context) => {
-        const childNodesMap = new functions_1.Accumulator();
-        const prevRuleIndexes = new functions_1.Accumulator();
-        const nextRuleIndexes = new functions_1.Accumulator();
+        const childNodes = new functions_1.Accumulator();
         const prevItems = [];
         const nextItems = [];
-        const listener = {
-            "*": (node) => {
-                utils.buildChildNodesMap(node, childNodesMap);
-            },
-            "Program:exit": () => {
-                prevItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
-                nextItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
-                const items = _.uniq(functions_1.a.fromIterable((0, functions_1.evaluate)(function* () {
+        const listeners = new functions_1.Accumulator();
+        for (const [index, subOptions] of context.subOptionsArray.entries()) {
+            listeners.push(subOptions.prev, (node) => {
+                prevItems.push({
+                    index,
+                    node,
+                    subOptions
+                });
+            });
+            listeners.push(subOptions.next, (node) => {
+                nextItems.push({
+                    index,
+                    node,
+                    subOptions
+                });
+            });
+        }
+        return Object.assign({ "*": (node) => {
+                utils.buildChildNodesMap(node, childNodes);
+            }, "Program:exit": () => {
+                prevItems.sort((item1, item2) => item2.index - item1.index);
+                nextItems.sort((item1, item2) => item2.index - item1.index);
+                const items = _.uniqBy(functions_1.a.fromIterable((0, functions_1.evaluate)(function* () {
                     for (const prevItem of prevItems)
                         for (const nextItem of nextItems)
-                            if (prevItem.ruleIndex === nextItem.ruleIndex &&
-                                utils.isAdjacentNodes(prevItem.node, nextItem.node, childNodesMap))
+                            if (prevItem.index === nextItem.index &&
+                                utils.isAdjacentNodes(prevItem.node, nextItem.node, childNodes))
                                 yield nextItem;
-                })));
+                })), "node");
                 for (const item of items) {
-                    const emptyLine = functions_1.a.get(context.subOptionsArray, item.ruleIndex).emptyLine;
-                    if (emptyLine === "any") {
+                    const emptyLine = item.subOptions.emptyLine;
+                    if (emptyLine === EmptyLine.any) {
                         // Skip check
                     }
                     else {
@@ -77,7 +90,7 @@ exports.consistentEmptyLines = utils.createRule({
                         }
                         else
                             context.report({
-                                data: { _id: item._id },
+                                data: { _id: item.subOptions._id },
                                 fix: () => ({
                                     range: [node.range[0] - got.length, node.range[0]],
                                     text: expected
@@ -87,29 +100,13 @@ exports.consistentEmptyLines = utils.createRule({
                             });
                     }
                 }
+            } }, functions_1.o.fromEntries(functions_1.a.fromIterable(listeners).map(([name, callbacks]) => [
+            name,
+            (node) => {
+                for (const callback of callbacks)
+                    callback(node);
             }
-        };
-        for (const [ruleIndex, subOptions] of context.subOptionsArray.entries()) {
-            prevRuleIndexes.push(subOptions.prev, ruleIndex);
-            nextRuleIndexes.push(subOptions.next, ruleIndex);
-        }
-        for (const subOptions of context.subOptionsArray)
-            for (const selector of [subOptions.prev, subOptions.next])
-                listener[selector] = (node) => {
-                    for (const ruleIndex of prevRuleIndexes.get(selector))
-                        prevItems.push({
-                            _id: subOptions._id,
-                            node,
-                            ruleIndex
-                        });
-                    for (const ruleIndex of nextRuleIndexes.get(selector))
-                        nextItems.push({
-                            _id: subOptions._id,
-                            node,
-                            ruleIndex
-                        });
-                };
-        return listener;
+        ])));
     }
 });
 //# sourceMappingURL=consistent-empty-lines.js.map
