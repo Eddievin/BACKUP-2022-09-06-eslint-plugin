@@ -1,21 +1,20 @@
 "use strict";
+/* eslint-disable @skylib/custom/no-literal-union-type -- Ok */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testRule = void 0;
+const utils_1 = require("@typescript-eslint/utils");
 const core_1 = require("./core");
 const functions_1 = require("@skylib/functions");
-const utils_1 = require("@typescript-eslint/utils");
 /**
  * Runs test.
  *
- * @param name - Rule name.
- * @param rules - Rules.
+ * @param name - Name.
+ * @param rule - Rule.
  * @param invalid - Invalid tests.
  * @param valid - Valid tests.
  */
-function testRule(name, rules, invalid, valid = []) {
-    const rule = rules[name];
+function testRule(name, rule, invalid, valid = []) {
     const tester = new utils_1.TSESLint.RuleTester({
-        // eslint-disable-next-line unicorn/prefer-module -- Postponed
         parser: require.resolve("vue-eslint-parser"),
         parserOptions: {
             ecmaFeatures: { jsx: true },
@@ -30,15 +29,15 @@ function testRule(name, rules, invalid, valid = []) {
         }
     });
     tester.run(name, rule, {
-        // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-        invalid: invalid.map(invalidTest => {
+        invalid: invalid.map((invalidTest) => {
             var _a, _b;
             const code = functions_1.s.unpadMultiline(invalidTest.code);
             const output = functions_1.s.unpadMultiline((_a = invalidTest.output) !== null && _a !== void 0 ? _a : invalidTest.code);
-            return Object.assign(Object.assign({}, invalidTest), { code, filename: `${core_1.base}fixtures/${(_b = invalidTest.filename) !== null && _b !== void 0 ? _b : "file.ts"}`, output });
+            const errors = invalidTest.errors.map((error) => { var _a; return (Object.assign({ endLine: (_a = error.line) !== null && _a !== void 0 ? _a : 1 }, error)); });
+            return Object.assign(Object.assign({}, invalidTest), { code,
+                errors, filename: `${core_1.base}fixtures/${(_b = invalidTest.filename) !== null && _b !== void 0 ? _b : "file.ts"}`, output });
         }),
-        // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-        valid: valid.map(validTest => {
+        valid: valid.map((validTest) => {
             var _a;
             const code = functions_1.s.unpadMultiline(validTest.code);
             return Object.assign(Object.assign({}, validTest), { code, filename: `${core_1.base}fixtures/${(_a = validTest.filename) !== null && _a !== void 0 ? _a : "file.ts"}` });

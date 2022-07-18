@@ -1,33 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exhaustiveSwitch = void 0;
+exports.exhaustiveSwitch = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
-const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
-const utils_1 = require("@typescript-eslint/utils");
+var MessageId;
+(function (MessageId) {
+    MessageId["inexhaustiveSwitch"] = "inexhaustiveSwitch";
+})(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.exhaustiveSwitch = utils.createRule({
-    create: (context) => {
-        return {
-            [utils_1.AST_NODE_TYPES.SwitchStatement]: (node) => {
-                const tests = node.cases.map(switchCase => switchCase.test);
-                // eslint-disable-next-line unicorn/no-null
-                if (tests.includes(null)) {
-                    // Has default
-                }
-                else {
-                    const got = tests
-                        .filter(functions_1.is.not.empty)
-                        .flatMap(expression => utils.getTypeParts(expression, context));
-                    const expected = utils.getTypeParts.typeofFix(node.discriminant, context);
-                    if (_.difference(expected, got).length > 0)
-                        context.report({ messageId: "inexhaustiveSwitch", node });
-                }
+    name: "exhaustive-switch",
+    messages: { [MessageId.inexhaustiveSwitch]: "Inexhaustive switch" },
+    create: (context) => ({
+        SwitchStatement: (node) => {
+            if (node.cases.some(switchCase => functions_1.is.null(switchCase.test))) {
+                // Has default
             }
-        };
-    },
-    isRuleOptions: functions_1.is.object,
-    messages: { inexhaustiveSwitch: "Inexhaustive switch" },
-    name: "exhaustive-switch"
+            else {
+                const got = node.cases
+                    .map(switchCase => switchCase.test)
+                    .filter(functions_1.is.not.empty)
+                    .flatMap(expression => context.typeCheck.parseUnionType(expression));
+                const expected = context.typeCheck.parseUnionTypeTypeofFix(node.discriminant);
+                if (_.difference(expected, got).length)
+                    context.report({
+                        messageId: MessageId.inexhaustiveSwitch,
+                        node: node.discriminant
+                    });
+            }
+        }
+    })
 });
 //# sourceMappingURL=exhaustive-switch.js.map

@@ -1,3 +1,15 @@
+import * as utils from "./utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-export declare const sortArray: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<"incorrectSortingOrder" | "expectingArray", import("@skylib/functions").objects, RuleListener>;
+import type { strings } from "@skylib/functions";
+export interface Options {
+    readonly customOrder?: strings;
+    readonly key?: string;
+    readonly selector: string;
+    readonly sendToBottom?: string;
+    readonly sendToTop?: string;
+}
+export declare enum MessageId {
+    expectingArray = "expectingArray"
+}
+export declare const sortArray: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("./utils/sort.internal").MessageId | MessageId, [Partial<Options & utils.SharedOptions1> & {}], RuleListener>;
 //# sourceMappingURL=sort-array.d.ts.map

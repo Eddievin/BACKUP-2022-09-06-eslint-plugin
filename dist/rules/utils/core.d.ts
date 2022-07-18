@@ -1,20 +1,12 @@
-import { is } from "@skylib/functions";
-import minimatch from "minimatch";
+import type { Accumulator, Rec, strings } from "@skylib/functions";
 import type { Context, Package } from "./types";
-import type { Accumulator, Rec, objects, strings } from "@skylib/functions";
-import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleListener, RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
+import { is } from "@skylib/functions";
+import type { TSESTree } from "@typescript-eslint/utils";
+import minimatch from "minimatch";
 export declare const isPackage: is.Guard<Package>;
 export declare const base: string;
-/**
- * Creates file matcher.
- *
- * @param patterns - Patterns.
- * @param defVal - Default value.
- * @param options - Minimatch options.
- * @returns Matcher.
- */
-export declare const createFileMatcher: {
+export declare const createFileMatcher: ((patterns: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher) & Readonly<{
     /**
      * Creates file matcher.
      *
@@ -25,8 +17,10 @@ export declare const createFileMatcher: {
      * @returns Matcher.
      */
     disallowAllow: (disallow: strings, allow: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher;
-} & ((patterns: strings, defVal: boolean, options: Readonly<minimatch.IOptions>) => Matcher);
-export interface CreateRuleOptions<M extends string, O extends object, S extends object> {
+}>;
+export declare const isPattern: is.Guard<Pattern>;
+export declare const isSelector: is.Guard<string | readonly string[]>;
+export interface CreateRuleOptions<M extends string, O extends object, S extends object, K extends string = never> {
     /**
      * Creates rule listener.
      *
@@ -37,11 +31,12 @@ export interface CreateRuleOptions<M extends string, O extends object, S extends
     readonly defaultOptions?: Readonly<Partial<O>>;
     readonly defaultSubOptions?: Readonly<Partial<S>>;
     readonly fixable?: "code" | "whitespace";
-    readonly isRuleOptions: is.Guard<O>;
+    readonly isOptions?: is.Guard<O>;
     readonly isSubOptions?: is.Guard<S>;
     readonly messages: Rec<M, string>;
     readonly name: string;
-    readonly subOptionsKey?: string;
+    readonly subOptionsKey?: K;
+    readonly vue?: boolean;
 }
 export interface GetSelectorsOptions {
     readonly excludeSelectors: strings;
@@ -57,7 +52,17 @@ export interface Matcher {
      */
     (str: string): boolean;
 }
-export declare type MessageId<T> = T extends RuleModule<infer I, infer _O> ? I : never;
+export declare type Pattern = strings | string;
+export declare type Selector = strings | string;
+export interface SharedOptions1 {
+    readonly filesToLint?: strings;
+    readonly filesToSkip?: strings;
+}
+export interface SharedOptions2 {
+    readonly _id?: string;
+    readonly filesToLint?: strings;
+    readonly filesToSkip?: strings;
+}
 /**
  * Adds node to child nodes map.
  *
@@ -68,17 +73,22 @@ export declare function buildChildNodesMap(node: TSESTree.Node, mutableChildNode
 /**
  * Creates matcher.
  *
- * @param patterns - RegExp patterns.
+ * @param mixedPattern - RegExp pattern(s).
+ * @param defVal - Default value.
  * @returns Matcher.
  */
-export declare function createMatcher(patterns: strings): Matcher;
+export declare function createMatcher(mixedPattern: Pattern | undefined, defVal: boolean): Matcher;
 /**
  * Creates rule listenter.
  *
  * @param options - Options.
  * @returns Rule listenter.
  */
-export declare function createRule<M extends string, O extends object, S extends object>(options: CreateRuleOptions<M, O, S>): RuleModule<M, objects>;
+export declare function createRule<M extends string, O extends object, S extends object, K extends string = never>(options: CreateRuleOptions<M, O, S, K>): RuleModule<M, [
+    Partial<O & SharedOptions1> & {
+        readonly [L in K]?: ReadonlyArray<Partial<S & SharedOptions2>>;
+    }
+]>;
 /**
  * Gets program comments.
  *
@@ -93,7 +103,7 @@ export declare function getComments(program: TSESTree.Program): TSESTree.Comment
  * @param expected - Expected name.
  * @returns Name.
  */
-export declare function getNameFromFilename(path: string, expected?: string): string;
+export declare function getIdentifierFromPath(path: string, expected?: string): string;
 /**
  * Generates node ID.
  *
@@ -125,6 +135,14 @@ export declare function getSelectors(options: GetSelectorsOptions, defaultSelect
  * @returns _True_ if two nodes are adjacent, _false_ otherwise.
  */
 export declare function isAdjacentNodes(node1: TSESTree.Node, node2: TSESTree.Node, childNodesMap: Accumulator<string, TSESTree.Node>): boolean;
+/**
+ * Returns string representing node.
+ *
+ * @param node - Node.
+ * @param context - Context.
+ * @returns String representing node.
+ */
+export declare function nodeToString(node: TSESTree.Node, context: Context<never, object, object>): string;
 /**
  * Strips base path.
  *

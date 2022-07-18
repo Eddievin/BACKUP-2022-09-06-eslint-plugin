@@ -1,18 +1,20 @@
 "use strict";
 /* eslint-disable @skylib/custom/prefer-arrow-function-property -- Ok */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stripBase = exports.isAdjacentNodes = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getNameFromFilename = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
+exports.stripBase = exports.nodeToString = exports.isAdjacentNodes = exports.getSelectors = exports.getPackage = exports.getNodeId = exports.getIdentifierFromPath = exports.getComments = exports.createRule = exports.createMatcher = exports.buildChildNodesMap = exports.isSelector = exports.isPattern = exports.createFileMatcher = exports.base = exports.isPackage = void 0;
 const tslib_1 = require("tslib");
 /* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
-const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
-const utils_1 = require("@typescript-eslint/utils");
-const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
-const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
-const node_path_1 = tslib_1.__importDefault(require("node:path"));
 const tsutils = tslib_1.__importStar(require("tsutils"));
+const utils_1 = require("@typescript-eslint/utils");
+const functions_1 = require("@skylib/functions");
+const TypeCheck_1 = require("./TypeCheck");
+const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
+const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
+const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.isPackage = functions_1.is.factory(functions_1.is.object.of, {}, { name: functions_1.is.string });
 exports.base = functions_1.fn.pipe(process.cwd(), functions_1.s.path.canonicalize, functions_1.s.path.addTrailingSlash);
+exports.createFileMatcher = (0, functions_1.defineFn)(
 /**
  * Creates file matcher.
  *
@@ -21,12 +23,13 @@ exports.base = functions_1.fn.pipe(process.cwd(), functions_1.s.path.canonicaliz
  * @param options - Minimatch options.
  * @returns Matcher.
  */
-exports.createFileMatcher = functions_1.o.extend((patterns, defVal, options) => {
-    if (patterns.length > 0) {
-        const matchers = patterns.map(pattern => (str) => (0, minimatch_1.default)(str, pattern, options));
-        return (str) => matchers.some(matcher => matcher(str));
-    }
-    return () => defVal;
+(patterns, defVal, options) => {
+    const matchers = patterns.map(pattern => (str) => (0, minimatch_1.default)(str, pattern, options));
+    // eslint-disable-next-line no-warning-comments -- Postponed
+    // fixme
+    return (0, functions_1.evaluate)(() => matchers.length
+        ? (str) => matchers.some(matcher => matcher(str))
+        : () => defVal);
 }, {
     /**
      * Creates file matcher.
@@ -38,7 +41,7 @@ exports.createFileMatcher = functions_1.o.extend((patterns, defVal, options) => 
      * @returns Matcher.
      */
     disallowAllow: (disallow, allow, defVal, options) => {
-        if (disallow.length > 0 || allow.length > 0) {
+        if (disallow.length || allow.length) {
             const disallowMatcher = (0, exports.createFileMatcher)(disallow, true, options);
             const allowMatcher = (0, exports.createFileMatcher)(allow, false, options);
             return (str) => disallowMatcher(str) && !allowMatcher(str);
@@ -46,6 +49,8 @@ exports.createFileMatcher = functions_1.o.extend((patterns, defVal, options) => 
         return () => defVal;
     }
 });
+exports.isPattern = functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings);
+exports.isSelector = functions_1.is.or.factory(functions_1.is.string, functions_1.is.strings);
 /**
  * Adds node to child nodes map.
  *
@@ -59,15 +64,20 @@ exports.buildChildNodesMap = buildChildNodesMap;
 /**
  * Creates matcher.
  *
- * @param patterns - RegExp patterns.
+ * @param mixedPattern - RegExp pattern(s).
+ * @param defVal - Default value.
  * @returns Matcher.
  */
-function createMatcher(patterns) {
-    const matchers = patterns
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        .map(pattern => new RegExp(pattern, "u"))
-        .map(re => (str) => re.test(str));
-    return (str) => matchers.some(matcher => matcher(str));
+function createMatcher(mixedPattern, defVal) {
+    if (functions_1.is.not.empty(mixedPattern)) {
+        const matchers = functions_1.a
+            .fromMixed(mixedPattern)
+            // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+            .map(pattern => new RegExp(pattern, "u"))
+            .map(re => (str) => re.test(str));
+        return str => matchers.some(matcher => matcher(str));
+    }
+    return () => defVal;
 }
 exports.createMatcher = createMatcher;
 /**
@@ -77,14 +87,20 @@ exports.createMatcher = createMatcher;
  * @returns Rule listenter.
  */
 function createRule(options) {
-    const { create, defaultOptions, fixable, messages } = options;
+    const { create, defaultOptions, fixable, messages, vue } = Object.assign({ vue: false }, options);
     const ruleCreator = utils_1.ESLintUtils.RuleCreator((name) => `https://ilyub.github.io/eslint-plugin/${name}.html`);
     return ruleCreator({
         create: (context, rawOptions) => {
             const betterContext = createBetterContext(context, rawOptions, options);
-            return shouldBeLinted1(betterContext.options, betterContext.path)
+            const result = shouldBeLinted1(betterContext.options, betterContext.path)
                 ? create(betterContext)
                 : {};
+            if (vue && functions_1.is.not.empty(context.parserServices)) {
+                const defineTemplateBodyVisitor = functions_1.o.get(context.parserServices, "defineTemplateBodyVisitor");
+                if (functions_1.is.callable(defineTemplateBodyVisitor))
+                    return defineTemplateBodyVisitor(result, result);
+            }
+            return result;
         },
         defaultOptions: [defaultOptions !== null && defaultOptions !== void 0 ? defaultOptions : {}],
         meta: Object.assign({ docs: {
@@ -113,7 +129,7 @@ exports.getComments = getComments;
  * @param expected - Expected name.
  * @returns Name.
  */
-function getNameFromFilename(path, expected) {
+function getIdentifierFromPath(path, expected) {
     // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
     const { base, dir, name } = node_path_1.default.parse(path);
     return functions_1.is.not.empty(expected) &&
@@ -121,10 +137,13 @@ function getNameFromFilename(path, expected) {
         ? expected
         : getName(name === "index" ? node_path_1.default.parse(dir).name : name);
     function getName(x) {
+        x = functions_1.a.first(x.split("."));
+        // eslint-disable-next-line no-warning-comments -- Postponed
+        // fixme
         return /^[A-Z]/u.test(x) ? functions_1.s.ucFirst(_.camelCase(x)) : _.camelCase(x);
     }
 }
-exports.getNameFromFilename = getNameFromFilename;
+exports.getIdentifierFromPath = getIdentifierFromPath;
 /**
  * Generates node ID.
  *
@@ -187,6 +206,24 @@ function isAdjacentNodes(node1, node2, childNodesMap) {
 }
 exports.isAdjacentNodes = isAdjacentNodes;
 /**
+ * Returns string representing node.
+ *
+ * @param node - Node.
+ * @param context - Context.
+ * @returns String representing node.
+ */
+function nodeToString(node, context) {
+    switch (node.type) {
+        case "Identifier":
+            return node.name;
+        case "Literal":
+            return functions_1.cast.string(node.value);
+        default:
+            return `\u0000${context.getText(node)}`;
+    }
+}
+exports.nodeToString = nodeToString;
+/**
  * Strips base path.
  *
  * @param path - Path.
@@ -219,6 +256,9 @@ function createBetterContext(context, ruleOptionsArray, options) {
     const code = source.getText();
     const parser = utils_1.ESLintUtils.getParserServices(context);
     functions_1.assert.toBeTrue(tsutils.isStrictCompilerOptionEnabled(parser.program.getCompilerOptions(), "strictNullChecks"), 'Expecting "strictNullChecks" compiler option to be enabled');
+    const checker = parser.program.getTypeChecker();
+    const toEsNode = parser.tsNodeToESTreeNodeMap.get.bind(parser.tsNodeToESTreeNodeMap);
+    const toTsNode = parser.esTreeNodeToTSNodeMap.get.bind(parser.esTreeNodeToTSNodeMap);
     return {
         checker: parser.program.getTypeChecker(),
         code,
@@ -283,10 +323,6 @@ function createBetterContext(context, ruleOptionsArray, options) {
         getTextWithLeadingTrivia(node) {
             return code.slice(node.range[0] - this.getLeadingTrivia(node).length, node.range[1]);
         },
-        hasLeadingComment(node) {
-            return (this.getLeadingTrivia(node).trim().startsWith("/*") ||
-                this.getLeadingTrivia(node).trim().startsWith("//"));
-        },
         hasLeadingDocComment(node) {
             return this.getLeadingTrivia(node).trim().startsWith("/**");
         },
@@ -294,7 +330,10 @@ function createBetterContext(context, ruleOptionsArray, options) {
             return code.slice(node.range[1]).trim().startsWith("//");
         },
         id,
-        locZero: source.getLocFromIndex(0),
+        locZero: {
+            end: source.getLocFromIndex(0),
+            start: source.getLocFromIndex(0)
+        },
         missingDocComment(mixed) {
             return mixed.getDocumentationComment(this.checker).length === 0;
         },
@@ -305,8 +344,9 @@ function createBetterContext(context, ruleOptionsArray, options) {
         scope: context.getScope(),
         source,
         subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, path),
-        toEsNode: parser.tsNodeToESTreeNodeMap.get.bind(parser.tsNodeToESTreeNodeMap),
-        toTsNode: parser.esTreeNodeToTSNodeMap.get.bind(parser.esTreeNodeToTSNodeMap)
+        toEsNode,
+        toTsNode,
+        typeCheck: new TypeCheck_1.TypeCheck(checker, toTsNode)
     };
 }
 /**
@@ -317,9 +357,11 @@ function createBetterContext(context, ruleOptionsArray, options) {
  * @returns Rule options.
  */
 function getRuleOptions(ruleOptionsArray, options) {
-    const { isRuleOptions } = options;
+    const { isOptions } = Object.assign({ 
+        // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
+        isOptions: functions_1.is.unknown }, options);
     const ruleOptions = ruleOptionsArray[0];
-    functions_1.assert.byGuard(ruleOptions, isRuleOptions, "Expecting valid rule options");
+    functions_1.assert.byGuard(ruleOptions, isOptions, "Expecting valid rule options");
     return ruleOptions;
 }
 /**
@@ -335,13 +377,11 @@ function getSubOptionsArray(ruleOptionsArray, options, path) {
     const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
     if (isSubOptions) {
         const ruleOptions = getRuleOptions(ruleOptionsArray, options);
-        const raw = (_a = functions_1.o.get(ruleOptions, subOptionsKey !== null && subOptionsKey !== void 0 ? subOptionsKey : "rules")) !== null && _a !== void 0 ? _a : [];
+        functions_1.assert.not.empty(subOptionsKey, "Expecting suboptions key");
+        const raw = (_a = functions_1.o.get(ruleOptions, subOptionsKey)) !== null && _a !== void 0 ? _a : [];
         functions_1.assert.array.of(raw, functions_1.is.object, "Expecting valid rule options");
         const result = raw
-            // eslint-disable-next-line @skylib/custom/no-anonymous-return -- Postponed
-            .map(subOptions => {
-            return Object.assign(Object.assign({}, defaultSubOptions), subOptions);
-        })
+            .map((subOptions) => (Object.assign(Object.assign({}, defaultSubOptions), subOptions)))
             .filter(subOptions => shouldBeLinted2(subOptions, path));
         functions_1.assert.array.of(result, isSubOptions, "Expecting valid rule options");
         return result;

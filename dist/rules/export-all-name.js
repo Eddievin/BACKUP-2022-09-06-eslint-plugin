@@ -1,27 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exportAllName = void 0;
+exports.exportAllName = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
-const functions_1 = require("@skylib/functions");
-const utils_1 = require("@typescript-eslint/utils");
+var MessageId;
+(function (MessageId) {
+    MessageId["invalidName"] = "invalidName";
+})(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.exportAllName = utils.createRule({
-    create: (context) => {
-        return {
-            [utils_1.AST_NODE_TYPES.ExportAllDeclaration]: (node) => {
-                if (node.exported) {
-                    const expected = utils.getNameFromFilename(node.source.value, node.exported.name);
-                    if (node.exported.name === expected) {
-                        // Valid
-                    }
-                    else
-                        context.report({ messageId: "invalidName", node });
+    name: "export-all-name",
+    messages: { [MessageId.invalidName]: "Export name should match file name" },
+    create: (context) => ({
+        ExportAllDeclaration: (node) => {
+            if (node.exported) {
+                const got = node.exported.name;
+                const expected = utils.getIdentifierFromPath(node.source.value, got);
+                if (got === expected) {
+                    // Valid
                 }
+                else
+                    context.report({ messageId: MessageId.invalidName, node });
             }
-        };
-    },
-    isRuleOptions: functions_1.is.object,
-    messages: { invalidName: "Export name should match file name" },
-    name: "export-all-name"
+        }
+    })
 });
 //# sourceMappingURL=export-all-name.js.map

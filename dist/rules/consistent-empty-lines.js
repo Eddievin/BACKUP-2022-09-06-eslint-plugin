@@ -1,10 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.consistentEmptyLines = void 0;
+exports.consistentEmptyLines = exports.MessageId = exports.isEmptyLine = exports.EmptyLine = void 0;
 const tslib_1 = require("tslib");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
+var EmptyLine;
+(function (EmptyLine) {
+    EmptyLine["always"] = "always";
+    EmptyLine["any"] = "any";
+    EmptyLine["never"] = "never";
+})(EmptyLine = exports.EmptyLine || (exports.EmptyLine = {}));
+exports.isEmptyLine = functions_1.is.factory(functions_1.is.enumeration, EmptyLine);
+var MessageId;
+(function (MessageId) {
+    MessageId["expectingEmptyLine"] = "expectingEmptyLine";
+    MessageId["unexpectedEmptyLine"] = "unexpectedEmptyLine";
+})(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.consistentEmptyLines = utils.createRule({
+    name: "consistent-empty-lines",
+    fixable: utils.Fixable.whitespace,
+    isSubOptions: functions_1.is.object.factory({
+        _id: functions_1.is.string,
+        emptyLine: exports.isEmptyLine,
+        next: functions_1.is.string,
+        prev: functions_1.is.string
+    }, {}),
+    subOptionsKey: "rules",
+    messages: {
+        [MessageId.expectingEmptyLine]: "Expecting empty line before ({{ _id }})",
+        [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
+    },
     create: (context) => {
         const childNodesMap = new functions_1.Accumulator();
         const prevRuleIndexes = new functions_1.Accumulator();
@@ -16,15 +42,16 @@ exports.consistentEmptyLines = utils.createRule({
                 utils.buildChildNodesMap(node, childNodesMap);
             },
             "Program:exit": () => {
-                const items = new Map();
                 prevItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
                 nextItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
-                for (const prevItem of prevItems)
-                    for (const nextItem of nextItems)
-                        if (prevItem.ruleIndex === nextItem.ruleIndex &&
-                            utils.isAdjacentNodes(prevItem.node, nextItem.node, childNodesMap))
-                            items.set(utils.getNodeId(nextItem.node), nextItem);
-                for (const item of items.values()) {
+                const items = _.uniq(functions_1.a.fromIterable((0, functions_1.evaluate)(function* () {
+                    for (const prevItem of prevItems)
+                        for (const nextItem of nextItems)
+                            if (prevItem.ruleIndex === nextItem.ruleIndex &&
+                                utils.isAdjacentNodes(prevItem.node, nextItem.node, childNodesMap))
+                                yield nextItem;
+                })));
+                for (const item of items) {
                     const emptyLine = functions_1.a.get(context.subOptionsArray, item.ruleIndex).emptyLine;
                     if (emptyLine === "any") {
                         // Skip check
@@ -33,16 +60,16 @@ exports.consistentEmptyLines = utils.createRule({
                         const node = item.node;
                         const spread = (0, functions_1.evaluate)(() => {
                             switch (emptyLine) {
-                                case "always":
+                                case EmptyLine.always:
                                     return true;
-                                case "never":
+                                case EmptyLine.never:
                                     return false;
                             }
                         });
                         const count = spread ? 2 : 1;
                         const messageId = spread
-                            ? "expectingEmptyLine"
-                            : "unexpectedEmptyLine";
+                            ? MessageId.expectingEmptyLine
+                            : MessageId.unexpectedEmptyLine;
                         const got = context.getLeadingTrivia(node);
                         const expected = context.eol.repeat(count) + functions_1.s.trimLeadingEmptyLines(got);
                         if (got === expected) {
@@ -51,12 +78,10 @@ exports.consistentEmptyLines = utils.createRule({
                         else
                             context.report({
                                 data: { _id: item._id },
-                                fix: () => [
-                                    {
-                                        range: [node.range[0] - got.length, node.range[0]],
-                                        text: expected
-                                    }
-                                ],
+                                fix: () => ({
+                                    range: [node.range[0] - got.length, node.range[0]],
+                                    text: expected
+                                }),
                                 messageId,
                                 node
                             });
@@ -85,27 +110,6 @@ exports.consistentEmptyLines = utils.createRule({
                         });
                 };
         return listener;
-    },
-    fixable: "whitespace",
-    isRuleOptions: functions_1.is.object,
-    isSubOptions: (0, functions_1.evaluate)(() => {
-        const EmptyLineVO = (0, functions_1.createValidationObject)({
-            always: "always",
-            any: "any",
-            never: "never"
-        });
-        const isEmptyLine = functions_1.is.factory(functions_1.is.enumeration, EmptyLineVO);
-        return functions_1.is.object.factory({
-            _id: functions_1.is.string,
-            emptyLine: isEmptyLine,
-            next: functions_1.is.string,
-            prev: functions_1.is.string
-        }, {});
-    }),
-    messages: {
-        expectingEmptyLine: "Expecting empty line before ({{ _id }})",
-        unexpectedEmptyLine: "Unexpected empty line before ({{ _id }})"
-    },
-    name: "consistent-empty-lines"
+    }
 });
 //# sourceMappingURL=consistent-empty-lines.js.map

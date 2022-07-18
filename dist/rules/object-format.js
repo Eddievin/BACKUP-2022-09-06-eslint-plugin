@@ -1,16 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.objectFormat = void 0;
+exports.objectFormat = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("./utils"));
 const functions_1 = require("@skylib/functions");
-const utils_1 = require("@typescript-eslint/utils");
+var MessageId;
+(function (MessageId) {
+    MessageId["expectingMultiline"] = "expectingMultiline";
+    MessageId["expectingSingleLine"] = "expectingSingleLine";
+})(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.objectFormat = utils.createRule({
+    name: "object-format",
+    fixable: utils.Fixable.code,
+    isOptions: functions_1.is.object.factory({ maxLineLength: functions_1.is.number, maxObjectSize: functions_1.is.number }, {}),
+    defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
+    messages: {
+        [MessageId.expectingMultiline]: "Expecting multiline object literal",
+        [MessageId.expectingSingleLine]: "Expecting single-line object literal"
+    },
     create: (context) => {
         const listener = {
-            [utils_1.AST_NODE_TYPES.ObjectExpression]: (node) => {
+            ObjectExpression: (node) => {
                 const texts = node.properties.map(property => context.getTextWithLeadingTrivia(property).trim());
-                if (texts.length > 0) {
+                if (texts.length) {
                     const predictedLength = (0, functions_1.evaluate)(() => {
                         const headLength = context.getLocFromRange(node.range).start.column;
                         const tailLength = (0, functions_1.evaluate)(() => {
@@ -37,46 +49,37 @@ exports.objectFormat = utils.createRule({
                     const gotSingleLine = isSingleLine(context.getText(node));
                     if (expectMultiline && !gotMultiline)
                         context.report({
-                            fix: () => {
-                                const propertiesText = texts.join(",\n");
-                                return [{ range: node.range, text: `{\n${propertiesText}\n}` }];
-                            },
-                            messageId: "expectingMultiline",
+                            fix: () => ({
+                                range: node.range,
+                                text: `{\n${texts.join(",\n")}\n}`
+                            }),
+                            messageId: MessageId.expectingMultiline,
                             node
                         });
                     if (expectSingleLine && !gotSingleLine)
                         context.report({
-                            fix: () => {
-                                const propertiesText = texts.join(",");
-                                return [{ range: node.range, text: `{${propertiesText}}` }];
-                            },
-                            messageId: "expectingSingleLine",
+                            fix: () => ({
+                                range: node.range,
+                                text: `{${texts.join(",")}}`
+                            }),
+                            messageId: MessageId.expectingSingleLine,
                             node
                         });
                 }
             }
         };
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Postponed
         return context.defineTemplateBodyVisitor(listener, listener);
-    },
-    defaultOptions: { maxLineLength: 80, maxObjectSize: 2 },
-    fixable: "code",
-    isRuleOptions: functions_1.is.object.factory({ maxLineLength: functions_1.is.number, maxObjectSize: functions_1.is.number }, {}),
-    messages: {
-        expectingMultiline: "Expecting multiline object literal",
-        expectingSingleLine: "Expecting single-line object literal"
-    },
-    name: "object-format"
+    }
 });
-// eslint-disable-next-line no-warning-comments
+// eslint-disable-next-line no-warning-comments -- Postponed
 // fixme: use @skylib/functions
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 function isMultiline(str) {
     return str.includes("\n");
 }
-// eslint-disable-next-line no-warning-comments
+// eslint-disable-next-line no-warning-comments -- Postponed
 // fixme: use @skylib/functions
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 function isSingleLine(str) {
     return !str.includes("\n");
 }

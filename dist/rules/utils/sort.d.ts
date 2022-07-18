@@ -1,26 +1,11 @@
 import type { Context } from "./types";
-import type { strings } from "@skylib/functions";
+import { MessageId } from "./sort.internal";
 import type { TSESTree } from "@typescript-eslint/utils";
-export interface SortOptions {
-    readonly customOrder?: strings;
-    readonly sendToBottom?: string;
-    readonly sendToTop?: string;
+export declare const sort: (<T extends TSESTree.Node>(nodes: readonly T[], keyNode: (node: T) => TSESTree.Node, options: sort.Options, context: Context<MessageId, object, object>) => void) & Readonly<{
+    MessageId: typeof MessageId;
+}>;
+export declare namespace sort {
+    type MessageId = import("./sort.internal").MessageId;
+    type Options = import("./sort.internal").Options;
 }
-/**
- * Returns string representing node.
- *
- * @param node - Node.
- * @param context - Context.
- * @returns String representing node.
- */
-export declare function nodeToString(node: TSESTree.Node, context: Context<never, object, object>): string;
-/**
- * Sorts nodes.
- *
- * @param nodes - Nodes.
- * @param nodeToKey - Finds key node.
- * @param options - Options.
- * @param context - Context.
- */
-export declare function sort<T extends TSESTree.Node>(nodes: readonly T[], nodeToKey: (node: T) => TSESTree.Node, options: SortOptions, context: Context<"incorrectSortingOrder", object, object>): void;
 //# sourceMappingURL=sort.d.ts.map

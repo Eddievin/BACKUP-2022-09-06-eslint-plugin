@@ -1,8 +1,32 @@
-import type { s, unknowns } from "@skylib/functions";
-import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
-import type { ReportDescriptor, RuleContext, SourceCode } from "@typescript-eslint/utils/dist/ts-eslint";
 import type * as estree from "estree";
 import type * as ts from "typescript";
+import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
+import type { ReportDescriptor, RuleContext, RuleFix, RuleListener, SourceCode } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { s, unknowns } from "@skylib/functions";
+import type { TypeCheck } from "./TypeCheck";
+import { is } from "@skylib/functions";
+export declare enum Fixable {
+    code = "code",
+    whitespace = "whitespace"
+}
+export declare enum TypeGroup {
+    any = "any",
+    array = "array",
+    boolean = "boolean",
+    complex = "complex",
+    function = "function",
+    null = "null",
+    number = "number",
+    object = "object",
+    readonly = "readonly",
+    string = "string",
+    symbol = "symbol",
+    tuple = "tuple",
+    undefined = "undefined",
+    unknown = "unknown"
+}
+export declare const isTypeGroup: is.Guard<TypeGroup>;
+export declare const isTypeGroups: is.Guard<readonly TypeGroup[]>;
 export interface Context<M extends string, O extends object, S extends object> {
     readonly checker: ts.TypeChecker;
     readonly code: string;
@@ -52,13 +76,6 @@ export interface Context<M extends string, O extends object, S extends object> {
      */
     readonly getTextWithLeadingTrivia: (node: TSESTree.Node) => string;
     /**
-     * Checks if node has leading comment.
-     *
-     * @param node - Node.
-     * @returns _True_ if node has leading comment, _false_ otherwise.
-     */
-    readonly hasLeadingComment: (node: TSESTree.Node) => boolean;
-    /**
      * Checks if node has leading doc comment.
      *
      * @param node - Node.
@@ -73,7 +90,7 @@ export interface Context<M extends string, O extends object, S extends object> {
      */
     readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
     readonly id: string;
-    readonly locZero: TSESTree.Position;
+    readonly locZero: TSESTree.SourceLocation;
     /**
      * Checks if signature or symbol is missing doc comment.
      *
@@ -95,12 +112,15 @@ export interface Context<M extends string, O extends object, S extends object> {
     readonly subOptionsArray: readonly S[];
     readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
     readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
+    readonly typeCheck: TypeCheck;
 }
 export interface DefineTemplateBodyVisitor {
-    (templateVisitor: any, scriptVisitor?: any, options?: any): any;
+    (templateVisitor: any, scriptVisitor?: any, options?: any): RuleListener;
 }
 export interface Package {
     readonly name?: string;
 }
 export declare type ReadonlyRange = readonly [number, number];
+export declare type RuleFixes = readonly RuleFix[];
+export declare type TypeGroups = readonly TypeGroup[];
 //# sourceMappingURL=types.d.ts.map
