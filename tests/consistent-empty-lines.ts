@@ -117,5 +117,81 @@ utils.testRule("consistent-empty-lines", consistentEmptyLines, [
       },
       { line: 4, messageId: MessageId.expectingEmptyLine }
     ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        rules: [
+          {
+            _id: "id1",
+            emptyLine: EmptyLine.always,
+            next: ":statement",
+            prev: ":statement"
+          },
+          {
+            _id: "id2",
+            emptyLine: EmptyLine.never,
+            next: "ExpressionStatement",
+            prev: "ExpressionStatement"
+          }
+        ]
+      }
+    ],
+    code: `
+      if (1) {}
+      x = 1;
+
+      y = 2;
+    `,
+    output: `
+      if (1) {}
+
+      x = 1;
+      y = 2;
+    `,
+    errors: [
+      { line: 2, messageId: MessageId.expectingEmptyLine },
+      { line: 4, messageId: MessageId.unexpectedEmptyLine }
+    ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        rules: [
+          {
+            _id: "statement",
+            emptyLine: EmptyLine.always,
+            next: ":matches(:statement, TSDeclareFunction, TSExportAssignment)",
+            prev: ":matches(:statement, TSDeclareFunction, TSExportAssignment)"
+          },
+          {
+            _id: "ExpressionStatement",
+            emptyLine: EmptyLine.any,
+            next: "ExpressionStatement",
+            prev: "ExpressionStatement"
+          }
+        ]
+      }
+    ],
+    code: `
+      {
+        if (1) {}
+        x = 1;
+
+        y = 2;
+      }
+    `,
+    output: `
+      {
+        if (1) {}
+
+        x = 1;
+
+        y = 2;
+      }
+    `,
+    errors: [{ line: 3, messageId: MessageId.expectingEmptyLine }]
   }
 ]);

@@ -309,7 +309,7 @@ export function getIdentifierFromPath(path: string, expected?: string): string {
  * @returns Node ID.
  */
 export function getNodeId(node: TSESTree.Node | undefined): string {
-  return node ? node.range.join("-") : ".";
+  return node ? `${node.type}-${node.range[0]}-${node.range[1]}` : ".";
 }
 
 /**

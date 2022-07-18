@@ -1,12 +1,13 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
-import { Accumulator, a, evaluate, is, s } from "@skylib/functions";
+import { Accumulator, a, evaluate, is, o, s } from "@skylib/functions";
 import type {
   RuleFix,
+  RuleFunction,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { Writable, stringU } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
+import type { Writable } from "@skylib/functions";
 
 export interface SubOptions {
   readonly _id: string;
@@ -46,49 +47,63 @@ export const consistentEmptyLines = utils.createRule({
     [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
   },
   create: (context): RuleListener => {
-    const childNodesMap = new Accumulator<string, TSESTree.Node>();
-
-    const prevRuleIndexes = new Accumulator<string, number>();
-
-    const nextRuleIndexes = new Accumulator<string, number>();
+    const childNodes = new Accumulator<string, TSESTree.Node>();
 
     const prevItems: Writable<Items> = [];
 
     const nextItems: Writable<Items> = [];
 
-    const listener: RuleListener = {
+    const listeners = new Accumulator<string, RuleFunction<TSESTree.Node>>();
+
+    for (const [index, subOptions] of context.subOptionsArray.entries()) {
+      listeners.push(subOptions.prev, (node: TSESTree.Node): void => {
+        prevItems.push({
+          index,
+          node,
+          subOptions
+        });
+      });
+
+      listeners.push(subOptions.next, (node: TSESTree.Node): void => {
+        nextItems.push({
+          index,
+          node,
+          subOptions
+        });
+      });
+    }
+
+    return {
       "*": (node: TSESTree.Node) => {
-        utils.buildChildNodesMap(node, childNodesMap);
+        utils.buildChildNodesMap(node, childNodes);
       },
       "Program:exit": () => {
-        prevItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
-        nextItems.sort((item1, item2) => item1.ruleIndex - item2.ruleIndex);
+        prevItems.sort((item1, item2) => item2.index - item1.index);
+        nextItems.sort((item1, item2) => item2.index - item1.index);
 
-        const items = _.uniq(
+        const items = _.uniqBy(
           a.fromIterable(
             evaluate(function* (): Generator<Item> {
               for (const prevItem of prevItems)
                 for (const nextItem of nextItems)
                   if (
-                    prevItem.ruleIndex === nextItem.ruleIndex &&
+                    prevItem.index === nextItem.index &&
                     utils.isAdjacentNodes(
                       prevItem.node,
                       nextItem.node,
-                      childNodesMap
+                      childNodes
                     )
                   )
                     yield nextItem;
             })
-          )
+          ),
+          "node"
         );
 
         for (const item of items) {
-          const emptyLine = a.get(
-            context.subOptionsArray,
-            item.ruleIndex
-          ).emptyLine;
+          const emptyLine = item.subOptions.emptyLine;
 
-          if (emptyLine === "any") {
+          if (emptyLine === EmptyLine.any) {
             // Skip check
           } else {
             const node = item.node;
@@ -118,7 +133,7 @@ export const consistentEmptyLines = utils.createRule({
               // Valid
             } else
               context.report({
-                data: { _id: item._id },
+                data: { _id: item.subOptions._id },
                 fix: (): RuleFix => ({
                   range: [node.range[0] - got.length, node.range[0]],
                   text: expected
@@ -128,41 +143,23 @@ export const consistentEmptyLines = utils.createRule({
               });
           }
         }
-      }
+      },
+      ...o.fromEntries(
+        a.fromIterable(listeners).map(([name, callbacks]) => [
+          name,
+          (node: TSESTree.Node) => {
+            for (const callback of callbacks) callback(node);
+          }
+        ])
+      )
     };
-
-    for (const [ruleIndex, subOptions] of context.subOptionsArray.entries()) {
-      prevRuleIndexes.push(subOptions.prev, ruleIndex);
-      nextRuleIndexes.push(subOptions.next, ruleIndex);
-    }
-
-    for (const subOptions of context.subOptionsArray)
-      for (const selector of [subOptions.prev, subOptions.next])
-        listener[selector] = (node: TSESTree.Node): void => {
-          for (const ruleIndex of prevRuleIndexes.get(selector))
-            prevItems.push({
-              _id: subOptions._id,
-              node,
-              ruleIndex
-            });
-
-          for (const ruleIndex of nextRuleIndexes.get(selector))
-            nextItems.push({
-              _id: subOptions._id,
-              node,
-              ruleIndex
-            });
-        };
-
-    return listener;
-
-    interface Item {
-      // eslint-disable-next-line @skylib/optional-property-style -- Temp
-      readonly _id: stringU;
-      readonly node: TSESTree.Node;
-      readonly ruleIndex: number;
-    }
-
-    type Items = readonly Item[];
   }
 });
+
+interface Item {
+  readonly index: number;
+  readonly node: TSESTree.Node;
+  readonly subOptions: SubOptions;
+}
+
+type Items = readonly Item[];
