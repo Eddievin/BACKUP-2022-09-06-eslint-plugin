@@ -61,7 +61,7 @@ exports.consistentOptionalProps = utils.createRule({
             [utils_1.AST_NODE_TYPES.ClassExpression]: Target.classes,
             [utils_1.AST_NODE_TYPES.TSInterfaceDeclaration]: Target.interfaces
         };
-        const matchers = context.subOptionsArray.map((subOptions) => (Object.assign(Object.assign({}, subOptions), { nodeName: utils.createMatcher(subOptions.pattern, true), propName: utils.createMatcher(subOptions.propertyPattern, true) })));
+        const matchers = functions_1.a.reverse(context.subOptionsArray.map((subOptions) => (Object.assign(Object.assign({}, subOptions), { nodeName: utils.createMatcher(subOptions.pattern, true), propName: utils.createMatcher(subOptions.propertyPattern, true) }))));
         return {
             ClassDeclaration: lintNode,
             ClassExpression: lintNode,
