@@ -1,5 +1,5 @@
 import * as utils from "./utils";
-import { ReadonlySet, evaluate, is } from "@skylib/functions";
+import { ReadonlySet, a, evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
@@ -89,12 +89,14 @@ export const consistentOptionalProps = utils.createRule({
       [AST_NODE_TYPES.TSInterfaceDeclaration]: Target.interfaces
     } as const;
 
-    const matchers = context.subOptionsArray.map(
-      (subOptions): Matcher => ({
-        ...subOptions,
-        nodeName: utils.createMatcher(subOptions.pattern, true),
-        propName: utils.createMatcher(subOptions.propertyPattern, true)
-      })
+    const matchers = a.reverse(
+      context.subOptionsArray.map(
+        (subOptions): Matcher => ({
+          ...subOptions,
+          nodeName: utils.createMatcher(subOptions.pattern, true),
+          propName: utils.createMatcher(subOptions.propertyPattern, true)
+        })
+      )
     );
 
     return {

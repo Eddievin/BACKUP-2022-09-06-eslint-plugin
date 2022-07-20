@@ -115,7 +115,7 @@ utils.testRule(
         {
           line: 2,
           messageId: MessageId.undefinedId,
-          data: { id: "id1" }
+          data: { id: "id2" }
         },
         {
           line: 3,
@@ -233,7 +233,7 @@ utils.testRule(
         {
           line: 2,
           messageId: MessageId.undefinedId,
-          data: { id: "id1" }
+          data: { id: "id2" }
         },
         {
           line: 3,
