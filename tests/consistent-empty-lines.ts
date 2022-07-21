@@ -110,11 +110,7 @@ utils.testRule("consistent-empty-lines", consistentEmptyLines, [
       }
     `,
     errors: [
-      {
-        line: 2,
-        endLine: 5,
-        messageId: MessageId.expectingEmptyLine
-      },
+      { line: 2, endLine: 5, messageId: MessageId.expectingEmptyLine },
       { line: 4, messageId: MessageId.expectingEmptyLine }
     ]
   },

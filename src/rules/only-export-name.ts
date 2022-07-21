@@ -1,5 +1,4 @@
 import * as utils from "./utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export enum MessageId {
   invalidName = "invalidName"
@@ -11,13 +10,13 @@ export const onlyExportName = utils.createRule({
     [MessageId.invalidName]:
       "Only export should match file name: {{ expected }}"
   },
-  create: (context): RuleListener =>
-    utils.ruleTemplates.export.create(ctx => {
+  create: context =>
+    utils.ruleTemplates.export(ctx => {
       if (ctx.onlyExport)
         for (const node of ctx.identifiers) {
           const expected = utils.getIdentifierFromPath(context.path, node.name);
 
-          if (node.name === "default" || node.name === expected) {
+          if ([expected, "default"].includes(node.name)) {
             // Valid
           } else
             context.report({

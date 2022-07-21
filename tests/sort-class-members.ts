@@ -1,23 +1,31 @@
-import { MessageId, sortClassMembers } from "@/rules/sort-class-members";
 import getCurrentLine from "get-current-line";
+import { sortClassMembers } from "@/rules/sort-class-members";
 import { utils } from "@";
+
+const { MessageId } = utils.sort;
 
 utils.testRule("sort-class-members", sortClassMembers, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
       class C {
-        g() {}
-        f() {}
+        f1() {}
+        f3() {}
+        f2() {}
+        f4() {}
       }
     `,
     output: `
       class C {
-        f() {}
-        g() {}
+        f1() {}
+        f2() {}
+        f3() {}
+        f4() {}
       }
     `,
-    errors: [{ endLine: 4, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 3, endLine: 4, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -36,7 +44,9 @@ utils.testRule("sort-class-members", sortClassMembers, [
         private f() {}
       }
     `,
-    errors: [{ endLine: 5, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 2, endLine: 4, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -72,7 +82,9 @@ utils.testRule("sort-class-members", sortClassMembers, [
         f() {}
       }
     `,
-    errors: [{ endLine: 8, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 2, endLine: 7, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -111,7 +123,9 @@ utils.testRule("sort-class-members", sortClassMembers, [
         f() {}
       }
     `,
-    errors: [{ endLine: 10, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 2, endLine: 9, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -132,7 +146,9 @@ utils.testRule("sort-class-members", sortClassMembers, [
         private value = 1;
       }
     `,
-    errors: [{ endLine: 6, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 3, endLine: 5, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -167,7 +183,9 @@ utils.testRule("sort-class-members", sortClassMembers, [
         f() {}
       }
     `,
-    errors: [{ endLine: 4, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 2, endLine: 3, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -184,7 +202,9 @@ utils.testRule("sort-class-members", sortClassMembers, [
         f() {}
       }
     `,
-    errors: [{ endLine: 4, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 2, endLine: 3, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -201,7 +221,9 @@ utils.testRule("sort-class-members", sortClassMembers, [
         f() {}
       }
     `,
-    errors: [{ endLine: 4, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 2, endLine: 3, messageId: MessageId.incorrectSortingOrder }
+    ]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -219,6 +241,8 @@ utils.testRule("sort-class-members", sortClassMembers, [
         "g"() {}
       }
     `,
-    errors: [{ endLine: 5, messageId: MessageId.incorrectSortingOrder }]
+    errors: [
+      { line: 2, endLine: 4, messageId: MessageId.incorrectSortingOrder }
+    ]
   }
 ]);

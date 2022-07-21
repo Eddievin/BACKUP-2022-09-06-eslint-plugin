@@ -9,19 +9,15 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          sources: [
-            {
-              _id: "id",
-              source: "source",
-              type: Type.wildcard
-            }
-          ]
-        }
+        { sources: [{ _id: "id", source: "source", type: Type.wildcard }] }
       ],
       code: 'import source from "source"',
       errors: [
-        { messageId: MessageId.wildcardImportRequired, data: { _id: "id" } }
+        {
+          line: 1,
+          messageId: MessageId.wildcardImportRequired,
+          data: { _id: "id" }
+        }
       ]
     },
     {
@@ -41,7 +37,11 @@ utils.testRule(
       ],
       code: 'import source from "source"',
       errors: [
-        { messageId: MessageId.wildcardImportRequired, data: { _id: "id" } }
+        {
+          line: 1,
+          messageId: MessageId.wildcardImportRequired,
+          data: { _id: "id" }
+        }
       ]
     }
   ],

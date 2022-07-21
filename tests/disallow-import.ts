@@ -45,7 +45,7 @@ utils.testRule("disallow-import", disallowImport, [
       import "source";
     `,
     errors: [
-      { messageId: MessageId.disallowedSource },
+      { line: 1, messageId: MessageId.disallowedSource },
       { line: 2, messageId: MessageId.disallowedSource },
       { line: 3, messageId: MessageId.disallowedSource }
     ]
@@ -60,7 +60,7 @@ utils.testRule("disallow-import", disallowImport, [
       import("source");
     `,
     errors: [
-      { messageId: MessageId.disallowedSource },
+      { line: 1, messageId: MessageId.disallowedSource },
       { line: 2, messageId: MessageId.disallowedSource },
       { line: 3, messageId: MessageId.disallowedSource }
     ]
@@ -75,7 +75,7 @@ utils.testRule("disallow-import", disallowImport, [
       require("source");
     `,
     errors: [
-      { messageId: MessageId.disallowedSource },
+      { line: 1, messageId: MessageId.disallowedSource },
       { line: 2, messageId: MessageId.disallowedSource },
       { line: 3, messageId: MessageId.disallowedSource }
     ]
@@ -90,7 +90,7 @@ utils.testRule("disallow-import", disallowImport, [
       export * from "source";
     `,
     errors: [
-      { messageId: MessageId.disallowedSource },
+      { line: 1, messageId: MessageId.disallowedSource },
       { line: 2, messageId: MessageId.disallowedSource },
       { line: 3, messageId: MessageId.disallowedSource }
     ]
@@ -105,18 +105,9 @@ utils.testRule("disallow-import", disallowImport, [
       export { x4 } from "source";
     `,
     errors: [
-      { messageId: MessageId.disallowedSource },
+      { line: 1, messageId: MessageId.disallowedSource },
       { line: 2, messageId: MessageId.disallowedSource },
       { line: 3, messageId: MessageId.disallowedSource }
     ]
-  },
-  {
-    name: `Test at line ${getCurrentLine().line}`,
-    options: [{ disallow: ["./*"], exclusions: [{ allow: ["./source2"] }] }],
-    code: `
-      import "./source1";
-      import "./source2";
-    `,
-    errors: [{ messageId: MessageId.disallowedSource }]
   }
 ]);

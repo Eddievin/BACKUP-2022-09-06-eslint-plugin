@@ -1,34 +1,34 @@
-/* eslint-disable @skylib/custom/prefer-arrow-function-property -- Ok */
-
 /* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
 
 import * as _ from "@skylib/lodash-commonjs-es";
-import type * as estree from "estree";
-import type * as ts from "typescript";
-import * as tsutils from "tsutils";
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
-import type { Accumulator, Rec, strings, unknowns } from "@skylib/functions";
-import type { Context, DefineTemplateBodyVisitor, Package } from "./types";
-import type {
-  RuleContext,
-  RuleListener,
-  RuleModule
-} from "@typescript-eslint/utils/dist/ts-eslint";
 import {
+  Accumulator,
+  ProxyHandlerAction,
   a,
+  as,
   assert,
   cast,
-  defineFn,
-  evaluate,
   fn,
   is,
   json,
   o,
+  reflect,
   s,
-  typedef
+  wrapProxyHandler
 } from "@skylib/functions";
+import type {
+  ReportDescriptor as BaseReportDescriptor,
+  RuleContext,
+  RuleFunction,
+  RuleListener,
+  RuleModule
+} from "@typescript-eslint/utils/dist/ts-eslint";
+import type { Context, DefineTemplateBodyVisitor, Package } from "./types";
+import type { Entry, Rec, strings, types } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { TypeCheck } from "./TypeCheck";
+import { createBetterContext } from "./create-context";
 import fs from "node:fs";
 import minimatch from "minimatch";
 import nodePath from "node:path";
@@ -43,63 +43,6 @@ export const base = fn.pipe(
   process.cwd(),
   s.path.canonicalize,
   s.path.addTrailingSlash
-);
-
-export const createFileMatcher = defineFn(
-  /**
-   * Creates file matcher.
-   *
-   * @param patterns - Patterns.
-   * @param defVal - Default value.
-   * @param options - Minimatch options.
-   * @returns Matcher.
-   */
-  (
-    patterns: strings,
-    defVal: boolean,
-    options: Readonly<minimatch.IOptions>
-  ): Matcher => {
-    const matchers = patterns.map(
-      pattern =>
-        (str: string): boolean =>
-          minimatch(str, pattern, options)
-    );
-
-    // eslint-disable-next-line no-warning-comments -- Postponed
-    // fixme
-    return evaluate(() =>
-      matchers.length
-        ? (str): boolean => matchers.some(matcher => matcher(str))
-        : (): boolean => defVal
-    );
-  },
-  {
-    /**
-     * Creates file matcher.
-     *
-     * @param disallow - Disallow patterns.
-     * @param allow - Allow patterns.
-     * @param defVal - Default value.
-     * @param options - Minimatch options.
-     * @returns Matcher.
-     */
-    disallowAllow: (
-      disallow: strings,
-      allow: strings,
-      defVal: boolean,
-      options: Readonly<minimatch.IOptions>
-    ): Matcher => {
-      if (disallow.length || allow.length) {
-        const disallowMatcher = createFileMatcher(disallow, true, options);
-
-        const allowMatcher = createFileMatcher(allow, false, options);
-
-        return (str): boolean => disallowMatcher(str) && !allowMatcher(str);
-      }
-
-      return (): boolean => defVal;
-    }
-  }
 );
 
 export const isPattern: is.Guard<Pattern> = is.or.factory(
@@ -119,9 +62,13 @@ export interface CreateRuleOptions<
    * Creates rule listener.
    *
    * @param context - Context.
+   * @param typeCheck - Type check.
    * @returns Rule listener.
    */
-  readonly create: (context: Context<M, O, S>) => RuleListener;
+  readonly create: (
+    context: Context<M, O, S>,
+    typeCheck: TypeCheck
+  ) => RuleListener;
   readonly defaultOptions?: Readonly<Partial<O>>;
   readonly defaultSubOptions?: Readonly<Partial<S>>;
   readonly fixable?: "code" | "whitespace";
@@ -149,14 +96,24 @@ export interface Matcher {
   (str: string): boolean;
 }
 
-export type Pattern = strings | string;
+export type Pattern =
+  | strings
+  | string
+  | {
+      readonly allow: strings | string;
+      readonly disallow: strings | string;
+    };
+
+export type ReportDescriptor<T extends string = string> =
+  BaseReportDescriptor<T>;
+
+export type ReportDescriptors<T extends string = string> = ReadonlyArray<
+  ReportDescriptor<T>
+>;
+
+export type RuleListeners = readonly RuleListener[];
 
 export type Selector = strings | string;
-
-export interface SharedOptions1 {
-  readonly filesToLint?: strings;
-  readonly filesToSkip?: strings;
-}
 
 export interface SharedOptions2 {
   readonly _id?: string;
@@ -174,31 +131,75 @@ export function buildChildNodesMap(
   node: TSESTree.Node,
   mutableChildNodesMap: Accumulator<string, TSESTree.Node>
 ): void {
-  mutableChildNodesMap.push(getNodeId(node.parent), node);
+  mutableChildNodesMap.push(nodeId(node.parent), node);
+}
+
+/**
+ * Creates file matcher.
+ *
+ * @param patterns - Patterns.
+ * @param defVal - Default value.
+ * @param options - Minimatch options.
+ * @returns Matcher.
+ */
+export function createFileMatcher(
+  patterns: strings | { readonly allow: strings; readonly disallow: strings },
+  defVal: boolean,
+  options: Readonly<minimatch.IOptions>
+): Matcher {
+  if (is.strings(patterns)) {
+    const matchers = patterns.map(
+      pattern =>
+        (str: string): boolean =>
+          minimatch(str, pattern, options)
+    );
+
+    return matchers.length
+      ? (str): boolean => matchers.some(matcher => matcher(str))
+      : (): boolean => defVal;
+  }
+
+  const { allow, disallow } = patterns;
+
+  const disallowMatcher = createFileMatcher(disallow, true, options);
+
+  const allowMatcher = createFileMatcher(allow, false, options);
+
+  return disallow.length || allow.length
+    ? (str): boolean => disallowMatcher(str) && !allowMatcher(str)
+    : (): boolean => defVal;
 }
 
 /**
  * Creates matcher.
  *
- * @param mixedPattern - RegExp pattern(s).
+ * @param pattern - RegExp pattern(s).
  * @param defVal - Default value.
  * @returns Matcher.
  */
-export function createMatcher(
-  mixedPattern: Pattern | undefined,
-  defVal: boolean
-): Matcher {
-  if (is.not.empty(mixedPattern)) {
-    const matchers = a
-      .fromMixed(mixedPattern)
+export function createMatcher(pattern: Pattern, defVal: boolean): Matcher {
+  if (is.string(pattern)) return createMatcher([pattern], defVal);
+
+  if (is.array(pattern)) {
+    const matchers = pattern
       // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      .map(pattern => new RegExp(pattern, "u"))
+      .map(pt => new RegExp(pt, "u"))
       .map(re => (str: string) => re.test(str));
 
-    return str => matchers.some(matcher => matcher(str));
+    return matchers.length
+      ? str => matchers.some(matcher => matcher(str))
+      : () => defVal;
   }
 
-  return () => defVal;
+  const { allow, disallow } = pattern;
+
+  const disallowMatcher = createMatcher(disallow, true);
+
+  const allowMatcher = createMatcher(allow, false);
+
+  return disallow.length || allow.length
+    ? (str): boolean => disallowMatcher(str) && !allowMatcher(str)
+    : (): boolean => defVal;
 }
 
 /**
@@ -217,7 +218,7 @@ export function createRule<
 ): RuleModule<
   M,
   [
-    Partial<O & SharedOptions1> & {
+    Partial<O> & {
       readonly [L in K]?: ReadonlyArray<Partial<S & SharedOptions2>>;
     }
   ]
@@ -235,9 +236,23 @@ export function createRule<
     create: (context: RuleContext<M, [object]>, rawOptions): RuleListener => {
       const betterContext = createBetterContext(context, rawOptions, options);
 
-      const result = shouldBeLinted1(betterContext.options, betterContext.path)
-        ? create(betterContext)
-        : {};
+      const typeCheck = new Proxy(
+        new TypeCheck(context),
+        wrapProxyHandler("classToInterface", ProxyHandlerAction.doDefault, {
+          get: (target, key) => {
+            // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Ok
+            const result2 = reflect.get(target, key);
+
+            // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+            // fixme
+            return is.callable<types.fn.Callable>(result2)
+              ? result2.bind(target)
+              : result2;
+          }
+        })
+      );
+
+      const result = create(betterContext, typeCheck);
 
       if (vue && is.not.empty(context.parserServices)) {
         const defineTemplateBodyVisitor = o.get(
@@ -268,16 +283,6 @@ export function createRule<
 }
 
 /**
- * Gets program comments.
- *
- * @param program - Program.
- * @returns Comments.
- */
-export function getComments(program: TSESTree.Program): TSESTree.Comment[] {
-  return cast.not.empty(program.comments, []);
-}
-
-/**
  * Gets name from filename.
  *
  * @param path - Path.
@@ -285,7 +290,7 @@ export function getComments(program: TSESTree.Program): TSESTree.Comment[] {
  * @returns Name.
  */
 export function getIdentifierFromPath(path: string, expected?: string): string {
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Postponed
   const { base, dir, name } = nodePath.parse(path);
 
   return is.not.empty(expected) &&
@@ -300,16 +305,6 @@ export function getIdentifierFromPath(path: string, expected?: string): string {
     // fixme
     return /^[A-Z]/u.test(x) ? s.ucFirst(_.camelCase(x)) : _.camelCase(x);
   }
-}
-
-/**
- * Generates node ID.
- *
- * @param node - Node.
- * @returns Node ID.
- */
-export function getNodeId(node: TSESTree.Node | undefined): string {
-  return node ? `${node.type}-${node.range[0]}-${node.range[1]}` : ".";
 }
 
 /**
@@ -366,9 +361,9 @@ export function isAdjacentNodes(
   node2: TSESTree.Node,
   childNodesMap: Accumulator<string, TSESTree.Node>
 ): boolean {
-  const id1 = getNodeId(node1.parent);
+  const id1 = nodeId(node1.parent);
 
-  const id2 = getNodeId(node2.parent);
+  const id2 = nodeId(node2.parent);
 
   if (id1 === id2) {
     const siblings = childNodesMap.get(id1);
@@ -383,26 +378,73 @@ export function isAdjacentNodes(
   return false;
 }
 
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+export function mergeListenters(...listenters: RuleListeners): RuleListener {
+  const visitorsMap = new Accumulator(
+    listenters.flatMap(visitors =>
+      o
+        .entries(visitors)
+        .map(
+          ([selector, visitor]): Entry1 => [
+            selector,
+            [as.callable<Visitor>(visitor)]
+          ]
+        )
+    )
+  );
+
+  const entries = a.fromIterable(visitorsMap).map(
+    ([name, visitors]): Entry2 => [
+      name,
+      node => {
+        for (const visitor of visitors) visitor(node);
+      }
+    ]
+  );
+
+  const result: RuleListener = {};
+
+  for (const [selector, visitor] of entries) result[selector] = visitor;
+
+  return result;
+
+  type Entry1 = Accumulator.Entry<string, Visitor>;
+
+  type Entry2 = Entry<string, Visitor>;
+
+  type Visitor = RuleFunction<TSESTree.Node>;
+}
+
+/**
+ * Generates node ID.
+ *
+ * @param node - Node.
+ * @returns Node ID.
+ */
+export function nodeId(node: TSESTree.Node | undefined): string {
+  return node ? `${node.type}-${node.range[0]}-${node.range[1]}` : ".";
+}
+
 /**
  * Returns string representing node.
  *
  * @param node - Node.
- * @param context - Context.
+ * @param defVal - Default value.
  * @returns String representing node.
  */
-export function nodeToString(
+export function nodeText(
   node: TSESTree.Node,
-  context: Context<never, object, object>
+  defVal: string | (() => string)
 ): string {
   switch (node.type) {
-    case "Identifier":
+    case AST_NODE_TYPES.Identifier:
       return node.name;
 
-    case "Literal":
+    case AST_NODE_TYPES.Literal:
       return cast.string(node.value);
 
     default:
-      return `\u0000${context.getText(node)}`;
+      return is.string(defVal) ? defVal : defVal();
   }
 }
 
@@ -420,289 +462,4 @@ export function stripBase(path: string, replacement = ""): string {
   );
 
   return `${replacement}${path.slice(base.length)}`;
-}
-
-const isSharedOptions1 = is.object.factory<SharedOptions1>(
-  {},
-  { filesToLint: is.strings, filesToSkip: is.strings }
-);
-
-const isSharedOptions2 = is.object.factory<SharedOptions2>(
-  {},
-  {
-    _id: is.string,
-    filesToLint: is.strings,
-    filesToSkip: is.strings
-  }
-);
-
-/**
- * Creates better context.
- *
- * @param context - Context.
- * @param ruleOptionsArray - Raw rule options array.
- * @param options - Options.
- * @returns Better context.
- */
-function createBetterContext<
-  M extends string,
-  O extends object,
-  S extends object,
-  K extends string = never
->(
-  context: RuleContext<M, unknowns>,
-  ruleOptionsArray: unknowns,
-  options: CreateRuleOptions<M, O, S, K>
-): Context<M, O, S> {
-  const id = context.id;
-
-  const path = context.getFilename();
-
-  const source = context.getSourceCode();
-
-  const code = source.getText();
-
-  const parser = ESLintUtils.getParserServices(context);
-
-  assert.toBeTrue(
-    tsutils.isStrictCompilerOptionEnabled(
-      parser.program.getCompilerOptions(),
-      "strictNullChecks"
-    ),
-    'Expecting "strictNullChecks" compiler option to be enabled'
-  );
-
-  const checker = parser.program.getTypeChecker();
-
-  const toEsNode = parser.tsNodeToESTreeNodeMap.get.bind(
-    parser.tsNodeToESTreeNodeMap
-  );
-
-  const toTsNode = parser.esTreeNodeToTSNodeMap.get.bind(
-    parser.esTreeNodeToTSNodeMap
-  );
-
-  return {
-    checker: parser.program.getTypeChecker(),
-    code,
-    defineTemplateBodyVisitor: (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
-      templateVisitor: any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
-      scriptVisitor?: any
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
-    ): any => {
-      assert.not.empty(context.parserServices, "Missing Vue parser");
-
-      const defineTemplateBodyVisitor = o.get(
-        context.parserServices,
-        "defineTemplateBodyVisitor"
-      );
-
-      assert.callable<DefineTemplateBodyVisitor>(
-        defineTemplateBodyVisitor,
-        "Missing Vue parser"
-      );
-
-      return defineTemplateBodyVisitor(templateVisitor, scriptVisitor);
-    },
-    eol: s.detectEol(code),
-    getLeadingTrivia(node): string {
-      // May be undefined inside Vue <template>
-      const tsNode = typedef<ts.Node | undefined>(this.toTsNode(node));
-
-      return tsNode
-        ? code.slice(
-            node.range[0] - tsNode.getLeadingTriviaWidth(),
-            node.range[0]
-          )
-        : code.slice(node.range[0], node.range[0]);
-    },
-    getLocFromRange(range): estree.SourceLocation {
-      return {
-        end: source.getLocFromIndex(range[1]),
-        start: source.getLocFromIndex(range[0])
-      };
-    },
-    getMemberName(node: TSESTree.ClassElement | TSESTree.TypeElement): string {
-      switch (node.type) {
-        case AST_NODE_TYPES.MethodDefinition:
-        case AST_NODE_TYPES.PropertyDefinition:
-        case AST_NODE_TYPES.TSAbstractMethodDefinition:
-        case AST_NODE_TYPES.TSAbstractPropertyDefinition:
-        case AST_NODE_TYPES.TSMethodSignature:
-        case AST_NODE_TYPES.TSPropertySignature:
-          switch (node.key.type) {
-            case AST_NODE_TYPES.Identifier:
-              return node.key.name;
-
-            case AST_NODE_TYPES.Literal:
-              return cast.string(node.key.value);
-
-            default:
-              return this.getText(node.key);
-          }
-
-        case AST_NODE_TYPES.StaticBlock:
-        case AST_NODE_TYPES.TSIndexSignature:
-        case AST_NODE_TYPES.TSCallSignatureDeclaration:
-        case AST_NODE_TYPES.TSConstructSignatureDeclaration:
-          return "";
-      }
-    },
-    getRangeWithLeadingTrivia(node): TSESTree.Range {
-      return [
-        node.range[0] - this.getLeadingTrivia(node).length,
-        node.range[1]
-      ];
-    },
-    getText(node): string {
-      return code.slice(...node.range);
-    },
-    getTextWithLeadingTrivia(node): string {
-      return code.slice(
-        node.range[0] - this.getLeadingTrivia(node).length,
-        node.range[1]
-      );
-    },
-    hasLeadingDocComment(node): boolean {
-      return this.getLeadingTrivia(node).trim().startsWith("/**");
-    },
-    hasTrailingComment(node): boolean {
-      return code.slice(node.range[1]).trim().startsWith("//");
-    },
-    id,
-    locZero: {
-      end: source.getLocFromIndex(0),
-      start: source.getLocFromIndex(0)
-    },
-    missingDocComment(mixed): boolean {
-      return mixed.getDocumentationComment(this.checker).length === 0;
-    },
-    options: getRuleOptions(ruleOptionsArray, options),
-    package: getPackage(),
-    path,
-    report: context.report.bind(context),
-    scope: context.getScope(),
-    source,
-    subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, path),
-    toEsNode,
-    toTsNode,
-    typeCheck: new TypeCheck(checker, toTsNode)
-  };
-}
-
-/**
- * Gets rule options.
- *
- * @param ruleOptionsArray - Raw rule options array.
- * @param options - Options.
- * @returns Rule options.
- */
-function getRuleOptions<
-  M extends string,
-  O extends object,
-  S extends object,
-  K extends string = never
->(ruleOptionsArray: unknowns, options: CreateRuleOptions<M, O, S, K>): O {
-  const { isOptions } = {
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
-    isOptions: is.unknown as is.Guard<O>,
-    ...options
-  };
-
-  const ruleOptions = ruleOptionsArray[0];
-
-  assert.byGuard(ruleOptions, isOptions, "Expecting valid rule options");
-
-  return ruleOptions;
-}
-
-/**
- * Gets suboptions array.
- *
- * @param ruleOptionsArray - Raw rule options array.
- * @param options - Options.
- * @param path - Path.
- * @returns Suboptions array.
- */
-function getSubOptionsArray<
-  M extends string,
-  O extends object,
-  S extends object,
-  K extends string = never
->(
-  ruleOptionsArray: unknowns,
-  options: CreateRuleOptions<M, O, S, K>,
-  path: string
-): readonly S[] {
-  const { defaultSubOptions, isSubOptions, subOptionsKey } = options;
-
-  if (isSubOptions) {
-    const ruleOptions = getRuleOptions(ruleOptionsArray, options);
-
-    assert.not.empty(subOptionsKey, "Expecting suboptions key");
-
-    const raw = o.get(ruleOptions, subOptionsKey) ?? [];
-
-    assert.array.of(raw, is.object, "Expecting valid rule options");
-
-    const result = raw
-      .map((subOptions): object => ({ ...defaultSubOptions, ...subOptions }))
-      .filter(subOptions => shouldBeLinted2(subOptions, path));
-
-    assert.array.of(result, isSubOptions, "Expecting valid rule options");
-
-    return result;
-  }
-
-  return [];
-}
-
-/**
- * Determines if file should be linted.
- *
- * @param options - Options.
- * @param path - Path.
- * @returns _True_ if file should be linted, _false_ otherwise.
- */
-function shouldBeLinted1(options: unknown, path: string): boolean {
-  assert.byGuard(options, isSharedOptions1, "Expecting valid rule options");
-
-  const disallowByPath = evaluate((): boolean => {
-    const matcher = createFileMatcher.disallowAllow(
-      options.filesToSkip ?? [],
-      options.filesToLint ?? [],
-      false,
-      { dot: true, matchBase: true }
-    );
-
-    return matcher(stripBase(s.path.canonicalize(path), "./"));
-  });
-
-  return !disallowByPath;
-}
-
-/**
- * Determines if file should be linted.
- *
- * @param options - Options.
- * @param path - Path.
- * @returns _True_ if file should be linted, _false_ otherwise.
- */
-function shouldBeLinted2(options: unknown, path: string): boolean {
-  assert.byGuard(options, isSharedOptions2, "Expecting valid rule options");
-
-  const disallowByPath = evaluate((): boolean => {
-    const matcher = createFileMatcher.disallowAllow(
-      options.filesToSkip ?? [],
-      options.filesToLint ?? [],
-      false,
-      { dot: true, matchBase: true }
-    );
-
-    return matcher(stripBase(s.path.canonicalize(path), "./"));
-  });
-
-  return !disallowByPath;
 }

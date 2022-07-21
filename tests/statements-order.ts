@@ -66,7 +66,9 @@ utils.testRule(
         function PF2();
         namespace PN1 {}
       `,
-      errors: [{ endLine: 27, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 27, messageId: MessageId.incorrectStatementsOrder }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -108,7 +110,9 @@ utils.testRule(
         class PU2 {}
         var PU1 = 1;
       `,
-      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 9, messageId: MessageId.incorrectStatementsOrder }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -150,7 +154,9 @@ utils.testRule(
         class PU2 {}
         var PU1 = 1;
       `,
-      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 9, messageId: MessageId.incorrectStatementsOrder }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -176,7 +182,9 @@ utils.testRule(
           function PF2();
         }
       `,
-      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 9, messageId: MessageId.incorrectStatementsOrder }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -218,7 +226,9 @@ utils.testRule(
           var PU1 = 1;
         }
       `,
-      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 9, messageId: MessageId.incorrectStatementsOrder }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -244,7 +254,9 @@ utils.testRule(
           function PF2();
         }
       `,
-      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 9, messageId: MessageId.incorrectStatementsOrder }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -286,7 +298,9 @@ utils.testRule(
           var PU1 = 1;
         }
       `,
-      errors: [{ endLine: 9, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 9, messageId: MessageId.incorrectStatementsOrder }
+      ]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -320,7 +334,9 @@ utils.testRule(
         test.only("test9", () => {});
         test.only.each([])("testA", () => {});
       `,
-      errors: [{ endLine: 13, messageId: MessageId.incorrectStatementsOrder }]
+      errors: [
+        { line: 1, endLine: 13, messageId: MessageId.incorrectStatementsOrder }
+      ]
     }
   ],
   [

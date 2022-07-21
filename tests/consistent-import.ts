@@ -111,8 +111,8 @@ utils.testRule(
         namespace localName7 {}
       `,
       errors: [
-        { messageId: MessageId.missingImport },
-        { messageId: MessageId.autoImport },
+        { line: 1, messageId: MessageId.missingImport },
+        { line: 1, messageId: MessageId.autoImport },
         { line: 2, messageId: MessageId.missingImport },
         { line: 4, messageId: MessageId.missingImport },
         { line: 5, messageId: MessageId.missingImport }
@@ -140,8 +140,8 @@ utils.testRule(
         source;
       `,
       errors: [
-        { messageId: MessageId.missingImport },
-        { messageId: MessageId.autoImport }
+        { line: 1, messageId: MessageId.missingImport },
+        { line: 1, messageId: MessageId.autoImport }
       ]
     },
     {
@@ -166,8 +166,8 @@ utils.testRule(
         const x = { source };
       `,
       errors: [
-        { messageId: MessageId.autoImport },
-        { messageId: MessageId.missingImport }
+        { line: 1, messageId: MessageId.autoImport },
+        { line: 1, messageId: MessageId.missingImport }
       ]
     },
     {
@@ -203,7 +203,11 @@ utils.testRule(
         import * as localName4 from "source4";
       `,
       errors: [
-        { messageId: MessageId.wildcardImportRequired, data: { _id: "id1" } },
+        {
+          line: 1,
+          messageId: MessageId.wildcardImportRequired,
+          data: { _id: "id1" }
+        },
         {
           line: 2,
           messageId: MessageId.wildcardImportRequired,
@@ -242,6 +246,7 @@ utils.testRule(
       `,
       errors: [
         {
+          line: 1,
           messageId: MessageId.invalidLocalName,
           data: { _id: "id1", expectedLocalName: '"localName1"' }
         },
@@ -317,6 +322,7 @@ utils.testRule(
       `,
       errors: [
         {
+          line: 1,
           messageId: MessageId.invalidLocalName,
           data: { _id: "id1", expectedLocalName: '"altName1"' }
         },

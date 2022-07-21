@@ -1,5 +1,4 @@
 import * as ts from "typescript";
-import * as tsutils from "tsutils";
 import * as utils from "./utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
@@ -18,7 +17,7 @@ export const noUnsafeObjectAssignment = utils.createRule({
     [MessageId.unsafeReadonlyAssignment]:
       "Unsafe readonly-to-mutable assignment: {{name}}"
   },
-  create: (context): RuleListener => {
+  create: (context, typeCheck): RuleListener => {
     return {
       ArrowFunctionExpression: (node): void => {
         if (node.body.type === AST_NODE_TYPES.BlockStatement) {
@@ -33,14 +32,10 @@ export const noUnsafeObjectAssignment = utils.createRule({
         lintNodes(node.left, node.right);
       },
       CallExpression: (node): void => {
-        const tsNode = context.toTsNode(node);
-
-        for (const arg of tsNode.arguments) lintExpression(arg);
+        for (const arg of node.arguments) lintExpression(arg);
       },
       ReturnStatement: (node): void => {
-        const tsNode = context.toTsNode(node);
-
-        if (tsNode.expression) lintExpression(tsNode.expression);
+        if (node.argument) lintExpression(node.argument);
       },
       VariableDeclaration: (node): void => {
         for (const declaration of node.declarations)
@@ -48,27 +43,21 @@ export const noUnsafeObjectAssignment = utils.createRule({
       }
     };
 
-    function lintExpression(tsNode: ts.Expression): void {
-      const destType = context.checker.getContextualType(tsNode);
+    function lintExpression(node: TSESTree.CallExpressionArgument): void {
+      const destType = typeCheck.getContextualType(node);
 
-      const sourceType = context.checker.getTypeAtLocation(tsNode);
+      const sourceType = typeCheck.getType(node);
 
-      const node = context.toEsNode(tsNode);
-
-      if (destType && node.type !== "ObjectExpression")
+      if (destType && node.type !== AST_NODE_TYPES.ObjectExpression)
         lintTypes(destType, sourceType, node);
     }
 
     function lintNodes(dest: TSESTree.Node, source: TSESTree.Node): void {
-      const tsDest = context.toTsNode(dest);
+      const destType = typeCheck.getType(dest);
 
-      const tsSource = context.toTsNode(source);
+      const sourceType = typeCheck.getType(source);
 
-      const destType = context.checker.getTypeAtLocation(tsDest);
-
-      const sourceType = context.checker.getTypeAtLocation(tsSource);
-
-      if (source.type === "ObjectExpression") {
+      if (source.type === AST_NODE_TYPES.ObjectExpression) {
         // Ignore
       } else lintTypes(destType, sourceType, source);
     }
@@ -80,8 +69,8 @@ export const noUnsafeObjectAssignment = utils.createRule({
     ): void {
       if (
         dest !== source &&
-        tsutils.isObjectType(dest) &&
-        tsutils.isObjectType(source)
+        typeCheck.isObjectType(dest) &&
+        typeCheck.isObjectType(source)
       ) {
         for (const destProperty of dest.getProperties())
           if (destProperty.name.startsWith("__@")) {
@@ -90,16 +79,14 @@ export const noUnsafeObjectAssignment = utils.createRule({
             const sourceProperty = source.getProperty(destProperty.name);
 
             if (sourceProperty) {
-              const destReadonly = tsutils.isPropertyReadonlyInType(
-                dest,
-                destProperty.getEscapedName(),
-                context.checker
+              const destReadonly = typeCheck.isReadonlyProperty(
+                destProperty,
+                dest
               );
 
-              const sourceReadonly = tsutils.isPropertyReadonlyInType(
-                source,
-                sourceProperty.getEscapedName(),
-                context.checker
+              const sourceReadonly = typeCheck.isReadonlyProperty(
+                sourceProperty,
+                source
               );
 
               if (sourceReadonly && !destReadonly) {
@@ -123,18 +110,15 @@ export const noUnsafeObjectAssignment = utils.createRule({
           }
 
         for (const kind of [ts.IndexKind.Number, ts.IndexKind.String]) {
-          const sourceIndexInfo = context.checker.getIndexInfoOfType(
-            source,
-            kind
-          );
+          const sourceIndex = typeCheck.getIndexInfo(source, kind);
 
-          const destIndexInfo = context.checker.getIndexInfoOfType(dest, kind);
+          const destIndex = typeCheck.getIndexInfo(dest, kind);
 
           if (
-            sourceIndexInfo &&
-            destIndexInfo &&
-            sourceIndexInfo.isReadonly &&
-            !destIndexInfo.isReadonly
+            sourceIndex &&
+            destIndex &&
+            sourceIndex.isReadonly &&
+            !destIndex.isReadonly
           ) {
             context.report({
               data: { name: "Index signature" },

@@ -19,18 +19,23 @@ utils.testRule(
         /** Comment */
         function g(): void {}
       `,
-      errors: [{ messageId: MessageId.undocumented }]
+      errors: [{ line: 1, messageId: MessageId.undocumented }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ interfaces: [InterfaceOption.interface] }],
       code: `
         /** Comment */
-        interface I {}
-
-        interface J extends I {}
+        interface I {
+          (): void;
+          new (): void;
+        }
+        interface J extends I {
+          (): void;
+          new (): void;
+        }
       `,
-      errors: [{ line: 4, messageId: MessageId.undocumented }]
+      errors: [{ line: 6, endLine: 9, messageId: MessageId.undocumented }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -39,18 +44,15 @@ utils.testRule(
         interface I {
           /** Comment */
           (): void;
+          new (): void;
         }
-
         interface J extends I {
           (): void;
+          new (): void;
         }
       `,
       errors: [
-        {
-          line: 6,
-          endLine: 8,
-          messageId: MessageId.undocumentedCallSignature
-        }
+        { line: 6, endLine: 9, messageId: MessageId.undocumentedCallSignature }
       ]
     },
     {
@@ -58,18 +60,19 @@ utils.testRule(
       options: [{ interfaces: [InterfaceOption.constructSignatures] }],
       code: `
         interface I {
+          (): void;
           /** Comment */
           new (): object;
         }
-
         interface J extends I {
+          (): void;
           new (): object;
         }
       `,
       errors: [
         {
           line: 6,
-          endLine: 8,
+          endLine: 9,
           messageId: MessageId.undocumentedConstructSignature
         }
       ]
@@ -79,13 +82,9 @@ utils.testRule(
       code: `
         class C {
           public constructor()  {}
-
           public get x(): boolean { return true; }
-
           public set x(value: boolean) {}
-
           public f() {}
-
           public static g() {}
         }
 
@@ -93,27 +92,23 @@ utils.testRule(
         class D {
           /** Comment */
           public constructor()  {}
-
           /** Comment */
           public get x(): boolean { return true; }
-
           /** Comment */
           public set x(value: boolean) {}
-
           /** Comment */
           public f() {}
-
           /** Comment */
           public static g() {}
         }
       `,
       errors: [
-        { endLine: 11, messageId: MessageId.undocumented },
+        { line: 1, endLine: 7, messageId: MessageId.undocumented },
         { line: 2, messageId: MessageId.undocumentedConstructSignature },
+        { line: 3, messageId: MessageId.undocumented },
         { line: 4, messageId: MessageId.undocumented },
-        { line: 6, messageId: MessageId.undocumented },
-        { line: 8, messageId: MessageId.undocumented },
-        { line: 10, messageId: MessageId.undocumented }
+        { line: 5, messageId: MessageId.undocumented },
+        { line: 6, messageId: MessageId.undocumented }
       ]
     },
     {
@@ -122,17 +117,14 @@ utils.testRule(
       code: `
         class C {
           f1: () => void;
-
           /** Comment */
           f2: () => void;
-
           f3;
-
           f4: string;
         }
       `,
       errors: [
-        { endLine: 10, messageId: MessageId.undocumented },
+        { line: 1, endLine: 7, messageId: MessageId.undocumented },
         { line: 2, messageId: MessageId.undocumented }
       ]
     },
@@ -142,17 +134,14 @@ utils.testRule(
       code: `
         class C {
           x1: string;
-
           /** Comment */
           x2: string;
-
           x3;
-
           x4: () => void;
         }
       `,
       errors: [
-        { endLine: 10, messageId: MessageId.undocumented },
+        { line: 1, endLine: 7, messageId: MessageId.undocumented },
         { line: 2, messageId: MessageId.undocumented }
       ]
     }

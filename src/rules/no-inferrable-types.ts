@@ -1,4 +1,5 @@
 import * as utils from "./utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export enum MessageId {
@@ -7,6 +8,7 @@ export enum MessageId {
 
 export const noInferrableTypes = utils.createRule({
   name: "no-inferrable-types",
+  vue: true,
   messages: {
     [MessageId.triviallyInferrableType]:
       "Type can be trivially inferred from initializer"
@@ -15,7 +17,11 @@ export const noInferrableTypes = utils.createRule({
     VariableDeclarator: (node): void => {
       const { id, init } = node;
 
-      if (id.typeAnnotation && init && init.type === "TSAsExpression") {
+      if (
+        id.typeAnnotation &&
+        init &&
+        init.type === AST_NODE_TYPES.TSAsExpression
+      ) {
         const type1 = id.typeAnnotation.typeAnnotation;
 
         const type2 = init.typeAnnotation;
@@ -27,7 +33,7 @@ export const noInferrableTypes = utils.createRule({
         if (text1 === text2)
           context.report({
             messageId: MessageId.triviallyInferrableType,
-            node
+            node: type1
           });
       }
     }

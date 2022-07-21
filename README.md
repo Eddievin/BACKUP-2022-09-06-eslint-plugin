@@ -48,7 +48,7 @@ npm install --save-dev @skylib/eslint-plugin
 - [consistent-group-empty-lines](https://ilyub.github.io/eslint-plugin/consistent-group-empty-lines.html)
 - [consistent-import](https://ilyub.github.io/eslint-plugin/consistent-import.html)
 - [disallow-import](https://ilyub.github.io/eslint-plugin/disallow-import.html)
-- [empty-lines-around-comment](https://ilyub.github.io/eslint-plugin/empty-lines-around-comment.html)
+- [comment-empty-lines](https://ilyub.github.io/eslint-plugin/comment-empty-lines.html)
 - [exhaustive-switch](https://ilyub.github.io/eslint-plugin/exhaustive-switch.html)
 - [no-inferrable-types](https://ilyub.github.io/eslint-plugin/no-inferrable-types.html)
 - [no-mutable-signature](https://ilyub.github.io/eslint-plugin/no-mutable-signature.html)

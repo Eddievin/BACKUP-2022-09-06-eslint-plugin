@@ -46,36 +46,28 @@ export const consistentEmptyLines = utils.createRule({
     [MessageId.expectingEmptyLine]: "Expecting empty line before ({{ _id }})",
     [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
   },
-  create: (context): RuleListener => {
-    const childNodes = new Accumulator<string, TSESTree.Node>();
+  create: (context, typeCheck): RuleListener => {
+    const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
     const prevItems: Writable<Items> = [];
 
     const nextItems: Writable<Items> = [];
 
-    const listeners = new Accumulator<string, RuleFunction<TSESTree.Node>>();
+    const visitorsMap = new Accumulator<string, RuleFunction<TSESTree.Node>>();
 
     for (const [index, subOptions] of context.subOptionsArray.entries()) {
-      listeners.push(subOptions.prev, (node: TSESTree.Node): void => {
-        prevItems.push({
-          index,
-          node,
-          subOptions
-        });
+      visitorsMap.push(subOptions.prev, (node: TSESTree.Node): void => {
+        prevItems.push({ index, node, subOptions });
       });
 
-      listeners.push(subOptions.next, (node: TSESTree.Node): void => {
-        nextItems.push({
-          index,
-          node,
-          subOptions
-        });
+      visitorsMap.push(subOptions.next, (node: TSESTree.Node): void => {
+        nextItems.push({ index, node, subOptions });
       });
     }
 
     return {
       "*": (node: TSESTree.Node) => {
-        utils.buildChildNodesMap(node, childNodes);
+        utils.buildChildNodesMap(node, childNodesMap);
       },
       "Program:exit": () => {
         prevItems.sort((item1, item2) => item2.index - item1.index);
@@ -91,7 +83,7 @@ export const consistentEmptyLines = utils.createRule({
                     utils.isAdjacentNodes(
                       prevItem.node,
                       nextItem.node,
-                      childNodes
+                      childNodesMap
                     )
                   )
                     yield nextItem;
@@ -124,7 +116,7 @@ export const consistentEmptyLines = utils.createRule({
               ? MessageId.expectingEmptyLine
               : MessageId.unexpectedEmptyLine;
 
-            const got = context.getLeadingTrivia(node);
+            const got = typeCheck.getLeadingTrivia(node);
 
             const expected =
               context.eol.repeat(count) + s.trimLeadingEmptyLines(got);
@@ -145,10 +137,10 @@ export const consistentEmptyLines = utils.createRule({
         }
       },
       ...o.fromEntries(
-        a.fromIterable(listeners).map(([name, callbacks]) => [
+        a.fromIterable(visitorsMap).map(([name, visitors]) => [
           name,
           (node: TSESTree.Node) => {
-            for (const callback of callbacks) callback(node);
+            for (const visitor of visitors) visitor(node);
           }
         ])
       )

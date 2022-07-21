@@ -11,12 +11,6 @@ const MessageId: Rec<
 utils.testRule("sort-keys", sortKeys, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ overrides: [{ _id: "id", selector: "Identifier" }] }],
-    code: "const id = 1;",
-    errors: [{ messageId: MessageId.expectingObject, data: { _id: "id" } }]
-  },
-  {
-    name: `Test at line ${getCurrentLine().line}`,
     code: `
       const x = {
         [key]: 6,
@@ -44,16 +38,16 @@ utils.testRule("sort-keys", sortKeys, [
       }
     `,
     errors: [
-      {
-        line: 2,
-        endLine: 5,
-        messageId: MessageId.incorrectSortingOrder
-      },
-      {
-        line: 7,
-        endLine: 10,
-        messageId: MessageId.incorrectSortingOrder
-      }
+      { line: 2, endLine: 5, messageId: MessageId.incorrectSortingOrder },
+      { line: 7, endLine: 10, messageId: MessageId.incorrectSortingOrder }
+    ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ overrides: [{ _id: "id", selector: "Identifier" }] }],
+    code: "const id = 1;",
+    errors: [
+      { line: 1, messageId: MessageId.expectingObject, data: { _id: "id" } }
     ]
   },
   {
@@ -71,11 +65,7 @@ utils.testRule("sort-keys", sortKeys, [
       }
     `,
     errors: [
-      {
-        line: 2,
-        endLine: 3,
-        messageId: MessageId.incorrectSortingOrder
-      }
+      { line: 2, endLine: 3, messageId: MessageId.incorrectSortingOrder }
     ]
   },
   {
@@ -97,11 +87,7 @@ utils.testRule("sort-keys", sortKeys, [
       }
     `,
     errors: [
-      {
-        line: 3,
-        endLine: 4,
-        messageId: MessageId.incorrectSortingOrder
-      }
+      { line: 3, endLine: 4, messageId: MessageId.incorrectSortingOrder }
     ]
   },
   {
@@ -146,11 +132,7 @@ utils.testRule("sort-keys", sortKeys, [
       };
     `,
     errors: [
-      {
-        line: 3,
-        endLine: 4,
-        messageId: MessageId.incorrectSortingOrder
-      },
+      { line: 3, endLine: 4, messageId: MessageId.incorrectSortingOrder },
       {
         line: 9,
         endLine: 11,

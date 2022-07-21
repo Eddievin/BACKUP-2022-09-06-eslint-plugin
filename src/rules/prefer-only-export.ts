@@ -1,89 +1,56 @@
-/* eslint-disable @skylib/custom/prefer-readonly-array -- Postponed */
-
 import * as utils from "./utils";
-import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { TSESTree } from "@typescript-eslint/utils";
-import { is } from "@skylib/functions";
-import type { stringU } from "@skylib/functions";
+import { a, is } from "@skylib/functions";
+
+export interface Options {
+  readonly exportMatchingFilename: boolean;
+  readonly selector: utils.Selector;
+}
 
 export enum MessageId {
-  exportNotAllowed = "exportNotAllowed"
+  invalidExport = "invalidExport"
 }
 
 export const preferOnlyExport = utils.createRule({
   name: "prefer-only-export",
-  messages: {
-    [MessageId.exportNotAllowed]: "Export except class is not allowed"
-  },
-  create: (context): RuleListener => {
-    const exportAllDeclarations: TSESTree.ExportAllDeclaration[] = [];
+  vue: true,
+  isOptions: is.object.factory<Options>(
+    { exportMatchingFilename: is.boolean, selector: utils.isSelector },
+    {}
+  ),
+  defaultOptions: { exportMatchingFilename: false, selector: [] },
+  messages: { [MessageId.invalidExport]: "Expecting only export" },
+  create: context => {
+    const { exportMatchingFilename, selector: mixed } = context.options;
 
-    const exportDefaultDeclaration: TSESTree.ExportDefaultDeclaration[] = [];
+    const selector = a.fromMixed(mixed).join(", ");
 
-    const identifiers: TSESTree.Identifier[] = [];
+    let activated = false;
 
-    let className: stringU;
+    return utils.ruleTemplates.export(
+      ctx => {
+        if (
+          exportMatchingFilename &&
+          ctx.identifiers.some(
+            node =>
+              node.name === utils.getIdentifierFromPath(context.path, node.name)
+          )
+        )
+          activated = true;
 
-    return {
-      "Program > ExportAllDeclaration": (
-        node: TSESTree.ExportAllDeclaration
-      ): void => {
-        if (is.empty(node.exported)) exportAllDeclarations.push(node);
+        if (activated)
+          if (ctx.onlyExport) {
+            // Valid
+          } else
+            for (const node of ctx.identifiers)
+              context.report({ messageId: MessageId.invalidExport, node });
       },
-      "Program > ExportAllDeclaration > Identifier": (
-        node: TSESTree.Identifier
-      ): void => {
-        identifiers.push(node);
-      },
-      "Program > ExportDefaultDeclaration": (
-        node: TSESTree.ExportDefaultDeclaration
-      ): void => {
-        if (node.declaration.type === "ClassDeclaration" && node.declaration.id)
-          className = node.declaration.id.name;
-        else exportDefaultDeclaration.push(node);
-      },
-      "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id": (
-        node: TSESTree.Identifier
-      ): void => {
-        className = node.name;
-      },
-      "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported":
-        (node: TSESTree.Identifier): void => {
-          identifiers.push(node);
-        },
-      "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.push(node);
-        },
-      "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.push(node);
-        },
-      "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.push(node);
-        },
-      "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.push(node);
-        },
-      "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id":
-        (node: TSESTree.Identifier): void => {
-          identifiers.push(node);
-        },
-      "Program:exit": (): void => {
-        if (is.not.empty(className)) {
-          const nodes = [
-            ...exportAllDeclarations,
-            ...exportDefaultDeclaration,
-            ...identifiers.filter(node => node.name !== className)
-          ] as const;
-
-          if (nodes.length)
-            for (const node of nodes)
-              context.report({ messageId: MessageId.exportNotAllowed, node });
-        }
-      }
-    };
+      selector
+        ? {
+            [selector]: () => {
+              activated = true;
+            }
+          }
+        : {}
+    );
   }
 });

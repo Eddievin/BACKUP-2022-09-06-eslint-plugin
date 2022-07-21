@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention -- Wait for @skylib/config update */
-
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
 import { Accumulator, a, assert, evaluate, is, o } from "@skylib/functions";
@@ -64,7 +62,7 @@ export const statementsOrder = utils.createRule({
   messages: {
     [MessageId.incorrectStatementsOrder]: "Incorrect statements order"
   },
-  create: (context): RuleListener => {
+  create: (context, typeCheck): RuleListener => {
     const blockOrder: Rec<NodeType, number> = {
       ...defaultOrder,
       ...o.fromEntries(
@@ -100,7 +98,7 @@ export const statementsOrder = utils.createRule({
     return {
       "*": (node: TSESTree.Node): void => {
         if (node.parent) {
-          const id = utils.getNodeId(node.parent);
+          const id = utils.nodeId(node.parent);
 
           const index = itemsMap.get(id).length;
 
@@ -108,13 +106,13 @@ export const statementsOrder = utils.createRule({
 
           const order = evaluate(() => {
             switch (parentNode.type) {
-              case "BlockStatement":
+              case AST_NODE_TYPES.BlockStatement:
                 return blockOrder;
 
-              case "Program":
+              case AST_NODE_TYPES.Program:
                 return rootOrder;
 
-              case "TSModuleBlock":
+              case AST_NODE_TYPES.TSModuleBlock:
                 return moduleOrder;
 
               default:
@@ -137,8 +135,8 @@ export const statementsOrder = utils.createRule({
               const item = a.get(items, index);
 
               return {
-                range: context.getRangeWithLeadingTrivia(item.node),
-                text: context.getTextWithLeadingTrivia(sortedItem.node)
+                range: typeCheck.getFullRange(item.node),
+                text: typeCheck.getFullText(sortedItem.node)
               };
             });
 
@@ -207,34 +205,38 @@ type NodeTypes = readonly NodeType[];
  * @returns Jest test name if node is Jest test, _undefined_ otherwise.
  */
 function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
-  if (node.expression.type === "CallExpression") {
+  if (node.expression.type === AST_NODE_TYPES.CallExpression) {
     const argument = node.expression.arguments[0];
 
-    if (argument && argument.type === "Literal" && is.string(argument.value)) {
+    if (
+      argument &&
+      argument.type === AST_NODE_TYPES.Literal &&
+      is.string(argument.value)
+    ) {
       const { callee } = node.expression;
 
-      if (callee.type === "Identifier" && callee.name === "test")
+      if (callee.type === AST_NODE_TYPES.Identifier && callee.name === "test")
         return argument.value;
 
       if (
-        callee.type === "MemberExpression" &&
+        callee.type === AST_NODE_TYPES.MemberExpression &&
         isIdentifier(callee.object, "test") &&
         isIdentifier(callee.property, "only", "skip")
       )
         return argument.value;
 
       if (
-        callee.type === "CallExpression" &&
-        callee.callee.type === "MemberExpression" &&
+        callee.type === AST_NODE_TYPES.CallExpression &&
+        callee.callee.type === AST_NODE_TYPES.MemberExpression &&
         isIdentifier(callee.callee.object, "test") &&
         isIdentifier(callee.callee.property, "each")
       )
         return argument.value;
 
       if (
-        callee.type === "CallExpression" &&
-        callee.callee.type === "MemberExpression" &&
-        callee.callee.object.type === "MemberExpression" &&
+        callee.type === AST_NODE_TYPES.CallExpression &&
+        callee.callee.type === AST_NODE_TYPES.MemberExpression &&
+        callee.callee.object.type === AST_NODE_TYPES.MemberExpression &&
         isIdentifier(callee.callee.object.object, "test") &&
         isIdentifier(callee.callee.object.property, "only", "skip") &&
         isIdentifier(callee.callee.property, "each")
@@ -254,7 +256,7 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
  * @returns _True_ if node is an identifier, _false_ otherwise.
  */
 function isIdentifier(node: TSESTree.Node, ...names: strings): boolean {
-  return node.type === "Identifier" && names.includes(node.name);
+  return node.type === AST_NODE_TYPES.Identifier && names.includes(node.name);
 }
 
 /**
@@ -357,7 +359,7 @@ function nodeInfo(
       node,
       order,
       parentNode,
-      sortingOrder: `${order1}\u0000${order2}\u0000${order3}`,
+      sortingOrder: `${order1}\u0001${order2}\u0001${order3}`,
       type
     };
   }

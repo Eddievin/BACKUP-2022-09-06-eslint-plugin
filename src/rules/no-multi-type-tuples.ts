@@ -3,19 +3,16 @@ import * as utils from "./utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
 export enum MessageId {
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Postponed
-  noMultiTypeTuples = "noMultiTypeTuples"
+  multiTypeTuple = "multiTypeTuple"
 }
 
 export const noMultiTypeTuples = utils.createRule({
   name: "no-multi-type-tuples",
-  messages: {
-    [MessageId.noMultiTypeTuples]: "Multi-type tuples are not allowed"
-  },
+  messages: { [MessageId.multiTypeTuple]: "Multi-type tuples are not allowed" },
   create: (context): RuleListener => ({
     TSTupleType: (node): void => {
       if (_.uniq(node.elementTypes.map(context.getText)).length > 1)
-        context.report({ messageId: MessageId.noMultiTypeTuples, node });
+        context.report({ messageId: MessageId.multiTypeTuple, node });
     }
   })
 });

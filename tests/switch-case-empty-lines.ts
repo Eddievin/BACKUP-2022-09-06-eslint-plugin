@@ -27,11 +27,7 @@ utils.testRule("switch-case-empty-lines", switchCaseEmptyLines, [
       }
     `,
     errors: [
-      {
-        line: 4,
-        endLine: 5,
-        messageId: MessageId.removeEmptyLine
-      },
+      { line: 4, endLine: 5, messageId: MessageId.removeEmptyLine },
       { line: 6, messageId: MessageId.addEmptyLine }
     ]
   }

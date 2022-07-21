@@ -10,7 +10,7 @@ export enum MessageId {
 export const exhaustiveSwitch = utils.createRule({
   name: "exhaustive-switch",
   messages: { [MessageId.inexhaustiveSwitch]: "Inexhaustive switch" },
-  create: (context): RuleListener => ({
+  create: (context, typeCheck): RuleListener => ({
     SwitchStatement: (node): void => {
       if (node.cases.some(switchCase => is.null(switchCase.test))) {
         // Has default
@@ -18,11 +18,9 @@ export const exhaustiveSwitch = utils.createRule({
         const got = node.cases
           .map(switchCase => switchCase.test)
           .filter(is.not.empty)
-          .flatMap(expression => context.typeCheck.parseUnionType(expression));
+          .flatMap(expression => typeCheck.unionTypeParts(expression));
 
-        const expected = context.typeCheck.parseUnionTypeTypeofFix(
-          node.discriminant
-        );
+        const expected = typeCheck.unionTypeParts(node.discriminant);
 
         if (_.difference(expected, got).length)
           context.report({

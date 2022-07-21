@@ -1,6 +1,7 @@
 import * as utils from "./utils";
 import { ReadonlySet, a, evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { IndexedRecord } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
@@ -11,8 +12,8 @@ export interface Options {
 
 export interface SubOptions {
   readonly _id: string;
-  readonly pattern?: utils.Pattern;
-  readonly propertyPattern?: utils.Pattern;
+  readonly pattern: utils.Pattern;
+  readonly propertyPattern: utils.Pattern;
   readonly style: Style;
   readonly target?: Target;
 }
@@ -22,7 +23,7 @@ export enum MessageId {
   combinedId = "combinedId",
   optional = "optional",
   optionalId = "optionalId",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Postponed
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
   undefined = "undefined",
   undefinedId = "undefinedId"
 }
@@ -51,87 +52,64 @@ export const consistentOptionalProps = utils.createRule({
   ),
   defaultOptions: { classes: Style.combined, interfaces: Style.combined },
   isSubOptions: is.object.factory<SubOptions>(
-    { _id: is.string, style: isStyle },
     {
+      _id: is.string,
       pattern: utils.isPattern,
       propertyPattern: utils.isPattern,
-      target: isTarget
-    }
+      style: isStyle
+    },
+    { target: isTarget }
   ),
+  defaultSubOptions: { pattern: [], propertyPattern: [] },
   subOptionsKey: "overrides",
   messages: {
-    [MessageId.combined]:
-      'Define optional property as "x?: string | undefined"',
-    [MessageId.optional]: 'Define optional property as "x?: string"',
-    [MessageId.optionalId]:
-      'Define optional property as "x?: string" ({{ id }})',
-    [MessageId.undefined]:
-      'Define optional property as "x: string | undefined"',
-    [MessageId.undefinedId]:
-      'Define optional property as "x: string | undefined" ({{ id }})',
-    combinedId:
-      'Define optional property as "x?: string | undefined" ({{ id }})'
+    [MessageId.combined]: 'Prefer "x?: T | undefined" style',
+    [MessageId.combinedId]: 'Prefer "x?: T | undefined" style ({{ _id }})',
+    [MessageId.optional]: 'Prefer "x?: T" style',
+    [MessageId.optionalId]: 'Prefer "x?: T" style ({{ _id }})',
+    [MessageId.undefined]: 'Prefer "x: T | undefined" style',
+    [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{ _id }})'
   },
-  create: (context): RuleListener => {
-    const interchangeableStyles = new ReadonlySet([
-      Style.combined,
-      Style.optional
-    ]);
+  create: (context, typeCheck): RuleListener => {
+    const subOptionsArray = a.sort(
+      context.subOptionsArray.map((subOptions): Matchers & SubOptions => {
+        const matcher = utils.createMatcher(subOptions.pattern, true);
 
-    const interchangeableTypes = new ReadonlySet([
-      AST_NODE_TYPES.TSAnyKeyword,
-      AST_NODE_TYPES.TSUnknownKeyword
-    ]);
+        const properyMatcher = utils.createMatcher(
+          subOptions.propertyPattern,
+          true
+        );
 
-    const nodeTypeToTarget = {
-      [AST_NODE_TYPES.ClassDeclaration]: Target.classes,
-      [AST_NODE_TYPES.ClassExpression]: Target.classes,
-      [AST_NODE_TYPES.TSInterfaceDeclaration]: Target.interfaces
-    } as const;
-
-    const matchers = a.reverse(
-      context.subOptionsArray.map(
-        (subOptions): Matcher => ({
-          ...subOptions,
-          nodeName: utils.createMatcher(subOptions.pattern, true),
-          propName: utils.createMatcher(subOptions.propertyPattern, true)
-        })
-      )
+        return { ...subOptions, matcher, properyMatcher };
+      }),
+      (matcher1, matcher2) => utils.compare(matcher2._id, matcher1._id)
     );
 
     return {
-      ClassDeclaration: lintNode,
-      ClassExpression: lintNode,
-      TSInterfaceDeclaration: lintNode
+      ClassDeclaration: lintClass,
+      ClassExpression: lintClass,
+      TSInterfaceDeclaration: lintInterface
     };
 
-    interface Matcher extends SubOptions {
-      readonly nodeName: utils.Matcher;
-      readonly propName: utils.Matcher;
-    }
-
-    function lintNode(
-      node:
-        | TSESTree.ClassDeclaration
-        | TSESTree.ClassExpression
-        | TSESTree.TSInterfaceDeclaration
+    function lintClass(
+      node: TSESTree.ClassDeclaration | TSESTree.ClassExpression
     ): void {
       const name = node.id ? node.id.name : "?";
 
-      const target = nodeTypeToTarget[node.type];
+      for (const property of node.body.body)
+        if (
+          property.type === AST_NODE_TYPES.PropertyDefinition ||
+          property.type === AST_NODE_TYPES.TSAbstractPropertyDefinition
+        )
+          lintProperty(property, Target.classes, name);
+    }
+
+    function lintInterface(node: TSESTree.TSInterfaceDeclaration): void {
+      const name = node.id.name;
 
       for (const property of node.body.body)
-        switch (property.type) {
-          case AST_NODE_TYPES.PropertyDefinition:
-          case AST_NODE_TYPES.TSAbstractPropertyDefinition:
-          case AST_NODE_TYPES.TSPropertySignature:
-            lintProperty(property, target, name);
-
-            break;
-
-          default:
-          // Skip
-        }
+        if (property.type === AST_NODE_TYPES.TSPropertySignature)
+          lintProperty(property, Target.interfaces, name);
     }
 
     function lintProperty(
@@ -143,12 +121,12 @@ export const consistentOptionalProps = utils.createRule({
       name: string
     ): void {
       if (node.typeAnnotation) {
-        const typeAnnotation = node.typeAnnotation.typeAnnotation;
+        const { typeAnnotation } = node.typeAnnotation;
 
-        const got = evaluate((): Style | undefined => {
-          const type = context.typeCheck.getType(typeAnnotation);
+        const got = evaluate(() => {
+          const type = typeCheck.getType(typeAnnotation);
 
-          const hasUndefined = context.typeCheck.typeHas(
+          const hasUndefined = typeCheck.typeHas(
             type,
             utils.TypeGroup.undefined
           );
@@ -165,47 +143,69 @@ export const consistentOptionalProps = utils.createRule({
         });
 
         if (got) {
-          const matcher = matchers.find(
-            candidate =>
-              new ReadonlySet([target, undefined]).has(candidate.target) &&
-              candidate.nodeName(name) &&
-              candidate.propName(context.getMemberName(node))
-          );
+          const subOptions = evaluate(() => {
+            const propertyName = context.getMemberName(node);
+
+            const targets = new ReadonlySet([target, undefined]);
+
+            return subOptionsArray.find(
+              candidate =>
+                targets.has(candidate.target) &&
+                candidate.matcher(name) &&
+                candidate.properyMatcher(propertyName)
+            );
+          });
 
           const expected = evaluate(() => {
-            const result = matcher ? matcher.style : context.options[target];
+            const result = subOptions
+              ? subOptions.style
+              : context.options[target];
 
-            return interchangeableTypes.has(typeAnnotation.type) &&
-              interchangeableStyles.has(got) &&
-              interchangeableStyles.has(result)
-              ? got
+            return exclusionTypes.has(typeAnnotation.type) &&
+              exclusionStyles.has(got) &&
+              exclusionStyles.has(result)
+              ? undefined
               : result;
           });
 
-          const messageId = evaluate(() => {
-            switch (expected) {
-              case Style.combined:
-                return matcher ? MessageId.combinedId : MessageId.combined;
+          if (expected) {
+            const data: IndexedRecord = subOptions
+              ? { _id: subOptions._id }
+              : {};
 
-              case Style.optional:
-                return matcher ? MessageId.optionalId : MessageId.optional;
+            const messageId = evaluate(() => {
+              switch (expected) {
+                case Style.combined:
+                  return subOptions ? MessageId.combinedId : MessageId.combined;
 
-              case Style.undefined:
-                return matcher ? MessageId.undefinedId : MessageId.undefined;
-            }
-          });
+                case Style.optional:
+                  return subOptions ? MessageId.optionalId : MessageId.optional;
 
-          if (got === expected) {
-            // Valid
-          } else if (matcher)
-            context.report({
-              data: { id: matcher._id },
-              messageId,
-              node
+                case Style.undefined:
+                  return subOptions
+                    ? MessageId.undefinedId
+                    : MessageId.undefined;
+              }
             });
-          else context.report({ messageId, node });
+
+            if (got === expected) {
+              // Valid
+            } else context.report({ data, messageId, node });
+          }
         }
       }
     }
   }
 });
+
+const exclusionTypes = new ReadonlySet([
+  AST_NODE_TYPES.TSAnyKeyword,
+  AST_NODE_TYPES.TSUnknownKeyword
+]);
+
+const exclusionStyles = new ReadonlySet([Style.combined, Style.optional]);
+
+interface Matchers {
+  readonly matcher: utils.Matcher;
+  readonly properyMatcher: utils.Matcher;
+}

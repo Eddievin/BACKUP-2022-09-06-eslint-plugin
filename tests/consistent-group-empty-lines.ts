@@ -59,13 +59,7 @@ utils.testRule(
         y+
         z;
       `,
-      errors: [
-        {
-          line: 2,
-          endLine: 4,
-          messageId: MessageId.expectingEmptyLine
-        }
-      ]
+      errors: [{ line: 2, endLine: 4, messageId: MessageId.expectingEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -93,13 +87,7 @@ utils.testRule(
         x+
         y;
       `,
-      errors: [
-        {
-          line: 3,
-          endLine: 4,
-          messageId: MessageId.expectingEmptyLine
-        }
-      ]
+      errors: [{ line: 3, endLine: 4, messageId: MessageId.expectingEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -127,13 +115,7 @@ utils.testRule(
         y+
         z;
       `,
-      errors: [
-        {
-          line: 2,
-          endLine: 4,
-          messageId: MessageId.expectingEmptyLine
-        }
-      ]
+      errors: [{ line: 2, endLine: 4, messageId: MessageId.expectingEmptyLine }]
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
@@ -256,11 +238,7 @@ utils.testRule(
         ];
       `,
       errors: [
-        {
-          line: 6,
-          endLine: 8,
-          messageId: MessageId.unexpectedEmptyLine
-        }
+        { line: 6, endLine: 8, messageId: MessageId.unexpectedEmptyLine }
       ]
     },
     {

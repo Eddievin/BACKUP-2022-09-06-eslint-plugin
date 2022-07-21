@@ -1,3 +1,4 @@
+import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
 import type { Writable, strings } from "@skylib/functions";
 import { a, is, o } from "@skylib/functions";
@@ -23,11 +24,7 @@ export const sortKeys = utils.createRule({
   vue: true,
   isSubOptions: is.object.factory<SubOptions>(
     { _id: is.string, selector: utils.isSelector },
-    {
-      customOrder: is.strings,
-      sendToBottom: is.string,
-      sendToTop: is.string
-    }
+    { customOrder: is.strings, sendToBottom: is.string, sendToTop: is.string }
   ),
   subOptionsKey: "overrides",
   messages: {
@@ -36,34 +33,16 @@ export const sortKeys = utils.createRule({
     [utils.sort.MessageId.incorrectSortingOrderId]:
       "Incorrect sorting order ({{ _id }})"
   },
-  create: (context): RuleListener => {
-    const objectExpressions = new Map<string, ObjectExpression>();
-
-    const objectMembers: Writable<ObjectMembers> = [];
+  create: (context, typeCheck): RuleListener => {
+    const items: Writable<Items> = [];
 
     return {
-      "ObjectExpression": (node): void => {
-        objectExpressions.set(utils.getNodeId(node), { node, options: {} });
-      },
-      "Program:exit": (): void => {
-        for (const objectExpression of objectExpressions.values()) {
-          for (const property of objectExpression.node.properties)
-            if (property.type === AST_NODE_TYPES.SpreadElement)
-              lintNodes(objectExpression.options);
-            else objectMembers.push(property);
-
-          lintNodes(objectExpression.options);
-        }
-      },
       ...o.fromEntries(
         context.subOptionsArray.map(subOptions => [
           a.fromMixed(subOptions.selector).join(", "),
           (node: TSESTree.Node): void => {
             if (node.type === AST_NODE_TYPES.ObjectExpression)
-              objectExpressions.set(utils.getNodeId(node), {
-                node,
-                options: subOptions
-              });
+              items.push({ node, options: { ...subOptions, keyNode } });
             else
               context.report({
                 data: { _id: subOptions._id },
@@ -72,25 +51,36 @@ export const sortKeys = utils.createRule({
               });
           }
         ])
-      )
+      ),
+      "ObjectExpression": (node): void => {
+        items.push({ node, options: { keyNode } });
+      },
+      "Program:exit": (): void => {
+        const sortedItems = a.sort(items, (item1, item2) =>
+          utils.compare(item2.options._id, item1.options._id)
+        );
+
+        const uniqItems = _.uniqBy(sortedItems, "node");
+
+        for (const item of uniqItems)
+          utils.sort(item.node.properties, context, typeCheck, item.options);
+      }
     };
 
-    function keyNode(node: ObjectMember): TSESTree.Node {
-      return node.key;
-    }
-
-    function lintNodes(options: utils.sort.Options): void {
-      utils.sort(objectMembers, keyNode, options, context);
-      a.truncate(objectMembers);
+    function keyNode(node: ObjectMember): TSESTree.Node | undefined {
+      return node.type === AST_NODE_TYPES.SpreadElement ? undefined : node.key;
     }
   }
 });
 
-interface ObjectExpression {
+interface Item {
   readonly node: TSESTree.ObjectExpression;
-  readonly options: utils.sort.Options;
+  readonly options: utils.sort.Options<ObjectMember>;
 }
 
-type ObjectMember = TSESTree.MethodDefinition | TSESTree.Property;
+type Items = readonly Item[];
 
-type ObjectMembers = readonly ObjectMember[];
+type ObjectMember =
+  | TSESTree.MethodDefinition
+  | TSESTree.Property
+  | TSESTree.SpreadElement;

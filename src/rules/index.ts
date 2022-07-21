@@ -1,6 +1,7 @@
 import * as utils from "./utils";
 import type { WritableIndexedObject } from "@skylib/functions";
 import { arrayCallbackReturnType } from "./array-callback-return-type";
+import { commentEmptyLines } from "./comment-empty-lines";
 import { consistentEmptyLines } from "./consistent-empty-lines";
 import { consistentFilename } from "./consistent-filename";
 import { consistentGroupEmptyLines } from "./consistent-group-empty-lines";
@@ -8,7 +9,6 @@ import { consistentImport } from "./consistent-import";
 import { consistentOptionalProps } from "./consistent-optional-props";
 import { custom } from "./custom";
 import { disallowImport } from "./disallow-import";
-import { emptyLinesAroundComment } from "./empty-lines-around-comment";
 import { evaluate } from "@skylib/functions";
 import { exhaustiveSwitch } from "./exhaustive-switch";
 import { exportAllName } from "./export-all-name";
@@ -18,11 +18,11 @@ import { noExpressionEmptyLines } from "./no-expression-empty-lines";
 import { noInferrableTypes } from "./no-inferrable-types";
 import { noMultiTypeTuples } from "./no-multi-type-tuples";
 import { noSelfImport } from "./no-self-import";
+import { noSiblingImport } from "./no-sibling-import";
 import { noUnsafeObjectAssignment } from "./no-unsafe-object-assignment";
 import { objectFormat } from "./object-format";
 import { onlyExportName } from "./only-export-name";
 import { preferOnlyExport } from "./prefer-only-export";
-import { primaryExportOnly } from "./primary-export-only";
 import { requireJsdoc } from "./require-jsdoc";
 import { sortArray } from "./sort-array";
 import { sortClassMembers } from "./sort-class-members";
@@ -30,6 +30,7 @@ import { sortKeys } from "./sort-keys";
 import { statementsOrder } from "./statements-order";
 import { switchCaseEmptyLines } from "./switch-case-empty-lines";
 import { templateLiteralFormat } from "./template-literal-format";
+import { wrap } from "./wrap";
 
 export * as utils from "./utils";
 
@@ -37,14 +38,15 @@ export * as utils from "./utils";
 export const rules = evaluate(() => {
   const core = {
     "array-callback-return-type": arrayCallbackReturnType,
+    "comment-empty-lines": commentEmptyLines,
     "consistent-empty-lines": consistentEmptyLines,
     "consistent-filename": consistentFilename,
     "consistent-group-empty-lines": consistentGroupEmptyLines,
     "consistent-import": consistentImport,
     "consistent-optional-props": consistentOptionalProps,
-    custom,
+    // eslint-disable-next-line object-shorthand -- Ok
+    "custom": custom,
     "disallow-import": disallowImport,
-    "empty-lines-around-comment": emptyLinesAroundComment,
     "exhaustive-switch": exhaustiveSwitch,
     "export-all-name": exportAllName,
     "match-filename": matchFilename,
@@ -52,18 +54,20 @@ export const rules = evaluate(() => {
     "no-inferrable-types": noInferrableTypes,
     "no-multi-type-tuples": noMultiTypeTuples,
     "no-self-import": noSelfImport,
+    "no-sibling-import": noSiblingImport,
     "no-unsafe-object-assignment": noUnsafeObjectAssignment,
     "object-format": objectFormat,
     "only-export-name": onlyExportName,
     "prefer-only-export": preferOnlyExport,
-    "primary-export-only": primaryExportOnly,
     "require-jsdoc": requireJsdoc,
     "sort-array": sortArray,
     "sort-class-members": sortClassMembers,
     "sort-keys": sortKeys,
     "statements-order": statementsOrder,
     "switch-case-empty-lines": switchCaseEmptyLines,
-    "template-literal-format": templateLiteralFormat
+    "template-literal-format": templateLiteralFormat,
+    // eslint-disable-next-line object-shorthand -- Ok
+    "wrap": wrap
   } as const;
 
   const synonyms: WritableIndexedObject = {};

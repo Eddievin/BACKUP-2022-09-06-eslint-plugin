@@ -1,11 +1,7 @@
-import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "./utils";
-import { ReadonlyMap, a, evaluate, is } from "@skylib/functions";
-import type {
-  RuleFix,
-  RuleListener
-} from "@typescript-eslint/utils/dist/ts-eslint";
+import { ReadonlyMap, evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
@@ -13,88 +9,65 @@ export interface Options {
   readonly sortingOrder: strings;
 }
 
-export enum MessageId {
-  incorrectSortingOrder = "incorrectSortingOrder"
-}
-
 export const sortClassMembers = utils.createRule({
   name: "sort-class-members",
   fixable: utils.Fixable.code,
   isOptions: is.object.factory<Options>({ sortingOrder: is.strings }, {}),
   defaultOptions: { sortingOrder: [] },
-  messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
-  create: (context): RuleListener => {
+  messages: {
+    [utils.sort.MessageId.incorrectSortingOrder]: "Incorrect sorting order",
+    [utils.sort.MessageId.incorrectSortingOrderId]:
+      "Incorrect sorting order ({{ _id }})"
+  },
+  create: (context, typeCheck): RuleListener => {
     const sortingOrders = new ReadonlyMap(
       context.options.sortingOrder.map((name, index) => [name, index])
     );
 
     return {
       ClassBody: (node): void => {
-        const members = node.body.map((member, index): Member => {
-          const x = getMemberAccessibility(member);
+        utils.sort(node.body, context, typeCheck, {
+          sortingOrder: member => {
+            const x = getMemberAccessibility(member);
 
-          const y = getMemberDynamicStatic(member);
+            const y = getMemberDynamicStatic(member);
 
-          const types = getMemberTypes(member);
+            const types = getMemberTypes(member);
 
-          const sortingOrder =
-            1000 +
-            Math.min(
-              ...types.map(z =>
-                Math.min(
-                  ...[
-                    1000,
-                    sortingOrders.get(x),
-                    sortingOrders.get(y),
-                    sortingOrders.get(z),
-                    sortingOrders.get(`${x}-${y}`),
-                    sortingOrders.get(`${x}-${z}`),
-                    sortingOrders.get(`${y}-${x}`),
-                    sortingOrders.get(`${y}-${z}`),
-                    sortingOrders.get(`${z}-${x}`),
-                    sortingOrders.get(`${z}-${y}`),
-                    sortingOrders.get(`${x}-${y}-${z}`),
-                    sortingOrders.get(`${x}-${z}-${y}`),
-                    sortingOrders.get(`${y}-${x}-${z}`),
-                    sortingOrders.get(`${y}-${z}-${x}`),
-                    sortingOrders.get(`${z}-${x}-${y}`),
-                    sortingOrders.get(`${z}-${y}-${x}`)
-                  ].filter(is.not.empty)
+            const sortingOrder =
+              1000 +
+              Math.min(
+                ...types.map(z =>
+                  Math.min(
+                    ...[
+                      1000,
+                      sortingOrders.get(x),
+                      sortingOrders.get(y),
+                      sortingOrders.get(z),
+                      sortingOrders.get(`${x}\u0001${y}`),
+                      sortingOrders.get(`${x}\u0001${z}`),
+                      sortingOrders.get(`${y}\u0001${x}`),
+                      sortingOrders.get(`${y}\u0001${z}`),
+                      sortingOrders.get(`${z}\u0001${x}`),
+                      sortingOrders.get(`${z}\u0001${y}`),
+                      sortingOrders.get(`${x}\u0001${y}\u0001${z}`),
+                      sortingOrders.get(`${x}\u0001${z}\u0001${y}`),
+                      sortingOrders.get(`${y}\u0001${x}\u0001${z}`),
+                      sortingOrders.get(`${y}\u0001${z}\u0001${x}`),
+                      sortingOrders.get(`${z}\u0001${x}\u0001${y}`),
+                      sortingOrders.get(`${z}\u0001${y}\u0001${x}`)
+                    ].filter(is.not.empty)
+                  )
                 )
-              )
-            );
+              );
 
-          const name = context.getMemberName(member);
+            const name = context.getMemberName(member);
 
-          const accessorType = getMemberAccessorType(member);
+            const accessorType = getMemberAccessorType(member);
 
-          return {
-            index,
-            node: member,
-            sortingOrder: `${sortingOrder} ${name} ${accessorType}`
-          };
+            return `${sortingOrder}\u0001${name}\u0001${accessorType}`;
+          }
         });
-
-        const sortedMembers = _.sortBy(members, member => member.sortingOrder);
-
-        const fixes = a
-          .fromIterable(sortedMembers.entries())
-          .filter(([index, sortedMember]) => sortedMember.index !== index)
-          .map(([index, sortedMember]): RuleFix => {
-            const member = a.get(members, index);
-
-            return {
-              range: context.getRangeWithLeadingTrivia(member.node),
-              text: context.getTextWithLeadingTrivia(sortedMember.node)
-            };
-          });
-
-        if (fixes.length)
-          context.report({
-            fix: () => fixes,
-            messageId: MessageId.incorrectSortingOrder,
-            node
-          });
       }
     };
   }
@@ -108,7 +81,7 @@ enum DynamicStatic {
 enum Type {
   accessor = "accessor",
   block = "block",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
   constructor = "constructor",
   field = "field",
   get = "get",
@@ -123,12 +96,6 @@ enum AccessorType {
   set = "set"
 }
 
-interface Member {
-  readonly index: number;
-  readonly node: TSESTree.ClassElement;
-  readonly sortingOrder: string;
-}
-
 type Types = readonly Type[];
 
 /**
@@ -137,14 +104,16 @@ type Types = readonly Type[];
  * @param node - Node.
  * @returns Member accessibility.
  */
-function getMemberAccessibility(node: TSESTree.ClassElement): string {
+function getMemberAccessibility(
+  node: TSESTree.ClassElement
+): TSESTree.Accessibility {
   switch (node.type) {
     case AST_NODE_TYPES.MethodDefinition:
     case AST_NODE_TYPES.PropertyDefinition:
     case AST_NODE_TYPES.TSAbstractMethodDefinition:
     case AST_NODE_TYPES.TSAbstractPropertyDefinition:
     case AST_NODE_TYPES.TSIndexSignature:
-      return node.accessibility ? node.accessibility.valueOf() : "public";
+      return node.accessibility ?? "public";
 
     case AST_NODE_TYPES.StaticBlock:
       return "public";

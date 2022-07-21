@@ -11,7 +11,7 @@ utils.testRule(
       code: `
         export * as a from "b";
       `,
-      errors: [{ messageId: MessageId.invalidName }]
+      errors: [{ line: 1, messageId: MessageId.invalidName }]
     }
   ],
   [

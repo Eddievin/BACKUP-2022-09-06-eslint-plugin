@@ -27,7 +27,7 @@ utils.testRule("custom", custom, [
     options: [{ selector: "Identifier" }],
     code: `
       <script lang="ts">
-        const id1 = [];
+      const id1 = [];
       </script>
     `,
     errors: [
@@ -47,6 +47,7 @@ utils.testRule("custom", custom, [
     output: "const id2 = [];",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: {
           _id: "id",
@@ -70,6 +71,7 @@ utils.testRule("custom", custom, [
     output: "const ie1 = [];",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -87,6 +89,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: any) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -104,6 +107,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: unknown[]) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -121,6 +125,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: boolean) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -138,6 +143,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: () => void) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -155,6 +161,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: null) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -172,6 +179,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: number) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -189,6 +197,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: object) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -206,6 +215,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: string) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -223,6 +233,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: symbol) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -240,6 +251,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: [unknown]) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -257,6 +269,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: undefined) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -274,6 +287,7 @@ utils.testRule("custom", custom, [
     code: "function f(x: unknown) {}",
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -294,6 +308,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -360,6 +375,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -380,6 +396,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -405,6 +422,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -425,6 +443,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -447,6 +466,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -469,6 +489,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -491,6 +512,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -513,6 +535,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }
@@ -535,6 +558,7 @@ utils.testRule("custom", custom, [
     `,
     errors: [
       {
+        line: 1,
         messageId: MessageId.customMessage,
         data: { message: "Custom message" }
       }

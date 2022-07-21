@@ -9,6 +9,6 @@ utils.testRule("no-multi-type-tuples", noMultiTypeTuples, [
       type T1 = [string, number];
       type T2 = [string, string];
     `,
-    errors: [{ messageId: MessageId.noMultiTypeTuples }]
+    errors: [{ line: 1, messageId: MessageId.multiTypeTuple }]
   }
 ]);

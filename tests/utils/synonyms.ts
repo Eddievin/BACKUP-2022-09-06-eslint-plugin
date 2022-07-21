@@ -7,11 +7,7 @@ test.each([
     expected: { "aaa/bbb": "ccc" },
     path: "./fixtures/synonyms.js"
   },
-  {
-    core: {},
-    expected: {},
-    path: "./fixtures/synonyms.missing.js"
-  }
+  { core: {}, expected: {}, path: "./fixtures/synonyms.missing.js" }
 ])("getSynonyms", ({ core, expected, path }) => {
   const dest: WritableIndexedObject = {};
 

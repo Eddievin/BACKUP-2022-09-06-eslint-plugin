@@ -2,17 +2,16 @@ import * as utils from "./utils";
 import { a, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { strings } from "@skylib/functions";
 
 export interface Options {
   readonly format: utils.casing.Format;
   readonly prefix: string;
-  readonly selector: strings | string;
+  readonly selector: utils.Selector;
   readonly suffix: string;
 }
 
 export enum MessageId {
-  invalidNodeText = "invalidNodeText"
+  invalidText = "invalidText"
 }
 
 export const matchFilename = utils.createRule({
@@ -22,7 +21,7 @@ export const matchFilename = utils.createRule({
     {
       format: utils.casing.isFormat,
       prefix: is.string,
-      selector: is.string,
+      selector: utils.isSelector,
       suffix: is.string
     },
     {}
@@ -33,8 +32,7 @@ export const matchFilename = utils.createRule({
     suffix: ""
   },
   messages: {
-    [MessageId.invalidNodeText]:
-      "Node text should match file name: {{ expected }}"
+    [MessageId.invalidText]: "Should match file name: {{ expected }}"
   },
   create: (context): RuleListener => {
     const { format, prefix, selector: mixed, suffix } = context.options;
@@ -43,7 +41,7 @@ export const matchFilename = utils.createRule({
 
     return {
       [selector]: (node: TSESTree.Node): void => {
-        const got = utils.nodeToString(node, context);
+        const got = utils.nodeText(node, "?");
 
         const expected =
           prefix +
@@ -58,7 +56,7 @@ export const matchFilename = utils.createRule({
         } else
           context.report({
             data: { expected },
-            messageId: MessageId.invalidNodeText,
+            messageId: MessageId.invalidText,
             node
           });
       }

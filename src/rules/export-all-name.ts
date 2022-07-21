@@ -7,7 +7,7 @@ export enum MessageId {
 
 export const exportAllName = utils.createRule({
   name: "export-all-name",
-  messages: { [MessageId.invalidName]: "Export name should match file name" },
+  messages: { [MessageId.invalidName]: "Export name should match source" },
   create: (context): RuleListener => ({
     ExportAllDeclaration: (node): void => {
       if (node.exported) {

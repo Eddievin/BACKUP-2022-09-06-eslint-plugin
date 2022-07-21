@@ -1,6 +1,6 @@
 import type * as ts from "typescript";
-import * as tsutils from "tsutils";
 import * as utils from "./utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
@@ -69,25 +69,25 @@ export const requireJsdoc = utils.createRule({
     [MessageId.undocumentedConstructSignature]:
       "Missing documentation for constructor signature"
   },
-  create: (context): RuleListener => {
+  create: (context, typeCheck): RuleListener => {
     const selectors = utils.getSelectors(context.options, defaultSelectors);
 
     return {
       [selectors]: (node: TSESTree.Node): void => {
         switch (node.type) {
-          case "TSInterfaceDeclaration":
+          case AST_NODE_TYPES.TSInterfaceDeclaration:
             lintInterface(node);
 
             break;
 
-          case "MethodDefinition":
-          case "TSMethodSignature":
+          case AST_NODE_TYPES.MethodDefinition:
+          case AST_NODE_TYPES.TSMethodSignature:
             lintMethod(node);
 
             break;
 
-          case "PropertyDefinition":
-          case "TSPropertySignature":
+          case AST_NODE_TYPES.PropertyDefinition:
+          case AST_NODE_TYPES.TSPropertySignature:
             lintProperty(node);
 
             break;
@@ -99,11 +99,13 @@ export const requireJsdoc = utils.createRule({
     };
 
     function lintCallSignatures(node: TSESTree.Node, type: ts.Type): void {
-      if (
-        type
-          .getCallSignatures()
-          .some(signature => context.missingDocComment(signature))
-      )
+      const hasDocComment = type
+        .getCallSignatures()
+        .every(signature => typeCheck.hasDocComment(signature));
+
+      if (hasDocComment) {
+        // Valid
+      } else
         context.report({
           messageId: MessageId.undocumentedCallSignature,
           node
@@ -111,11 +113,13 @@ export const requireJsdoc = utils.createRule({
     }
 
     function lintConstructSignatures(node: TSESTree.Node, type: ts.Type): void {
-      if (
-        type
-          .getConstructSignatures()
-          .some(signature => context.missingDocComment(signature))
-      )
+      const hasDocComment = type
+        .getConstructSignatures()
+        .every(signature => typeCheck.hasDocComment(signature));
+
+      if (hasDocComment) {
+        // Valid
+      } else
         context.report({
           messageId: MessageId.undocumentedConstructSignature,
           node
@@ -125,9 +129,7 @@ export const requireJsdoc = utils.createRule({
     function lintInterface(node: TSESTree.TSInterfaceDeclaration): void {
       const { interfaces } = context.options;
 
-      const tsNode = context.toTsNode(node);
-
-      const type = context.checker.getTypeAtLocation(tsNode);
+      const type = typeCheck.getType(node);
 
       if (interfaces.includes(InterfaceOption.interface))
         lintNodeByTypeSymbol(node);
@@ -142,82 +144,63 @@ export const requireJsdoc = utils.createRule({
     function lintMethod(
       node: TSESTree.MethodDefinition | TSESTree.TSMethodSignature
     ): void {
-      const tsNode = context.toTsNode(node);
+      const type = typeCheck.getConstructorType(node);
 
-      if (tsutils.isConstructorDeclaration(tsNode)) {
-        const type = tsutils.getConstructorTypeOfClassLikeDeclaration(
-          tsNode.parent,
-          context.checker
-        );
-
-        lintConstructSignatures(node, type);
-      } else lintNodeBySymbol(node.key);
+      if (type) lintConstructSignatures(node, type);
+      else lintNodeBySymbol(node.key);
     }
 
-    /**
-     * Lints node.
-     *
-     * @param node - Node.
-     */
     function lintNodeBySymbol(node: TSESTree.Node): void {
-      const tsNode = context.toTsNode(node);
+      const symbol = typeCheck.getSymbol(node);
 
-      const symbol = context.checker.getSymbolAtLocation(tsNode);
-
-      if (symbol && context.missingDocComment(symbol))
-        context.report({ messageId: MessageId.undocumented, node });
+      if (symbol)
+        if (typeCheck.hasDocComment(symbol)) {
+          // Valid
+        } else context.report({ messageId: MessageId.undocumented, node });
     }
 
-    /**
-     * Lints node.
-     *
-     * @param node - Node.
-     */
     function lintNodeByTypeSymbol(node: TSESTree.Node): void {
-      const tsNode = context.toTsNode(node);
+      const type = typeCheck.getType(node);
 
-      const symbol = context.checker.getTypeAtLocation(tsNode).getSymbol();
+      const symbol = type.getSymbol();
 
-      if (symbol && context.missingDocComment(symbol))
-        context.report({ messageId: MessageId.undocumented, node });
+      if (symbol)
+        if (typeCheck.hasDocComment(symbol)) {
+          // Valid
+        } else context.report({ messageId: MessageId.undocumented, node });
     }
 
-    /**
-     * Lints property.
-     *
-     * @param node - Node.
-     */
     function lintProperty(
       node: TSESTree.PropertyDefinition | TSESTree.TSPropertySignature
     ): void {
       const { properties } = context.options;
 
-      const typeAnnotation = node.typeAnnotation;
+      const { key, typeAnnotation } = node;
 
       if (typeAnnotation) {
         const type = typeAnnotation.typeAnnotation.type;
 
         if (
-          type === "TSFunctionType"
+          type === AST_NODE_TYPES.TSFunctionType
             ? properties.includes(PropertyOption.function)
             : properties.includes(PropertyOption.nonFunction)
         )
-          lintNodeBySymbol(node.key);
+          lintNodeBySymbol(key);
       }
     }
   }
 });
 
 const defaultSelectors: strings = [
-  "ClassDeclaration",
-  "FunctionDeclaration",
-  "MethodDefinition",
-  "PropertyDefinition",
-  "TSAbstractMethodDefinition",
-  "TSCallSignatureDeclaration",
-  "TSConstructSignatureDeclaration",
-  "TSDeclareFunction",
-  "TSInterfaceDeclaration",
-  "TSMethodSignature",
-  "TSPropertySignature"
+  AST_NODE_TYPES.ClassDeclaration,
+  AST_NODE_TYPES.FunctionDeclaration,
+  AST_NODE_TYPES.MethodDefinition,
+  AST_NODE_TYPES.PropertyDefinition,
+  AST_NODE_TYPES.TSAbstractMethodDefinition,
+  AST_NODE_TYPES.TSCallSignatureDeclaration,
+  AST_NODE_TYPES.TSConstructSignatureDeclaration,
+  AST_NODE_TYPES.TSDeclareFunction,
+  AST_NODE_TYPES.TSInterfaceDeclaration,
+  AST_NODE_TYPES.TSMethodSignature,
+  AST_NODE_TYPES.TSPropertySignature
 ];

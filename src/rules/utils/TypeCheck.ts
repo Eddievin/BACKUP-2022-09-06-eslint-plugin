@@ -1,14 +1,14 @@
-/* eslint-disable @skylib/custom -- Wait for @skylib/config update */
-
 /* eslint-disable @skylib/require-jsdoc -- Postponed */
 
 import * as ts from "typescript";
 import * as tsutils from "tsutils";
+import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
+import type { NumStrU, Writable, unknowns } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
-import { ReadonlySet, as, assert, is } from "@skylib/functions";
-import type { NumStrU } from "@skylib/functions";
+import type { Ranges, TypeGroups } from "./types";
+import { ReadonlySet, as, assert, is, typedef } from "@skylib/functions";
+import type { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 import { TypeGroup } from "./types";
-import type { TypeGroups } from "./types";
 
 export class TypeCheck {
   /**
@@ -53,18 +53,32 @@ export class TypeCheck {
     return false;
   };
 
+  public readonly isObjectType = (type: ts.Type): type is ts.ObjectType =>
+    tsutils.isObjectType(type);
+
   /**
    * Creates class instance.
    *
-   * @param checker - Checker.
-   * @param toTsNode - Converter.
+   * @param context - Context.
    */
-  public constructor(
-    checker: ts.TypeChecker,
-    toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"]
-  ) {
-    this.checker = checker;
-    this.toTsNode = toTsNode;
+  public constructor(context: RuleContext<never, unknowns>) {
+    const parser = ESLintUtils.getParserServices(context);
+
+    assert.toBeTrue(
+      tsutils.isStrictCompilerOptionEnabled(
+        parser.program.getCompilerOptions(),
+        "strictNullChecks"
+      ),
+      'Expecting "strictNullChecks" compiler option to be enabled'
+    );
+
+    this.checker = parser.program.getTypeChecker();
+
+    this.code = context.getSourceCode().getText();
+
+    this.toTsNode = parser.esTreeNodeToTSNodeMap.get.bind(
+      parser.esTreeNodeToTSNodeMap
+    );
   }
 
   /**
@@ -74,11 +88,86 @@ export class TypeCheck {
    * @returns _True_ if node is an array, _false_ otherwise.
    */
   public getCallSignatures(node: TSESTree.Node): TypeCheck.Signatures {
-    const tsNode = this.toTsNode(node);
-
-    const type = this.checker.getTypeAtLocation(tsNode);
+    const type = this.getType(node);
 
     return this.checker.getSignaturesOfType(type, ts.SignatureKind.Call);
+  }
+
+  public getComments(node: TSESTree.Node): Ranges {
+    const result: Writable<Ranges> = [];
+
+    const tsNode = this.toTsNode(node);
+
+    const offset = node.range[0] - tsNode.pos - tsNode.getLeadingTriviaWidth();
+
+    tsutils.forEachComment(tsNode, (_fullText, comment) => {
+      const pos = comment.pos + offset;
+
+      const end = comment.end + offset;
+
+      result.push([pos, pos + this.code.slice(pos, end).trimEnd().length]);
+    });
+
+    return result;
+  }
+
+  public getConstructorType(node: TSESTree.Node): ts.Type | undefined {
+    const tsNode = this.toTsNode(node);
+
+    return tsutils.isConstructorDeclaration(tsNode)
+      ? tsutils.getConstructorTypeOfClassLikeDeclaration(
+          tsNode.parent,
+          this.checker
+        )
+      : undefined;
+  }
+
+  public getContextualType(node: TSESTree.Node): ts.Type | undefined {
+    const tsNode = this.toTsNode(node);
+
+    return tsutils.isExpression(tsNode)
+      ? this.checker.getContextualType(tsNode)
+      : undefined;
+  }
+
+  public getFullRange(node: TSESTree.Node): TSESTree.Range {
+    return [node.range[0] - this.getLeadingTrivia(node).length, node.range[1]];
+  }
+
+  public getFullText(node: TSESTree.Node): string {
+    return this.code.slice(
+      node.range[0] - this.getLeadingTrivia(node).length,
+      node.range[1]
+    );
+  }
+
+  public getIndexInfo(
+    type: ts.Type,
+    kind: ts.IndexKind
+  ): ts.IndexInfo | undefined {
+    return this.checker.getIndexInfoOfType(type, kind);
+  }
+
+  public getLeadingTrivia(node: TSESTree.Node): string {
+    // May be undefined inside Vue <template>
+    const tsNode = typedef<ts.Node | undefined>(this.toTsNode(node));
+
+    return tsNode
+      ? this.code.slice(
+          node.range[0] - tsNode.getLeadingTriviaWidth(),
+          node.range[0]
+        )
+      : this.code.slice(node.range[0], node.range[0]);
+  }
+
+  public getReturnType(signature: ts.Signature): ts.Type {
+    return this.checker.getReturnTypeOfSignature(signature);
+  }
+
+  public getSymbol(node: TSESTree.Node): ts.Symbol | undefined {
+    const tsNode = this.toTsNode(node);
+
+    return this.checker.getSymbolAtLocation(tsNode);
   }
 
   public getType(node: TSESTree.Node): ts.Type {
@@ -88,88 +177,37 @@ export class TypeCheck {
   }
 
   /**
+   * Checks if signature or symbol is missing doc comment.
+   *
+   * @param mixed - Signature or symbol.
+   * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
+   */
+  public hasDocComment(mixed: ts.Signature | ts.Symbol): boolean {
+    return mixed.getDocumentationComment(this.checker).length > 0;
+  }
+
+  public hasLeadingDocComment(node: TSESTree.Node): boolean {
+    return this.getLeadingTrivia(node).trimStart().startsWith("/**");
+  }
+
+  /**
    * Checks if node is an array.
    *
    * @param node - Node.
    * @returns _True_ if node is an array, _false_ otherwise.
    */
   public isArray(node: TSESTree.Node): boolean {
-    const tsNode = this.toTsNode(node);
-
-    const type = this.checker.getTypeAtLocation(tsNode);
+    const type = this.getType(node);
 
     return this.checker.isArrayType(type);
   }
 
-  /**
-   * Gets type parts.
-   *
-   * @param node - Node.
-   * @returns Type parts.
-   */
-  public parseUnionType(node: TSESTree.Node): TypeCheck.TypeParts {
-    return recurs(this.checker.getTypeAtLocation(this.toTsNode(node)));
-
-    function recurs(type: ts.Type): TypeCheck.TypeParts {
-      if (type.isNumberLiteral()) return [type.value];
-
-      if (type.isStringLiteral()) return [type.value];
-
-      if (type.isUnion())
-        return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
-
-      return [type];
-    }
-  }
-
-  /**
-   * Gets type parts.
-   *
-   * @param node - Node.
-   * @returns Type parts.
-   */
-  public parseUnionTypeTypeofFix(node: TSESTree.Node): TypeCheck.TypeParts {
-    return node.type === "UnaryExpression" && node.operator === "typeof"
-      ? recurs(this.checker.getTypeAtLocation(this.toTsNode(node.argument)))
-      : this.parseUnionType(node);
-
-    function recurs(type: ts.Type): TypeCheck.TypeParts {
-      if (type.getCallSignatures().length) return ["function"];
-
-      if (type.getConstructSignatures().length) return ["function"];
-
-      if (type.isUnion())
-        return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
-
-      switch (as.byGuard(type.flags, isExpectedFlags)) {
-        case ts.TypeFlags.BigInt:
-        case ts.TypeFlags.BigIntLiteral:
-          return ["bigint"];
-
-        case ts.TypeFlags.BooleanLiteral:
-          return ["boolean"];
-
-        case ts.TypeFlags.Number:
-        case ts.TypeFlags.NumberLiteral:
-          return ["number"];
-
-        case ts.TypeFlags.Null:
-        case ts.TypeFlags.Object:
-          return ["object"];
-
-        case ts.TypeFlags.String:
-        case ts.TypeFlags.StringLiteral:
-          return ["string"];
-
-        case ts.TypeFlags.ESSymbol:
-        case ts.TypeFlags.UniqueESSymbol:
-          return ["symbol"];
-
-        case ts.TypeFlags.Undefined:
-        case ts.TypeFlags.Void:
-          return ["undefined"];
-      }
-    }
+  public isReadonlyProperty(property: ts.Symbol, type: ts.Type): boolean {
+    return tsutils.isPropertyReadonlyInType(
+      type,
+      property.getEscapedName(),
+      this.checker
+    );
   }
 
   public typeHas(type: ts.Type, expected?: TypeGroup): boolean {
@@ -181,11 +219,7 @@ export class TypeCheck {
   }
 
   public typeHasNoneOf(type: ts.Type, expected?: TypeGroups): boolean {
-    return expected ? expected.every(x => this.typeHasNot(type, x)) : true;
-  }
-
-  public typeHasNot(type: ts.Type, expected?: TypeGroup): boolean {
-    return expected ? !this.typeHas(type, expected) : true;
+    return expected ? expected.every(x => !this.typeHas(type, x)) : true;
   }
 
   public typeHasOneOf(type: ts.Type, expected?: TypeGroups): boolean {
@@ -297,18 +331,67 @@ export class TypeCheck {
   }
 
   public typeIsNoneOf(type: ts.Type, expected?: TypeGroups): boolean {
-    return expected ? expected.every(x => this.typeIsNot(type, x)) : true;
-  }
-
-  public typeIsNot(type: ts.Type, expected?: TypeGroup): boolean {
-    return expected ? !this.typeIs(type, expected) : true;
+    return expected ? expected.every(x => !this.typeIs(type, x)) : true;
   }
 
   public typeIsOneOf(type: ts.Type, expected?: TypeGroups): boolean {
     return expected ? expected.some(x => this.typeIs(type, x)) : true;
   }
 
+  /**
+   * Gets type parts.
+   *
+   * @param node - Node.
+   * @returns Type parts.
+   */
+  public unionTypeParts(node: TSESTree.Node): TypeCheck.TypeParts {
+    return node.type === AST_NODE_TYPES.UnaryExpression &&
+      node.operator === "typeof"
+      ? recurs(this.checker.getTypeAtLocation(this.toTsNode(node.argument)))
+      : this.unionTypeParts2(node);
+
+    function recurs(type: ts.Type): TypeCheck.TypeParts {
+      if (type.getCallSignatures().length) return ["function"];
+
+      if (type.getConstructSignatures().length) return ["function"];
+
+      if (type.isUnion())
+        return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
+
+      switch (as.byGuard(type.flags, isExpectedFlags)) {
+        case ts.TypeFlags.BigInt:
+        case ts.TypeFlags.BigIntLiteral:
+          return ["bigint"];
+
+        case ts.TypeFlags.BooleanLiteral:
+          return ["boolean"];
+
+        case ts.TypeFlags.Number:
+        case ts.TypeFlags.NumberLiteral:
+          return ["number"];
+
+        case ts.TypeFlags.Null:
+        case ts.TypeFlags.Object:
+          return ["object"];
+
+        case ts.TypeFlags.String:
+        case ts.TypeFlags.StringLiteral:
+          return ["string"];
+
+        case ts.TypeFlags.ESSymbol:
+        case ts.TypeFlags.UniqueESSymbol:
+          return ["symbol"];
+
+        case ts.TypeFlags.Undefined:
+        case ts.TypeFlags.Void:
+          return ["undefined"];
+      }
+    }
+  }
+
   protected readonly checker: ts.TypeChecker;
+
+  protected readonly code: string;
 
   protected readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
 
@@ -329,6 +412,27 @@ export class TypeCheck {
         type.types.every(subtype => flags.includes(subtype.getFlags())))
     );
   };
+
+  /**
+   * Gets type parts.
+   *
+   * @param node - Node.
+   * @returns Type parts.
+   */
+  protected unionTypeParts2(node: TSESTree.Node): TypeCheck.TypeParts {
+    return recurs(this.checker.getTypeAtLocation(this.toTsNode(node)));
+
+    function recurs(type: ts.Type): TypeCheck.TypeParts {
+      if (type.isNumberLiteral()) return [type.value];
+
+      if (type.isStringLiteral()) return [type.value];
+
+      if (type.isUnion())
+        return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
+
+      return [type];
+    }
+  }
 }
 
 export namespace TypeCheck {

@@ -17,12 +17,12 @@ export const switchCaseEmptyLines = utils.createRule({
     [MessageId.addEmptyLine]: "Add empty line before switch case",
     [MessageId.removeEmptyLine]: "Remove empty line before switch case"
   },
-  create: (context): RuleListener => ({
+  create: (context, typeCheck): RuleListener => ({
     SwitchStatement: (node): void => {
       for (const [case1, case2] of a.chain(node.cases)) {
         const fallThrough = case1.consequent.length === 0;
 
-        const got = context.getLeadingTrivia(case2);
+        const got = typeCheck.getLeadingTrivia(case2);
 
         const expected =
           context.eol.repeat(fallThrough ? 1 : 2) +

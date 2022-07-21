@@ -18,16 +18,8 @@ utils.testRule("template-literal-format", templateLiteralFormat, [
         template literal\`;
     `,
     errors: [
-      {
-        line: 3,
-        endLine: 4,
-        messageId: MessageId.invalidTemplateLiteralFormat
-      },
-      {
-        line: 6,
-        endLine: 7,
-        messageId: MessageId.invalidTemplateLiteralFormat
-      }
+      { line: 3, endLine: 4, messageId: MessageId.invalidFormat },
+      { line: 6, endLine: 7, messageId: MessageId.invalidFormat }
     ]
   },
   {
@@ -46,7 +38,7 @@ utils.testRule("template-literal-format", templateLiteralFormat, [
         template literal
       \`;
     `,
-    errors: [{ endLine: 5, messageId: MessageId.invalidTemplateLiteralFormat }]
+    errors: [{ line: 1, endLine: 5, messageId: MessageId.invalidFormat }]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -68,12 +60,6 @@ utils.testRule("template-literal-format", templateLiteralFormat, [
         \`;
       }
     `,
-    errors: [
-      {
-        line: 2,
-        endLine: 6,
-        messageId: MessageId.invalidTemplateLiteralFormat
-      }
-    ]
+    errors: [{ line: 2, endLine: 6, messageId: MessageId.invalidFormat }]
   }
 ]);

@@ -5,6 +5,7 @@ import type {
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import { a, assert, evaluate, is, s } from "@skylib/functions";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
 import nodePath from "node:path";
@@ -72,7 +73,7 @@ export const consistentImport = utils.createRule({
     const importDeclarations: TSESTree.ImportDeclaration[] = [];
 
     return {
-      ":not(ImportDefaultSpecifier,ImportNamespaceSpecifier,ImportSpecifier,Property) > Identifier:not(.property)":
+      ":not(ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, Property) > Identifier:not(.property)":
         (node: TSESTree.Identifier): void => {
           identifiers.add(node.name);
         },
@@ -141,11 +142,12 @@ export const consistentImport = utils.createRule({
     function checkImport(): void {
       for (const node of importDeclarations) {
         const defaultSpecifier = node.specifiers.find(
-          specifier => specifier.type === "ImportDefaultSpecifier"
+          specifier => specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier
         );
 
         const wildcardSpecifier = node.specifiers.find(
-          specifier => specifier.type === "ImportNamespaceSpecifier"
+          specifier =>
+            specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
         );
 
         const source = normalizeSource(node.source.value);

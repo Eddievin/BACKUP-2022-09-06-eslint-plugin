@@ -14,25 +14,29 @@ utils.testRule(
       code: `
         <script lang="ts">
         [1, true].every(x => x);
+        [1, true].some(x => x);
         </script>
         <template>
           <div :prop="[1, true].every(x => x)"></div>
         </template>
       `,
-      errors: [{ line: 2, messageId: MessageId.invalidType }]
+      errors: [
+        { line: 2, messageId: MessageId.invalidType },
+        { line: 3, messageId: MessageId.invalidType }
+      ]
     }
   ],
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
       code: `
-        [1].some(x => x);
-        [""].some(x => x);
-        [false].some(x => x);
-        [1].some((x): true | undefined => x);
-        [1].some((x): object | undefined => x);
-        [1].some((x): symbol | undefined => x);
-        [1].some((x): {} | undefined => x);
+        [1].every(x => x);
+        [""].every(x => x);
+        [false].every(x => x);
+        [1].every((x): true | undefined => x);
+        [1].every((x): object | undefined => x);
+        [1].every((x): symbol | undefined => x);
+        [1].every((x): {} | undefined => x);
       `
     }
   ]

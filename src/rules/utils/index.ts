@@ -1,5 +1,3 @@
-export * as TypeCheck from "./TypeCheck";
-
 export * as casing from "./casing";
 
 export * from "./core";
@@ -10,6 +8,9 @@ export * from "./synonyms";
 
 export * from "./test";
 
+export * from "./tree";
+
 export * from "./types";
 
+export { compare } from "./compare";
 export { sort } from "./sort";

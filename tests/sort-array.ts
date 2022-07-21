@@ -13,35 +13,57 @@ utils.testRule("sort-array", sortArray, [
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "Identifier" }],
     code: "const id = 1;",
-    errors: [{ messageId: MessageId.expectingArray }]
+    errors: [{ line: 1, messageId: MessageId.expectingArray }]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "ArrayExpression" }],
     code: `
       const x = [
-      {},
-      "a",
-      "c",
-      // Comment
-      "b"
+        {},
+        "a",
+        "c",
+        // Comment
+        "b"
       ];
     `,
     output: `
       const x = [
-      {},
-      "a",
-      // Comment
-      "b",
-      "c"
+        {},
+        "a",
+        // Comment
+        "b",
+        "c"
       ];
     `,
     errors: [
-      {
-        line: 4,
-        endLine: 6,
-        messageId: MessageId.incorrectSortingOrder
-      }
+      { line: 4, endLine: 6, messageId: MessageId.incorrectSortingOrder }
+    ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [{ selector: "ArrayExpression" }],
+    code: `
+      const x = [
+        "d",
+        "c",
+        ...[],
+        "b",
+        "a"
+      ];
+    `,
+    output: `
+      const x = [
+        "c",
+        "d",
+        ...[],
+        "a",
+        "b"
+      ];
+    `,
+    errors: [
+      { line: 2, endLine: 3, messageId: MessageId.incorrectSortingOrder },
+      { line: 5, endLine: 6, messageId: MessageId.incorrectSortingOrder }
     ]
   },
   {
@@ -56,32 +78,28 @@ utils.testRule("sort-array", sortArray, [
     ],
     code: `
       const x = [
-      { ...{}, a: 1, key: "top:x" },
-      { ...{}, a: 2, key: "bottom:y" },
-      { ...{}, a: 3, key: "bottom:x" },
-      { ...{}, a: 4, key: "a" },
-      { ...{}, a: 5, key: "c" },
-      { ...{}, a: 6, key: "b" },
-      { ...{}, a: 7, key: "top:y" }
+        { ...{}, a: 1, key: "top:x" },
+        { ...{}, a: 2, key: "bottom:y" },
+        { ...{}, a: 3, key: "bottom:x" },
+        { ...{}, a: 4, key: "a" },
+        { ...{}, a: 5, key: "c" },
+        { ...{}, a: 6, key: "b" },
+        { ...{}, a: 7, key: "top:y" }
       ];
     `,
     output: `
       const x = [
-      { ...{}, a: 1, key: "top:x" },
-      { ...{}, a: 7, key: "top:y" },
-      { ...{}, a: 4, key: "a" },
-      { ...{}, a: 6, key: "b" },
-      { ...{}, a: 5, key: "c" },
-      { ...{}, a: 3, key: "bottom:x" },
-      { ...{}, a: 2, key: "bottom:y" }
+        { ...{}, a: 1, key: "top:x" },
+        { ...{}, a: 7, key: "top:y" },
+        { ...{}, a: 4, key: "a" },
+        { ...{}, a: 6, key: "b" },
+        { ...{}, a: 5, key: "c" },
+        { ...{}, a: 3, key: "bottom:x" },
+        { ...{}, a: 2, key: "bottom:y" }
       ];
     `,
     errors: [
-      {
-        line: 3,
-        endLine: 8,
-        messageId: MessageId.incorrectSortingOrder
-      }
+      { line: 3, endLine: 8, messageId: MessageId.incorrectSortingOrder }
     ]
   },
   {
@@ -89,24 +107,20 @@ utils.testRule("sort-array", sortArray, [
     options: [{ selector: "ArrayExpression" }],
     code: `
       const x = [
-      {},
-      "showConfirm.async: Failure",
-      "showConfirm: Failure"
+        {},
+        "showConfirm.async: Failure",
+        "showConfirm: Failure"
       ];
     `,
     output: `
       const x = [
-      {},
-      "showConfirm: Failure",
-      "showConfirm.async: Failure"
+        {},
+        "showConfirm: Failure",
+        "showConfirm.async: Failure"
       ];
     `,
     errors: [
-      {
-        line: 3,
-        endLine: 4,
-        messageId: MessageId.incorrectSortingOrder
-      }
+      { line: 3, endLine: 4, messageId: MessageId.incorrectSortingOrder }
     ]
   }
 ]);

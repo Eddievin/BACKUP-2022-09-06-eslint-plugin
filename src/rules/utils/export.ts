@@ -19,7 +19,10 @@ export interface ProgramExitContext {
 }
 
 // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-export function create(callback: ProgramExit): RuleListener {
+export function create(
+  callback: ProgramExit,
+  rules: RuleListener = {}
+): RuleListener {
   const exportAllDeclarations: Writable<ExportAllDeclarations> = [];
 
   const exportDefaultDeclarations: Writable<ExportDefaultDeclarations> = [];
@@ -29,6 +32,7 @@ export function create(callback: ProgramExit): RuleListener {
   const identifiers: Writable<Identifiers> = [];
 
   return {
+    ...rules,
     [[
       "Program > ExportAllDeclaration > Identifier",
       "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id",

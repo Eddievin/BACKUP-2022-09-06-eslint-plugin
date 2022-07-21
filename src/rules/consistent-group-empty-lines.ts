@@ -10,7 +10,7 @@ export interface SubOptions {
   readonly _id: string;
   readonly averageLinesGte: number;
   readonly everyLinesGte: number;
-  readonly selector: string;
+  readonly selector: utils.Selector;
   readonly someHasDocComment: boolean;
   readonly someLinesGte: number;
 }
@@ -28,7 +28,7 @@ export const consistentGroupEmptyLines = utils.createRule({
       _id: is.string,
       averageLinesGte: is.number,
       everyLinesGte: is.number,
-      selector: is.string,
+      selector: utils.isSelector,
       someHasDocComment: is.boolean,
       someLinesGte: is.number
     },
@@ -45,7 +45,7 @@ export const consistentGroupEmptyLines = utils.createRule({
     [MessageId.expectingEmptyLine]: "Expecting empty line before ({{ _id }})",
     [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
   },
-  create: (context): RuleListener => {
+  create: (context, typeCheck): RuleListener => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();
 
     const nodesMap2 = new Accumulator2<string, string, TSESTree.Node>();
@@ -56,7 +56,9 @@ export const consistentGroupEmptyLines = utils.createRule({
       },
       "Program:exit": () => {
         for (const subOptions of context.subOptionsArray) {
-          const nodesMap = nodesMap2.get(subOptions.selector);
+          const nodesMap = nodesMap2.get(
+            a.fromMixed(subOptions.selector).join(", ")
+          );
 
           for (const nodes of nodesMap.values()) {
             // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
@@ -80,12 +82,14 @@ export const consistentGroupEmptyLines = utils.createRule({
     };
 
     for (const subOptions of context.subOptionsArray)
-      listener[subOptions.selector] = function (node: TSESTree.Node): void {
+      listener[a.fromMixed(subOptions.selector).join(", ")] = function (
+        node: TSESTree.Node
+      ): void {
         const { selector } = subOptions;
 
-        const id = utils.getNodeId(node.parent);
+        const id = utils.nodeId(node.parent);
 
-        nodesMap2.push(selector, id, node);
+        nodesMap2.push(a.fromMixed(selector).join(", "), id, node);
       };
 
     return listener;
@@ -96,7 +100,7 @@ export const consistentGroupEmptyLines = utils.createRule({
     ): void {
       if (group.length > 1) {
         const hasDocComment = subOptions.someHasDocComment
-          ? group.some(node => context.hasLeadingDocComment(node))
+          ? group.some(node => typeCheck.hasLeadingDocComment(node))
           : false;
 
         const linesPerNode = group
@@ -122,7 +126,7 @@ export const consistentGroupEmptyLines = utils.createRule({
           : MessageId.unexpectedEmptyLine;
 
         for (const node of group.slice(1)) {
-          const got = context.getLeadingTrivia(node);
+          const got = typeCheck.getLeadingTrivia(node);
 
           if (got.includes("\n")) {
             const expected =

@@ -1,6 +1,4 @@
 import type * as estree from "estree";
-import type * as ts from "typescript";
-import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import type {
   ReportDescriptor,
   RuleContext,
@@ -9,7 +7,7 @@ import type {
   SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { s, unknowns } from "@skylib/functions";
-import type { TypeCheck } from "./TypeCheck";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 
 export enum Fixable {
@@ -40,24 +38,16 @@ export const isTypeGroup = is.factory(is.enumeration, TypeGroup);
 export const isTypeGroups = is.factory(is.array.of, isTypeGroup);
 
 export interface Context<M extends string, O extends object, S extends object> {
-  readonly checker: ts.TypeChecker;
   readonly code: string;
   readonly defineTemplateBodyVisitor: DefineTemplateBodyVisitor;
   readonly eol: s.Eol;
-  /**
-   * Gets leading trivia.
-   *
-   * @param node - Node.
-   * @returns Leading trivia.
-   */
-  readonly getLeadingTrivia: (node: TSESTree.Node) => string;
   /**
    * Gets location from range.
    *
    * @param range - Range.
    * @returns Location.
    */
-  readonly getLocFromRange: (range: ReadonlyRange) => estree.SourceLocation;
+  readonly getLocFromRange: (range: Range) => estree.SourceLocation;
   /**
    * Gets member name.
    *
@@ -69,33 +59,12 @@ export interface Context<M extends string, O extends object, S extends object> {
     node: TSESTree.ClassElement | TSESTree.TypeElement
   ) => string;
   /**
-   * Gets range with leading trivia.
-   *
-   * @param node - Node.
-   * @returns Range.
-   */
-  readonly getRangeWithLeadingTrivia: (node: TSESTree.Node) => TSESTree.Range;
-  /**
    * Gets text.
    *
    * @param node - Node.
    * @returns Text.
    */
   readonly getText: (node: TSESTree.Comment | TSESTree.Node) => string;
-  /**
-   * Gets text with leading trivia.
-   *
-   * @param node - Node.
-   * @returns Text.
-   */
-  readonly getTextWithLeadingTrivia: (node: TSESTree.Node) => string;
-  /**
-   * Checks if node has leading doc comment.
-   *
-   * @param node - Node.
-   * @returns _True_ if node has leading doc comment, _false_ otherwise.
-   */
-  readonly hasLeadingDocComment: (node: TSESTree.Node) => boolean;
   /**
    * Checks if node has trailing comment.
    *
@@ -105,16 +74,11 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
   readonly id: string;
   readonly locZero: TSESTree.SourceLocation;
-  /**
-   * Checks if signature or symbol is missing doc comment.
-   *
-   * @param mixed - Signature or symbol.
-   * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
-   */
-  readonly missingDocComment: (mixed: ts.Signature | ts.Symbol) => boolean;
   readonly options: O;
   readonly package: Package;
   readonly path: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+  readonly rawContext: Readonly<RuleContext<any, any>>;
   /**
    * Reports error.
    *
@@ -124,9 +88,6 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly scope: ReturnType<RuleContext<M, unknowns>["getScope"]>;
   readonly source: SourceCode;
   readonly subOptionsArray: readonly S[];
-  readonly toEsNode: ParserServices["tsNodeToESTreeNodeMap"]["get"];
-  readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
-  readonly typeCheck: TypeCheck;
 }
 
 // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
@@ -139,7 +100,9 @@ export interface Package {
   readonly name?: string;
 }
 
-export type ReadonlyRange = readonly [number, number];
+export type Range = readonly [number, number];
+
+export type Ranges = readonly Range[];
 
 export type RuleFixes = readonly RuleFix[];
 

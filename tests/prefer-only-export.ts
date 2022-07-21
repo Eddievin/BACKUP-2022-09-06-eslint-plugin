@@ -8,75 +8,110 @@ utils.testRule(
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
       code: `
-        export class C extends D {}
+        export const file = 1;
+        export * from "source";
+      `,
+      errors: [{ line: 1, messageId: MessageId.invalidExport }]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export const file = 1;
+        export * as y from "source";
+      `,
+      errors: [
+        { line: 1, messageId: MessageId.invalidExport },
+        { line: 2, messageId: MessageId.invalidExport }
+      ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export const file = 1;
         export default 1;
       `,
-      errors: [{ line: 2, messageId: MessageId.exportNotAllowed }]
+      errors: [{ line: 1, messageId: MessageId.invalidExport }]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export const file = 1;
+        export const y = 1;
+      `,
+      errors: [
+        { line: 1, messageId: MessageId.invalidExport },
+        { line: 2, messageId: MessageId.invalidExport }
+      ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ selector: "ClassDeclaration > Identifier.id" }],
+      code: `
+        export class C {}
+        export const x = 1;
+      `,
+      errors: [
+        { line: 1, messageId: MessageId.invalidExport },
+        { line: 2, messageId: MessageId.invalidExport }
+      ]
+    }
+  ],
+  [
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: "export const file = 1;"
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export const x = 1;
+        export * from "source";
+      `
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export const x = 1;
+        export * as y from "source";
+      `
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export const x = 1;
+        export default 1;
+      `
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export const x = 1;
+        export const y = 1;
+      `
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ exportMatchingFilename: true }],
+      code: `
+        export class file {}
+        export namespace file {}
+      `
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       code: `
         export class C {}
         export const x = 1;
-        export function f() {}
-        export interface I {}
-        export type T = string;
-        export namespace N {}
-      `,
-      errors: [
-        { line: 2, messageId: MessageId.exportNotAllowed },
-        { line: 3, messageId: MessageId.exportNotAllowed },
-        { line: 4, messageId: MessageId.exportNotAllowed },
-        { line: 5, messageId: MessageId.exportNotAllowed },
-        { line: 6, messageId: MessageId.exportNotAllowed }
-      ]
-    },
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        export default class C {}
-        const x = 1;
-        export { x };
-      `,
-      errors: [{ line: 3, messageId: MessageId.exportNotAllowed }]
-    },
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        export class C {}
-        export * from "lodash";
-      `,
-      errors: [{ line: 2, messageId: MessageId.exportNotAllowed }]
-    },
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        export class C {}
-        export * as _ from "lodash";
-      `,
-      errors: [{ line: 2, messageId: MessageId.exportNotAllowed }]
-    }
-  ],
-  [
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        export class C {}
-      `
-    },
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        export class C {}
-        namespace Ns { export const x = 1; }
-      `
-    },
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        export class C {}
-        export namespace C {}
       `
     }
   ]

@@ -6,15 +6,14 @@ import type {
 import { a, fn, s } from "@skylib/functions";
 
 export enum MessageId {
-  invalidTemplateLiteralFormat = "invalidTemplateLiteralFormat"
+  invalidFormat = "invalidFormat"
 }
 
 export const templateLiteralFormat = utils.createRule({
   name: "template-literal-format",
   fixable: utils.Fixable.code,
-  messages: {
-    [MessageId.invalidTemplateLiteralFormat]: "Invalid template literal format"
-  },
+  vue: true,
+  messages: { [MessageId.invalidFormat]: "Invalid template literal format" },
   create: (context): RuleListener => ({
     TemplateLiteral: (node): void => {
       const lines = s.lines(context.getText(node));
@@ -24,63 +23,59 @@ export const templateLiteralFormat = utils.createRule({
 
         const middleLines = lines.slice(1, -1);
 
-        const lastLine = a.last(lines);
-
         const nonEmptyMiddleLines = middleLines.filter(line => line.length);
+
+        const lastLine = a.last(lines);
 
         if (
           firstLine === "`" &&
           nonEmptyMiddleLines.length &&
           lastLine.trimStart() === "`"
         ) {
-          const padding1 = fn.pipe(
+          const firstPadding = fn.pipe(
             context.code.slice(0, node.range[0]),
             s.lines,
             a.last,
             s.leadingSpaces
           ).length;
 
-          const padding2 = Math.min(
+          const middlePadding = Math.min(
             ...nonEmptyMiddleLines.map(line => s.leadingSpaces(line).length)
           );
 
-          const padding3 = s.leadingSpaces(lastLine).length;
+          const middleDelta = firstPadding - middlePadding + 2;
 
-          const delta2 = padding1 - padding2 + 2;
+          const lastPadding = s.leadingSpaces(lastLine).length;
 
-          const delta3 = padding1 - padding3;
+          const lastDelta = firstPadding - lastPadding;
 
-          if (delta2 || delta3)
+          if (middleDelta || lastDelta)
             context.report({
               fix: (): RuleFix => ({
                 range: node.range,
                 text: [
                   firstLine,
-                  ...middleLines.map(line => fixLine(line, delta2)),
-                  fixLine(lastLine, delta3)
+                  ...middleLines.map(line => pad(line, middleDelta)),
+                  pad(lastLine, lastDelta)
                 ].join(context.eol)
               }),
-              messageId: MessageId.invalidTemplateLiteralFormat,
+              messageId: MessageId.invalidFormat,
               node
             });
-        } else
-          context.report({
-            messageId: MessageId.invalidTemplateLiteralFormat,
-            node
-          });
+        } else context.report({ messageId: MessageId.invalidFormat, node });
       }
     }
   })
 });
 
 /**
- * Fixes line.
+ * Pads line.
  *
  * @param line - Line.
  * @param delta - The number of spaces to add/remove.
- * @returns Fixed line.
+ * @returns Padded line.
  */
-function fixLine(line: string, delta: number): string {
+function pad(line: string, delta: number): string {
   return line.length
     ? " ".repeat(s.leadingSpaces(line).length + delta) + line.trimStart()
     : line;

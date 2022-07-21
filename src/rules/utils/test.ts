@@ -79,7 +79,7 @@ export function testRule<
       const output = s.unpadMultiline(invalidTest.output ?? invalidTest.code);
 
       const errors = invalidTest.errors.map(
-        (error): TestCaseError<M> => ({ endLine: error.line ?? 1, ...error })
+        (error): TestCaseError<M> => ({ endLine: error.line, ...error })
       );
 
       return {

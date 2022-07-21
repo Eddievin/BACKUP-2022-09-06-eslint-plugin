@@ -24,8 +24,8 @@ utils.testRule(
         .map(x => x);
       `,
       errors: [
-        { endLine: 5, messageId: MessageId.unexpectedEmptyLine },
-        { endLine: 3, messageId: MessageId.unexpectedEmptyLine }
+        { line: 3, messageId: MessageId.unexpectedEmptyLine },
+        { line: 5, messageId: MessageId.unexpectedEmptyLine }
       ]
     }
   ],

@@ -112,21 +112,9 @@ utils.testRule(
         }
       `,
       errors: [
-        {
-          line: 2,
-          messageId: MessageId.undefinedId,
-          data: { id: "id2" }
-        },
-        {
-          line: 3,
-          messageId: MessageId.undefinedId,
-          data: { id: "id1" }
-        },
-        {
-          line: 6,
-          messageId: MessageId.undefinedId,
-          data: { id: "id2" }
-        }
+        { line: 2, messageId: MessageId.undefinedId, data: { _id: "id2" } },
+        { line: 3, messageId: MessageId.undefinedId, data: { _id: "id1" } },
+        { line: 6, messageId: MessageId.undefinedId, data: { _id: "id2" } }
       ]
     },
     {
@@ -230,21 +218,9 @@ utils.testRule(
         }
       `,
       errors: [
-        {
-          line: 2,
-          messageId: MessageId.undefinedId,
-          data: { id: "id2" }
-        },
-        {
-          line: 3,
-          messageId: MessageId.undefinedId,
-          data: { id: "id1" }
-        },
-        {
-          line: 6,
-          messageId: MessageId.undefinedId,
-          data: { id: "id2" }
-        }
+        { line: 2, messageId: MessageId.undefinedId, data: { _id: "id2" } },
+        { line: 3, messageId: MessageId.undefinedId, data: { _id: "id1" } },
+        { line: 6, messageId: MessageId.undefinedId, data: { _id: "id2" } }
       ]
     },
     {
@@ -254,16 +230,8 @@ utils.testRule(
           classes: Style.undefined,
           interfaces: Style.undefined,
           overrides: [
-            {
-              _id: "id1",
-              propertyPattern: ["^x$"],
-              style: Style.combined
-            },
-            {
-              _id: "id2",
-              propertyPattern: ["^y$"],
-              style: Style.optional
-            }
+            { _id: "id1", propertyPattern: ["^x$"], style: Style.combined },
+            { _id: "id2", propertyPattern: ["^y$"], style: Style.optional }
           ]
         }
       ],
@@ -274,16 +242,8 @@ utils.testRule(
         }
       `,
       errors: [
-        {
-          line: 2,
-          messageId: MessageId.combinedId,
-          data: { id: "id1" }
-        },
-        {
-          line: 3,
-          messageId: MessageId.optionalId,
-          data: { id: "id2" }
-        }
+        { line: 2, messageId: MessageId.combinedId, data: { _id: "id1" } },
+        { line: 3, messageId: MessageId.optionalId, data: { _id: "id2" } }
       ]
     }
   ],

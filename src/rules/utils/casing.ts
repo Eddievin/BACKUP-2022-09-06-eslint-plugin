@@ -3,8 +3,8 @@ import { is, s } from "@skylib/functions";
 
 export enum Format {
   camelCase = "camelCase",
-  kebabCase = "kebabCase",
-  pascalCase = "pascalCase"
+  kebabCase = "kebab-case",
+  pascalCase = "PascalCase"
 }
 
 export const isFormat = is.factory(is.enumeration, Format);
