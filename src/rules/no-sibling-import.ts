@@ -1,7 +1,7 @@
 import * as utils from "./utils";
 import fs from "node:fs";
 import { is } from "@skylib/functions";
-import path from "node:path";
+import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 
 export interface Options {
@@ -21,25 +21,22 @@ export const noSiblingImport = utils.createRule({
   },
   create: context =>
     utils.ruleTemplates.source(ctx => {
-      if (path.dirname(ctx.source) === ".") {
-        const basename = path.basename(ctx.source);
+      if (nodePath.dirname(ctx.source) === ".") {
+        const { exclusions } = context.options;
 
-        if (context.options.exclusions.includes(basename)) {
+        const basename = nodePath.basename(ctx.source);
+
+        const path = `${nodePath.dirname(context.path)}/${basename}`;
+
+        if (exclusions.includes(basename)) {
           // Valid
-        } else {
-          const sourcePath = `${path.dirname(context.path)}/${basename}`;
-
-          if (
-            fs.existsSync(sourcePath) &&
-            fs.statSync(sourcePath).isDirectory()
-          ) {
-            // Valid
-          } else
-            context.report({
-              messageId: MessageId.disallowedSource,
-              node: ctx.node
-            });
-        }
+        } else if (fs.existsSync(path) && fs.statSync(path).isDirectory()) {
+          // Valid
+        } else
+          context.report({
+            messageId: MessageId.disallowedSource,
+            node: ctx.node
+          });
       }
     })
 });
