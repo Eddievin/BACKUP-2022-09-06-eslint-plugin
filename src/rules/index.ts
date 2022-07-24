@@ -30,6 +30,7 @@ import { sortKeys } from "./sort-keys";
 import { statementsOrder } from "./statements-order";
 import { switchCaseEmptyLines } from "./switch-case-empty-lines";
 import { templateLiteralFormat } from "./template-literal-format";
+import { vueElementContentsSpacing } from "./vue-element-contents-spacing";
 import { wrap } from "./wrap";
 
 export * as utils from "./utils";
@@ -66,6 +67,7 @@ export const rules = evaluate(() => {
     "statements-order": statementsOrder,
     "switch-case-empty-lines": switchCaseEmptyLines,
     "template-literal-format": templateLiteralFormat,
+    "vue-element-contents-spacing": vueElementContentsSpacing,
     // eslint-disable-next-line object-shorthand -- Ok
     "wrap": wrap
   } as const;
