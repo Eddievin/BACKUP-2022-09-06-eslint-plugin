@@ -85,6 +85,13 @@ module.exports = {
     {
       files: "./tests/**",
       rules: {
+        "@skylib/custom/project/no-ast": [
+          "warn",
+          {
+            message: "Prefer string literal",
+            selector: "Identifier[name=AST_NODE_TYPES]"
+          }
+        ],
         "@skylib/match-filename/project/testRule-name": [
           "warn",
           {
