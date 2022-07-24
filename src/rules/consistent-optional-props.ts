@@ -64,11 +64,11 @@ export const consistentOptionalProps = utils.createRule({
   subOptionsKey: "overrides",
   messages: {
     [MessageId.combined]: 'Prefer "x?: T | undefined" style',
-    [MessageId.combinedId]: 'Prefer "x?: T | undefined" style ({{ _id }})',
+    [MessageId.combinedId]: 'Prefer "x?: T | undefined" style ({{_id}})',
     [MessageId.optional]: 'Prefer "x?: T" style',
-    [MessageId.optionalId]: 'Prefer "x?: T" style ({{ _id }})',
+    [MessageId.optionalId]: 'Prefer "x?: T" style ({{_id}})',
     [MessageId.undefined]: 'Prefer "x: T | undefined" style',
-    [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{ _id }})'
+    [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{_id}})'
   },
   create: (context, typeCheck): RuleListener => {
     const subOptionsArray = a.sort(

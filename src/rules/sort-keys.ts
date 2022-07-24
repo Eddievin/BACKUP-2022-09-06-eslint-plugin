@@ -28,10 +28,10 @@ export const sortKeys = utils.createRule({
   ),
   subOptionsKey: "overrides",
   messages: {
-    [MessageId.expectingObject]: "Expecting object ({{ _id }})",
+    [MessageId.expectingObject]: "Expecting object ({{_id}})",
     [utils.sort.MessageId.incorrectSortingOrder]: "Incorrect sorting order",
     [utils.sort.MessageId.incorrectSortingOrderId]:
-      "Incorrect sorting order ({{ _id }})"
+      "Incorrect sorting order ({{_id}})"
   },
   create: (context, typeCheck): RuleListener => {
     const items: Writable<Items> = [];

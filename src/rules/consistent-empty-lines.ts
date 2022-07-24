@@ -43,8 +43,8 @@ export const consistentEmptyLines = utils.createRule({
   ),
   subOptionsKey: "rules",
   messages: {
-    [MessageId.expectingEmptyLine]: "Expecting empty line before ({{ _id }})",
-    [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{ _id }})"
+    [MessageId.expectingEmptyLine]: "Expecting empty line before ({{_id}})",
+    [MessageId.unexpectedEmptyLine]: "Unexpected empty line before ({{_id}})"
   },
   create: (context, typeCheck): RuleListener => {
     const childNodesMap = new Accumulator<string, TSESTree.Node>();

@@ -60,11 +60,11 @@ export const consistentImport = utils.createRule({
     [MessageId.autoImport]:
       'Run "eslint --fix" to add missing import statement(s)',
     [MessageId.invalidLocalName]:
-      "Expecting local name to be {{ expectedLocalName }} ({{ _id }})",
+      "Expecting local name to be {{expectedLocalName}} ({{_id}})",
     [MessageId.missingImport]: "Missing import statement",
     [MessageId.wildcardImportDisallowed]:
-      "Wildcard import disallowed ({{ _id }})",
-    [MessageId.wildcardImportRequired]: "Wildcard import required ({{ _id }})"
+      "Wildcard import disallowed ({{_id}})",
+    [MessageId.wildcardImportRequired]: "Wildcard import required ({{_id}})"
   },
   create: (context): RuleListener => {
     const identifiers = new Set<string>();

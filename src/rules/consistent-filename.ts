@@ -34,9 +34,9 @@ export const consistentFilename = utils.createRule({
   defaultSubOptions: { match: false },
   subOptionsKey: "overrides",
   messages: {
-    [MessageId.invalidFilename]: "Expecting file name to be: {{ expected }}",
+    [MessageId.invalidFilename]: "Expecting file name to be: {{expected}}",
     [MessageId.invalidFilenameId]:
-      "Expecting file name to be: {{ expected }} ({{ _id }})"
+      "Expecting file name to be: {{expected}} ({{_id}})"
   },
   create: (context): RuleListener => {
     let _id: stringU;

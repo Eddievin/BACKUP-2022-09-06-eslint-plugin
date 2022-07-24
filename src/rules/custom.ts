@@ -41,7 +41,7 @@ export const custom = utils.createRule({
     }
   ),
   defaultOptions: { selector: [] },
-  messages: { [MessageId.customMessage]: "{{ message }}" },
+  messages: { [MessageId.customMessage]: "{{message}}" },
   create: (context, typeCheck): RuleListener => {
     const {
       checkReturnType,

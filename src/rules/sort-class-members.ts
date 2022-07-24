@@ -17,7 +17,7 @@ export const sortClassMembers = utils.createRule({
   messages: {
     [utils.sort.MessageId.incorrectSortingOrder]: "Incorrect sorting order",
     [utils.sort.MessageId.incorrectSortingOrderId]:
-      "Incorrect sorting order ({{ _id }})"
+      "Incorrect sorting order ({{_id}})"
   },
   create: (context, typeCheck): RuleListener => {
     const sortingOrders = new ReadonlyMap(

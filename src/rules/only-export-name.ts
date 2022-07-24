@@ -7,8 +7,7 @@ export enum MessageId {
 export const onlyExportName = utils.createRule({
   name: "only-export-name",
   messages: {
-    [MessageId.invalidName]:
-      "Only export should match file name: {{ expected }}"
+    [MessageId.invalidName]: "Only export should match file name: {{expected}}"
   },
   create: context =>
     utils.ruleTemplates.export(ctx => {

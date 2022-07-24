@@ -34,7 +34,7 @@ export const sortArray = utils.createRule({
     [MessageId.expectingArray]: "Expecting array",
     [utils.sort.MessageId.incorrectSortingOrder]: "Incorrect sorting order",
     [utils.sort.MessageId.incorrectSortingOrderId]:
-      "Incorrect sorting order ({{ _id }})"
+      "Incorrect sorting order ({{_id}})"
   },
   create: (context, typeCheck): RuleListener => {
     const { key, selector: mixed } = context.options;

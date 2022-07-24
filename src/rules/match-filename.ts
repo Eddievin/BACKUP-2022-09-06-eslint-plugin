@@ -31,9 +31,7 @@ export const matchFilename = utils.createRule({
     prefix: "",
     suffix: ""
   },
-  messages: {
-    [MessageId.invalidText]: "Should match file name: {{ expected }}"
-  },
+  messages: { [MessageId.invalidText]: "Should match file name: {{expected}}" },
   create: (context): RuleListener => {
     const { format, prefix, selector: mixed, suffix } = context.options;
 

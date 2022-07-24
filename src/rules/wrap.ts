@@ -41,7 +41,7 @@ export const wrap = utils.createRule({
     {}
   ),
   defaultOptions: { lintSelector: [], skipSelector: [] },
-  messages: { [MessageId.customMessage]: "{{ message }}" },
+  messages: { [MessageId.customMessage]: "{{message}}" },
   create: (context): RuleListener => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
     const plugin = require(context.options.plugin);
