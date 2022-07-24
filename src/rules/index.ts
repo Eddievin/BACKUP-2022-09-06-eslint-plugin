@@ -3,6 +3,7 @@ import type { WritableIndexedObject } from "@skylib/functions";
 import { arrayCallbackReturnType } from "./array-callback-return-type";
 import { commentEmptyLines } from "./comment-empty-lines";
 import { consistentEmptyLines } from "./consistent-empty-lines";
+import { consistentEnumMember } from "./consistent-enum-member";
 import { consistentFilename } from "./consistent-filename";
 import { consistentGroupEmptyLines } from "./consistent-group-empty-lines";
 import { consistentImport } from "./consistent-import";
@@ -41,6 +42,7 @@ export const rules = evaluate(() => {
     "array-callback-return-type": arrayCallbackReturnType,
     "comment-empty-lines": commentEmptyLines,
     "consistent-empty-lines": consistentEmptyLines,
+    "consistent-enum-member": consistentEnumMember,
     "consistent-filename": consistentFilename,
     "consistent-group-empty-lines": consistentGroupEmptyLines,
     "consistent-import": consistentImport,
