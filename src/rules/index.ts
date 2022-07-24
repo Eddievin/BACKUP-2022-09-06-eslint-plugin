@@ -25,6 +25,7 @@ import { objectFormat } from "./object-format";
 import { onlyExportName } from "./only-export-name";
 import { preferOnlyExport } from "./prefer-only-export";
 import { requireJsdoc } from "./require-jsdoc";
+import { requireSyntax } from "./require-syntax";
 import { sortArray } from "./sort-array";
 import { sortClassMembers } from "./sort-class-members";
 import { sortKeys } from "./sort-keys";
@@ -63,6 +64,7 @@ export const rules = evaluate(() => {
     "only-export-name": onlyExportName,
     "prefer-only-export": preferOnlyExport,
     "require-jsdoc": requireJsdoc,
+    "require-syntax": requireSyntax,
     "sort-array": sortArray,
     "sort-class-members": sortClassMembers,
     "sort-keys": sortKeys,

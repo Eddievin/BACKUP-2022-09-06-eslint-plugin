@@ -1,10 +1,10 @@
 import * as utils from "./utils";
-import { a, evaluate, is } from "@skylib/functions";
+import { a, assert, evaluate, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export interface Options {
-  readonly checkReturnType?: boolean;
+  readonly checkReturnType: boolean;
   readonly message?: string;
   readonly replacement?: string;
   readonly search?: string;
@@ -26,9 +26,8 @@ export const custom = utils.createRule({
   fixable: utils.Fixable.code,
   vue: true,
   isOptions: is.object.factory<Options>(
-    { selector: utils.isSelector },
+    { checkReturnType: is.boolean, selector: utils.isSelector },
     {
-      checkReturnType: is.boolean,
       message: is.string,
       replacement: is.string,
       search: is.string,
@@ -40,7 +39,7 @@ export const custom = utils.createRule({
       typeIsOneOf: utils.isTypeGroups
     }
   ),
-  defaultOptions: { selector: [] },
+  defaultOptions: { checkReturnType: false },
   messages: { [MessageId.customMessage]: "{{message}}" },
   create: (context, typeCheck): RuleListener => {
     const {
@@ -55,59 +54,58 @@ export const custom = utils.createRule({
       typeIs,
       typeIsNoneOf,
       typeIsOneOf
-    } = { checkReturnType: false, ...context.options };
+    } = context.options;
 
     const selector = a.fromMixed(mixed).join(", ");
 
-    if (selector)
-      return {
-        [selector]: (node: TSESTree.Node): void => {
-          const types = evaluate(() => {
-            const type = typeCheck.getType(node);
+    assert.toBeTrue(selector !== "", "Expecting selector");
 
-            return checkReturnType
-              ? type
-                  .getCallSignatures()
-                  .map(signature => signature.getReturnType())
-              : [type];
-          });
+    return {
+      [selector]: (node: TSESTree.Node): void => {
+        const types = evaluate(() => {
+          const type = typeCheck.getType(node);
 
-          if (
-            types.some(
-              type =>
-                typeCheck.typeIs(type, typeIs) &&
-                typeCheck.typeIsNoneOf(type, typeIsNoneOf) &&
-                typeCheck.typeIsOneOf(type, typeIsOneOf) &&
-                typeCheck.typeHas(type, typeHas) &&
-                typeCheck.typeHasNoneOf(type, typeHasNoneOf) &&
-                typeCheck.typeHasOneOf(type, typeHasOneOf)
-            )
+          return checkReturnType
+            ? type
+                .getCallSignatures()
+                .map(signature => signature.getReturnType())
+            : [type];
+        });
+
+        if (
+          types.some(
+            type =>
+              typeCheck.typeIs(type, typeIs) &&
+              typeCheck.typeIsNoneOf(type, typeIsNoneOf) &&
+              typeCheck.typeIsOneOf(type, typeIsOneOf) &&
+              typeCheck.typeHas(type, typeHas) &&
+              typeCheck.typeHasNoneOf(type, typeHasNoneOf) &&
+              typeCheck.typeHasOneOf(type, typeHasOneOf)
           )
-            context.report({
-              data: {
-                message: message ?? `This syntax is not allowed: ${selector}`
-              },
-              fix: (): utils.RuleFixes =>
-                is.not.empty(replacement)
-                  ? [
-                      {
-                        range: node.range,
-                        text: is.not.empty(search)
-                          ? context.getText(node).replace(
-                              // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-                              new RegExp(search, "u"),
-                              replacement
-                            )
-                          : replacement
-                      }
-                    ]
-                  : [],
-              messageId: MessageId.customMessage,
-              node
-            });
-        }
-      };
-
-    return {};
+        )
+          context.report({
+            data: {
+              message: message ?? `This syntax is not allowed: ${selector}`
+            },
+            fix: (): utils.RuleFixes =>
+              is.not.empty(replacement)
+                ? [
+                    {
+                      range: node.range,
+                      text: is.not.empty(search)
+                        ? context.getText(node).replace(
+                            // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                            new RegExp(search, "u"),
+                            replacement
+                          )
+                        : replacement
+                    }
+                  ]
+                : [],
+            messageId: MessageId.customMessage,
+            node
+          });
+      }
+    };
   }
 });

@@ -14,7 +14,7 @@ import type { strings } from "@skylib/functions";
 export interface SubOptions {
   readonly _id: string;
   readonly altLocalNames: strings;
-  readonly autoImport?: boolean;
+  readonly autoImport: boolean;
   readonly autoImportSource?: string;
   readonly localName?: string;
   readonly source: string;
@@ -44,17 +44,17 @@ export const consistentImport = utils.createRule({
     {
       _id: is.string,
       altLocalNames: is.strings,
+      autoImport: is.boolean,
       source: is.string,
       type: isType
     },
     {
-      autoImport: is.boolean,
       autoImportSource: is.string,
       localName: is.string,
       sourcePattern: is.string
     }
   ),
-  defaultSubOptions: { altLocalNames: [] },
+  defaultSubOptions: { altLocalNames: [], autoImport: false },
   subOptionsKey: "sources",
   messages: {
     [MessageId.autoImport]:
@@ -95,7 +95,6 @@ export const consistentImport = utils.createRule({
           evaluate(function* (): Generator<string> {
             for (const subOptions of context.subOptionsArray) {
               const { autoImport, autoImportSource, localName } = {
-                autoImport: false,
                 autoImportSource: subOptions.source,
                 localName: utils.getIdentifierFromPath(subOptions.source),
                 ...subOptions
