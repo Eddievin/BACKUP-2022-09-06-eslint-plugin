@@ -25,22 +25,20 @@ export const custom = utils.createRule({
   name: "custom",
   fixable: utils.Fixable.code,
   vue: true,
-  isOptions: evaluate(() =>
-    is.object.factory<Options>(
-      { selector: utils.isSelector },
-      {
-        checkReturnType: is.boolean,
-        message: is.string,
-        replacement: is.string,
-        search: is.string,
-        typeHas: utils.isTypeGroup,
-        typeHasNoneOf: utils.isTypeGroups,
-        typeHasOneOf: utils.isTypeGroups,
-        typeIs: utils.isTypeGroup,
-        typeIsNoneOf: utils.isTypeGroups,
-        typeIsOneOf: utils.isTypeGroups
-      }
-    )
+  isOptions: is.object.factory<Options>(
+    { selector: utils.isSelector },
+    {
+      checkReturnType: is.boolean,
+      message: is.string,
+      replacement: is.string,
+      search: is.string,
+      typeHas: utils.isTypeGroup,
+      typeHasNoneOf: utils.isTypeGroups,
+      typeHasOneOf: utils.isTypeGroups,
+      typeIs: utils.isTypeGroup,
+      typeIsNoneOf: utils.isTypeGroups,
+      typeIsOneOf: utils.isTypeGroups
+    }
   ),
   defaultOptions: { selector: [] },
   messages: { [MessageId.customMessage]: "{{ message }}" },

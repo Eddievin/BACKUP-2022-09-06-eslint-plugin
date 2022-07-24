@@ -73,9 +73,9 @@ export const consistentOptionalProps = utils.createRule({
   create: (context, typeCheck): RuleListener => {
     const subOptionsArray = a.sort(
       context.subOptionsArray.map((subOptions): Matchers & SubOptions => {
-        const matcher = utils.createMatcher(subOptions.pattern, true);
+        const matcher = utils.createRegexpMatcher(subOptions.pattern, true);
 
-        const properyMatcher = utils.createMatcher(
+        const properyMatcher = utils.createRegexpMatcher(
           subOptions.propertyPattern,
           true
         );

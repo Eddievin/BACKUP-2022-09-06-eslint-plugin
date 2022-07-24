@@ -23,6 +23,5 @@ const re = /[.:]/gu;
  * @returns Replacement character.
  */
 function callback(char: string): string {
-  // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
   return map[char] as string;
 }

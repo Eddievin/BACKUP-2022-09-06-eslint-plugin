@@ -52,6 +52,11 @@ export const isPattern: is.Guard<Pattern> = is.or.factory(
 
 export const isSelector = is.or.factory(is.string, is.strings);
 
+export enum MatcherType {
+  allowDisallow = "allowDisallow",
+  disallowAllow = "disallowAllow"
+}
+
 export interface CreateRuleOptions<
   M extends string,
   O extends object,
@@ -102,6 +107,7 @@ export type Pattern =
   | {
       readonly allow: strings | string;
       readonly disallow: strings | string;
+      readonly type: MatcherType;
     };
 
 export type ReportDescriptor<T extends string = string> =
@@ -177,8 +183,11 @@ export function createFileMatcher(
  * @param defVal - Default value.
  * @returns Matcher.
  */
-export function createMatcher(pattern: Pattern, defVal: boolean): Matcher {
-  if (is.string(pattern)) return createMatcher([pattern], defVal);
+export function createRegexpMatcher(
+  pattern: Pattern,
+  defVal: boolean
+): Matcher {
+  if (is.string(pattern)) return createRegexpMatcher([pattern], defVal);
 
   if (is.array(pattern)) {
     const matchers = pattern
@@ -193,9 +202,9 @@ export function createMatcher(pattern: Pattern, defVal: boolean): Matcher {
 
   const { allow, disallow } = pattern;
 
-  const disallowMatcher = createMatcher(disallow, true);
+  const disallowMatcher = createRegexpMatcher(disallow, true);
 
-  const allowMatcher = createMatcher(allow, false);
+  const allowMatcher = createRegexpMatcher(allow, false);
 
   return disallow.length || allow.length
     ? (str): boolean => disallowMatcher(str) && !allowMatcher(str)
@@ -280,6 +289,47 @@ export function createRule<
     },
     name: options.name
   });
+}
+
+/**
+ * Creates matcher.
+ *
+ * @param pattern - RegExp pattern(s).
+ * @param defVal - Default value.
+ * @returns Matcher.
+ */
+export function createStringMatcher(
+  pattern: Pattern,
+  defVal: boolean
+): Matcher {
+  if (is.string(pattern)) return str => str === pattern;
+
+  if (is.array(pattern))
+    return pattern.length ? str => pattern.includes(str) : () => defVal;
+
+  const { allow, disallow, type } = pattern;
+
+  switch (type) {
+    case MatcherType.allowDisallow: {
+      const allowMatcher = createStringMatcher(allow, true);
+
+      const disallowMatcher = createStringMatcher(disallow, false);
+
+      return disallow.length || allow.length
+        ? (str): boolean => allowMatcher(str) && !disallowMatcher(str)
+        : (): boolean => defVal;
+    }
+
+    case MatcherType.disallowAllow: {
+      const disallowMatcher = createStringMatcher(disallow, true);
+
+      const allowMatcher = createStringMatcher(allow, false);
+
+      return disallow.length || allow.length
+        ? (str): boolean => disallowMatcher(str) && !allowMatcher(str)
+        : (): boolean => defVal;
+    }
+  }
 }
 
 /**
@@ -421,7 +471,9 @@ export function mergeListenters(...listenters: RuleListeners): RuleListener {
  * @param node - Node.
  * @returns Node ID.
  */
-export function nodeId(node: TSESTree.Node | undefined): string {
+export function nodeId(
+  node: TSESTree.Node | TSESTree.Token | undefined
+): string {
   return node ? `${node.type}-${node.range[0]}-${node.range[1]}` : ".";
 }
 
