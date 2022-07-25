@@ -9,7 +9,7 @@ import { Type } from "./source.internal";
 export const create = defineFn(
   // eslint-disable-next-line @skylib/require-jsdoc/functions -- Postponed
   (callback: Callback): RuleListener => ({
-    CallExpression: (node): void => {
+    CallExpression: node => {
       if (
         node.callee.type === AST_NODE_TYPES.Identifier &&
         node.callee.name === "require"
@@ -24,23 +24,23 @@ export const create = defineFn(
           callback({ node: source, source: source.value, type: Type.import });
       }
     },
-    ExportAllDeclaration: (node): void => {
+    ExportAllDeclaration: node => {
       const source = node.source;
 
       callback({ node: source, source: source.value, type: Type.export });
     },
-    ExportNamedDeclaration: (node): void => {
+    ExportNamedDeclaration: node => {
       const source = node.source;
 
       if (source)
         callback({ node: source, source: source.value, type: Type.export });
     },
-    ImportDeclaration: (node): void => {
+    ImportDeclaration: node => {
       const source = node.source;
 
       callback({ node: source, source: source.value, type: Type.import });
     },
-    ImportExpression: (node): void => {
+    ImportExpression: node => {
       const source = node.source;
 
       if (source.type === AST_NODE_TYPES.Literal && is.string(source.value))

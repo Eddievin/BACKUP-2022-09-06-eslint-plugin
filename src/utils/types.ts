@@ -7,6 +7,7 @@ import type {
   SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { s, unknowns } from "@skylib/functions";
+import type { KebabCase } from "type-fest";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 
@@ -21,6 +22,7 @@ export enum TypeGroup {
   boolean = "boolean",
   complex = "complex",
   function = "function",
+  never = "never",
   null = "null",
   number = "number",
   object = "object",
@@ -38,16 +40,22 @@ export const isTypeGroup = is.factory(is.enumeration, TypeGroup);
 export const isTypeGroups = is.factory(is.array.of, isTypeGroup);
 
 export interface Context<M extends string, O extends object, S extends object> {
-  readonly code: string;
-  readonly defineTemplateBodyVisitor: DefineTemplateBodyVisitor;
   readonly eol: s.Eol;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly getComments: (node: TSESTree.Node) => Ranges;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly getFullRange: (node: TSESTree.Node) => TSESTree.Range;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly getFullText: (node: TSESTree.Node) => string;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly getLeadingSpaces: (node: TSESTree.Node) => Range;
   /**
    * Gets location from range.
    *
    * @param range - Range.
    * @returns Location.
    */
-  readonly getLocFromRange: (range: Range) => estree.SourceLocation;
+  readonly getLoc: (range: Range) => estree.SourceLocation;
   /**
    * Gets member name.
    *
@@ -61,10 +69,12 @@ export interface Context<M extends string, O extends object, S extends object> {
   /**
    * Gets text.
    *
-   * @param node - Node.
+   * @param mixed - Node, comment or range.
    * @returns Text.
    */
-  readonly getText: (node: TSESTree.Comment | TSESTree.Node) => string;
+  readonly getText: (
+    mixed: Range | TSESTree.Comment | TSESTree.Node | number
+  ) => string;
   /**
    * Checks if node has trailing comment.
    *
@@ -73,7 +83,14 @@ export interface Context<M extends string, O extends object, S extends object> {
    */
   readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
   readonly id: string;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly isAdjacentNodes: (
+    node1: TSESTree.Node,
+    node2: TSESTree.Node
+  ) => boolean;
   readonly locZero: TSESTree.SourceLocation;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly normalizeSource: (source: string) => string;
   readonly options: O;
   readonly package: Package;
   readonly path: string;
@@ -96,9 +113,17 @@ export interface DefineTemplateBodyVisitor {
   (templateVisitor: any, scriptVisitor?: any, options?: any): RuleListener;
 }
 
+export type KeysToKebabCase<T> = {
+  [K in string & keyof T as KebabCase<K>]: T[K];
+};
+
 export interface Package {
   readonly name?: string;
 }
+
+export type PrefixKeys<T, P extends string> = {
+  [K in string & keyof T as `${P}${K}`]: T[K];
+};
 
 export type Range = readonly [number, number];
 

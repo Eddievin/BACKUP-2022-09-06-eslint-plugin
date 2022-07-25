@@ -3,13 +3,14 @@
 /* eslint-disable @skylib/custom/prefer-arrow-function-property -- Postponed */
 
 import type * as estree from "estree";
-import type { Context, DefineTemplateBodyVisitor } from "./types";
 import type { CreateRuleOptions, SharedOptions2 } from "./core";
 import { assert, cast, evaluate, is, o, s } from "@skylib/functions";
 import { createFileMatcher, getPackage, stripBase } from "./core";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import type { Context } from "./types";
 import type { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
+import nodePath from "node:path";
 import type { unknowns } from "@skylib/functions";
 
 /**
@@ -38,31 +39,38 @@ export function createBetterContext<
 
   const code = source.getText();
 
+  const _package = getPackage();
+
   return {
-    code,
-    defineTemplateBodyVisitor: (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
-      templateVisitor: any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
-      scriptVisitor?: any
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
-    ): any => {
-      assert.not.empty(context.parserServices, "Missing Vue parser");
-
-      const defineTemplateBodyVisitor = o.get(
-        context.parserServices,
-        "defineTemplateBodyVisitor"
-      );
-
-      assert.callable<DefineTemplateBodyVisitor>(
-        defineTemplateBodyVisitor,
-        "Missing Vue parser"
-      );
-
-      return defineTemplateBodyVisitor(templateVisitor, scriptVisitor);
-    },
     eol: s.detectEol(code),
-    getLocFromRange(range): estree.SourceLocation {
+    getComments: (node: TSESTree.Node) =>
+      source.getCommentsBefore(node).map(comment => comment.range),
+    getFullRange: (node: TSESTree.Node) => [
+      Math.min(
+        node.range[0],
+        ...source.getCommentsBefore(node).map(comment => comment.range[0])
+      ),
+      node.range[1]
+    ],
+    getFullText: (node: TSESTree.Node): string =>
+      code.slice(
+        Math.min(
+          node.range[0],
+          ...source.getCommentsBefore(node).map(comment => comment.range[0])
+        ),
+        node.range[1]
+      ),
+    getLeadingSpaces: (node: TSESTree.Node) => {
+      const end = Math.min(
+        node.range[0],
+        ...source.getCommentsBefore(node).map(comment => comment.range[0])
+      );
+
+      const pos = code.slice(0, end).trimEnd().length;
+
+      return [pos, end];
+    },
+    getLoc(range): estree.SourceLocation {
       return {
         end: source.getLocFromIndex(range[1]),
         start: source.getLocFromIndex(range[0])
@@ -94,16 +102,70 @@ export function createBetterContext<
           return "";
       }
     },
-    getText(node): string {
-      return code.slice(...node.range);
+    getText: mixed => {
+      if (is.number(mixed)) return code.slice(mixed);
+
+      if (is.array(mixed)) return code.slice(...mixed);
+
+      return code.slice(...mixed.range);
     },
     hasTrailingComment(node): boolean {
       return code.slice(node.range[1]).trimStart().startsWith("//");
     },
     id,
+    isAdjacentNodes: (node1: TSESTree.Node, node2: TSESTree.Node): boolean => {
+      if (node1.parent === node2.parent) {
+        const pos = node1.range[1];
+
+        const end = Math.min(
+          node2.range[0],
+          ...source.getCommentsBefore(node2).map(comment => comment.range[0])
+        );
+
+        if (pos <= end) return ["", ","].includes(code.slice(pos, end).trim());
+      }
+
+      return false;
+    },
     locZero: {
       end: source.getLocFromIndex(0),
       start: source.getLocFromIndex(0)
+    },
+    normalizeSource: (source2: string): string => {
+      source2 = evaluate(() => {
+        if (source2 === "@") {
+          assert.not.empty(_package.name, "Missing package name");
+
+          return `${_package.name}`;
+        }
+
+        if (source2.startsWith("@/")) {
+          assert.not.empty(_package.name, "Missing package name");
+
+          const path2 = `src/${source2.slice(2)}`;
+
+          return `${_package.name}/${path2}`;
+        }
+
+        if (
+          source2 === "." ||
+          source2 === ".." ||
+          source2.startsWith("./") ||
+          source2.startsWith("../")
+        ) {
+          assert.not.empty(_package.name, "Missing package name");
+
+          const path2 = stripBase(
+            nodePath.join(nodePath.dirname(path), source2)
+          );
+
+          return `${_package.name}/${path2}`;
+        }
+
+        return source2;
+      });
+
+      return s.path.canonicalize(source2);
     },
     options: getRuleOptions(ruleOptionsArray, options),
     package: getPackage(),

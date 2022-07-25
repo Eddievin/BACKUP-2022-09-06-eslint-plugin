@@ -1,4 +1,4 @@
-import { utils } from "@";
+import * as utils from "@/utils";
 
 test.each(["fixtures/corrupted.json", "fixtures/missing.json"])(
   "getPackage",

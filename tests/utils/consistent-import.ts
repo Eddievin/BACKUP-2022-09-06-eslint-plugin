@@ -1,23 +1,21 @@
-import { MessageId, Type, consistentImport } from "@/rules/consistent-import";
+import * as utils from "@/utils";
 import getCurrentLine from "get-current-line";
-import { utils } from "@";
+import { rules } from "@";
+
+const rule = rules["consistent-import"];
+
+const MessageId = utils.getMessageId(rule);
 
 utils.testRule(
   "consistent-import",
-  consistentImport,
+  rule,
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        { sources: [{ _id: "id", source: "source", type: Type.wildcard }] }
-      ],
+      options: [{ sources: [{ _id: "id", source: "source", wildcard: true }] }],
       code: 'import source from "source"',
       errors: [
-        {
-          line: 1,
-          messageId: MessageId.wildcardImportRequired,
-          data: { _id: "id" }
-        }
+        { line: 1, messageId: MessageId.wildcardRequired, data: { _id: "id" } }
       ]
     },
     {
@@ -30,18 +28,14 @@ utils.testRule(
               filesToLint: ["./fixtures/file.ts"],
               filesToSkip: ["./fixtures/**", "./other/**"],
               source: "source",
-              type: Type.wildcard
+              wildcard: true
             }
           ]
         }
       ],
       code: 'import source from "source"',
       errors: [
-        {
-          line: 1,
-          messageId: MessageId.wildcardImportRequired,
-          data: { _id: "id" }
-        }
+        { line: 1, messageId: MessageId.wildcardRequired, data: { _id: "id" } }
       ]
     }
   ],
@@ -55,7 +49,7 @@ utils.testRule(
               _id: "id",
               filesToSkip: ["./fixtures/**"],
               source: "source",
-              type: Type.wildcard
+              wildcard: true
             }
           ]
         }
@@ -71,7 +65,7 @@ utils.testRule(
               _id: "id",
               filesToLint: ["./other/**"],
               source: "source",
-              type: Type.wildcard
+              wildcard: true
             }
           ]
         }

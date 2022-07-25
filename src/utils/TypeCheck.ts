@@ -1,14 +1,18 @@
+/* eslint-disable complexity -- Postponed */
+
 /* eslint-disable @skylib/require-jsdoc -- Postponed */
 
+// eslint-disable-next-line @skylib/disallow-import/project -- Ok
 import * as ts from "typescript";
+// eslint-disable-next-line @skylib/disallow-import/project -- Ok
 import * as tsutils from "tsutils";
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
-import type { NumStrU, Writable, unknowns } from "@skylib/functions";
+import type { NumStrU, unknowns } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
-import type { Ranges, TypeGroups } from "./types";
-import { ReadonlySet, as, assert, is, typedef } from "@skylib/functions";
+import { ReadonlySet, as, assert, is } from "@skylib/functions";
 import type { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 import { TypeGroup } from "./types";
+import type { TypeGroups } from "./types";
 
 export class TypeCheck {
   /**
@@ -93,24 +97,6 @@ export class TypeCheck {
     return this.checker.getSignaturesOfType(type, ts.SignatureKind.Call);
   }
 
-  public getComments(node: TSESTree.Node): Ranges {
-    const result: Writable<Ranges> = [];
-
-    const tsNode = this.toTsNode(node);
-
-    const offset = node.range[0] - tsNode.pos - tsNode.getLeadingTriviaWidth();
-
-    tsutils.forEachComment(tsNode, (_fullText, comment) => {
-      const pos = comment.pos + offset;
-
-      const end = comment.end + offset;
-
-      result.push([pos, pos + this.code.slice(pos, end).trimEnd().length]);
-    });
-
-    return result;
-  }
-
   public getConstructorType(node: TSESTree.Node): ts.Type | undefined {
     const tsNode = this.toTsNode(node);
 
@@ -125,20 +111,9 @@ export class TypeCheck {
   public getContextualType(node: TSESTree.Node): ts.Type | undefined {
     const tsNode = this.toTsNode(node);
 
-    return tsutils.isExpression(tsNode)
-      ? this.checker.getContextualType(tsNode)
-      : undefined;
-  }
+    assertExpression(tsNode, "Expecting expression");
 
-  public getFullRange(node: TSESTree.Node): TSESTree.Range {
-    return [node.range[0] - this.getLeadingTrivia(node).length, node.range[1]];
-  }
-
-  public getFullText(node: TSESTree.Node): string {
-    return this.code.slice(
-      node.range[0] - this.getLeadingTrivia(node).length,
-      node.range[1]
-    );
+    return this.checker.getContextualType(tsNode);
   }
 
   public getIndexInfo(
@@ -146,18 +121,6 @@ export class TypeCheck {
     kind: ts.IndexKind
   ): ts.IndexInfo | undefined {
     return this.checker.getIndexInfoOfType(type, kind);
-  }
-
-  public getLeadingTrivia(node: TSESTree.Node): string {
-    // May be undefined inside Vue <template>
-    const tsNode = typedef<ts.Node | undefined>(this.toTsNode(node));
-
-    return tsNode
-      ? this.code.slice(
-          node.range[0] - tsNode.getLeadingTriviaWidth(),
-          node.range[0]
-        )
-      : this.code.slice(node.range[0], node.range[0]);
   }
 
   public getReturnType(signature: ts.Signature): ts.Type {
@@ -184,10 +147,6 @@ export class TypeCheck {
    */
   public hasDocComment(mixed: ts.Signature | ts.Symbol): boolean {
     return mixed.getDocumentationComment(this.checker).length > 0;
-  }
-
-  public hasLeadingDocComment(node: TSESTree.Node): boolean {
-    return this.getLeadingTrivia(node).trimStart().startsWith("/**");
   }
 
   /**
@@ -229,16 +188,16 @@ export class TypeCheck {
   public typeIs(type: ts.Type, expected?: TypeGroup): boolean {
     if (expected)
       switch (expected) {
-        case "any":
+        case TypeGroup.any:
           return this.zzz(type, ts.TypeFlags.Any);
 
-        case "array":
+        case TypeGroup.array:
           return (
             this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
             this.checker.isArrayType(type)
           );
 
-        case "boolean":
+        case TypeGroup.boolean:
           return this.zzz(
             type,
             ts.TypeFlags.Boolean,
@@ -246,7 +205,7 @@ export class TypeCheck {
             ts.TypeFlags.BooleanLiteral
           );
 
-        case "complex":
+        case TypeGroup.complex: {
           if (
             this.checker.isArrayType(type) ||
             this.checker.isTupleType(type)
@@ -261,18 +220,24 @@ export class TypeCheck {
           if (type.isUnionOrIntersection())
             return type.types.some(subtype => this.typeIs(subtype, expected));
 
-          return type.getSymbol()?.name === "__object";
+          const symbol = type.getSymbol();
 
-        case "function":
+          return symbol ? ["__object", "__type"].includes(symbol.name) : false;
+        }
+
+        case TypeGroup.function:
           return (
             this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
             type.getCallSignatures().length > 0
           );
 
-        case "null":
+        case TypeGroup.never:
+          return this.zzz(type, ts.TypeFlags.Never);
+
+        case TypeGroup.null:
           return this.zzz(type, ts.TypeFlags.Null);
 
-        case "number":
+        case TypeGroup.number:
           return this.zzz(
             type,
             ts.TypeFlags.Number,
@@ -280,14 +245,14 @@ export class TypeCheck {
             ts.TypeFlags.NumberLiteral
           );
 
-        case "object":
+        case TypeGroup.object:
           return (
             this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
             !this.typeIs(type, TypeGroup.array) &&
             !this.typeIs(type, TypeGroup.function)
           );
 
-        case "readonly":
+        case TypeGroup.readonly:
           return type
             .getProperties()
             .some(property =>
@@ -298,7 +263,7 @@ export class TypeCheck {
               )
             );
 
-        case "string":
+        case TypeGroup.string:
           return this.zzz(
             type,
             ts.TypeFlags.String,
@@ -306,7 +271,7 @@ export class TypeCheck {
             ts.TypeFlags.StringLiteral
           );
 
-        case "symbol":
+        case TypeGroup.symbol:
           return this.zzz(
             type,
             ts.TypeFlags.ESSymbol,
@@ -314,16 +279,16 @@ export class TypeCheck {
             ts.TypeFlags.UniqueESSymbol
           );
 
-        case "tuple":
+        case TypeGroup.tuple:
           return (
             this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
             this.checker.isTupleType(type)
           );
 
-        case "undefined":
+        case TypeGroup.undefined:
           return this.zzz(type, ts.TypeFlags.Undefined);
 
-        case "unknown":
+        case TypeGroup.unknown:
           return this.zzz(type, ts.TypeFlags.Unknown);
       }
 
@@ -491,3 +456,10 @@ type ExpectedFlags =
   | ts.TypeFlags.Undefined
   | ts.TypeFlags.UniqueESSymbol
   | ts.TypeFlags.Void;
+
+function assertExpression(
+  tsNode: ts.Node,
+  error: assert.ErrorArg
+): asserts tsNode is ts.Expression {
+  assert.toBeTrue(tsutils.isExpression(tsNode), error);
+}

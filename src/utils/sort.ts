@@ -1,12 +1,11 @@
 /* eslint-disable @skylib/custom/prefer-readonly-array -- Postponed */
 
 import type { Writable, numberU, stringU, strings } from "@skylib/functions";
-import { a, as, defineFn, is } from "@skylib/functions";
+import { a, as, defineFn, fn, is } from "@skylib/functions";
 import type { Context } from "./types";
 import { MessageId } from "./sort.internal";
 import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
-import type { TypeCheck } from "./TypeCheck";
 import { compare } from "./compare";
 import { nodeText } from "./core";
 
@@ -16,18 +15,18 @@ export const sort = defineFn(
    *
    * @param nodes - Nodes.
    * @param context - Context.
-   * @param typeCheck - Type check.
    * @param options - Options.
    */
   <T extends TSESTree.Node = TSESTree.Node>(
     nodes: readonly T[],
     context: Context<MessageId, object, object>,
-    typeCheck: TypeCheck,
     options: sort.Options<T>
   ): void => {
     const { customOrder, keyNode, sendToBottom, sendToTop, sortingOrder } = {
       customOrder: [],
-      keyNode: (node: T) => node,
+      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+      // fixme -- Use fn.never
+      keyNode: fn.noop as (node: T) => TSESTree.Node,
       sortingOrder: (node: T): stringU => {
         const node2 = keyNode(node);
 
@@ -62,19 +61,25 @@ export const sort = defineFn(
 
     const items: Writable<Items> = [];
 
-    for (const [index, node] of nodes.entries()) {
+    for (const node of nodes) {
       const key = sortingOrder(node);
 
-      if (is.not.empty(key)) items.push({ index, key, node });
+      if (is.not.empty(key)) items.push({ index: 0, key, node });
       else {
-        sortGroup(items, options, context, typeCheck);
+        sortGroup(items, options, context);
         a.truncate(items);
       }
     }
 
-    sortGroup(items, options, context, typeCheck);
+    sortGroup(items, options, context);
   },
-  { MessageId }
+  {
+    MessageId,
+    messages: {
+      [MessageId.incorrectSortingOrder]: "Incorrect sorting order",
+      [MessageId.incorrectSortingOrderId]: "Incorrect sorting order ({{_id}})"
+    }
+  }
 );
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- Postponed
@@ -105,53 +110,56 @@ type Items = readonly Item[];
 function sortGroup<T extends TSESTree.Node = TSESTree.Node>(
   items: Items,
   options: sort.Options<T>,
-  context: Context<MessageId, object, object>,
-  typeCheck: TypeCheck
+  context: Context<MessageId, object, object>
 ): void {
-  const { _id } = options;
+  if (items.length >= 2) {
+    items = items.map((item, index): Item => ({ ...item, index }));
 
-  const sortedItems = a.sort(items, (item1, item2) =>
-    compare(item1.key, item2.key)
-  );
+    const { _id } = options;
 
-  const fixes: RuleFix[] = [];
+    const sortedItems = a.sort(items, (item1, item2) =>
+      compare(item1.key, item2.key)
+    );
 
-  let min: numberU;
+    const fixes: RuleFix[] = [];
 
-  let max: numberU;
+    let min: numberU;
 
-  for (const [index, sortedItem] of sortedItems.entries())
-    if (sortedItem.index === index) {
-      // Valid
-    } else {
-      const item = a.get(items, index);
+    let max: numberU;
 
-      min = is.not.empty(min) ? Math.min(min, index) : index;
-      max = is.not.empty(max) ? Math.max(max, index) : index;
-      fixes.push({
-        range: typeCheck.getFullRange(item.node),
-        text: typeCheck.getFullText(sortedItem.node)
-      });
+    for (const [index, sortedItem] of sortedItems.entries())
+      if (sortedItem.index === index) {
+        // Valid
+      } else {
+        const item = a.get(items, index);
+
+        min = is.not.empty(min) ? Math.min(min, index) : index;
+        max = is.not.empty(max) ? Math.max(max, index) : index;
+        fixes.push({
+          range: context.getFullRange(item.node),
+          text: context.getFullText(sortedItem.node)
+        });
+      }
+
+    if (fixes.length) {
+      const loc = context.getLoc([
+        a.get(items, as.not.empty(min)).node.range[0],
+        a.get(items, as.not.empty(max)).node.range[1]
+      ]);
+
+      if (is.not.empty(_id))
+        context.report({
+          data: { _id },
+          fix: () => fixes,
+          loc,
+          messageId: sort.MessageId.incorrectSortingOrderId
+        });
+      else
+        context.report({
+          fix: () => fixes,
+          loc,
+          messageId: sort.MessageId.incorrectSortingOrder
+        });
     }
-
-  if (fixes.length) {
-    const loc = context.getLocFromRange([
-      a.get(items, as.not.empty(min)).node.range[0],
-      a.get(items, as.not.empty(max)).node.range[1]
-    ]);
-
-    if (is.not.empty(_id))
-      context.report({
-        data: { _id },
-        fix: () => fixes,
-        loc,
-        messageId: sort.MessageId.incorrectSortingOrderId
-      });
-    else
-      context.report({
-        fix: () => fixes,
-        loc,
-        messageId: sort.MessageId.incorrectSortingOrder
-      });
   }
 }

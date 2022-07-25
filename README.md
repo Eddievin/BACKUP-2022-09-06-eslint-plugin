@@ -45,10 +45,9 @@ npm install --save-dev @skylib/eslint-plugin
 ## <a name="rules"></a>Rules
 
 - [consistent-empty-lines](https://ilyub.github.io/eslint-plugin/consistent-empty-lines.html)
-- [consistent-group-empty-lines](https://ilyub.github.io/eslint-plugin/consistent-group-empty-lines.html)
 - [consistent-import](https://ilyub.github.io/eslint-plugin/consistent-import.html)
 - [disallow-import](https://ilyub.github.io/eslint-plugin/disallow-import.html)
-- [comment-empty-lines](https://ilyub.github.io/eslint-plugin/comment-empty-lines.html)
+- [comment-spacing](https://ilyub.github.io/eslint-plugin/comment-spacing.html)
 - [exhaustive-switch](https://ilyub.github.io/eslint-plugin/exhaustive-switch.html)
 - [no-inferrable-types](https://ilyub.github.io/eslint-plugin/no-inferrable-types.html)
 - [no-mutable-signature](https://ilyub.github.io/eslint-plugin/no-mutable-signature.html)
@@ -63,6 +62,6 @@ npm install --save-dev @skylib/eslint-plugin
 - [sort-array](https://ilyub.github.io/eslint-plugin/sort-array.html)
 - [sort-class-members](https://ilyub.github.io/eslint-plugin/sort-class-members.html)
 - [sort-keys](https://ilyub.github.io/eslint-plugin/sort-keys.html)
-- [statements-order](https://ilyub.github.io/eslint-plugin/statements-order.html)
-- [switch-case-empty-lines](https://ilyub.github.io/eslint-plugin/switch-case-empty-lines.html)
+- [sort-statements](https://ilyub.github.io/eslint-plugin/sort-statements.html)
+- [switch-case-spacing](https://ilyub.github.io/eslint-plugin/switch-case-spacing.html)
 - [template-literal-format](https://ilyub.github.io/eslint-plugin/template-literal-format.html)

@@ -42,25 +42,23 @@ export function create(
       "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id",
       "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id",
       "Program > ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id"
-    ].join(", ")]: (node: TSESTree.Identifier): void => {
+    ].join(", ")]: (node: TSESTree.Identifier) => {
       identifiers.push(node);
     },
-    "Program > ExportAllDeclaration": (
-      node: TSESTree.ExportAllDeclaration
-    ): void => {
+    "Program > ExportAllDeclaration": (node: TSESTree.ExportAllDeclaration) => {
       if (is.empty(node.exported)) exportAllDeclarations.push(node);
     },
     "Program > ExportDefaultDeclaration": (
       node: TSESTree.ExportDefaultDeclaration
-    ): void => {
+    ) => {
       exportDefaultDeclarations.push(node);
     },
     "Program > ExportNamedDeclaration": (
       node: TSESTree.ExportNamedDeclaration
-    ): void => {
+    ) => {
       exportNamedDeclarations.push(node);
     },
-    "Program:exit": (): void => {
+    "Program:exit": () => {
       const count =
         exportAllDeclarations.filter(declaration => !declaration.exported)
           .length +

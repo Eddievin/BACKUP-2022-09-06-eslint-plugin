@@ -12,18 +12,22 @@ module.exports = {
           {
             _id: "utils",
             autoImport: true,
-            autoImportSource: "./utils",
+            autoImportSource: "@/utils",
             source: "@skylib/eslint-plugin/src/utils",
             type: "wildcard"
           },
           ...consistentImport.sources
         ]
       }
+    ],
+    "@skylib/disallow-import/project": [
+      "warn",
+      { disallow: ["{natural-compare,tsutils,typescript}"] }
     ]
   },
   overrides: [
     {
-      files: "./src/rules/*",
+      files: ["./src/misc/core/*", "./src/typescript/core/*"],
       rules: {
         "@skylib/disallow-import/no-relative-parent-imports": [
           "warn",
@@ -35,7 +39,7 @@ module.exports = {
               "../../../../**",
               "../../../../../**"
             ],
-            allow: ["../utils"]
+            allow: ["../../utils", "../misc", "../utils"]
           }
         ],
         "@skylib/match-filename/project/createRule": [
@@ -104,7 +108,7 @@ module.exports = {
       }
     },
     {
-      files: "./src/wrapped-rules/*",
+      files: "./src/**",
       rules: {
         "@skylib/disallow-import/no-relative-parent-imports": [
           "warn",
@@ -116,7 +120,14 @@ module.exports = {
               "../../../../**",
               "../../../../../**"
             ],
-            allow: ["../rules/*", "../utils"]
+            allow: [
+              "../../misc",
+              "../../typescript",
+              "../../utils",
+              "../misc",
+              "../utils",
+              "../typescript"
+            ]
           }
         ],
         "@skylib/match-filename/project/wrapRule": [
@@ -141,6 +152,14 @@ module.exports = {
             selector: "Identifier[name=AST_NODE_TYPES]"
           }
         ],
+        "@skylib/custom/project/no-test-only": [
+          "warn",
+          {
+            message: "No skipped tests",
+            selector:
+              "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression > Property > Identifier.key[name=only]"
+          }
+        ],
         "@skylib/match-filename/project/testRule-name": [
           "warn",
           {
@@ -150,11 +169,11 @@ module.exports = {
           }
         ],
         "@skylib/match-filename/project/testRule-rule": [
-          "warn",
+          "off",
           {
-            format: "camelCase",
+            format: "kebabCase",
             selector:
-              "CallExpression[callee.object.name=utils][callee.property.name=testRule] > Identifier:nth-child(2)"
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
           }
         ],
         "@skylib/sort-keys": [

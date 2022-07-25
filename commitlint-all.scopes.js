@@ -2,12 +2,16 @@ module.exports = {
   scopes: [
     "class-name",
     "class-only-export",
+    "consistent-enum-member",
+    "consistent-group-empty-lines",
+    "custom",
     "disallow-by-regexp",
     "disallow-identifier",
     "function-properties-style",
     "no-expression-empty-line",
     "no-mutable-signature",
     "no-negated-condition",
+    "no-relative-parent-imports",
     "no-restricted-syntax",
     "no-unnecessary-readonly",
     "no-unnecessary-writable",
@@ -17,7 +21,11 @@ module.exports = {
     "prefer-readonly",
     "prefer-readonly-props",
     "prefer-ts-toolbelt",
+    "primary-export-only",
+    "statements-order",
+    "switch-case-empty-lines",
     "utils.readonliness",
-    "vue-component-name"
+    "vue-component-name",
+    "vue-element-contents-spacing"
   ]
 };

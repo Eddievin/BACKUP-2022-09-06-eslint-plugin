@@ -2,13 +2,14 @@
 
 import type {
   InvalidTestCase as BaseInvalidTestCase,
+  TestCaseError as BaseTestCaseError,
   ValidTestCase as BaseValidTestCase,
-  RuleModule,
-  TestCaseError
+  RuleModule
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { Rec, unknowns } from "@skylib/functions";
+import { o, s } from "@skylib/functions";
 import { TSESLint } from "@typescript-eslint/utils";
 import { base } from "./core";
-import { s } from "@skylib/functions";
 
 export interface InvalidTestCase<M extends string, O extends readonly unknown[]>
   extends BaseInvalidTestCase<M, O> {
@@ -29,6 +30,10 @@ export type SourceFile =
   | "subfolder/index.ts"
   | "vue.d.ts";
 
+export interface TestCaseError<T extends string> extends BaseTestCaseError<T> {
+  readonly line: number;
+}
+
 export interface ValidTestCase<O extends readonly unknown[]>
   extends BaseValidTestCase<O> {
   readonly filename?: SourceFile;
@@ -38,6 +43,20 @@ export interface ValidTestCase<O extends readonly unknown[]>
 export type ValidTestCases<O extends readonly unknown[]> = ReadonlyArray<
   ValidTestCase<O>
 >;
+
+/**
+ * Gets MessageId enum from rule.
+ *
+ * @param rule - Rule.
+ * @returns MessageId enum.
+ */
+export function getMessageId<T extends string>(
+  rule: RuleModule<T, unknowns>
+): Rec<T, T> {
+  return o.fromEntries.exhaustive(
+    o.keys(rule.meta.messages).map(key => [key, key])
+  );
+}
 
 /**
  * Runs test.

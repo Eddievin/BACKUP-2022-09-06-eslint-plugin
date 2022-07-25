@@ -24,7 +24,12 @@ import type {
   RuleListener,
   RuleModule
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { Context, DefineTemplateBodyVisitor, Package } from "./types";
+import type {
+  Context,
+  DefineTemplateBodyVisitor,
+  Package,
+  PrefixKeys
+} from "./types";
 import type { Entry, Rec, strings, types } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { TypeCheck } from "./TypeCheck";
@@ -32,6 +37,13 @@ import { createBetterContext } from "./create-context";
 import fs from "node:fs";
 import minimatch from "minimatch";
 import nodePath from "node:path";
+
+export enum MatcherType {
+  allowDisallow = "allowDisallow",
+  disallowAllow = "disallowAllow"
+}
+
+export const isMatcherType = is.factory(is.enumeration, MatcherType);
 
 export const isPackage: is.Guard<Package> = is.factory(
   is.object.of,
@@ -52,10 +64,17 @@ export const isPattern: is.Guard<Pattern> = is.or.factory(
 
 export const isSelector = is.or.factory(is.string, is.strings);
 
-export enum MatcherType {
-  allowDisallow = "allowDisallow",
-  disallowAllow = "disallowAllow"
-}
+export const selectors = {
+  arrayType: "TSArrayType, TSTupleType",
+  block: "BlockStatement, Program, SwitchCase, TSModuleBlock",
+  documentedBlock: "ExportNamedDeclaration, Program, TSModuleBlock",
+  function:
+    ":function, MethodDefinition, TSAbstractMethodDefinition, TSCallSignatureDeclaration, TSConstructSignatureDeclaration, TSDeclareFunction, TSFunctionType, TSMethodSignature",
+  functionExpression: "ArrowFunctionExpression, FunctionExpression",
+  method: "MethodDefinition, TSAbstractMethodDefinition",
+  property: "PropertyDefinition, TSPropertySignature",
+  statement: ":statement, TSDeclareFunction, TSExportAssignment"
+} as const;
 
 export interface CreateRuleOptions<
   M extends string,
@@ -101,14 +120,7 @@ export interface Matcher {
   (str: string): boolean;
 }
 
-export type Pattern =
-  | strings
-  | string
-  | {
-      readonly allow: strings | string;
-      readonly disallow: strings | string;
-      readonly type: MatcherType;
-    };
+export type Pattern = strings | string;
 
 export type ReportDescriptor<T extends string = string> =
   BaseReportDescriptor<T>;
@@ -125,19 +137,6 @@ export interface SharedOptions2 {
   readonly _id?: string;
   readonly filesToLint?: strings;
   readonly filesToSkip?: strings;
-}
-
-/**
- * Adds node to child nodes map.
- *
- * @param node - Node.
- * @param mutableChildNodesMap - Child nodes map.
- */
-export function buildChildNodesMap(
-  node: TSESTree.Node,
-  mutableChildNodesMap: Accumulator<string, TSESTree.Node>
-): void {
-  mutableChildNodesMap.push(nodeId(node.parent), node);
 }
 
 /**
@@ -189,26 +188,14 @@ export function createRegexpMatcher(
 ): Matcher {
   if (is.string(pattern)) return createRegexpMatcher([pattern], defVal);
 
-  if (is.array(pattern)) {
-    const matchers = pattern
-      // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-      .map(pt => new RegExp(pt, "u"))
-      .map(re => (str: string) => re.test(str));
+  const matchers = pattern
+    // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+    .map(pt => new RegExp(pt, "u"))
+    .map(re => (str: string) => re.test(str));
 
-    return matchers.length
-      ? str => matchers.some(matcher => matcher(str))
-      : () => defVal;
-  }
-
-  const { allow, disallow } = pattern;
-
-  const disallowMatcher = createRegexpMatcher(disallow, true);
-
-  const allowMatcher = createRegexpMatcher(allow, false);
-
-  return disallow.length || allow.length
-    ? (str): boolean => disallowMatcher(str) && !allowMatcher(str)
-    : (): boolean => defVal;
+  return matchers.length
+    ? str => matchers.some(matcher => matcher(str))
+    : () => defVal;
 }
 
 /**
@@ -249,14 +236,14 @@ export function createRule<
         new TypeCheck(context),
         wrapProxyHandler("classToInterface", ProxyHandlerAction.doDefault, {
           get: (target, key) => {
-            // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Ok
+            // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Postponed
             const result2 = reflect.get(target, key);
+
+            assert.callable<types.fn.Callable>(result2, "Expecting function");
 
             // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
             // fixme
-            return is.callable<types.fn.Callable>(result2)
-              ? result2.bind(target)
-              : result2;
+            return result2.bind(target);
           }
         })
       );
@@ -289,47 +276,6 @@ export function createRule<
     },
     name: options.name
   });
-}
-
-/**
- * Creates matcher.
- *
- * @param pattern - RegExp pattern(s).
- * @param defVal - Default value.
- * @returns Matcher.
- */
-export function createStringMatcher(
-  pattern: Pattern,
-  defVal: boolean
-): Matcher {
-  if (is.string(pattern)) return str => str === pattern;
-
-  if (is.array(pattern))
-    return pattern.length ? str => pattern.includes(str) : () => defVal;
-
-  const { allow, disallow, type } = pattern;
-
-  switch (type) {
-    case MatcherType.allowDisallow: {
-      const allowMatcher = createStringMatcher(allow, true);
-
-      const disallowMatcher = createStringMatcher(disallow, false);
-
-      return disallow.length || allow.length
-        ? (str): boolean => allowMatcher(str) && !disallowMatcher(str)
-        : (): boolean => defVal;
-    }
-
-    case MatcherType.disallowAllow: {
-      const disallowMatcher = createStringMatcher(disallow, true);
-
-      const allowMatcher = createStringMatcher(allow, false);
-
-      return disallow.length || allow.length
-        ? (str): boolean => disallowMatcher(str) && !allowMatcher(str)
-        : (): boolean => defVal;
-    }
-  }
 }
 
 /**
@@ -386,46 +332,16 @@ export function getSelectors(
 ): string {
   const { excludeSelectors, includeSelectors, noDefaultSelectors } = options;
 
-  const selectors = noDefaultSelectors
+  const selectors2 = noDefaultSelectors
     ? includeSelectors
     : _.difference(
         [...defaultSelectors, ...includeSelectors],
         excludeSelectors
       );
 
-  assert.toBeTrue(selectors.length > 0, "Expecting at least one selector");
+  assert.toBeTrue(selectors2.length > 0, "Expecting at least one selector");
 
-  return selectors.join(", ");
-}
-
-/**
- * Checks if two nodes are adjacent.
- *
- * @param node1 - Node 1.
- * @param node2 - Node 2.
- * @param childNodesMap - Child nodes map.
- * @returns _True_ if two nodes are adjacent, _false_ otherwise.
- */
-export function isAdjacentNodes(
-  node1: TSESTree.Node,
-  node2: TSESTree.Node,
-  childNodesMap: Accumulator<string, TSESTree.Node>
-): boolean {
-  const id1 = nodeId(node1.parent);
-
-  const id2 = nodeId(node2.parent);
-
-  if (id1 === id2) {
-    const siblings = childNodesMap.get(id1);
-
-    const index1 = siblings.indexOf(node1);
-
-    const index2 = siblings.indexOf(node2);
-
-    return index1 !== -1 && index2 !== -1 && index2 - index1 === 1;
-  }
-
-  return false;
+  return selectors2.join(", ");
 }
 
 // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
@@ -466,18 +382,6 @@ export function mergeListenters(...listenters: RuleListeners): RuleListener {
 }
 
 /**
- * Generates node ID.
- *
- * @param node - Node.
- * @returns Node ID.
- */
-export function nodeId(
-  node: TSESTree.Node | TSESTree.Token | undefined
-): string {
-  return node ? `${node.type}-${node.range[0]}-${node.range[1]}` : ".";
-}
-
-/**
  * Returns string representing node.
  *
  * @param node - Node.
@@ -496,7 +400,37 @@ export function nodeText(
       return cast.string(node.value);
 
     default:
-      return is.string(defVal) ? defVal : defVal();
+      return as.callable<() => string>(defVal)();
+  }
+}
+
+// eslint-disable-next-line @skylib/require-jsdoc -- Ok
+export function prefixKeys<T, P extends string>(
+  obj: T,
+  prefix: P
+): PrefixKeys<T, P> {
+  return o.fromEntries(
+    o.entries(obj).map(([key, value]) => [`${prefix}${key}`, value])
+  ) as PrefixKeys<T, P>;
+}
+
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+export function prepareForComparison(str: string, priority: string): string {
+  const keys = a.fromString(priority);
+
+  const values = a.sort(a.fromString(priority));
+
+  const map = o.fromEntries(
+    keys.map((key, index) => [key, a.get(values, index)])
+  );
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+  const re = new RegExp(`[${s.escapeRegExpSpecialChars(priority)}]`, "gu");
+
+  return str.replace(re, callback);
+
+  function callback(char: string): string {
+    return map[char] as string;
   }
 }
 
@@ -537,10 +471,8 @@ export function wrapRule<M extends string, O extends readonly unknown[]>(
           {} as Readonly<RuleContext<never, never>>,
           wrapProxyHandler("wrap-rule", ProxyHandlerAction.throw, {
             get: (_target, key) =>
-              key === "options"
-                ? combined
-                : // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Ok
-                  reflect.get(context, key)
+              // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Postponed
+              key === "options" ? combined : reflect.get(context, key)
           })
         )
       );

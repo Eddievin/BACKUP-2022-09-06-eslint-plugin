@@ -1,4 +1,4 @@
-import type { IndexedObject } from "@skylib/functions";
+// eslint-disable-next-line @skylib/disallow-import/project -- Ok
 import naturalCompare from "natural-compare";
 
 /**
@@ -9,19 +9,5 @@ import naturalCompare from "natural-compare";
  * @returns Comparison result.
  */
 export function compare(x = "", y = ""): -1 | 0 | 1 {
-  return naturalCompare(x.replace(re, callback), y.replace(re, callback));
-}
-
-const map: IndexedObject<string> = { ":": ".", ".": ":" };
-
-const re = /[.:]/gu;
-
-/**
- * Returns replacement character.
- *
- * @param char - Character.
- * @returns Replacement character.
- */
-function callback(char: string): string {
-  return map[char] as string;
+  return naturalCompare(x, y);
 }

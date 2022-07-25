@@ -1,5 +1,4 @@
 import * as utils from "@/utils";
-import type { WritableIndexedObject } from "@skylib/functions";
 
 test.each([
   {
@@ -9,8 +8,5 @@ test.each([
   },
   { core: {}, expected: {}, path: "./fixtures/synonyms.missing.js" }
 ])("getSynonyms", ({ core, expected, path }) => {
-  const dest: WritableIndexedObject = {};
-
-  utils.getSynonyms(dest, path, core);
-  expect(dest).toStrictEqual(expected);
+  expect(utils.getSynonyms(path, core)).toStrictEqual(expected);
 });
