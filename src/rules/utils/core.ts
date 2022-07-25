@@ -520,21 +520,30 @@ export function stripBase(path: string, replacement = ""): string {
 export function wrapRule<M extends string, O extends readonly unknown[]>(
   rule: RuleModule<M, O>,
   options: O
-): RuleModule<M> {
+): RuleModule<M, O> {
   return {
     ...rule,
-    create: context =>
-      rule.create(
+    create: context => {
+      const combined = options.map((option, index) => {
+        const override = context.options[index];
+
+        return is.object(option) && is.object(override)
+          ? { ...option, ...override }
+          : option;
+      });
+
+      return rule.create(
         new Proxy(
           {} as Readonly<RuleContext<never, never>>,
           wrapProxyHandler("wrap-rule", ProxyHandlerAction.throw, {
             get: (_target, key) =>
               key === "options"
-                ? options
+                ? combined
                 : // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Ok
                   reflect.get(context, key)
           })
         )
-      )
+      );
+    }
   };
 }
