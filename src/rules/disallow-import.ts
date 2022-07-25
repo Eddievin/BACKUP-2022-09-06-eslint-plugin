@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import * as utils from "../utils";
 import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
 

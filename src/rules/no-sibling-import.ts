@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import * as utils from "../utils";
 import fs from "node:fs";
 import { is } from "@skylib/functions";
 import nodePath from "node:path";

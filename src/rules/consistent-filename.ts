@@ -1,5 +1,5 @@
 import * as _ from "@skylib/lodash-commonjs-es";
-import * as utils from "./utils";
+import * as utils from "../utils";
 import { a, is, o } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";

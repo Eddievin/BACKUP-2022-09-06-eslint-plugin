@@ -1,5 +1,5 @@
 import * as _ from "@skylib/lodash-commonjs-es";
-import * as utils from "./utils";
+import * as utils from "../utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
 

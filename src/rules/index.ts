@@ -1,5 +1,3 @@
-export * as utils from "./utils";
-
 export { arrayCallbackReturnType } from "./array-callback-return-type";
 export { commentEmptyLines } from "./comment-empty-lines";
 export { consistentEmptyLines } from "./consistent-empty-lines";

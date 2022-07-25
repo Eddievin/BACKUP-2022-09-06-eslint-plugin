@@ -1,4 +1,4 @@
-import * as utils from "@/rules/utils";
+import * as utils from "@/utils";
 import type { WritableIndexedObject } from "@skylib/functions";
 
 test.each([

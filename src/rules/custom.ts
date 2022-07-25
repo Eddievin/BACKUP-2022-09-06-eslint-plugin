@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import * as utils from "../utils";
 import { a, assert, evaluate, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";

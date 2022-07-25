@@ -1,5 +1,5 @@
 import * as _ from "@skylib/lodash-commonjs-es";
-import * as utils from "./utils";
+import * as utils from "../utils";
 import type {
   RuleFix,
   RuleListener

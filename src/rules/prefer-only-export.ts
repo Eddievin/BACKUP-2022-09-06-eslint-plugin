@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import * as utils from "../utils";
 import { a, is } from "@skylib/functions";
 
 export interface Options {

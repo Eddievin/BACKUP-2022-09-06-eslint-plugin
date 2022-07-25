@@ -1,5 +1,5 @@
 import * as _ from "@skylib/lodash-commonjs-es";
-import * as utils from "./utils";
+import * as utils from "../utils";
 import type { Writable, strings } from "@skylib/functions";
 import { a, is, o } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";

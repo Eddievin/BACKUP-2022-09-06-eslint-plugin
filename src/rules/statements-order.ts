@@ -1,5 +1,5 @@
 import * as _ from "@skylib/lodash-commonjs-es";
-import * as utils from "./utils";
+import * as utils from "../utils";
 import { Accumulator, a, assert, evaluate, is, o } from "@skylib/functions";
 import type { Rec, stringU, strings } from "@skylib/functions";
 import type {

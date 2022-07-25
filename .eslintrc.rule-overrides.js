@@ -13,7 +13,7 @@ module.exports = {
             _id: "utils",
             autoImport: true,
             autoImportSource: "./utils",
-            source: "@skylib/eslint-plugin/src/rules/utils",
+            source: "@skylib/eslint-plugin/src/utils",
             type: "wildcard"
           },
           ...consistentImport.sources
@@ -25,6 +25,19 @@ module.exports = {
     {
       files: "./src/rules/*",
       rules: {
+        "@skylib/disallow-import/no-relative-parent-imports": [
+          "warn",
+          {
+            disallow: [
+              "../**",
+              "../../**",
+              "../../../**",
+              "../../../../**",
+              "../../../../../**"
+            ],
+            allow: ["../utils"]
+          }
+        ],
         "@skylib/match-filename/project/createRule": [
           "warn",
           {
@@ -103,7 +116,7 @@ module.exports = {
               "../../../../**",
               "../../../../../**"
             ],
-            allow: ["../rules/*"]
+            allow: ["../rules/*", "../utils"]
           }
         ],
         "@skylib/match-filename/project/wrapRule": [

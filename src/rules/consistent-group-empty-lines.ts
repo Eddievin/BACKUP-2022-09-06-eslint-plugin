@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import * as utils from "../utils";
 import { Accumulator, Accumulator2, a, is, num, s } from "@skylib/functions";
 import type {
   RuleFix,

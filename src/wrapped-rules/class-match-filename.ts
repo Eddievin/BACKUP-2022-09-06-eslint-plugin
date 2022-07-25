@@ -1,4 +1,4 @@
-import * as utils from "../rules/utils";
+import * as utils from "../utils";
 import { matchFilename } from "../rules/match-filename";
 
 export { MessageId } from "../rules/match-filename";

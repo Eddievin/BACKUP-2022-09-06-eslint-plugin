@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import * as utils from "../utils";
 import { ReadonlySet, is } from "@skylib/functions";
 import path from "node:path";
 import type { strings } from "@skylib/functions";
