@@ -28,9 +28,17 @@ module.exports = {
         "@skylib/match-filename/project/createRule": [
           "warn",
           {
+            format: "camelCase",
+            selector:
+              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > Identifier.id"
+          }
+        ],
+        "@skylib/match-filename/project/createRule-name": [
+          "warn",
+          {
             format: "kebabCase",
             selector:
-              "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=name] > Literal.value"
+              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > CallExpression > ObjectExpression > Property[key.name=name] > Literal.value"
           }
         ],
         // eslint-disable-next-line @skylib/custom/eslintrc-no-disable -- Ok
