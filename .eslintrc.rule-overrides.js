@@ -91,6 +91,34 @@ module.exports = {
       }
     },
     {
+      files: "./src/wrapped-rules/*",
+      rules: {
+        "@skylib/disallow-import/no-relative-parent-imports": [
+          "warn",
+          {
+            disallow: [
+              "../**",
+              "../../**",
+              "../../../**",
+              "../../../../**",
+              "../../../../../**"
+            ],
+            allow: ["../rules/*"]
+          }
+        ],
+        "@skylib/match-filename/project/wrapRule": [
+          "warn",
+          {
+            format: "camelCase",
+            selector:
+              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
+          }
+        ],
+        // eslint-disable-next-line @skylib/custom/eslintrc-no-disable -- Ok
+        "@skylib/primary-export-only": "off"
+      }
+    },
+    {
       files: "./tests/**",
       rules: {
         "@skylib/custom/project/no-ast": [

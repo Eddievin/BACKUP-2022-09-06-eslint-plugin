@@ -515,3 +515,26 @@ export function stripBase(path: string, replacement = ""): string {
 
   return `${replacement}${path.slice(base.length)}`;
 }
+
+// eslint-disable-next-line @skylib/require-jsdoc -- Postpone
+export function wrapRule<M extends string, O extends readonly unknown[]>(
+  rule: RuleModule<M, O>,
+  options: O
+): RuleModule<M> {
+  return {
+    ...rule,
+    create: context =>
+      rule.create(
+        new Proxy(
+          {} as Readonly<RuleContext<never, never>>,
+          wrapProxyHandler("wrap-rule", ProxyHandlerAction.throw, {
+            get: (_target, key) =>
+              key === "options"
+                ? options
+                : // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Ok
+                  reflect.get(context, key)
+          })
+        )
+      )
+  };
+}

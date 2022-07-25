@@ -62,7 +62,7 @@ export const wrap = utils.createRule({
     const listener1 = rule.create(
       new Proxy(
         {} as Readonly<RuleContext<never, never>>,
-        wrapProxyHandler("eslint-rule__wrap", ProxyHandlerAction.throw, {
+        wrapProxyHandler("eslint-wrap-rule", ProxyHandlerAction.throw, {
           get: (_target, key) =>
             key === "report"
               ? (report: utils.ReportDescriptor) => {
