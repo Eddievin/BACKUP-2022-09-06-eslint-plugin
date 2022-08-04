@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-label-prop.js","sourceRoot":"","sources":["../../../src/skylib-quasar-extension/template/prefer-label-prop.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,eAAe,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACrE;QACE,OAAO,EAAE,qBAAqB;QAC9B,QAAQ,EAAE;YACR,mGAAmG;YACnG,uJAAuJ;SACxJ;KACF;CACF,CAAC,CAAC"}

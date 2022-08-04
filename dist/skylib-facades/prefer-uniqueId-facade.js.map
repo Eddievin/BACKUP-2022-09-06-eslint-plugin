@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-uniqueId-facade.js","sourceRoot":"","sources":["../../src/skylib-facades/prefer-uniqueId-facade.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,wDAAkC;AAClC,kCAA+B;AAElB,QAAA,oBAAoB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC1E;QACE,OAAO,EAAE,0BAA0B;QACnC,QAAQ,EACN,iFAAiF;KACpF;CACF,CAAC,CAAC"}

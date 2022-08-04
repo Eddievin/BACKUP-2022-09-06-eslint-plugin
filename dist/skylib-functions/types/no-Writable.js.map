@@ -1,0 +1,1 @@
+{"version":3,"file":"no-Writable.js","sourceRoot":"","sources":["../../../src/skylib-functions/types/no-Writable.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,UAAU,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAChE;QACE,OAAO,EAAE,2BAA2B;QACpC,QAAQ,EAAE;YACR,iHAAiH;YACjH,iHAAiH;YACjH,iHAAiH;YACjH,uGAAuG;SACxG;KACF;CACF,CAAC,CAAC"}

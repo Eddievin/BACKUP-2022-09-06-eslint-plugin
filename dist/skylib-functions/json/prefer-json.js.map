@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-json.js","sourceRoot":"","sources":["../../../src/skylib-functions/json/prefer-json.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,UAAU,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAChE,EAAE,OAAO,EAAE,sBAAsB,EAAE,QAAQ,EAAE,uBAAuB,EAAE;CACvE,CAAC,CAAC"}

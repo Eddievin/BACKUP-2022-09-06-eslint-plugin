@@ -1,0 +1,1 @@
+{"version":3,"file":"symbol-always-true.js","sourceRoot":"","sources":["../../../src/skylib-functions/guards/symbol-always-true.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,iDAA8C;AAEjC,QAAA,gBAAgB,GAAG,KAAK,CAAC,QAAQ,CAAC,uBAAU,CAAC,iBAAiB,CAAC,EAAE;IAC5E;QACE,OAAO,EAAE,wBAAwB;QACjC,QAAQ,EACN,iIAAiI;QACnI,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,MAAM;KAC/B;CACF,CAAC,CAAC"}

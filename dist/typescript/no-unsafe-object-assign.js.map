@@ -1,0 +1,1 @@
+{"version":3,"file":"no-unsafe-object-assign.js","sourceRoot":"","sources":["../../src/typescript/no-unsafe-object-assign.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,oBAAoB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC1E;QACE,OAAO,EAAE,kCAAkC;QAC3C,QAAQ,EACN,+FAA+F;QACjG,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,QAAQ;KACjC;CACF,CAAC,CAAC"}

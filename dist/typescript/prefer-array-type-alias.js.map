@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-array-type-alias.js","sourceRoot":"","sources":["../../src/typescript/prefer-array-type-alias.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,oBAAoB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC1E;QACE,OAAO,EAAE,6BAA6B;QACtC,QAAQ,EAAE;YACR,6CAA6C;YAC7C,sHAAsH;YACtH,yGAAyG;SAC1G;KACF;CACF,CAAC,CAAC"}

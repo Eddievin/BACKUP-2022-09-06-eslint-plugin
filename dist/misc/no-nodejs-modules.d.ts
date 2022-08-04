@@ -1,0 +1,2 @@
+export declare const noNodejsModules: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("./core/disallow-import").MessageId, [Partial<import("./core/disallow-import").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=no-nodejs-modules.d.ts.map

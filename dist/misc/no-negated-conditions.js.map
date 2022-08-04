@@ -1,0 +1,1 @@
+{"version":3,"file":"no-negated-conditions.js","sourceRoot":"","sources":["../../src/misc/no-negated-conditions.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,mBAAmB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACzE;QACE,OAAO,EAAE,sBAAsB;QAC/B,QAAQ,EAAE;YACR,gDAAgD;YAChD,yEAAyE;YACzE,sEAAsE;YACtE,6CAA6C;SAC9C;KACF;CACF,CAAC,CAAC"}

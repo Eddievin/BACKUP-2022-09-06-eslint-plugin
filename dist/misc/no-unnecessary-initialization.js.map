@@ -1,0 +1,1 @@
+{"version":3,"file":"no-unnecessary-initialization.js","sourceRoot":"","sources":["../../src/misc/no-unnecessary-initialization.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,2BAA2B,GAAG,KAAK,CAAC,QAAQ,CACvD,WAAI,CAAC,iBAAiB,CAAC,EACvB;IACE;QACE,OAAO,EAAE,4BAA4B;QACrC,QAAQ,EAAE;YACR,uDAAuD;YACvD,sDAAsD;SACvD;KACF;CACF,CACF,CAAC"}

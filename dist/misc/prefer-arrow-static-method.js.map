@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-arrow-static-method.js","sourceRoot":"","sources":["../../src/misc/prefer-arrow-static-method.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,uBAAuB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC7E;QACE,OAAO,EAAE,uBAAuB;QAChC,QAAQ,EAAE,YAAY,KAAK,CAAC,SAAS,CAAC,MAAM,gBAAgB;KAC7D;CACF,CAAC,CAAC"}

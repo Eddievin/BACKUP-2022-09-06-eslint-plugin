@@ -1,0 +1,2 @@
+export declare const checkPropsExtends: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../misc/core/restrict-syntax").MessageId, [Partial<import("../../misc/core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=check-Props-extends.d.ts.map

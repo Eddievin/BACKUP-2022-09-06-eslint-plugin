@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-setTimeout.js","sourceRoot":"","sources":["../../../src/skylib-functions/program-flow/prefer-setTimeout.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,gBAAgB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACtE;QACE,OAAO,EAAE,0CAA0C;QACnD,QAAQ,EAAE,2CAA2C;KACtD;CACF,CAAC,CAAC"}

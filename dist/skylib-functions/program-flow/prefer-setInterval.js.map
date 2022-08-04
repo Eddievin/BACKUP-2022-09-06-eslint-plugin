@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-setInterval.js","sourceRoot":"","sources":["../../../src/skylib-functions/program-flow/prefer-setInterval.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,iBAAiB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACvE;QACE,OAAO,EAAE,2CAA2C;QACpD,QAAQ,EAAE,4CAA4C;KACvD;CACF,CAAC,CAAC"}

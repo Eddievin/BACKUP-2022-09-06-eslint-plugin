@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-defineProperty.js","sourceRoot":"","sources":["../../../src/skylib-functions/object/prefer-defineProperty.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,oBAAoB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC1E;QACE,OAAO,EAAE,oCAAoC;QAC7C,QAAQ,EACN,yLAAyL;KAC5L;CACF,CAAC,CAAC"}

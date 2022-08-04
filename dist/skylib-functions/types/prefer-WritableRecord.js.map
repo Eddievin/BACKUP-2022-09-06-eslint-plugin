@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-WritableRecord.js","sourceRoot":"","sources":["../../../src/skylib-functions/types/prefer-WritableRecord.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,oBAAoB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC1E;QACE,OAAO,EAAE,8BAA8B;QACvC,QAAQ,EAAE,yBAAyB;KACpC;CACF,CAAC,CAAC"}

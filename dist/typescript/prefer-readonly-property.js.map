@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-readonly-property.js","sourceRoot":"","sources":["../../src/typescript/prefer-readonly-property.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,sBAAsB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC5E;QACE,OAAO,EAAE,0BAA0B;QACnC,QAAQ,EAAE,YAAY,KAAK,CAAC,SAAS,CAAC,QAAQ,mBAAmB;KAClE;CACF,CAAC,CAAC"}

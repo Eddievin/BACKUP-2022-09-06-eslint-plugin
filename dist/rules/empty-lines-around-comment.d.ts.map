@@ -1,1 +1,0 @@
-{"version":3,"file":"empty-lines-around-comment.d.ts","sourceRoot":"","sources":["../../src/rules/empty-lines-around-comment.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,SAAS,CAAC;AAEjC,OAAO,KAAK,EAEV,YAAY,EACb,MAAM,yCAAyC,CAAC;AAIjD,oBAAY,SAAS;IACnB,qBAAqB,0BAA0B;IAC/C,sBAAsB,2BAA2B;IACjD,wBAAwB,6BAA6B;CACtD;AAED,eAAO,MAAM,uBAAuB,2IAiIlC,CAAC"}

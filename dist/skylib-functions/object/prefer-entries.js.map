@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-entries.js","sourceRoot":"","sources":["../../../src/skylib-functions/object/prefer-entries.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,aAAa,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACnE;QACE,OAAO,EAAE,6BAA6B;QACtC,QAAQ,EACN,qEAAqE;KACxE;CACF,CAAC,CAAC"}

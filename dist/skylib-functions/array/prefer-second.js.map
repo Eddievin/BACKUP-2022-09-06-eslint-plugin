@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-second.js","sourceRoot":"","sources":["../../../src/skylib-functions/array/prefer-second.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,YAAY,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAClE;QACE,OAAO,EAAE,wBAAwB;QACjC,QAAQ,EACN,0GAA0G;KAC7G;CACF,CAAC,CAAC"}

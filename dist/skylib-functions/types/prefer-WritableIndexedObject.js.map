@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-WritableIndexedObject.js","sourceRoot":"","sources":["../../../src/skylib-functions/types/prefer-WritableIndexedObject.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,2BAA2B,GAAG,KAAK,CAAC,QAAQ,CACvD,WAAI,CAAC,iBAAiB,CAAC,EACvB;IACE;QACE,OAAO,EAAE,qCAAqC;QAC9C,QAAQ,EACN,qHAAqH;KACxH;CACF,CACF,CAAC"}

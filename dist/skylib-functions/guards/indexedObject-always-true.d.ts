@@ -1,0 +1,2 @@
+export declare const indexedObjectAlwaysTrue: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../typescript/core/restrict-syntax").MessageId, [Partial<import("../../typescript/core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=indexedObject-always-true.d.ts.map

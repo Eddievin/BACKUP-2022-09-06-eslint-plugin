@@ -1,0 +1,1 @@
+{"version":3,"file":"no-underscore-export.js","sourceRoot":"","sources":["../../src/misc/no-underscore-export.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,kBAAkB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACxE;QACE,OAAO,EAAE,uBAAuB;QAChC,QAAQ,EAAE;YACR,qCAAqC,KAAK,CAAC,SAAS,CAAC,QAAQ,+BAA+B;YAC5F,+FAA+F;SAChG;KACF;CACF,CAAC,CAAC"}

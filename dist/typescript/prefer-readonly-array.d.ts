@@ -1,0 +1,2 @@
+export declare const preferReadonlyArray: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("./core/restrict-syntax").MessageId, [Partial<import("./core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=prefer-readonly-array.d.ts.map

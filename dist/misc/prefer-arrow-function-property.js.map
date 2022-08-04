@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-arrow-function-property.js","sourceRoot":"","sources":["../../src/misc/prefer-arrow-function-property.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,2BAA2B,GAAG,KAAK,CAAC,QAAQ,CACvD,WAAI,CAAC,iBAAiB,CAAC,EACvB;IACE;QACE,OAAO,EAAE,uBAAuB;QAChC,QAAQ,EAAE,qCAAqC;KAChD;CACF,CACF,CAAC"}

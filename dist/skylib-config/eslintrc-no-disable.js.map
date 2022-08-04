@@ -1,0 +1,1 @@
+{"version":3,"file":"eslintrc-no-disable.js","sourceRoot":"","sources":["../../src/skylib-config/eslintrc-no-disable.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,kCAA+B;AAElB,QAAA,iBAAiB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACvE;QACE,OAAO,EAAE,sBAAsB;QAC/B,QAAQ,EACN,mFAAmF;KACtF;CACF,CAAC,CAAC"}

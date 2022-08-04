@@ -1,0 +1,2 @@
+export declare const componentName: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../misc/core/match-filename").MessageId, [Partial<import("../misc/core/match-filename").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=component-name.d.ts.map

@@ -1,0 +1,2 @@
+export declare const noUnsafeObjectAssign: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("./core/restrict-syntax").MessageId, [Partial<import("./core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+//# sourceMappingURL=no-unsafe-object-assign.d.ts.map

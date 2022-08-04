@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-getPrototypeOf.js","sourceRoot":"","sources":["../../../src/skylib-functions/object/prefer-getPrototypeOf.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,oBAAoB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC1E;QACE,OAAO,EAAE,oCAAoC;QAC7C,QAAQ,EACN,4EAA4E;KAC/E;CACF,CAAC,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-sort.js","sourceRoot":"","sources":["../../../src/skylib-functions/array/prefer-sort.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,iDAA8C;AAEjC,QAAA,UAAU,GAAG,KAAK,CAAC,QAAQ,CAAC,uBAAU,CAAC,iBAAiB,CAAC,EAAE;IACtE;QACE,OAAO,EAAE,+CAA+C;QACxD,QAAQ,EAAE,uCAAuC;QACjD,OAAO,EAAE,KAAK,CAAC,SAAS,CAAC,KAAK;KAC/B;CACF,CAAC,CAAC"}

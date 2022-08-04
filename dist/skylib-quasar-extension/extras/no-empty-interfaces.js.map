@@ -1,0 +1,1 @@
+{"version":3,"file":"no-empty-interfaces.js","sourceRoot":"","sources":["../../../src/skylib-quasar-extension/extras/no-empty-interfaces.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,iBAAiB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACvE;QACE,OAAO,EAAE,gCAAgC;QACzC,QAAQ,EACN,+FAA+F;KAClG;CACF,CAAC,CAAC"}

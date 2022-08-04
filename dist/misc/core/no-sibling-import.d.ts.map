@@ -1,0 +1,1 @@
+{"version":3,"file":"no-sibling-import.d.ts","sourceRoot":"","sources":["../../../src/misc/core/no-sibling-import.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,mBAAmB,CAAC;AAEjD,MAAM,WAAW,OAAO;IACtB,QAAQ,CAAC,UAAU,EAAE,OAAO,CAAC;CAC9B;AAED,oBAAY,SAAS;IACnB,gBAAgB,qBAAqB;CACtC;AAED,eAAO,MAAM,eAAe,4KA0C1B,CAAC"}

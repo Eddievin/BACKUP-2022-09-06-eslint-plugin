@@ -1,0 +1,1 @@
+{"version":3,"file":"no-global-icons.js","sourceRoot":"","sources":["../../../src/skylib-quasar-extension/script/no-global-icons.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,aAAa,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACnE;QACE,OAAO,EAAE,iBAAiB;QAC1B,QAAQ,EACN,wFAAwF;KAC3F;CACF,CAAC,CAAC"}

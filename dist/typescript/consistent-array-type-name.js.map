@@ -1,0 +1,1 @@
+{"version":3,"file":"consistent-array-type-name.js","sourceRoot":"","sources":["../../src/typescript/consistent-array-type-name.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,uBAAuB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IAC7E;QACE,OAAO,EAAE,qCAAqC;QAC9C,QAAQ,EAAE,gEAAgE;QAC1E,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,KAAK;KAC9B;CACF,CAAC,CAAC"}

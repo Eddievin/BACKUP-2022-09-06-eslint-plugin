@@ -1,0 +1,1 @@
+{"version":3,"file":"no-unnecessary-break.js","sourceRoot":"","sources":["../../src/misc/no-unnecessary-break.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,iCAA8B;AAEjB,QAAA,kBAAkB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACxE;QACE,OAAO,EAAE,+BAA+B;QACxC,QAAQ,EAAE,mDAAmD;KAC9D;CACF,CAAC,CAAC"}

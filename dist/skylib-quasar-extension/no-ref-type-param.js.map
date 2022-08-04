@@ -1,0 +1,1 @@
+{"version":3,"file":"no-ref-type-param.js","sourceRoot":"","sources":["../../src/skylib-quasar-extension/no-ref-type-param.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,kCAA+B;AAElB,QAAA,cAAc,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,iBAAiB,CAAC,EAAE;IACpE;QACE,OAAO,EAAE,4BAA4B;QACrC,QAAQ,EACN,+KAA+K;KAClL;CACF,CAAC,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-only-export.d.ts","sourceRoot":"","sources":["../../../src/misc/core/prefer-only-export.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,aAAa,CAAC;AAGrC,MAAM,WAAW,OAAO;IACtB,QAAQ,CAAC,sBAAsB,EAAE,OAAO,CAAC;IACzC,QAAQ,CAAC,QAAQ,EAAE,KAAK,CAAC,QAAQ,CAAC;CACnC;AAED,oBAAY,SAAS;IACnB,aAAa,kBAAkB;CAChC;AAED,eAAO,MAAM,gBAAgB,4KA2C3B,CAAC"}

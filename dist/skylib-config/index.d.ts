@@ -1,0 +1,9 @@
+export declare const skylibConfig: {
+    readonly "eslintrc-no-disable": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../misc/core/restrict-syntax").MessageId, [Partial<import("../misc/core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+    readonly "eslintrc-no-overrides": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../misc/core/restrict-syntax").MessageId, [Partial<import("../misc/core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+    readonly "eslintrc-no-rules": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../misc/core/restrict-syntax").MessageId, [Partial<import("../misc/core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+    readonly prettier: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../misc/core/restrict-syntax").MessageId, [Partial<import("../misc/core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+    readonly "sort-commitlint": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../utils/sort.internal").MessageId | import("../misc/core/sort-array").MessageId, [Partial<import("../misc/core/sort-array").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+    readonly "sort-eslintrc-synonyms": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../utils/sort.internal").MessageId | import("../misc/core/sort-array").MessageId, [Partial<import("../misc/core/sort-array").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+};
+//# sourceMappingURL=index.d.ts.map
