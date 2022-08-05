@@ -3,7 +3,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const preferNumStr = utils.wrapRule(misc["restrict-syntax"], [
+export const preferNumStr = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Prefer "NumStr" type',
     selector: [

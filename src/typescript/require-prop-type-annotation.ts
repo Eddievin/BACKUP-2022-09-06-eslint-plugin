@@ -2,7 +2,7 @@ import * as utils from "../utils";
 import { core } from "./core";
 
 export const requirePropTypeAnnotation = utils.wrapRule(
-  core["restrict-syntax"],
+  core["no-restricted-syntax"],
   [
     {
       message: "Expecting type annotation",

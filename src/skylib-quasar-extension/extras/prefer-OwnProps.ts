@@ -3,7 +3,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const preferOwnProps = utils.wrapRule(misc["restrict-syntax"], [
+export const preferOwnProps = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Use "OwnProps" interface',
     selector:

@@ -1,7 +1,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const noGlobalLang = utils.wrapRule(misc["restrict-syntax"], [
+export const noGlobalLang = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: "No global lang",
     selector:

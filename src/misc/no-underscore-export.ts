@@ -1,7 +1,7 @@
 import * as utils from "../utils";
 import { core } from "./core";
 
-export const noUnderscoreExport = utils.wrapRule(core["restrict-syntax"], [
+export const noUnderscoreExport = utils.wrapRule(core["no-restricted-syntax"], [
   {
     message: "No underscore exports",
     selector: [

@@ -8,6 +8,6 @@ import naturalCompare from "natural-compare";
  * @param y - Value 2.
  * @returns Comparison result.
  */
-export function compare(x = "", y = ""): -1 | 0 | 1 {
+export function compare(x: string, y: string): -1 | 0 | 1 {
   return naturalCompare(x, y);
 }

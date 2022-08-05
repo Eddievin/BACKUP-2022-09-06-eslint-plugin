@@ -71,7 +71,7 @@ export const consistentOptionalProps = utils.createRule({
     [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{_id}})'
   },
   create: (context, typeCheck): RuleListener => {
-    const subOptionsArray = a.sort(
+    const subOptionsArray = a.reverse(
       context.subOptionsArray.map((subOptions): Matchers & SubOptions => {
         const matcher = utils.createRegexpMatcher(subOptions.pattern, true);
 
@@ -81,8 +81,7 @@ export const consistentOptionalProps = utils.createRule({
         );
 
         return { ...subOptions, matcher, properyMatcher };
-      }),
-      reverseCompare
+      })
     );
 
     return {
@@ -208,18 +207,4 @@ const exclusionStyles = new ReadonlySet([Style.combined, Style.optional]);
 interface Matchers {
   readonly matcher: utils.Matcher;
   readonly properyMatcher: utils.Matcher;
-}
-
-/**
- * Compares matchers.
- *
- * @param matcher1 - First matcher.
- * @param matcher2 - Second matcher.
- * @returns - Comparison result.
- */
-function reverseCompare(
-  matcher1: Matchers & SubOptions,
-  matcher2: Matchers & SubOptions
-): -1 | 0 | 1 {
-  return utils.compare(matcher2._id, matcher1._id);
 }

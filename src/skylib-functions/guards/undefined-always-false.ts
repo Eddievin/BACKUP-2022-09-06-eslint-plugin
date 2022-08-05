@@ -2,7 +2,7 @@ import * as utils from "../../utils";
 import { typescript } from "../../typescript";
 
 export const undefinedAlwaysFalse = utils.wrapRule(
-  typescript["restrict-syntax"],
+  typescript["no-restricted-syntax"],
   [
     {
       message: "Unnecessary type guard",

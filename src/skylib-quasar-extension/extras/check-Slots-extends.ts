@@ -3,7 +3,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const checkSlotsExtends = utils.wrapRule(misc["restrict-syntax"], [
+export const checkSlotsExtends = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Extend "OwnSlots" or "PluginSlots" interface',
     selector: [

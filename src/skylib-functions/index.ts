@@ -1,6 +1,6 @@
 import * as utils from "../utils";
 import { array } from "./array";
-import { cast } from "./cast";
+import { cast } from "./converters";
 import { guards } from "./guards";
 import { json } from "./json";
 import { noEvaluateTypeParam } from "./no-evaluate-type-param";
@@ -25,7 +25,7 @@ export const skylibFunctions = {
   "require-jsdoc": requireJsdoc,
   "require-return-in-defineFn": requireReturnInDefineFn,
   ...utils.prefixKeys(array, "array/"),
-  ...utils.prefixKeys(cast, "cast/"),
+  ...utils.prefixKeys(cast, "converters/"),
   ...utils.prefixKeys(guards, "guards/"),
   ...utils.prefixKeys(json, "json/"),
   ...utils.prefixKeys(object, "object/"),

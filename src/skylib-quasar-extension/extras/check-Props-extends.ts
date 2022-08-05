@@ -3,7 +3,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const checkPropsExtends = utils.wrapRule(misc["restrict-syntax"], [
+export const checkPropsExtends = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: "Incorrect extends",
     selector: [

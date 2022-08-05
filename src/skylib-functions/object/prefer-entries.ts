@@ -1,7 +1,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const preferEntries = utils.wrapRule(misc["restrict-syntax"], [
+export const preferEntries = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Prefer "o.entries" function',
     selector:

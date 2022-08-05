@@ -2,7 +2,7 @@ import * as utils from "../utils";
 import { core } from "./core";
 
 export const consistentSymbolDescription = utils.wrapRule(
-  core["restrict-syntax"],
+  core["no-restricted-syntax"],
   [
     {
       message: "Prefer kebab-case symbol description",

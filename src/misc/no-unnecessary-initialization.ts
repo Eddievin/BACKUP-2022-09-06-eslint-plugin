@@ -2,7 +2,7 @@ import * as utils from "../utils";
 import { core } from "./core";
 
 export const noUnnecessaryInitialization = utils.wrapRule(
-  core["restrict-syntax"],
+  core["no-restricted-syntax"],
   [
     {
       message: "Unnecessary initialization",

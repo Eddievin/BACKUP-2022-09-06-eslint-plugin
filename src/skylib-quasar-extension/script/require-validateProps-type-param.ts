@@ -4,7 +4,7 @@ import * as utils from "../../utils";
 import { misc } from "../../misc";
 
 export const requireValidatePropsTypeParam = utils.wrapRule(
-  misc["restrict-syntax"],
+  misc["no-restricted-syntax"],
   [
     {
       message: 'Expecting "OwnProps" type parameter',

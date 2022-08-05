@@ -4,7 +4,7 @@ import * as utils from "../../utils";
 import { misc } from "../../misc";
 
 export const preferFindQuasarComponent = utils.wrapRule(
-  misc["restrict-syntax"],
+  misc["no-restricted-syntax"],
   [
     {
       message: 'Use "findQuasarComponent" function',

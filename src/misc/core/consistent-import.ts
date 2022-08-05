@@ -150,13 +150,11 @@ export const consistentImport = utils.createRule({
     ): SubOptionsExtended | undefined {
       const source = context.normalizeSource(node.value);
 
-      const subOptions = a
-        .sort(context.subOptionsArray, reverseCompare)
-        .find(candidate =>
-          minimatch(source, candidate.sourcePattern ?? candidate.source, {
-            dot: true
-          })
-        );
+      const subOptions = a.reverse(context.subOptionsArray).find(candidate =>
+        minimatch(source, candidate.sourcePattern ?? candidate.source, {
+          dot: true
+        })
+      );
 
       return subOptions
         ? { localName: utils.getIdentifierFromPath(source), ...subOptions }
@@ -165,7 +163,7 @@ export const consistentImport = utils.createRule({
 
     function lintAutoImport(node: TSESTree.Program): void {
       const fixes = _.uniq(
-        a.sort(context.subOptionsArray, compare).flatMap(subOptions => {
+        context.subOptionsArray.flatMap(subOptions => {
           const { autoImport, autoImportSource, localName, wildcard } = {
             autoImportSource: subOptions.source,
             localName: utils.getIdentifierFromPath(subOptions.source),
@@ -289,29 +287,4 @@ export const consistentImport = utils.createRule({
 
 interface SubOptionsExtended extends SubOptions {
   readonly localName: string;
-}
-
-/**
- * Compares suboptions.
- *
- * @param subOptions1 - First suboptions.
- * @param subOptions2 - Second suboptions.
- * @returns - Comparison result.
- */
-function compare(subOptions1: SubOptions, subOptions2: SubOptions): -1 | 0 | 1 {
-  return utils.compare(subOptions1._id, subOptions2._id);
-}
-
-/**
- * Compares suboptions.
- *
- * @param subOptions1 - First suboptions.
- * @param subOptions2 - Second suboptions.
- * @returns - Comparison result.
- */
-function reverseCompare(
-  subOptions1: SubOptions,
-  subOptions2: SubOptions
-): -1 | 0 | 1 {
-  return utils.compare(subOptions2._id, subOptions1._id);
 }

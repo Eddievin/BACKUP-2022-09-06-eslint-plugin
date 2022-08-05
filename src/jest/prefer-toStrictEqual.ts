@@ -4,7 +4,7 @@ import * as utils from "../utils";
 import { typescript } from "../typescript";
 
 export const preferToStrictEqual = utils.wrapRule(
-  typescript["restrict-syntax"],
+  typescript["no-restricted-syntax"],
   [
     {
       message: 'Prefer "toStrictEqual" matcher',

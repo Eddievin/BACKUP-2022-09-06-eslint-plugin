@@ -15,6 +15,8 @@ import { TypeGroup } from "./types";
 import type { TypeGroups } from "./types";
 
 export class TypeCheck {
+  public readonly checker: ts.TypeChecker;
+
   /**
    * Checks if type is boolean.
    *
@@ -155,10 +157,16 @@ export class TypeCheck {
    * @param node - Node.
    * @returns _True_ if node is an array, _false_ otherwise.
    */
-  public isArray(node: TSESTree.Node): boolean {
+  public isArrayOrTuple(node: TSESTree.Node): boolean {
     const type = this.getType(node);
 
-    return this.checker.isArrayType(type);
+    return this.checker.isArrayType(type) || this.checker.isTupleType(type);
+  }
+
+  public isArrayOrTupleType(
+    type: ts.Type
+  ): type is ts.TupleTypeReference | ts.TypeReference {
+    return this.checker.isArrayType(type) || this.checker.isTupleType(type);
   }
 
   public isReadonlyProperty(property: ts.Symbol, type: ts.Type): boolean {
@@ -185,7 +193,7 @@ export class TypeCheck {
     return expected ? expected.some(x => this.typeHas(type, x)) : true;
   }
 
-  public typeIs(type: ts.Type, expected?: TypeGroup): boolean {
+  public typeIs(type: ts.Type, expected: TypeGroup | undefined): boolean {
     if (expected)
       switch (expected) {
         case TypeGroup.any:
@@ -222,7 +230,9 @@ export class TypeCheck {
 
           const symbol = type.getSymbol();
 
-          return symbol ? ["__object", "__type"].includes(symbol.name) : false;
+          return symbol && symbol.name.startsWith("__")
+            ? this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object)
+            : false;
         }
 
         case TypeGroup.function:
@@ -251,6 +261,9 @@ export class TypeCheck {
             !this.typeIs(type, TypeGroup.array) &&
             !this.typeIs(type, TypeGroup.function)
           );
+
+        case TypeGroup.parameter:
+          return type.isTypeParameter();
 
         case TypeGroup.readonly:
           return type
@@ -353,8 +366,6 @@ export class TypeCheck {
       }
     }
   }
-
-  protected readonly checker: ts.TypeChecker;
 
   protected readonly code: string;
 

@@ -12,5 +12,4 @@ export * from "./tree";
 
 export * from "./types";
 
-export { compare } from "./compare";
 export { sort } from "./sort";

@@ -2,11 +2,11 @@ import * as utils from "@/utils";
 import getCurrentLine from "get-current-line";
 import { rules } from "@";
 
-const rule = rules["typescript/restrict-syntax"];
+const rule = rules["typescript/no-restricted-syntax"];
 
 const MessageId = utils.getMessageId(rule);
 
-utils.testRule("restrict-syntax", rule, [
+utils.testRule("no-restricted-syntax", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "VElement[name=p]" }],
@@ -45,7 +45,10 @@ utils.testRule("restrict-syntax", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
-      { replacement: "id2", selector: ["Identifier", "Identifier[name=id1]"] }
+      {
+        replacement: "id2",
+        selector: ["Identifier[name=id1]", "Identifier[name=id2]"]
+      }
     ],
     code: "const id1 = [];",
     output: "const id2 = [];",
@@ -56,8 +59,25 @@ utils.testRule("restrict-syntax", rule, [
         data: {
           _id: "id",
           message:
-            "This syntax is not allowed: Identifier, Identifier[name=id1]"
+            "This syntax is not allowed: Identifier[name=id1], Identifier[name=id2]"
         }
+      }
+    ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      { ignoreSelector: "Identifier[name=id2]", selector: "Identifier" }
+    ],
+    code: `
+      const id1 = [];
+      const id2 = [];
+    `,
+    errors: [
+      {
+        line: 1,
+        messageId: MessageId.customMessage,
+        data: { _id: "id", message: "This syntax is not allowed: Identifier" }
       }
     ]
   },
@@ -68,7 +88,7 @@ utils.testRule("restrict-syntax", rule, [
         message: "Custom message",
         replacement: "e",
         search: /d/u.source,
-        selector: ["Identifier"]
+        selector: "Identifier"
       }
     ],
     code: "const id1 = [];",
@@ -86,7 +106,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.any
       }
     ],
@@ -104,7 +124,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.array
       }
     ],
@@ -122,7 +142,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.boolean
       }
     ],
@@ -140,7 +160,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=/^id\\w$/u]"],
+        selector: "Identifier[name=/^id\\w$/u]",
         typeIs: utils.TypeGroup.complex
       }
     ],
@@ -184,7 +204,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.function
       }
     ],
@@ -202,7 +222,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.never
       }
     ],
@@ -220,7 +240,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.null
       }
     ],
@@ -238,7 +258,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.number
       }
     ],
@@ -256,7 +276,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.object
       }
     ],
@@ -274,7 +294,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.readonly
       }
     ],
@@ -292,7 +312,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.string
       }
     ],
@@ -310,7 +330,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.symbol
       }
     ],
@@ -328,7 +348,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.tuple
       }
     ],
@@ -346,7 +366,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.undefined
       }
     ],
@@ -364,7 +384,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=id]"],
+        selector: "Identifier[name=id]",
         typeIs: utils.TypeGroup.unknown
       }
     ],
@@ -382,7 +402,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=/^id\\w$/u]"],
+        selector: "Identifier[name=/^id\\w$/u]",
         typeHasOneOf: [utils.TypeGroup.number, utils.TypeGroup.string]
       }
     ],
@@ -408,7 +428,7 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=x]"],
+        selector: "Identifier[name=x]",
         typeIs: utils.TypeGroup.number
       }
     ],
@@ -429,11 +449,62 @@ utils.testRule("restrict-syntax", rule, [
     options: [
       {
         message: "Custom message",
-        selector: ["Identifier[name=x]"],
+        selector: "Identifier[name=x]",
         typeIs: utils.TypeGroup.unknown
       }
     ],
     code: "function f<T>(x: T) {}",
+    errors: [
+      {
+        line: 1,
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
+    ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        checkArrayType: true,
+        message: "Custom message",
+        selector: "Identifier",
+        typeIs: utils.TypeGroup.string
+      }
+    ],
+    code: `
+      const x: string[] = [];
+      const y: [] = [];
+      const z: string = "";
+    `,
+    errors: [
+      {
+        line: 1,
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      },
+      {
+        line: 2,
+        messageId: MessageId.customMessage,
+        data: { message: "Custom message" }
+      }
+    ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        checkReturnType: true,
+        message: "Custom message",
+        selector: "Identifier",
+        typeIs: utils.TypeGroup.string
+      }
+    ],
+    code: `
+      function f(): string {}
+      function g(): number {}
+      const h = 1;
+    `,
     errors: [
       {
         line: 1,

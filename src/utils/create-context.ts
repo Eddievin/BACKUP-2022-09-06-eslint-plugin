@@ -174,6 +174,12 @@ export function createBetterContext<
     report: context.report.bind(context),
     scope: context.getScope(),
     source,
+    stripExtension: (str: string): string => {
+      for (const ext of [".js", ".ts"])
+        if (str.endsWith(ext)) return str.slice(0, -ext.length);
+
+      return str;
+    },
     subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, path)
   };
 }

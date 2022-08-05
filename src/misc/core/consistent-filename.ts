@@ -55,9 +55,9 @@ export const consistentFilename = utils.createRule({
         "Program:exit": () => {
           const { base: got } = path.parse(context.path);
 
-          const item = a.sort(items, reverseCompare)[0];
+          if (items.length) {
+            const item = a.last(items);
 
-          if (item) {
             const { _id, format, match } = {
               format: context.options.format,
               ...item.subOptions
@@ -116,14 +116,3 @@ interface Item {
 }
 
 type Items = readonly Item[];
-
-/**
- * Compares items.
- *
- * @param item1 - First item.
- * @param item2 - Second item.
- * @returns - Comparison result.
- */
-function reverseCompare(item1: Item, item2: Item): -1 | 0 | 1 {
-  return utils.compare(item2.subOptions._id, item1.subOptions._id);
-}

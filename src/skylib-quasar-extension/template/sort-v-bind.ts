@@ -1,7 +1,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const sortVBind = utils.wrapRule(misc["restrict-syntax"], [
+export const sortVBind = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Move "v-bind" directive to the end',
     selector:

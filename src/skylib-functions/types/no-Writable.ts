@@ -3,7 +3,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const noWritable = utils.wrapRule(misc["restrict-syntax"], [
+export const noWritable = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Prefer "Writable..." type',
     selector: [

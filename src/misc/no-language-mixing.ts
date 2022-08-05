@@ -13,7 +13,7 @@ export const noLanguageMixing = evaluate(() => {
 
   const re = `/${eng}${sep}${int}|${int}${sep}${eng}/u`;
 
-  return utils.wrapRule(core["restrict-syntax"], [
+  return utils.wrapRule(core["no-restricted-syntax"], [
     {
       message: "No language mixing",
       selector: [`Literal[value=${re}]`, `TemplateLiteral[value.raw=${re}]`]

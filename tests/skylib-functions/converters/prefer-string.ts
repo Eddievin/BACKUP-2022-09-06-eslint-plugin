@@ -2,7 +2,7 @@ import * as utils from "@/utils";
 import getCurrentLine from "get-current-line";
 import { rules } from "@";
 
-const rule = rules["functions/cast/prefer-string"];
+const rule = rules["functions/converters/prefer-string"];
 
 const MessageId = utils.getMessageId(rule);
 

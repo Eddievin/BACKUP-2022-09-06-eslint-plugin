@@ -2,7 +2,7 @@ import * as utils from "../../utils";
 import { misc } from "../../misc";
 
 export const preferUndefinedShorthandType = utils.wrapRule(
-  misc["restrict-syntax"],
+  misc["no-restricted-syntax"],
   [
     {
       message: 'Prefer "...U" type',

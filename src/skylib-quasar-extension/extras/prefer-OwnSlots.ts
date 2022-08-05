@@ -3,7 +3,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const preferOwnSlots = utils.wrapRule(misc["restrict-syntax"], [
+export const preferOwnSlots = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Use "OwnSlots" interface',
     selector:

@@ -8,6 +8,7 @@ import { disallowImport } from "./disallow-import";
 import { exportAllName } from "./export-all-name";
 import { matchFilename } from "./match-filename";
 import { noExpressionEmptyLines } from "./no-expression-empty-lines";
+import { noRestrictedSyntax } from "./no-restricted-syntax";
 import { noSelfImport } from "./no-self-import";
 import { noSiblingImport } from "./no-sibling-import";
 import { objectFormat } from "./object-format";
@@ -15,7 +16,6 @@ import { onlyExportName } from "./only-export-name";
 import { preferOnlyExport } from "./prefer-only-export";
 import { requireJsdoc } from "./require-jsdoc";
 import { requireSyntax } from "./require-syntax";
-import { restrictSyntax } from "./restrict-syntax";
 import { sortArray } from "./sort-array";
 import { sortClassMembers } from "./sort-class-members";
 import { sortKeys } from "./sort-keys";
@@ -35,6 +35,7 @@ export const core = {
   "export-all-name": exportAllName,
   "match-filename": matchFilename,
   "no-expression-empty-lines": noExpressionEmptyLines,
+  "no-restricted-syntax": noRestrictedSyntax,
   "no-self-import": noSelfImport,
   "no-sibling-import": noSiblingImport,
   "object-format": objectFormat,
@@ -42,7 +43,6 @@ export const core = {
   "prefer-only-export": preferOnlyExport,
   "require-jsdoc": requireJsdoc,
   "require-syntax": requireSyntax,
-  "restrict-syntax": restrictSyntax,
   "sort-array": sortArray,
   "sort-class-members": sortClassMembers,
   "sort-keys": sortKeys,

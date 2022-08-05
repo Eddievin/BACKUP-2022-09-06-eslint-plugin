@@ -19,7 +19,7 @@ export const arrayCallbackReturnType = utils.createRule({
         callee.type === AST_NODE_TYPES.MemberExpression &&
         callee.property.type === AST_NODE_TYPES.Identifier &&
         arrayCallbacks.has(callee.property.name) &&
-        typeCheck.isArray(callee.object)
+        typeCheck.isArrayOrTuple(callee.object)
       ) {
         const argument = node.arguments[0];
 

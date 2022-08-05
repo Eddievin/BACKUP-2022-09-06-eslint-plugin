@@ -1,7 +1,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const preferSecond = utils.wrapRule(misc["restrict-syntax"], [
+export const preferSecond = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Use "a.second" instead',
     selector:

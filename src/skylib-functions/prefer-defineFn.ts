@@ -3,7 +3,7 @@
 import * as utils from "../utils";
 import { misc } from "../misc";
 
-export const preferDefineFn = utils.wrapRule(misc["restrict-syntax"], [
+export const preferDefineFn = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Use "defineFn" instead',
     selector:

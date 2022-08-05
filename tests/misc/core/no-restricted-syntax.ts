@@ -2,11 +2,11 @@ import * as utils from "@/utils";
 import getCurrentLine from "get-current-line";
 import { rules } from "@";
 
-const rule = rules["restrict-syntax"];
+const rule = rules["no-restricted-syntax"];
 
 const MessageId = utils.getMessageId(rule);
 
-utils.testRule("restrict-syntax", rule, [
+utils.testRule("no-restricted-syntax", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "VElement[name=p]" }],
@@ -45,7 +45,10 @@ utils.testRule("restrict-syntax", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     options: [
-      { replacement: "id2", selector: ["Identifier", "Identifier[name=id1]"] }
+      {
+        replacement: "id2",
+        selector: ["Identifier[name=id1]", "Identifier[name=id2]"]
+      }
     ],
     code: "const id1 = [];",
     output: "const id2 = [];",
@@ -56,8 +59,25 @@ utils.testRule("restrict-syntax", rule, [
         data: {
           _id: "id",
           message:
-            "This syntax is not allowed: Identifier, Identifier[name=id1]"
+            "This syntax is not allowed: Identifier[name=id1], Identifier[name=id2]"
         }
+      }
+    ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      { ignoreSelector: "Identifier[name=id2]", selector: "Identifier" }
+    ],
+    code: `
+      const id1 = [];
+      const id2 = [];
+    `,
+    errors: [
+      {
+        line: 1,
+        messageId: MessageId.customMessage,
+        data: { _id: "id", message: "This syntax is not allowed: Identifier" }
       }
     ]
   },
@@ -68,7 +88,7 @@ utils.testRule("restrict-syntax", rule, [
         message: "Custom message",
         replacement: "e",
         search: /d/u.source,
-        selector: ["Identifier"]
+        selector: "Identifier"
       }
     ],
     code: "const id1 = [];",

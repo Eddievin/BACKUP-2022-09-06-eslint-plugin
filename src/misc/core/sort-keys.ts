@@ -58,7 +58,7 @@ export const sortKeys = utils.createRule({
           items.push({ node, options: { keyNode } });
         },
         "Program:exit": () => {
-          for (const item of _.uniqBy(a.sort(items, reverseCompare), "node"))
+          for (const item of _.uniqBy(a.reverse(items), "node"))
             utils.sort(item.node.properties, context, item.options);
         }
       }
@@ -81,14 +81,3 @@ type ObjectMember =
   | TSESTree.MethodDefinition
   | TSESTree.Property
   | TSESTree.SpreadElement;
-
-/**
- * Compares items.
- *
- * @param item1 - First item.
- * @param item2 - Second item.
- * @returns - Comparison result.
- */
-function reverseCompare(item1: Item, item2: Item): -1 | 0 | 1 {
-  return utils.compare(item2.options._id, item1.options._id);
-}

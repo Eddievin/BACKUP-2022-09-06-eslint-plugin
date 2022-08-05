@@ -3,9 +3,12 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const preferClearInterval = utils.wrapRule(misc["restrict-syntax"], [
-  {
-    message: 'Prefer "programFlow.clearInterval" function',
-    selector: "CallExpression > .callee[name=clearInterval]"
-  }
-]);
+export const preferClearInterval = utils.wrapRule(
+  misc["no-restricted-syntax"],
+  [
+    {
+      message: 'Prefer "programFlow.clearInterval" function',
+      selector: "CallExpression > .callee[name=clearInterval]"
+    }
+  ]
+);

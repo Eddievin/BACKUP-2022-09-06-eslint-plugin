@@ -1,7 +1,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const noEmptyInterfaces = utils.wrapRule(misc["restrict-syntax"], [
+export const noEmptyInterfaces = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: "Empty interface is not allowed",
     selector:

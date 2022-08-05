@@ -52,7 +52,7 @@ export const consistentEmptyLines = utils.createRule({
 
     return utils.mergeListenters(
       ...context.subOptionsArray.flatMap(
-        (subOptions): readonly RuleListener[] => {
+        (subOptions, index): readonly RuleListener[] => {
           const prev = a.fromMixed(subOptions.prev).join(", ");
 
           const next = a.fromMixed(subOptions.next).join(", ");
@@ -60,12 +60,12 @@ export const consistentEmptyLines = utils.createRule({
           return [
             {
               [prev]: (node: TSESTree.Node) => {
-                prevItems.push({ node, subOptions });
+                prevItems.push({ index, node, subOptions });
               }
             },
             {
               [next]: (node: TSESTree.Node) => {
-                nextItems.push({ node, subOptions });
+                nextItems.push({ index, node, subOptions });
               }
             }
           ];
@@ -141,6 +141,7 @@ export const consistentEmptyLines = utils.createRule({
 });
 
 interface Item {
+  readonly index: number;
   readonly node: TSESTree.Node;
   readonly subOptions: SubOptions;
 }
@@ -154,6 +155,6 @@ type Items = readonly Item[];
  * @param item2 - Second item.
  * @returns - Comparison result.
  */
-function reverseCompare(item1: Item, item2: Item): -1 | 0 | 1 {
-  return utils.compare(item2.subOptions._id, item1.subOptions._id);
+function reverseCompare(item1: Item, item2: Item): number {
+  return item2.index - item1.index;
 }

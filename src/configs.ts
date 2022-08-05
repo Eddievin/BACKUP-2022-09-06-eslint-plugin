@@ -19,33 +19,33 @@ export const configs = {
       ...rules(misc),
       "@skylib/disallow-import": "off",
       "@skylib/match-filename": "off",
+      "@skylib/no-restricted-syntax": "off",
       "@skylib/require-syntax": "off",
-      "@skylib/restrict-syntax": "off",
       "@skylib/sort-array": "off",
       "@skylib/wrap": "off"
     }
   },
+  "config": { plugins: ["@skylib/eslint-plugin"], rules: rules(skylibConfig) },
   "eslintrc": { plugins: ["@skylib/eslint-plugin"], rules: rules(eslintrc) },
-  "jest": { plugins: ["@skylib/eslint-plugin"], rules: rules(jest) },
-  "skylib-config": {
-    plugins: ["@skylib/eslint-plugin"],
-    rules: rules(skylibConfig)
-  },
-  "skylib-facades": {
+  "facades": {
     plugins: ["@skylib/eslint-plugin"],
     rules: rules(skylibFacades)
   },
-  "skylib-functions": {
+  "functions": {
     plugins: ["@skylib/eslint-plugin"],
     rules: rules(skylibFunctions)
   },
-  "skylib-quasar-extension": {
+  "jest": { plugins: ["@skylib/eslint-plugin"], rules: rules(jest) },
+  "quasar-extension": {
     plugins: ["@skylib/eslint-plugin"],
     rules: rules(skylibQuasarExtension)
   },
   "typescript": {
     plugins: ["@skylib/eslint-plugin"],
-    rules: { ...rules(typescript), "@skylib/typescript/restrict-syntax": "off" }
+    rules: {
+      ...rules(typescript),
+      "@skylib/typescript/no-restricted-syntax": "off"
+    }
   },
   "vue": {
     plugins: ["@skylib/eslint-plugin"],

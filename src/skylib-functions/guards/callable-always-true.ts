@@ -2,7 +2,7 @@ import * as utils from "../../utils";
 import { typescript } from "../../typescript";
 
 export const callableAlwaysTrue = utils.wrapRule(
-  typescript["restrict-syntax"],
+  typescript["no-restricted-syntax"],
   [
     {
       message: "Expecting type to include function or unknown",

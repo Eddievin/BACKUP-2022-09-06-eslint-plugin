@@ -1,7 +1,7 @@
 import * as utils from "../utils";
 import { core } from "./core";
 
-export const preferEnum = utils.wrapRule(core["restrict-syntax"], [
+export const preferEnum = utils.wrapRule(core["no-restricted-syntax"], [
   {
     message: "Use enum instead",
     selector:

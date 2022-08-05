@@ -1,7 +1,7 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const noTsToolbelt = utils.wrapRule(misc["restrict-syntax"], [
+export const noTsToolbelt = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: 'Prefer "@skylib/functions" type',
     selector: [

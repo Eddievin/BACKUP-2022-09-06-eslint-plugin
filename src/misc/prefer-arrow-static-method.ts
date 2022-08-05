@@ -1,9 +1,12 @@
 import * as utils from "../utils";
 import { core } from "./core";
 
-export const preferArrowStaticMethod = utils.wrapRule(core["restrict-syntax"], [
-  {
-    message: "Prefer arrow function",
-    selector: `:matches(${utils.selectors.method})[static=true]`
-  }
-]);
+export const preferArrowStaticMethod = utils.wrapRule(
+  core["no-restricted-syntax"],
+  [
+    {
+      message: "Prefer arrow function",
+      selector: `:matches(${utils.selectors.method})[static=true]`
+    }
+  ]
+);
