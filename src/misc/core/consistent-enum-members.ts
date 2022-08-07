@@ -11,7 +11,7 @@ export const consistentEnumMembers = utils.createRule({
   name: "consistent-enum-members",
   vue: true,
   defaultOptions: { selector: [] },
-  messages: { [MessageId.inconsistentMember]: "{{message}}" },
+  messages: { [MessageId.inconsistentMember]: "Inconsistent enum member" },
   create: (context): RuleListener => ({
     TSEnumMember: node => {
       if (

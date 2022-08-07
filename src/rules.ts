@@ -1,20 +1,19 @@
 import * as utils from "./utils";
-import {
-  eslintrc,
-  jest,
-  misc,
-  skylibConfig,
-  skylibFacades,
-  skylibFunctions,
-  skylibQuasarExtension,
-  typescript,
-  vue
-} from "./prefixed-rules";
+import { eslintrc } from "./eslintrc";
 import { evaluate } from "@skylib/functions";
+import { jest } from "./jest";
+import { misc } from "./misc";
+import { skylibConfig } from "./skylib-config";
+import { skylibFacades } from "./skylib-facades";
+import { skylibFramework } from "./skylib-framework";
+import { skylibFunctions } from "./skylib-functions";
+import { skylibQuasarExtension } from "./skylib-quasar-extension";
+import { typescript } from "./typescript";
+import { vue } from "./vue";
 
 // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
 // fixme - Remove evaluate
-// eslint-disable-next-line @skylib/custom/no-complex-type-in-function-return, @skylib/custom/no-complex-type-in-variable-declaration -- Ok
+// eslint-disable-next-line @skylib/custom/no-complex-type-in-variable-declaration, @skylib/custom/no-complex-type-in-function-return -- Ok
 export const rules = evaluate(() => {
   const result = {
     ...misc,
@@ -24,8 +23,13 @@ export const rules = evaluate(() => {
     ...vue,
     ...skylibConfig,
     ...skylibFacades,
-    ...skylibFunctions,
-    ...skylibQuasarExtension
+    ...skylibFramework,
+    ...skylibFunctions.jest,
+    ...skylibFunctions.misc,
+    ...skylibQuasarExtension.extras,
+    ...skylibQuasarExtension.jest,
+    ...skylibQuasarExtension.misc,
+    ...skylibQuasarExtension.vue
   } as const;
 
   return { ...result, ...utils.getSynonyms("./.eslintrc.synonyms.js", result) };

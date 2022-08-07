@@ -2,7 +2,7 @@ import * as utils from "../utils";
 import { typescript } from "../typescript";
 
 export const noComplexReturnType = utils.wrapRule(
-  typescript["no-restricted-syntax"],
+  typescript["typescript/no-restricted-syntax"],
   [
     {
       checkReturnType: true,

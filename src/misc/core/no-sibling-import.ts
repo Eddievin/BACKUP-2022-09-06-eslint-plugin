@@ -64,7 +64,7 @@ export const noSiblingImport = utils.createRule({
     });
 
     return utils.ruleTemplates.source(ctx => {
-      const source = ctx.source;
+      const source = context.stripExtension(ctx.source);
 
       const parts = source.split("/");
 

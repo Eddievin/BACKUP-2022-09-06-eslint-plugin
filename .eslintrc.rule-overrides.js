@@ -39,7 +39,14 @@ module.exports = {
               "../../../../**",
               "../../../../../**"
             ],
-            allow: ["../../utils", "../misc", "../utils"]
+            allow: [
+              "../../../misc",
+              "../../../utils",
+              "../../misc",
+              "../../utils",
+              "../misc",
+              "../utils"
+            ]
           }
         ],
         "@skylib/match-filename/project/createRule": [
@@ -121,6 +128,9 @@ module.exports = {
               "../../../../../**"
             ],
             allow: [
+              "../../../misc",
+              "../../../typescript",
+              "../../../utils",
               "../../misc",
               "../../typescript",
               "../../utils",

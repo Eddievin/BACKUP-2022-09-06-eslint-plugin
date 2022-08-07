@@ -136,15 +136,13 @@ export function createBetterContext<
         if (source2 === "@") {
           assert.not.empty(_package.name, "Missing package name");
 
-          return `${_package.name}`;
+          return `${_package.name}/src`;
         }
 
         if (source2.startsWith("@/")) {
           assert.not.empty(_package.name, "Missing package name");
 
-          const path2 = `src/${source2.slice(2)}`;
-
-          return `${_package.name}/${path2}`;
+          return `${_package.name}/src/${source2.slice(2)}`;
         }
 
         if (
@@ -175,7 +173,7 @@ export function createBetterContext<
     scope: context.getScope(),
     source,
     stripExtension: (str: string): string => {
-      for (const ext of [".js", ".ts"])
+      for (const ext of [".js", ".ts", ".vue"])
         if (str.endsWith(ext)) return str.slice(0, -ext.length);
 
       return str;

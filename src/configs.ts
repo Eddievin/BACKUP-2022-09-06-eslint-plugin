@@ -1,16 +1,15 @@
-import {
-  eslintrc,
-  jest,
-  misc,
-  skylibConfig,
-  skylibFacades,
-  skylibFunctions,
-  skylibQuasarExtension,
-  typescript,
-  vue
-} from "./prefixed-rules";
 import type { IndexedObject } from "@skylib/functions";
+import { eslintrc } from "./eslintrc";
+import { jest } from "./jest";
+import { misc } from "./misc";
 import { o } from "@skylib/functions";
+import { skylibConfig } from "./skylib-config";
+import { skylibFacades } from "./skylib-facades";
+import { skylibFramework } from "./skylib-framework";
+import { skylibFunctions } from "./skylib-functions";
+import { skylibQuasarExtension } from "./skylib-quasar-extension";
+import { typescript } from "./typescript";
+import { vue } from "./vue";
 
 export const configs = {
   "all": {
@@ -31,14 +30,48 @@ export const configs = {
     plugins: ["@skylib/eslint-plugin"],
     rules: rules(skylibFacades)
   },
-  "functions": {
+  "framework": {
     plugins: ["@skylib/eslint-plugin"],
-    rules: rules(skylibFunctions)
+    rules: rules(skylibFramework)
+  },
+  "functions": {
+    overrides: [{ files: "./tests/**", rules: rules(skylibFunctions.jest) }],
+    plugins: ["@skylib/eslint-plugin"],
+    rules: rules(skylibFunctions.misc)
+  },
+  "functions/jest": {
+    plugins: ["@skylib/eslint-plugin"],
+    rules: rules(skylibFunctions.jest)
+  },
+  "functions/misc": {
+    plugins: ["@skylib/eslint-plugin"],
+    rules: rules(skylibFunctions.misc)
   },
   "jest": { plugins: ["@skylib/eslint-plugin"], rules: rules(jest) },
   "quasar-extension": {
+    overrides: [
+      { files: "*.extras", rules: rules(skylibQuasarExtension.extras) },
+      { files: "*.vue", rules: rules(skylibQuasarExtension.vue) },
+      { files: "./tests/**", rules: rules(skylibQuasarExtension.jest) }
+    ],
     plugins: ["@skylib/eslint-plugin"],
-    rules: rules(skylibQuasarExtension)
+    rules: rules(skylibQuasarExtension.misc)
+  },
+  "quasar-extension/extras": {
+    plugins: ["@skylib/eslint-plugin"],
+    rules: rules(skylibQuasarExtension.extras)
+  },
+  "quasar-extension/jest": {
+    plugins: ["@skylib/eslint-plugin"],
+    rules: rules(skylibQuasarExtension.jest)
+  },
+  "quasar-extension/misc": {
+    plugins: ["@skylib/eslint-plugin"],
+    rules: rules(skylibQuasarExtension.misc)
+  },
+  "quasar-extension/vue": {
+    plugins: ["@skylib/eslint-plugin"],
+    rules: rules(skylibQuasarExtension.vue)
   },
   "typescript": {
     plugins: ["@skylib/eslint-plugin"],

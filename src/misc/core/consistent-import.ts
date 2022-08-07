@@ -129,7 +129,7 @@ export const consistentImport = utils.createRule({
       },
       "Program:exit": (node: TSESTree.Program) => {
         lintAutoImport(node);
-        lintConsistent();
+        lintConsistentImport();
       },
       "Property > Identifier.value": (node: TSESTree.Identifier) => {
         identifiers.add(node.name);
@@ -206,7 +206,7 @@ export const consistentImport = utils.createRule({
         });
     }
 
-    function lintConsistent(): void {
+    function lintConsistentImport(): void {
       for (const node of importDeclarations) {
         const subOptions = findSubOptions(node.source);
 

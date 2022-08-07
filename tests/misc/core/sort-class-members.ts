@@ -279,5 +279,54 @@ utils.testRule("sort-class-members", rule, [
     errors: [
       { line: 2, endLine: 4, messageId: MessageId.incorrectSortingOrder }
     ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    options: [
+      {
+        sortingOrder: [
+          "public-static-field",
+          "public-static-accessor",
+          "public-static-constructor",
+          "public-static-method",
+          "signature",
+          "public-dynamic-field",
+          "public-dynamic-accessor",
+          "public-dynamic-constructor",
+          "public-dynamic-method",
+          "protected-static-field",
+          "protected-static-accessor",
+          "protected-static-constructor",
+          "protected-static-method",
+          "protected-dynamic-field",
+          "protected-dynamic-accessor",
+          "protected-dynamic-constructor",
+          "protected-dynamic-method",
+          "private-static-field",
+          "private-static-accessor",
+          "private-static-constructor",
+          "private-static-method",
+          "private-dynamic-field",
+          "private-dynamic-accessor",
+          "private-dynamic-constructor",
+          "private-dynamic-method"
+        ]
+      }
+    ],
+    code: `
+      export class C {
+        protected readonly a = 1;
+        public b(): void {}
+      }
+    `,
+    output: `
+      export class C {
+        public b(): void {}
+        protected readonly a = 1;
+      }
+    `,
+    errors: [
+      { line: 2, endLine: 3, messageId: MessageId.incorrectSortingOrder }
+    ]
   }
 ]);

@@ -45,13 +45,13 @@ utils.testRule(
         export { d } from "source1";
         export type { E } from "source2";
         export { e } from "source2";
+        const x = 1;
+        export const y = 2;
+        export default 1;
         export interface T1 {}
         export type T2 = 1;
         export function f1() {}
         export function f2();
-        const x = 1;
-        export const y = 2;
-        export default 1;
         interface T3 {}
         type T4 = 1;
         function f3() {}

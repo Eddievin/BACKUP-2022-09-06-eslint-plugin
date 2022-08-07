@@ -1,3 +1,4 @@
+import * as utils from "../utils";
 import { consistentArrayTypeName } from "./consistent-array-type-name";
 import { core } from "./core";
 import { noComplexDeclaratorType } from "./no-complex-declarator-type";
@@ -14,7 +15,7 @@ import { preferReadonlyProperty } from "./prefer-readonly-property";
 import { preferReadonlySet } from "./prefer-ReadonlySet";
 import { requirePropTypeAnnotation } from "./require-prop-type-annotation";
 
-export const typescript = {
+export const typescript = utils.prefixKeys("typescript/", {
   ...core,
   "consistent-array-type-name": consistentArrayTypeName,
   "no-complex-declarator-type": noComplexDeclaratorType,
@@ -30,4 +31,4 @@ export const typescript = {
   "prefer-readonly-array": preferReadonlyArray,
   "prefer-readonly-property": preferReadonlyProperty,
   "require-prop-type-annotation": requirePropTypeAnnotation
-} as const;
+});

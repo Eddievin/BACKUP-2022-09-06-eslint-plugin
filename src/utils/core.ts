@@ -405,8 +405,8 @@ export function nodeText(
 
 // eslint-disable-next-line @skylib/require-jsdoc -- Ok
 export function prefixKeys<T, P extends string>(
-  obj: T,
-  prefix: P
+  prefix: P,
+  obj: T
 ): PrefixKeys<T, P> {
   return o.fromEntries(
     o.entries(obj).map(([key, value]) => [`${prefix}${key}`, value])
