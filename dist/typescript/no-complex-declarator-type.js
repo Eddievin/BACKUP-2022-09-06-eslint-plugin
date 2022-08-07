@@ -4,13 +4,13 @@ exports.noComplexDeclaratorType = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../utils"));
 const core_1 = require("./core");
-exports.noComplexDeclaratorType = utils.wrapRule(core_1.core["restrict-syntax"], [
+exports.noComplexDeclaratorType = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
         message: "Avoid complex declarator type",
         selector: [
-            "VariableDeclarator:not([init.type=TSAsExpression][init.typeAnnotation.typeName.name=const]) > ArrayPattern > Identifier",
-            "VariableDeclarator:not([init.type=TSAsExpression][init.typeAnnotation.typeName.name=const]) > Identifier.id[typeAnnotation=undefined]",
-            "VariableDeclarator:not([init.type=TSAsExpression][init.typeAnnotation.typeName.name=const]) > ObjectPattern > Property > Identifier.value"
+            "VariableDeclarator[init.type=ArrayExpression] > ArrayPattern > Identifier",
+            "VariableDeclarator[init.type=/^(?:ArrayExpression|ObjectExpression)/u] > Identifier.id[typeAnnotation=undefined]",
+            "VariableDeclarator[init.type=ObjectExpression] > ObjectPattern > Property > Identifier.value"
         ],
         typeIs: utils.TypeGroup.complex
     }

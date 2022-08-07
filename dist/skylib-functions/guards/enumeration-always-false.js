@@ -4,7 +4,7 @@ exports.enumerationAlwaysFalse = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const typescript_1 = require("../../typescript");
-exports.enumerationAlwaysFalse = utils.wrapRule(typescript_1.typescript["restrict-syntax"], [
+exports.enumerationAlwaysFalse = utils.wrapRule(typescript_1.typescript["no-restricted-syntax"], [
     {
         message: "Expecting type to include string, unknown",
         selector: "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=enumeration] > .arguments:first-child",

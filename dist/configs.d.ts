@@ -4,13 +4,25 @@ export declare const configs: {
         readonly rules: {
             readonly "@skylib/disallow-import": "off";
             readonly "@skylib/match-filename": "off";
+            readonly "@skylib/no-restricted-syntax": "off";
             readonly "@skylib/require-syntax": "off";
-            readonly "@skylib/restrict-syntax": "off";
             readonly "@skylib/sort-array": "off";
             readonly "@skylib/wrap": "off";
         };
     };
+    readonly config: {
+        readonly plugins: readonly ["@skylib/eslint-plugin"];
+        readonly rules: object;
+    };
     readonly eslintrc: {
+        readonly plugins: readonly ["@skylib/eslint-plugin"];
+        readonly rules: object;
+    };
+    readonly facades: {
+        readonly plugins: readonly ["@skylib/eslint-plugin"];
+        readonly rules: object;
+    };
+    readonly functions: {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
@@ -18,26 +30,14 @@ export declare const configs: {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
-    readonly "skylib-config": {
-        readonly plugins: readonly ["@skylib/eslint-plugin"];
-        readonly rules: object;
-    };
-    readonly "skylib-facades": {
-        readonly plugins: readonly ["@skylib/eslint-plugin"];
-        readonly rules: object;
-    };
-    readonly "skylib-functions": {
-        readonly plugins: readonly ["@skylib/eslint-plugin"];
-        readonly rules: object;
-    };
-    readonly "skylib-quasar-extension": {
+    readonly "quasar-extension": {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
     readonly typescript: {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: {
-            readonly "@skylib/typescript/restrict-syntax": "off";
+            readonly "@skylib/typescript/no-restricted-syntax": "off";
         };
     };
     readonly vue: {

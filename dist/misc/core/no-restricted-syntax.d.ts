@@ -1,6 +1,7 @@
 import * as utils from "../../utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 export interface Options {
+    readonly ignoreSelector: utils.Selector;
     readonly message?: string;
     readonly replacement?: string;
     readonly search?: string;
@@ -9,5 +10,5 @@ export interface Options {
 export declare enum MessageId {
     customMessage = "customMessage"
 }
-export declare const restrictSyntax: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<MessageId, [Partial<Options> & {}], RuleListener>;
-//# sourceMappingURL=restrict-syntax.d.ts.map
+export declare const noRestrictedSyntax: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<MessageId, [Partial<Options> & {}], RuleListener>;
+//# sourceMappingURL=no-restricted-syntax.d.ts.map

@@ -18,6 +18,7 @@ export declare enum TypeGroup {
     null = "null",
     number = "number",
     object = "object",
+    parameter = "parameter",
     readonly = "readonly",
     string = "string",
     symbol = "symbol",
@@ -78,6 +79,7 @@ export interface Context<M extends string, O extends object, S extends object> {
     readonly report: (descriptor: ReportDescriptor<M>) => void;
     readonly scope: ReturnType<RuleContext<M, unknowns>["getScope"]>;
     readonly source: SourceCode;
+    readonly stripExtension: (path: string) => string;
     readonly subOptionsArray: readonly S[];
 }
 export interface DefineTemplateBodyVisitor {

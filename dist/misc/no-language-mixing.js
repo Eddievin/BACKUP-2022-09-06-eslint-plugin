@@ -12,7 +12,7 @@ exports.noLanguageMixing = (0, functions_1.evaluate)(() => {
     const int = "[^\\u0000-\\u00FF]";
     const sep = "[\\d_]*";
     const re = `/${eng}${sep}${int}|${int}${sep}${eng}/u`;
-    return utils.wrapRule(core_1.core["restrict-syntax"], [
+    return utils.wrapRule(core_1.core["no-restricted-syntax"], [
         {
             message: "No language mixing",
             selector: [`Literal[value=${re}]`, `TemplateLiteral[value.raw=${re}]`]

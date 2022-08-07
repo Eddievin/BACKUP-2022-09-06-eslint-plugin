@@ -5,7 +5,7 @@ exports.noToThrowLiteral = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../utils"));
 const typescript_1 = require("../typescript");
-exports.noToThrowLiteral = utils.wrapRule(typescript_1.typescript["restrict-syntax"], [
+exports.noToThrowLiteral = utils.wrapRule(typescript_1.typescript["no-restricted-syntax"], [
     {
         message: "String argument is not allowed",
         selector: "CallExpression[callee.property.name=toThrow] > .arguments",

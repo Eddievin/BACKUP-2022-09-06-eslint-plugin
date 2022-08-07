@@ -5,6 +5,7 @@ import type { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 import { TypeGroup } from "./types";
 import type { TypeGroups } from "./types";
 export declare class TypeCheck {
+    readonly checker: ts.TypeChecker;
     /**
      * Checks if type is boolean.
      *
@@ -45,12 +46,13 @@ export declare class TypeCheck {
      * @param node - Node.
      * @returns _True_ if node is an array, _false_ otherwise.
      */
-    isArray(node: TSESTree.Node): boolean;
+    isArrayOrTuple(node: TSESTree.Node): boolean;
+    isArrayOrTupleType(type: ts.Type): type is ts.TupleTypeReference | ts.TypeReference;
     isReadonlyProperty(property: ts.Symbol, type: ts.Type): boolean;
     typeHas(type: ts.Type, expected?: TypeGroup): boolean;
     typeHasNoneOf(type: ts.Type, expected?: TypeGroups): boolean;
     typeHasOneOf(type: ts.Type, expected?: TypeGroups): boolean;
-    typeIs(type: ts.Type, expected?: TypeGroup): boolean;
+    typeIs(type: ts.Type, expected: TypeGroup | undefined): boolean;
     typeIsNoneOf(type: ts.Type, expected?: TypeGroups): boolean;
     typeIsOneOf(type: ts.Type, expected?: TypeGroups): boolean;
     /**
@@ -60,7 +62,6 @@ export declare class TypeCheck {
      * @returns Type parts.
      */
     unionTypeParts(node: TSESTree.Node): TypeCheck.TypeParts;
-    protected readonly checker: ts.TypeChecker;
     protected readonly code: string;
     protected readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
     protected readonly zzz: (type: ts.Type, ...flags: readonly ts.TypeFlags[]) => boolean;

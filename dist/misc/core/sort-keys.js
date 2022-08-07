@@ -39,7 +39,7 @@ exports.sortKeys = utils.createRule({
                 items.push({ node, options: { keyNode } });
             },
             "Program:exit": () => {
-                for (const item of _.uniqBy(functions_1.a.sort(items, reverseCompare), "node"))
+                for (const item of _.uniqBy(functions_1.a.reverse(items), "node"))
                     utils.sort(item.node.properties, context, item.options);
             }
         });
@@ -48,14 +48,4 @@ exports.sortKeys = utils.createRule({
         }
     }
 });
-/**
- * Compares items.
- *
- * @param item1 - First item.
- * @param item2 - Second item.
- * @returns - Comparison result.
- */
-function reverseCompare(item1, item2) {
-    return utils.compare(item2.options._id, item1.options._id);
-}
 //# sourceMappingURL=sort-keys.js.map

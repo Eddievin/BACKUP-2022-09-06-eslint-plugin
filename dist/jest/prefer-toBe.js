@@ -5,7 +5,7 @@ exports.preferToBe = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../utils"));
 const typescript_1 = require("../typescript");
-exports.preferToBe = utils.wrapRule(typescript_1.typescript["restrict-syntax"], [
+exports.preferToBe = utils.wrapRule(typescript_1.typescript["no-restricted-syntax"], [
     {
         message: 'Prefer "toBe" matcher',
         selector: "CallExpression[callee.property.name=toStrictEqual] > .arguments",

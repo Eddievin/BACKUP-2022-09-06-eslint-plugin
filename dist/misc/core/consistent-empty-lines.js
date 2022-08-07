@@ -34,18 +34,18 @@ exports.consistentEmptyLines = utils.createRule({
     create: (context) => {
         const prevItems = [];
         const nextItems = [];
-        return utils.mergeListenters(...context.subOptionsArray.flatMap((subOptions) => {
+        return utils.mergeListenters(...context.subOptionsArray.flatMap((subOptions, index) => {
             const prev = functions_1.a.fromMixed(subOptions.prev).join(", ");
             const next = functions_1.a.fromMixed(subOptions.next).join(", ");
             return [
                 {
                     [prev]: (node) => {
-                        prevItems.push({ node, subOptions });
+                        prevItems.push({ index, node, subOptions });
                     }
                 },
                 {
                     [next]: (node) => {
-                        nextItems.push({ node, subOptions });
+                        nextItems.push({ index, node, subOptions });
                     }
                 }
             ];
@@ -108,6 +108,6 @@ exports.consistentEmptyLines = utils.createRule({
  * @returns - Comparison result.
  */
 function reverseCompare(item1, item2) {
-    return utils.compare(item2.subOptions._id, item1.subOptions._id);
+    return item2.index - item1.index;
 }
 //# sourceMappingURL=consistent-empty-lines.js.map

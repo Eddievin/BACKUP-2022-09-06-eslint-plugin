@@ -4,7 +4,7 @@ exports.noGlobalIcons = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const misc_1 = require("../../misc");
-exports.noGlobalIcons = utils.wrapRule(misc_1.misc["restrict-syntax"], [
+exports.noGlobalIcons = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: "No global icons",
         selector: "ImportDeclaration[source.value=@skylib/facades] > ImportSpecifier[imported.name=icons]"

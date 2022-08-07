@@ -11,7 +11,7 @@ const natural_compare_1 = tslib_1.__importDefault(require("natural-compare"));
  * @param y - Value 2.
  * @returns Comparison result.
  */
-function compare(x = "", y = "") {
+function compare(x, y) {
     return (0, natural_compare_1.default)(x, y);
 }
 exports.compare = compare;

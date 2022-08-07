@@ -4,7 +4,7 @@ exports.preferSecond = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const misc_1 = require("../../misc");
-exports.preferSecond = utils.wrapRule(misc_1.misc["restrict-syntax"], [
+exports.preferSecond = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: 'Use "a.second" instead',
         selector: "CallExpression[callee.object.name=a][callee.property.name=get] > Literal.arguments:nth-child(2)[value=1]"

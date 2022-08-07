@@ -4,7 +4,7 @@ exports.stringAlwaysFalse = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const typescript_1 = require("../../typescript");
-exports.stringAlwaysFalse = utils.wrapRule(typescript_1.typescript["restrict-syntax"], [
+exports.stringAlwaysFalse = utils.wrapRule(typescript_1.typescript["no-restricted-syntax"], [
     {
         message: "Expecting type to include string, unknown",
         selector: "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:string|stringU)$/u] > .arguments:first-child",

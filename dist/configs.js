@@ -6,29 +6,26 @@ const functions_1 = require("@skylib/functions");
 exports.configs = {
     "all": {
         plugins: ["@skylib/eslint-plugin"],
-        rules: Object.assign(Object.assign({}, rules(prefixed_rules_1.misc)), { "@skylib/disallow-import": "off", "@skylib/match-filename": "off", "@skylib/require-syntax": "off", "@skylib/restrict-syntax": "off", "@skylib/sort-array": "off", "@skylib/wrap": "off" })
+        rules: Object.assign(Object.assign({}, rules(prefixed_rules_1.misc)), { "@skylib/disallow-import": "off", "@skylib/match-filename": "off", "@skylib/no-restricted-syntax": "off", "@skylib/require-syntax": "off", "@skylib/sort-array": "off", "@skylib/wrap": "off" })
     },
+    "config": { plugins: ["@skylib/eslint-plugin"], rules: rules(prefixed_rules_1.skylibConfig) },
     "eslintrc": { plugins: ["@skylib/eslint-plugin"], rules: rules(prefixed_rules_1.eslintrc) },
-    "jest": { plugins: ["@skylib/eslint-plugin"], rules: rules(prefixed_rules_1.jest) },
-    "skylib-config": {
-        plugins: ["@skylib/eslint-plugin"],
-        rules: rules(prefixed_rules_1.skylibConfig)
-    },
-    "skylib-facades": {
+    "facades": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(prefixed_rules_1.skylibFacades)
     },
-    "skylib-functions": {
+    "functions": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(prefixed_rules_1.skylibFunctions)
     },
-    "skylib-quasar-extension": {
+    "jest": { plugins: ["@skylib/eslint-plugin"], rules: rules(prefixed_rules_1.jest) },
+    "quasar-extension": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(prefixed_rules_1.skylibQuasarExtension)
     },
     "typescript": {
         plugins: ["@skylib/eslint-plugin"],
-        rules: Object.assign(Object.assign({}, rules(prefixed_rules_1.typescript)), { "@skylib/typescript/restrict-syntax": "off" })
+        rules: Object.assign(Object.assign({}, rules(prefixed_rules_1.typescript)), { "@skylib/typescript/no-restricted-syntax": "off" })
     },
     "vue": {
         plugins: ["@skylib/eslint-plugin"],

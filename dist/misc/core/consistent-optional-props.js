@@ -50,11 +50,11 @@ exports.consistentOptionalProps = utils.createRule({
         [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{_id}})'
     },
     create: (context, typeCheck) => {
-        const subOptionsArray = functions_1.a.sort(context.subOptionsArray.map((subOptions) => {
+        const subOptionsArray = functions_1.a.reverse(context.subOptionsArray.map((subOptions) => {
             const matcher = utils.createRegexpMatcher(subOptions.pattern, true);
             const properyMatcher = utils.createRegexpMatcher(subOptions.propertyPattern, true);
             return Object.assign(Object.assign({}, subOptions), { matcher, properyMatcher });
-        }), reverseCompare);
+        }));
         return {
             ClassDeclaration: lintClass,
             ClassExpression: lintClass,
@@ -139,14 +139,4 @@ const exclusionTypes = new functions_1.ReadonlySet([
     utils_1.AST_NODE_TYPES.TSUnknownKeyword
 ]);
 const exclusionStyles = new functions_1.ReadonlySet([Style.combined, Style.optional]);
-/**
- * Compares matchers.
- *
- * @param matcher1 - First matcher.
- * @param matcher2 - Second matcher.
- * @returns - Comparison result.
- */
-function reverseCompare(matcher1, matcher2) {
-    return utils.compare(matcher2._id, matcher1._id);
-}
 //# sourceMappingURL=consistent-optional-props.js.map

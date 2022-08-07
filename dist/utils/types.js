@@ -18,6 +18,7 @@ var TypeGroup;
     TypeGroup["null"] = "null";
     TypeGroup["number"] = "number";
     TypeGroup["object"] = "object";
+    TypeGroup["parameter"] = "parameter";
     TypeGroup["readonly"] = "readonly";
     TypeGroup["string"] = "string";
     TypeGroup["symbol"] = "symbol";

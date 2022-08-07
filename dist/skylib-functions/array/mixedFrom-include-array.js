@@ -5,7 +5,7 @@ exports.mixedFromIncludeArray = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const typescript_1 = require("../../typescript");
-exports.mixedFromIncludeArray = utils.wrapRule(typescript_1.typescript["restrict-syntax"], [
+exports.mixedFromIncludeArray = utils.wrapRule(typescript_1.typescript["no-restricted-syntax"], [
     {
         message: "Expecting type to include array",
         selector: "CallExpression[callee.object.name=a][callee.property.name=fromMixed] > .arguments:first-child",

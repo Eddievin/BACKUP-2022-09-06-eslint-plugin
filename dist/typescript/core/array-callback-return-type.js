@@ -19,7 +19,7 @@ exports.arrayCallbackReturnType = utils.createRule({
             if (callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
                 callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
                 arrayCallbacks.has(callee.property.name) &&
-                typeCheck.isArray(callee.object)) {
+                typeCheck.isArrayOrTuple(callee.object)) {
                 const argument = node.arguments[0];
                 if (argument) {
                     const isBoolishReturnType = typeCheck

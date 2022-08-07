@@ -4,7 +4,7 @@ exports.noNegatedConditions = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../utils"));
 const core_1 = require("./core");
-exports.noNegatedConditions = utils.wrapRule(core_1.core["restrict-syntax"], [
+exports.noNegatedConditions = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
         message: "No negated condition",
         selector: [

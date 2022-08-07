@@ -114,9 +114,7 @@ exports.consistentImport = utils.createRule({
         }
         function findSubOptions(node) {
             const source = context.normalizeSource(node.value);
-            const subOptions = functions_1.a
-                .sort(context.subOptionsArray, reverseCompare)
-                .find(candidate => {
+            const subOptions = functions_1.a.reverse(context.subOptionsArray).find(candidate => {
                 var _a;
                 return (0, minimatch_1.default)(source, (_a = candidate.sourcePattern) !== null && _a !== void 0 ? _a : candidate.source, {
                     dot: true
@@ -126,7 +124,7 @@ exports.consistentImport = utils.createRule({
                 ? Object.assign({ localName: utils.getIdentifierFromPath(source) }, subOptions) : undefined;
         }
         function lintAutoImport(node) {
-            const fixes = _.uniq(functions_1.a.sort(context.subOptionsArray, compare).flatMap(subOptions => {
+            const fixes = _.uniq(context.subOptionsArray.flatMap(subOptions => {
                 const { autoImport, autoImportSource, localName, wildcard } = Object.assign({ autoImportSource: subOptions.source, localName: utils.getIdentifierFromPath(subOptions.source) }, subOptions);
                 return autoImport
                     ? context.scope.through
@@ -219,24 +217,4 @@ exports.consistentImport = utils.createRule({
         }
     }
 });
-/**
- * Compares suboptions.
- *
- * @param subOptions1 - First suboptions.
- * @param subOptions2 - Second suboptions.
- * @returns - Comparison result.
- */
-function compare(subOptions1, subOptions2) {
-    return utils.compare(subOptions1._id, subOptions2._id);
-}
-/**
- * Compares suboptions.
- *
- * @param subOptions1 - First suboptions.
- * @param subOptions2 - Second suboptions.
- * @returns - Comparison result.
- */
-function reverseCompare(subOptions1, subOptions2) {
-    return utils.compare(subOptions2._id, subOptions1._id);
-}
 //# sourceMappingURL=consistent-import.js.map

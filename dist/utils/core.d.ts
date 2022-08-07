@@ -18,7 +18,7 @@ export declare const selectors: {
     readonly arrayType: "TSArrayType, TSTupleType";
     readonly block: "BlockStatement, Program, SwitchCase, TSModuleBlock";
     readonly documentedBlock: "ExportNamedDeclaration, Program, TSModuleBlock";
-    readonly function: ":function, MethodDefinition, TSAbstractMethodDefinition, TSCallSignatureDeclaration, TSConstructSignatureDeclaration, TSDeclareFunction, TSFunctionType, TSMethodSignature";
+    readonly function: ":function, TSDeclareFunction, TSFunctionType, TSMethodSignature";
     readonly functionExpression: "ArrowFunctionExpression, FunctionExpression";
     readonly method: "MethodDefinition, TSAbstractMethodDefinition";
     readonly property: "PropertyDefinition, TSPropertySignature";

@@ -35,8 +35,8 @@ exports.consistentFilename = utils.createRule({
         }), {
             "Program:exit": () => {
                 const { base: got } = node_path_1.default.parse(context.path);
-                const item = functions_1.a.sort(items, reverseCompare)[0];
-                if (item) {
+                if (items.length) {
+                    const item = functions_1.a.last(items);
                     const { _id, format, match } = Object.assign({ format: context.options.format }, item.subOptions);
                     const expected = got
                         .split(".")
@@ -76,14 +76,4 @@ exports.consistentFilename = utils.createRule({
         });
     }
 });
-/**
- * Compares items.
- *
- * @param item1 - First item.
- * @param item2 - Second item.
- * @returns - Comparison result.
- */
-function reverseCompare(item1, item2) {
-    return utils.compare(item2.subOptions._id, item1.subOptions._id);
-}
 //# sourceMappingURL=consistent-filename.js.map

@@ -5,7 +5,7 @@ exports.checkSlotsExtends = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const misc_1 = require("../../misc");
-exports.checkSlotsExtends = utils.wrapRule(misc_1.misc["restrict-syntax"], [
+exports.checkSlotsExtends = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: 'Extend "OwnSlots" or "PluginSlots" interface',
         selector: [

@@ -18,6 +18,12 @@ class TypeCheck {
      * @param context - Context.
      */
     constructor(context) {
+        Object.defineProperty(this, "checker", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         /**
          * Checks if type is boolean.
          *
@@ -56,12 +62,6 @@ class TypeCheck {
             configurable: true,
             writable: true,
             value: (type) => tsutils.isObjectType(type)
-        });
-        Object.defineProperty(this, "checker", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
         });
         Object.defineProperty(this, "code", {
             enumerable: true,
@@ -148,9 +148,12 @@ class TypeCheck {
      * @param node - Node.
      * @returns _True_ if node is an array, _false_ otherwise.
      */
-    isArray(node) {
+    isArrayOrTuple(node) {
         const type = this.getType(node);
-        return this.checker.isArrayType(type);
+        return this.checker.isArrayType(type) || this.checker.isTupleType(type);
+    }
+    isArrayOrTupleType(type) {
+        return this.checker.isArrayType(type) || this.checker.isTupleType(type);
     }
     isReadonlyProperty(property, type) {
         return tsutils.isPropertyReadonlyInType(type, property.getEscapedName(), this.checker);
@@ -188,7 +191,9 @@ class TypeCheck {
                     if (type.isUnionOrIntersection())
                         return type.types.some(subtype => this.typeIs(subtype, expected));
                     const symbol = type.getSymbol();
-                    return symbol ? ["__object", "__type"].includes(symbol.name) : false;
+                    return symbol && symbol.name.startsWith("__")
+                        ? this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object)
+                        : false;
                 }
                 case types_1.TypeGroup.function:
                     return (this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
@@ -203,6 +208,8 @@ class TypeCheck {
                     return (this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
                         !this.typeIs(type, types_1.TypeGroup.array) &&
                         !this.typeIs(type, types_1.TypeGroup.function));
+                case types_1.TypeGroup.parameter:
+                    return type.isTypeParameter();
                 case types_1.TypeGroup.readonly:
                     return type
                         .getProperties()

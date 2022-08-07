@@ -1,2 +1,2 @@
-export declare const setAlwaysFalse: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../typescript/core/restrict-syntax").MessageId, [Partial<import("../../typescript/core/restrict-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
+export declare const setAlwaysFalse: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../typescript/core/no-restricted-syntax").MessageId, [Partial<import("../../typescript/core/no-restricted-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
 //# sourceMappingURL=set-always-false.d.ts.map
