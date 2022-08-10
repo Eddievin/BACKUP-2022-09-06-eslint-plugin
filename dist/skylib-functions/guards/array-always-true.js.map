@@ -1,1 +1,0 @@
-{"version":3,"file":"array-always-true.js","sourceRoot":"","sources":["../../../src/skylib-functions/guards/array-always-true.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,iDAA8C;AAEjC,QAAA,eAAe,GAAG,KAAK,CAAC,QAAQ,CAC3C,uBAAU,CAAC,sBAAsB,CAAC,EAClC;IACE;QACE,OAAO,EAAE,4CAA4C;QACrD,QAAQ,EACN,+HAA+H;QACjI,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,KAAK;KAC9B;CACF,CACF,CAAC"}

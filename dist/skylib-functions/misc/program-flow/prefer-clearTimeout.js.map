@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-clearTimeout.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/program-flow/prefer-clearTimeout.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,8DAAwC;AACxC,wCAAqC;AAExB,QAAA,kBAAkB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IAC7E;QACE,OAAO,EAAE,4CAA4C;QACrD,QAAQ,EAAE,6CAA6C;KACxD;CACF,CAAC,CAAC"}

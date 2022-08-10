@@ -1,1 +1,0 @@
-{"version":3,"file":"no-unfreeze.js","sourceRoot":"","sources":["../../../src/skylib-functions/object/no-unfreeze.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,UAAU,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACrE;QACE,OAAO,EAAE,oCAAoC;QAC7C,QAAQ,EAAE,iEAAiE;KAC5E;CACF,CAAC,CAAC"}

@@ -101,7 +101,7 @@ exports.consistentImport = utils.createRule({
             },
             "Program:exit": (node) => {
                 lintAutoImport(node);
-                lintConsistent();
+                lintConsistentImport();
             },
             "Property > Identifier.value": (node) => {
                 identifiers.add(node.name);
@@ -156,7 +156,7 @@ exports.consistentImport = utils.createRule({
                     messageId: MessageId.autoImport
                 });
         }
-        function lintConsistent() {
+        function lintConsistentImport() {
             for (const node of importDeclarations) {
                 const subOptions = findSubOptions(node.source);
                 if (subOptions) {

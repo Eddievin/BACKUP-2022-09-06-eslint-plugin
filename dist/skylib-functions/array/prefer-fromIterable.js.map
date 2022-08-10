@@ -1,1 +1,0 @@
-{"version":3,"file":"prefer-fromIterable.js","sourceRoot":"","sources":["../../../src/skylib-functions/array/prefer-fromIterable.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,kBAAkB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IAC7E;QACE,OAAO,EAAE,kCAAkC;QAC3C,QAAQ,EAAE,oDAAoD;KAC/D;CACF,CAAC,CAAC"}

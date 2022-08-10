@@ -3,21 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.skylibFunctions = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../utils"));
-const array_1 = require("./array");
-const converters_1 = require("./converters");
-const guards_1 = require("./guards");
-const json_1 = require("./json");
-const no_evaluate_type_param_1 = require("./no-evaluate-type-param");
-const object_1 = require("./object");
-const prefer_defineFn_1 = require("./prefer-defineFn");
-const prefer_evaluate_1 = require("./prefer-evaluate");
-const prefer_ReadonlyMap_1 = require("./prefer-ReadonlyMap");
-const prefer_ReadonlySet_1 = require("./prefer-ReadonlySet");
-const program_flow_1 = require("./program-flow");
-const reflect_1 = require("./reflect");
-const require_jsdoc_1 = require("./require-jsdoc");
-const require_return_in_defineFn_1 = require("./require-return-in-defineFn");
-const test_utils_1 = require("./test-utils");
-const types_1 = require("./types");
-exports.skylibFunctions = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ "no-evaluate-type-param": no_evaluate_type_param_1.noEvaluateTypeParam, "prefer-ReadonlyMap": prefer_ReadonlyMap_1.preferReadonlyMap, "prefer-ReadonlySet": prefer_ReadonlySet_1.preferReadonlySet, "prefer-defineFn": prefer_defineFn_1.preferDefineFn, "prefer-evaluate": prefer_evaluate_1.preferEvaluate, "require-jsdoc": require_jsdoc_1.requireJsdoc, "require-return-in-defineFn": require_return_in_defineFn_1.requireReturnInDefineFn }, utils.prefixKeys(array_1.array, "array/")), utils.prefixKeys(converters_1.cast, "converters/")), utils.prefixKeys(guards_1.guards, "guards/")), utils.prefixKeys(json_1.json, "json/")), utils.prefixKeys(object_1.object, "object/")), utils.prefixKeys(program_flow_1.programFlow, "program-flow/")), utils.prefixKeys(reflect_1.reflect, "reflect/")), utils.prefixKeys(test_utils_1.testUtils, "test-utils/")), utils.prefixKeys(types_1.types, "types/"));
+const jest_1 = require("./jest");
+const misc_1 = require("./misc");
+exports.skylibFunctions = {
+    jest: utils.prefixKeys("functions/", jest_1.jest),
+    misc: utils.prefixKeys("functions/", misc_1.misc)
+};
 //# sourceMappingURL=index.js.map

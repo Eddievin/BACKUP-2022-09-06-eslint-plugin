@@ -38,7 +38,7 @@ exports.noSiblingImport = utils.createRule({
             return () => false;
         });
         return utils.ruleTemplates.source(ctx => {
-            const source = ctx.source;
+            const source = context.stripExtension(ctx.source);
             const parts = source.split("/");
             if (parts.length === 2) {
                 const sourceDir = functions_1.a.first(parts);

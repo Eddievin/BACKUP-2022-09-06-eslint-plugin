@@ -91,12 +91,11 @@ function createBetterContext(context, ruleOptionsArray, options) {
             source2 = (0, functions_1.evaluate)(() => {
                 if (source2 === "@") {
                     functions_1.assert.not.empty(_package.name, "Missing package name");
-                    return `${_package.name}`;
+                    return `${_package.name}/src`;
                 }
                 if (source2.startsWith("@/")) {
                     functions_1.assert.not.empty(_package.name, "Missing package name");
-                    const path2 = `src/${source2.slice(2)}`;
-                    return `${_package.name}/${path2}`;
+                    return `${_package.name}/src/${source2.slice(2)}`;
                 }
                 if (source2 === "." ||
                     source2 === ".." ||
@@ -118,7 +117,7 @@ function createBetterContext(context, ruleOptionsArray, options) {
         scope: context.getScope(),
         source,
         stripExtension: (str) => {
-            for (const ext of [".js", ".ts"])
+            for (const ext of [".js", ".ts", ".vue"])
                 if (str.endsWith(ext))
                     return str.slice(0, -ext.length);
             return str;

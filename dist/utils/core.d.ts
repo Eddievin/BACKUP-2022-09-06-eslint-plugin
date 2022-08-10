@@ -130,7 +130,7 @@ export declare function mergeListenters(...listenters: RuleListeners): RuleListe
  * @returns String representing node.
  */
 export declare function nodeText(node: TSESTree.Node, defVal: string | (() => string)): string;
-export declare function prefixKeys<T, P extends string>(obj: T, prefix: P): PrefixKeys<T, P>;
+export declare function prefixKeys<T, P extends string>(prefix: P, obj: T): PrefixKeys<T, P>;
 export declare function prepareForComparison(str: string, priority: string): string;
 /**
  * Strips base path.

@@ -1,1 +1,0 @@
-{"version":3,"file":"prefer-clearInterval.js","sourceRoot":"","sources":["../../../src/skylib-functions/program-flow/prefer-clearInterval.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,mBAAmB,GAAG,KAAK,CAAC,QAAQ,CAC/C,WAAI,CAAC,sBAAsB,CAAC,EAC5B;IACE;QACE,OAAO,EAAE,6CAA6C;QACtD,QAAQ,EAAE,8CAA8C;KACzD;CACF,CACF,CAAC"}

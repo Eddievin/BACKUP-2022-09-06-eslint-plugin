@@ -1,1 +1,0 @@
-{"version":3,"file":"prefer-assign.js","sourceRoot":"","sources":["../../../src/skylib-functions/object/prefer-assign.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,YAAY,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACvE;QACE,OAAO,EAAE,4BAA4B;QACrC,QAAQ,EACN,oEAAoE;KACvE;CACF,CAAC,CAAC"}

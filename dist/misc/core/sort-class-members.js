@@ -26,18 +26,18 @@ exports.sortClassMembers = utils.createRule({
                                 sortingOrders.get(x),
                                 sortingOrders.get(y),
                                 sortingOrders.get(z),
-                                sortingOrders.get(`${x}\u0001${y}`),
-                                sortingOrders.get(`${x}\u0001${z}`),
-                                sortingOrders.get(`${y}\u0001${x}`),
-                                sortingOrders.get(`${y}\u0001${z}`),
-                                sortingOrders.get(`${z}\u0001${x}`),
-                                sortingOrders.get(`${z}\u0001${y}`),
-                                sortingOrders.get(`${x}\u0001${y}\u0001${z}`),
-                                sortingOrders.get(`${x}\u0001${z}\u0001${y}`),
-                                sortingOrders.get(`${y}\u0001${x}\u0001${z}`),
-                                sortingOrders.get(`${y}\u0001${z}\u0001${x}`),
-                                sortingOrders.get(`${z}\u0001${x}\u0001${y}`),
-                                sortingOrders.get(`${z}\u0001${y}\u0001${x}`)
+                                sortingOrders.get(`${x}-${y}`),
+                                sortingOrders.get(`${x}-${z}`),
+                                sortingOrders.get(`${y}-${x}`),
+                                sortingOrders.get(`${y}-${z}`),
+                                sortingOrders.get(`${z}-${x}`),
+                                sortingOrders.get(`${z}-${y}`),
+                                sortingOrders.get(`${x}-${y}-${z}`),
+                                sortingOrders.get(`${x}-${z}-${y}`),
+                                sortingOrders.get(`${y}-${x}-${z}`),
+                                sortingOrders.get(`${y}-${z}-${x}`),
+                                sortingOrders.get(`${z}-${x}-${y}`),
+                                sortingOrders.get(`${z}-${y}-${x}`)
                             ].filter(functions_1.is.not.empty))));
                         const name = context.getMemberName(member);
                         const accessorType = getMemberAccessorType(member);

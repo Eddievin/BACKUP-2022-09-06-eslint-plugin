@@ -1,1 +1,1 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/vue/index.ts"],"names":[],"mappings":"AAKA,eAAO,MAAM,GAAG;;;;;CAKN,CAAC"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/vue/index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,UAAU,CAAC;AAMlC,eAAO,MAAM,GAAG;;;;;UAKd,CAAC"}

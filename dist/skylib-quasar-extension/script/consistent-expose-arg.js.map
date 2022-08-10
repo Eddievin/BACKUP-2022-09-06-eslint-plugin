@@ -1,1 +1,0 @@
-{"version":3,"file":"consistent-expose-arg.js","sourceRoot":"","sources":["../../../src/skylib-quasar-extension/script/consistent-expose-arg.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,mBAAmB,GAAG,KAAK,CAAC,QAAQ,CAC/C,WAAI,CAAC,sBAAsB,CAAC,EAC5B;IACE;QACE,OAAO,EAAE,sBAAsB;QAC/B,QAAQ,EACN,4EAA4E;KAC/E;CACF,CACF,CAAC"}

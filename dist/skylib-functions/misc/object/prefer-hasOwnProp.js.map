@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-hasOwnProp.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/object/prefer-hasOwnProp.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,8DAAwC;AACxC,wCAAqC;AAExB,QAAA,gBAAgB,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IAC3E;QACE,OAAO,EAAE,gCAAgC;QACzC,QAAQ,EACN,4JAA4J;KAC/J;CACF,CAAC,CAAC"}

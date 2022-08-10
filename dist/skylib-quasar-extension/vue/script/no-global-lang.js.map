@@ -1,0 +1,1 @@
+{"version":3,"file":"no-global-lang.js","sourceRoot":"","sources":["../../../../src/skylib-quasar-extension/vue/script/no-global-lang.ts"],"names":[],"mappings":";;;;AAAA,8DAAwC;AACxC,wCAAqC;AAExB,QAAA,YAAY,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACvE;QACE,OAAO,EAAE,gBAAgB;QACzB,QAAQ,EACN,uFAAuF;KAC1F;CACF,CAAC,CAAC"}

@@ -61,9 +61,9 @@ const defaultOrder = [
     NodeType.ImportDeclaration,
     NodeType.ExportAllDeclaration,
     NodeType.ExportDeclaration,
+    NodeType.Unknown,
     NodeType.ExportTypeDeclaration,
     NodeType.ExportFunctionDeclaration,
-    NodeType.Unknown,
     NodeType.TypeDeclaration,
     NodeType.FunctionDeclaration,
     NodeType.JestTest

@@ -1,1 +1,0 @@
-{"version":3,"file":"prefer-defineFn.js","sourceRoot":"","sources":["../../src/skylib-functions/prefer-defineFn.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,wDAAkC;AAClC,kCAA+B;AAElB,QAAA,cAAc,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACzE;QACE,OAAO,EAAE,wBAAwB;QACjC,QAAQ,EACN,sLAAsL;KACzL;CACF,CAAC,CAAC"}

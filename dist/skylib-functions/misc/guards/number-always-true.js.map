@@ -1,0 +1,1 @@
+{"version":3,"file":"number-always-true.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/guards/number-always-true.ts"],"names":[],"mappings":";;;;AAAA,8DAAwC;AACxC,oDAAiD;AAEpC,QAAA,gBAAgB,GAAG,KAAK,CAAC,QAAQ,CAC5C,uBAAU,CAAC,iCAAiC,CAAC,EAC7C;IACE;QACE,OAAO,EAAE,2CAA2C;QACpD,QAAQ,EACN,iIAAiI;QACnI,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,MAAM;KAC/B;CACF,CACF,CAAC"}

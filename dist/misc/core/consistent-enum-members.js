@@ -13,7 +13,7 @@ exports.consistentEnumMembers = utils.createRule({
     name: "consistent-enum-members",
     vue: true,
     defaultOptions: { selector: [] },
-    messages: { [MessageId.inconsistentMember]: "{{message}}" },
+    messages: { [MessageId.inconsistentMember]: "Inconsistent enum member" },
     create: (context) => ({
         TSEnumMember: node => {
             if (node.id.type === utils_1.AST_NODE_TYPES.Identifier &&

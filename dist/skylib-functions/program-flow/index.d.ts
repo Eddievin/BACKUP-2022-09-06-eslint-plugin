@@ -1,7 +1,0 @@
-export declare const programFlow: {
-    readonly "prefer-clearInterval": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../misc/core/no-restricted-syntax").MessageId, [Partial<import("../../misc/core/no-restricted-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-    readonly "prefer-clearTimeout": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../misc/core/no-restricted-syntax").MessageId, [Partial<import("../../misc/core/no-restricted-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-    readonly "prefer-setInterval": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../misc/core/no-restricted-syntax").MessageId, [Partial<import("../../misc/core/no-restricted-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-    readonly "prefer-setTimeout": import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../misc/core/no-restricted-syntax").MessageId, [Partial<import("../../misc/core/no-restricted-syntax").Options> & {}], import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleListener>;
-};
-//# sourceMappingURL=index.d.ts.map

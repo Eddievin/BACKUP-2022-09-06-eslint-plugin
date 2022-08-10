@@ -1,0 +1,1 @@
+{"version":3,"file":"null-always-true.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/guards/null-always-true.ts"],"names":[],"mappings":";;;;AAAA,8DAAwC;AACxC,oDAAiD;AAEpC,QAAA,cAAc,GAAG,KAAK,CAAC,QAAQ,CAC1C,uBAAU,CAAC,iCAAiC,CAAC,EAC7C;IACE;QACE,OAAO,EAAE,2CAA2C;QACpD,QAAQ,EACN,8GAA8G;QAChH,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,IAAI;KAC7B;CACF,CACF,CAAC"}

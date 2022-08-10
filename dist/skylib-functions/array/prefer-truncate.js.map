@@ -1,1 +1,0 @@
-{"version":3,"file":"prefer-truncate.js","sourceRoot":"","sources":["../../../src/skylib-functions/array/prefer-truncate.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,iDAA8C;AAEjC,QAAA,cAAc,GAAG,KAAK,CAAC,QAAQ,CAC1C,uBAAU,CAAC,sBAAsB,CAAC,EAClC;IACE;QACE,OAAO,EAAE,0BAA0B;QACnC,QAAQ,EACN,uEAAuE;QACzE,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,KAAK;KAC9B;CACF,CACF,CAAC"}

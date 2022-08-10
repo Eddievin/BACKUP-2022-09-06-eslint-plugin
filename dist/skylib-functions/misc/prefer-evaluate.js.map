@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-evaluate.js","sourceRoot":"","sources":["../../../src/skylib-functions/misc/prefer-evaluate.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,cAAc,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACzE;QACE,OAAO,EAAE,wBAAwB;QACjC,QAAQ,EACN,qEAAqE;KACxE;CACF,CAAC,CAAC"}

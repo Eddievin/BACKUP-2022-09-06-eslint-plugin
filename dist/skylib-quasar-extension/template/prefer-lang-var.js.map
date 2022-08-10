@@ -1,1 +1,0 @@
-{"version":3,"file":"prefer-lang-var.js","sourceRoot":"","sources":["../../../src/skylib-quasar-extension/template/prefer-lang-var.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,aAAa,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACxE;QACE,OAAO,EAAE,mBAAmB;QAC5B,QAAQ,EACN,uLAAuL;KAC1L;CACF,CAAC,CAAC"}

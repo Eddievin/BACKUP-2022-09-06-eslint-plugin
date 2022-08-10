@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-keys.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/object/prefer-keys.ts"],"names":[],"mappings":";;;;AAAA,8DAAwC;AACxC,wCAAqC;AAExB,QAAA,UAAU,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACrE;QACE,OAAO,EAAE,0BAA0B;QACnC,QAAQ,EAAE,kEAAkE;KAC7E;CACF,CAAC,CAAC"}

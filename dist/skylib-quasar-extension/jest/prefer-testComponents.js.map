@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-testComponents.js","sourceRoot":"","sources":["../../../src/skylib-quasar-extension/jest/prefer-testComponents.ts"],"names":[],"mappings":";AAAA,sDAAsD;;;;AAEtD,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,oBAAoB,GAAG,KAAK,CAAC,QAAQ,CAChD,WAAI,CAAC,sBAAsB,CAAC,EAC5B;IACE;QACE,OAAO,EAAE,yBAAyB;QAClC,QAAQ,EACN,8JAA8J;KACjK;CACF,CACF,CAAC"}

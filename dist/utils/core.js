@@ -206,7 +206,7 @@ function nodeText(node, defVal) {
 }
 exports.nodeText = nodeText;
 // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-function prefixKeys(obj, prefix) {
+function prefixKeys(prefix, obj) {
     return functions_1.o.fromEntries(functions_1.o.entries(obj).map(([key, value]) => [`${prefix}${key}`, value]));
 }
 exports.prefixKeys = prefixKeys;
