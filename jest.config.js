@@ -9,5 +9,5 @@ module.exports = {
     [/^@\/(.+)/u.source]: "<rootDir>/src/$1",
     [/^quasar$/u.source]: "quasar/dist/quasar.esm.prod.js"
   },
-  preset: "@skylib/config/src"
+  preset: "@skylib/config/jest"
 };
