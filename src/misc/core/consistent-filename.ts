@@ -6,17 +6,6 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 import path from "node:path";
 
-export interface Options {
-  readonly format: utils.casing.Format;
-}
-
-export interface SubOptions {
-  readonly _id: string;
-  readonly format?: utils.casing.Format;
-  readonly match: boolean;
-  readonly selector: utils.Selector;
-}
-
 export enum MessageId {
   invalidFilename = "invalidFilename",
   invalidFilenameId = "invalidFilenameId"
@@ -109,6 +98,17 @@ export const consistentFilename = utils.createRule({
     );
   }
 });
+
+export interface Options {
+  readonly format: utils.casing.Format;
+}
+
+export interface SubOptions {
+  readonly _id: string;
+  readonly format?: utils.casing.Format;
+  readonly match: boolean;
+  readonly selector: utils.Selector;
+}
 
 interface Item {
   readonly node: TSESTree.Node;

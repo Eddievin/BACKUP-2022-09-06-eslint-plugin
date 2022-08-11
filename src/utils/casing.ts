@@ -3,7 +3,9 @@ import { is, s } from "@skylib/functions";
 
 export enum Format {
   camelCase = "camelCase",
+  // eslint-disable-next-line @skylib/consistent-enum-members -- Postponed
   kebabCase = "kebab-case",
+  // eslint-disable-next-line @skylib/consistent-enum-members -- Postponed
   pascalCase = "PascalCase"
 }
 

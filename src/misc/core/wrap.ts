@@ -16,13 +16,6 @@ import type {
 import type { Writable, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-export interface Options {
-  readonly lintSelector: utils.Selector;
-  readonly plugin: string;
-  readonly rule: string;
-  readonly skipSelector: utils.Selector;
-}
-
 export enum MessageId {
   customMessage = "customMessage"
 }
@@ -43,10 +36,10 @@ export const wrap = utils.createRule({
   defaultOptions: { lintSelector: [], skipSelector: [] },
   messages: { [MessageId.customMessage]: "{{message}}" },
   create: (context): RuleListener => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
     const plugin = require(context.options.plugin);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Ok
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Postponed
     const rule = plugin.rules[context.options.rule] as RuleModule<string>;
 
     const lintSelector = a.fromMixed(context.options.lintSelector).join(", ");
@@ -68,7 +61,7 @@ export const wrap = utils.createRule({
               ? (report: utils.ReportDescriptor) => {
                   reports.push(report);
                 }
-              : // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Ok
+              : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Postponed
                 reflect.get(context.rawContext, key)
         })
       )
@@ -104,10 +97,7 @@ export const wrap = utils.createRule({
 
         for (const report of reports)
           if (lintMatcher(report) && !skipMatcher(report)) {
-            const { data, messageId } = {
-              data: {},
-              ...report
-            } as const;
+            const { data, messageId } = { data: {}, ...report } as const;
 
             const message = as.not
               .empty(rule.meta.messages[messageId])
@@ -129,6 +119,13 @@ export const wrap = utils.createRule({
     return utils.mergeListenters(listener1, listener2, listener3, listener4);
   }
 });
+
+export interface Options {
+  readonly lintSelector: utils.Selector;
+  readonly plugin: string;
+  readonly rule: string;
+  readonly skipSelector: utils.Selector;
+}
 
 /**
  * Generates node ID.

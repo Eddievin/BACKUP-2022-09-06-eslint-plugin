@@ -6,13 +6,6 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-export interface Options {
-  readonly blockOrder: NodeTypes;
-  readonly moduleOrder: NodeTypes;
-  readonly order: NodeTypes;
-  readonly programOrder: NodeTypes;
-}
-
 export enum NodeType {
   ExportAllDeclaration = "ExportAllDeclaration",
   ExportDeclaration = "ExportDeclaration",
@@ -101,6 +94,13 @@ const sortable: Rec<NodeType, boolean> = {
   [NodeType.Unknown]: false
 };
 
+export interface Options {
+  readonly blockOrder: NodeTypes;
+  readonly moduleOrder: NodeTypes;
+  readonly order: NodeTypes;
+  readonly programOrder: NodeTypes;
+}
+
 type NodeTypes = readonly NodeType[];
 
 /**
@@ -160,8 +160,8 @@ function isIdentifier(node: TSESTree.Node, ...names: strings): boolean {
  * @param order - Order by node type.
  * @returns Sorting order function.
  */
-function sortingOrder(order: NodeTypes) {
-  return (node: TSESTree.Node): string => {
+function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
+  return node => {
     switch (node.type) {
       case AST_NODE_TYPES.ExportAllDeclaration:
         return buildResult(

@@ -82,10 +82,7 @@ export const configs = {
   },
   "vue": {
     plugins: ["@skylib/eslint-plugin"],
-    rules: {
-      ...rules(vue),
-      "@skylib/typescript/no-complex-return-type": "off"
-    }
+    rules: { ...rules(vue), "@skylib/typescript/no-complex-return-type": "off" }
   }
 } as const;
 

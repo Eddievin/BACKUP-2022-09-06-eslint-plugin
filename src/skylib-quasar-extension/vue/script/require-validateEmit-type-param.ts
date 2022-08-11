@@ -1,8 +1,9 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
+/* eslint-disable @skylib/consistent-filename -- Postponed */
 
 import * as utils from "../../../utils";
 import { misc } from "../../../misc";
 
+// eslint-disable-next-line @skylib/max-identifier-blocks -- Postponed
 export const requireValidateEmitTypeParam = utils.wrapRule(
   misc["no-restricted-syntax"],
   [

@@ -4,13 +4,6 @@ import fs from "node:fs";
 import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 
-export interface SubOptions {
-  readonly allow: boolean;
-  readonly levels: stringsArray;
-}
-
-export type stringsArray = readonly strings[];
-
 export enum MessageId {
   disallowedSource = "disallowedSource"
 }
@@ -92,3 +85,10 @@ export const noSiblingImport = utils.createRule({
     });
   }
 });
+
+export interface SubOptions {
+  readonly allow: boolean;
+  readonly levels: stringsArray;
+}
+
+export type stringsArray = readonly strings[];

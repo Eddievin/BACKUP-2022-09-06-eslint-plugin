@@ -10,17 +10,6 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
 import type { strings } from "@skylib/functions";
 
-export interface SubOptions {
-  readonly _id: string;
-  readonly altLocalNames: strings;
-  readonly autoImport: boolean;
-  readonly autoImportSource?: string;
-  readonly localName?: string;
-  readonly source: string;
-  readonly sourcePattern?: string;
-  readonly wildcard: boolean;
-}
-
 export enum MessageId {
   autoImport = "autoImport",
   invalidLocalName = "invalidLocalName",
@@ -58,9 +47,10 @@ export const consistentImport = utils.createRule({
   create: (context): RuleListener => {
     const eol = context.eol;
 
+    // eslint-disable-next-line @skylib/functions/prefer-ReadonlySet -- Postponed
     const identifiers = new Set<string>();
 
-    // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
+    // eslint-disable-next-line @skylib/typescript/prefer-readonly-array, @skylib/typescript/prefer-array-type-alias -- Postponed
     const importDeclarations: TSESTree.ImportDeclaration[] = [];
 
     return {
@@ -284,6 +274,17 @@ export const consistentImport = utils.createRule({
     }
   }
 });
+
+export interface SubOptions {
+  readonly _id: string;
+  readonly altLocalNames: strings;
+  readonly autoImport: boolean;
+  readonly autoImportSource?: string;
+  readonly localName?: string;
+  readonly source: string;
+  readonly sourcePattern?: string;
+  readonly wildcard: boolean;
+}
 
 interface SubOptionsExtended extends SubOptions {
   readonly localName: string;

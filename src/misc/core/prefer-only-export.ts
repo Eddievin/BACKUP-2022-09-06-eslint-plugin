@@ -1,11 +1,6 @@
 import * as utils from "../../utils";
 import { a, is } from "@skylib/functions";
 
-export interface Options {
-  readonly exportMatchingFilename: boolean;
-  readonly selector: utils.Selector;
-}
-
 export enum MessageId {
   invalidExport = "invalidExport"
 }
@@ -54,3 +49,8 @@ export const preferOnlyExport = utils.createRule({
     );
   }
 });
+
+export interface Options {
+  readonly exportMatchingFilename: boolean;
+  readonly selector: utils.Selector;
+}

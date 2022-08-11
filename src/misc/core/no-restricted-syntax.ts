@@ -5,14 +5,6 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 
-export interface Options {
-  readonly ignoreSelector: utils.Selector;
-  readonly message?: string;
-  readonly replacement?: string;
-  readonly search?: string;
-  readonly selector: utils.Selector;
-}
-
 export enum MessageId {
   customMessage = "customMessage"
 }
@@ -79,7 +71,7 @@ export const noRestrictedSyntax = utils.createRule({
                   range: node.range,
                   text: is.not.empty(search)
                     ? context.getText(node).replace(
-                        // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                        // eslint-disable-next-line security/detect-non-literal-regexp -- Postponed
                         new RegExp(search, "u"),
                         replacement
                       )
@@ -93,3 +85,11 @@ export const noRestrictedSyntax = utils.createRule({
     }
   }
 });
+
+export interface Options {
+  readonly ignoreSelector: utils.Selector;
+  readonly message?: string;
+  readonly replacement?: string;
+  readonly search?: string;
+  readonly selector: utils.Selector;
+}

@@ -1,3 +1,3 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
+/* eslint-disable @skylib/consistent-filename -- Postponed */
 
 export {};

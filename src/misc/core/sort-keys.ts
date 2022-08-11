@@ -6,14 +6,6 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-export interface SubOptions {
-  readonly _id: string;
-  readonly customOrder?: strings;
-  readonly selector: utils.Selector;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-}
-
 export enum MessageId {
   expectingObject = "expectingObject"
 }
@@ -69,6 +61,14 @@ export const sortKeys = utils.createRule({
     }
   }
 });
+
+export interface SubOptions {
+  readonly _id: string;
+  readonly customOrder?: strings;
+  readonly selector: utils.Selector;
+  readonly sendToBottom?: string;
+  readonly sendToTop?: string;
+}
 
 interface Item {
   readonly node: TSESTree.ObjectExpression;

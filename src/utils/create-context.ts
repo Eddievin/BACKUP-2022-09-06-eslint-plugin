@@ -1,17 +1,22 @@
+/* eslint-disable @skylib/no-sibling-import -- Postponed */
 /* eslint-disable @skylib/only-export-name -- Postponed */
 
-/* eslint-disable @skylib/custom/prefer-arrow-function-property -- Postponed */
-
 import type * as estree from "estree";
+// eslint-disable-next-line @typescript-eslint/no-shadow -- Postponeds
+import type { Context, Range } from "./types";
 import type { CreateRuleOptions, SharedOptions2 } from "./core";
 import { assert, cast, evaluate, is, o, s } from "@skylib/functions";
 import { createFileMatcher, getPackage, stripBase } from "./core";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { Context } from "./types";
 import type { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import nodePath from "node:path";
 import type { unknowns } from "@skylib/functions";
+
+const isSharedOptions2 = is.object.factory<SharedOptions2>(
+  {},
+  { _id: is.string, filesToLint: is.strings, filesToSkip: is.strings }
+);
 
 /**
  * Creates better context.
@@ -40,6 +45,16 @@ export function createBetterContext<
   const code = source.getText();
 
   const _package = getPackage();
+
+  const getText = (
+    mixed: Range | TSESTree.Comment | TSESTree.Node | number
+  ): string => {
+    if (is.number(mixed)) return code.slice(mixed);
+
+    if (is.array(mixed)) return code.slice(...mixed);
+
+    return code.slice(...mixed.range);
+  };
 
   return {
     eol: s.detectEol(code),
@@ -70,13 +85,13 @@ export function createBetterContext<
 
       return [pos, end];
     },
-    getLoc(range): estree.SourceLocation {
-      return {
-        end: source.getLocFromIndex(range[1]),
-        start: source.getLocFromIndex(range[0])
-      };
-    },
-    getMemberName(node: TSESTree.ClassElement | TSESTree.TypeElement): string {
+    getLoc: (range): estree.SourceLocation => ({
+      end: source.getLocFromIndex(range[1]),
+      start: source.getLocFromIndex(range[0])
+    }),
+    getMemberName: (
+      node: TSESTree.ClassElement | TSESTree.TypeElement
+    ): string => {
       switch (node.type) {
         case AST_NODE_TYPES.MethodDefinition:
         case AST_NODE_TYPES.PropertyDefinition:
@@ -92,7 +107,7 @@ export function createBetterContext<
               return cast.string(node.key.value);
 
             default:
-              return this.getText(node.key);
+              return getText(node.key);
           }
 
         case AST_NODE_TYPES.StaticBlock:
@@ -102,16 +117,9 @@ export function createBetterContext<
           return "";
       }
     },
-    getText: mixed => {
-      if (is.number(mixed)) return code.slice(mixed);
-
-      if (is.array(mixed)) return code.slice(...mixed);
-
-      return code.slice(...mixed.range);
-    },
-    hasTrailingComment(node): boolean {
-      return code.slice(node.range[1]).trimStart().startsWith("//");
-    },
+    getText,
+    hasTrailingComment: (node): boolean =>
+      code.slice(node.range[1]).trimStart().startsWith("//"),
     id,
     isAdjacentNodes: (node1: TSESTree.Node, node2: TSESTree.Node): boolean => {
       if (node1.parent === node2.parent) {
@@ -181,11 +189,6 @@ export function createBetterContext<
     subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, path)
   };
 }
-
-const isSharedOptions2 = is.object.factory<SharedOptions2>(
-  {},
-  { _id: is.string, filesToLint: is.strings, filesToSkip: is.strings }
-);
 
 /**
  * Gets rule options.

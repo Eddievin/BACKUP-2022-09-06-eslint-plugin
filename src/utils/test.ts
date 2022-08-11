@@ -1,4 +1,5 @@
-/* eslint-disable @skylib/custom/no-literal-union-type -- Ok */
+/* eslint-disable @skylib/no-sibling-import -- Postponed */
+/* eslint-disable @skylib/typescript/prefer-array-type-alias -- Postponed */
 
 import type {
   InvalidTestCase as BaseInvalidTestCase,
@@ -19,6 +20,7 @@ export interface InvalidTestCase<M extends string, O extends readonly unknown[]>
 }
 
 export type SourceFile =
+  // eslint-disable-next-line @skylib/typescript/prefer-enum -- Postponed
   | "camelCase.camelCase.ts"
   | "camelCase.ts"
   | "Component.vue"

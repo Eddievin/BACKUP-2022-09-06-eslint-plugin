@@ -1,4 +1,4 @@
-// eslint-disable-next-line @skylib/disallow-import/project -- Ok
+// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import * as ts from "typescript";
 import * as utils from "../../utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";

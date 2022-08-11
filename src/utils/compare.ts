@@ -1,4 +1,4 @@
-// eslint-disable-next-line @skylib/disallow-import/project -- Ok
+// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import naturalCompare from "natural-compare";
 
 /**

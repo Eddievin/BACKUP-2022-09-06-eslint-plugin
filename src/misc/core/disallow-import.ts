@@ -2,11 +2,6 @@ import * as utils from "../../utils";
 import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
 
-export interface Options {
-  readonly allow: strings;
-  readonly disallow: strings;
-}
-
 export enum MessageId {
   disallowedSource = "disallowedSource"
 }
@@ -35,3 +30,8 @@ export const disallowImport = utils.createRule({
     });
   }
 });
+
+export interface Options {
+  readonly allow: strings;
+  readonly disallow: strings;
+}

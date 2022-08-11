@@ -1,4 +1,4 @@
-// eslint-disable-next-line @skylib/consistent-import, @skylib/disallow-import/project, import/no-unassigned-import -- Ok
+// eslint-disable-next-line @skylib/consistent-import, @skylib/disallow-import, import/no-unassigned-import -- Postponed
 import "typescript";
 
 declare module "typescript" {
@@ -10,6 +10,7 @@ declare module "typescript" {
      * @param propertyName - Property name.
      * @returns Type of property of type.
      */
+    // eslint-disable-next-line @skylib/max-identifier-blocks -- Postponed
     readonly getTypeOfPropertyOfType: (
       type: Type,
       propertyName: string

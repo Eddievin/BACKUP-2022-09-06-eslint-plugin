@@ -7,7 +7,7 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { Type } from "./source.internal";
 
 export const create = defineFn(
-  // eslint-disable-next-line @skylib/require-jsdoc/functions -- Postponed
+  // eslint-disable-next-line @skylib/functions/require-jsdoc -- Postponed
   (callback: Callback): RuleListener => ({
     CallExpression: node => {
       if (

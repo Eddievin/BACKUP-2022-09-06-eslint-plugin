@@ -1,4 +1,6 @@
-/* eslint-disable @skylib/custom/prefer-readonly-array -- Postponed */
+/* eslint-disable @skylib/no-sibling-import -- Postponed */
+/* eslint-disable @skylib/typescript/prefer-array-type-alias -- Postponed */
+/* eslint-disable @skylib/typescript/prefer-readonly-array -- Postponed */
 
 import type { Writable, numberU, stringU, strings } from "@skylib/functions";
 import { a, as, defineFn, fn, is } from "@skylib/functions";

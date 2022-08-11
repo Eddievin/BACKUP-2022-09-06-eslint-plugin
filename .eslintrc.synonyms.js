@@ -1,10 +1,10 @@
 module.exports = [
-  "@skylib/custom/project/no-ast",
-  "@skylib/custom/project/no-test-only",
-  "@skylib/disallow-import/project",
-  "@skylib/match-filename/project/createRule",
-  "@skylib/match-filename/project/createRule-name",
-  "@skylib/match-filename/project/testRule-name",
-  "@skylib/match-filename/project/testRule-rule",
-  "@skylib/match-filename/project/wrapRule"
+  "@skylib/no-restricted-syntax/no-ast",
+  "@skylib/no-restricted-syntax/no-test-only",
+  "@skylib/disallow-import",
+  "@skylib/match-filename/createRule",
+  "@skylib/match-filename/createRule-name",
+  "@skylib/match-filename/testRule-name",
+  "@skylib/match-filename/testRule-rule",
+  "@skylib/match-filename/wrapRule"
 ];

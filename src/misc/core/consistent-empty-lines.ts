@@ -8,13 +8,6 @@ import { a, evaluate, is, s } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 
-export interface SubOptions {
-  readonly _id: string;
-  readonly emptyLine: EmptyLine;
-  readonly next: utils.Selector;
-  readonly prev: utils.Selector;
-}
-
 export enum EmptyLine {
   always = "always",
   any = "any",
@@ -52,6 +45,7 @@ export const consistentEmptyLines = utils.createRule({
 
     return utils.mergeListenters(
       ...context.subOptionsArray.flatMap(
+        // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
         (subOptions, index): readonly RuleListener[] => {
           const prev = a.fromMixed(subOptions.prev).join(", ");
 
@@ -73,7 +67,9 @@ export const consistentEmptyLines = utils.createRule({
       ),
       {
         "Program:exit": () => {
+          // eslint-disable-next-line @skylib/functions/array/prefer-sort -- Postponed
           prevItems.sort(reverseCompare);
+          // eslint-disable-next-line @skylib/functions/array/prefer-sort -- Postponed
           nextItems.sort(reverseCompare);
 
           const items = _.uniqBy(
@@ -139,6 +135,13 @@ export const consistentEmptyLines = utils.createRule({
     );
   }
 });
+
+export interface SubOptions {
+  readonly _id: string;
+  readonly emptyLine: EmptyLine;
+  readonly next: utils.Selector;
+  readonly prev: utils.Selector;
+}
 
 interface Item {
   readonly index: number;

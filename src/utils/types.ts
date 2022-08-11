@@ -7,7 +7,6 @@ import type {
   SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { s, unknowns } from "@skylib/functions";
-import type { KebabCase } from "type-fest";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 
@@ -95,7 +94,7 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly options: O;
   readonly package: Package;
   readonly path: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Ok
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
   readonly rawContext: Readonly<RuleContext<any, any>>;
   /**
    * Reports error.
@@ -115,10 +114,6 @@ export interface DefineTemplateBodyVisitor {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
   (templateVisitor: any, scriptVisitor?: any, options?: any): RuleListener;
 }
-
-export type KeysToKebabCase<T> = {
-  [K in string & keyof T as KebabCase<K>]: T[K];
-};
 
 export interface Package {
   readonly name?: string;

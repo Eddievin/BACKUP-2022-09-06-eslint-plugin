@@ -5,11 +5,6 @@ import type {
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import { a, is, num, s } from "@skylib/functions";
 
-export interface Options {
-  readonly maxLineLength: number;
-  readonly maxObjectSize: number;
-}
-
 export enum MessageId {
   preferMultiline = "preferMultiline",
   preferSingleLine = "preferSingleLine"
@@ -88,6 +83,11 @@ export const objectFormat = utils.createRule({
     };
   }
 });
+
+export interface Options {
+  readonly maxLineLength: number;
+  readonly maxObjectSize: number;
+}
 
 /**
  * Returns first line.

@@ -1,10 +1,10 @@
+/* eslint-disable @skylib/no-sibling-import -- Postponed */
 /* eslint-disable complexity -- Postponed */
-
 /* eslint-disable @skylib/require-jsdoc -- Postponed */
 
-// eslint-disable-next-line @skylib/disallow-import/project -- Ok
+// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import * as ts from "typescript";
-// eslint-disable-next-line @skylib/disallow-import/project -- Ok
+// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import * as tsutils from "tsutils";
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
 import type { NumStrU, unknowns } from "@skylib/functions";
@@ -16,51 +16,6 @@ import type { TypeGroups } from "./types";
 
 export class TypeCheck {
   public readonly checker: ts.TypeChecker;
-
-  /**
-   * Checks if type is boolean.
-   *
-   * @param type - Type.
-   * @returns _True_ if type is boolean, _false_ otherwise.
-   */
-  public readonly isBoolish = (type: ts.Type): boolean => {
-    if (safeTypes.has(type.getFlags())) return true;
-
-    if (tsutils.isUnionType(type)) {
-      const parts = tsutils.unionTypeParts(type);
-
-      if (parts.length === 2) {
-        if (
-          parts.some(part => tsutils.isBooleanLiteralType(part, true)) &&
-          parts.some(part => tsutils.isBooleanLiteralType(part, false))
-        )
-          return true;
-
-        if (
-          parts.some(part => tsutils.isBooleanLiteralType(part, true)) &&
-          parts.some(part => part.getFlags() === ts.TypeFlags.Undefined)
-        )
-          return true;
-
-        if (
-          parts.some(part => tsutils.isObjectType(part)) &&
-          parts.some(part => part.getFlags() === ts.TypeFlags.Undefined)
-        )
-          return true;
-
-        if (
-          parts.some(part => safeTypesWithUndefined.has(part.getFlags())) &&
-          parts.some(part => part.getFlags() === ts.TypeFlags.Undefined)
-        )
-          return true;
-      }
-    }
-
-    return false;
-  };
-
-  public readonly isObjectType = (type: ts.Type): type is ts.ObjectType =>
-    tsutils.isObjectType(type);
 
   /**
    * Creates class instance.
@@ -77,11 +32,8 @@ export class TypeCheck {
       ),
       'Expecting "strictNullChecks" compiler option to be enabled'
     );
-
     this.checker = parser.program.getTypeChecker();
-
     this.code = context.getSourceCode().getText();
-
     this.toTsNode = parser.esTreeNodeToTSNodeMap.get.bind(
       parser.esTreeNodeToTSNodeMap
     );
@@ -168,6 +120,51 @@ export class TypeCheck {
   ): type is ts.TupleTypeReference | ts.TypeReference {
     return this.checker.isArrayType(type) || this.checker.isTupleType(type);
   }
+
+  /**
+   * Checks if type is boolean.
+   *
+   * @param type - Type.
+   * @returns _True_ if type is boolean, _false_ otherwise.
+   */
+  public readonly isBoolish = (type: ts.Type): boolean => {
+    if (safeTypes.has(type.getFlags())) return true;
+
+    if (tsutils.isUnionType(type)) {
+      const parts = tsutils.unionTypeParts(type);
+
+      if (parts.length === 2) {
+        if (
+          parts.some(part => tsutils.isBooleanLiteralType(part, true)) &&
+          parts.some(part => tsutils.isBooleanLiteralType(part, false))
+        )
+          return true;
+
+        if (
+          parts.some(part => tsutils.isBooleanLiteralType(part, true)) &&
+          parts.some(part => part.getFlags() === ts.TypeFlags.Undefined)
+        )
+          return true;
+
+        if (
+          parts.some(part => tsutils.isObjectType(part)) &&
+          parts.some(part => part.getFlags() === ts.TypeFlags.Undefined)
+        )
+          return true;
+
+        if (
+          parts.some(part => safeTypesWithUndefined.has(part.getFlags())) &&
+          parts.some(part => part.getFlags() === ts.TypeFlags.Undefined)
+        )
+          return true;
+      }
+    }
+
+    return false;
+  };
+
+  public readonly isObjectType = (type: ts.Type): type is ts.ObjectType =>
+    tsutils.isObjectType(type);
 
   public isReadonlyProperty(property: ts.Symbol, type: ts.Type): boolean {
     return tsutils.isPropertyReadonlyInType(
@@ -371,24 +368,6 @@ export class TypeCheck {
 
   protected readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
 
-  protected readonly zzz = (
-    type: ts.Type,
-    ...flags: readonly ts.TypeFlags[]
-  ): boolean => {
-    if (type.isTypeParameter()) {
-      const constraint = type.getConstraint();
-
-      if (is.not.empty(constraint)) type = constraint;
-      else return flags.includes(ts.TypeFlags.Unknown);
-    }
-
-    return (
-      flags.includes(type.getFlags()) ||
-      (type.isUnion() &&
-        type.types.every(subtype => flags.includes(subtype.getFlags())))
-    );
-  };
-
   /**
    * Gets type parts.
    *
@@ -409,6 +388,25 @@ export class TypeCheck {
       return [type];
     }
   }
+
+  protected readonly zzz = (
+    type: ts.Type,
+    // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
+    ...flags: readonly ts.TypeFlags[]
+  ): boolean => {
+    if (type.isTypeParameter()) {
+      const constraint = type.getConstraint();
+
+      if (is.not.empty(constraint)) type = constraint;
+      else return flags.includes(ts.TypeFlags.Unknown);
+    }
+
+    return (
+      flags.includes(type.getFlags()) ||
+      (type.isUnion() &&
+        type.types.every(subtype => flags.includes(subtype.getFlags())))
+    );
+  };
 }
 
 export namespace TypeCheck {

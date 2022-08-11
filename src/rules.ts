@@ -13,7 +13,7 @@ import { vue } from "./vue";
 
 // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
 // fixme - Remove evaluate
-// eslint-disable-next-line @skylib/custom/no-complex-type-in-variable-declaration, @skylib/custom/no-complex-type-in-function-return -- Ok
+// eslint-disable-next-line @skylib/typescript/no-complex-return-type -- Postponed
 export const rules = evaluate(() => {
   const result = {
     ...misc,

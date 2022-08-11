@@ -1,3 +1,5 @@
+/* eslint-disable @skylib/consistent-import -- Postponed */
+
 export * as casing from "./casing";
 
 export * from "./core";

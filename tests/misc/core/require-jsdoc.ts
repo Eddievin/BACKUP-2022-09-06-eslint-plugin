@@ -1,7 +1,9 @@
-import * as utils from "@/utils";
+/* eslint-disable @skylib/no-at-sign-internal-import -- Postponed */
+/* eslint-disable @skylib/no-internal-modules -- Postponed */
+
 import { InterfaceOption, PropertyOption } from "@/misc/core/require-jsdoc";
+import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
-import { rules } from "@";
 
 const rule = rules["require-jsdoc"];
 

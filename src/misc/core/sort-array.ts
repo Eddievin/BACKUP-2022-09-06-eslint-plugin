@@ -5,14 +5,6 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
-export interface Options {
-  readonly customOrder?: strings;
-  readonly key?: string;
-  readonly selector: utils.Selector;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-}
-
 export enum MessageId {
   expectingArray = "expectingArray"
 }
@@ -69,3 +61,11 @@ export const sortArray = utils.createRule({
     }
   }
 });
+
+export interface Options {
+  readonly customOrder?: strings;
+  readonly key?: string;
+  readonly selector: utils.Selector;
+  readonly sendToBottom?: string;
+  readonly sendToTop?: string;
+}

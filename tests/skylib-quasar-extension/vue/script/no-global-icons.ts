@@ -1,6 +1,5 @@
-import * as utils from "@/utils";
+import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
-import { rules } from "@";
 
 const rule = rules["quasar-extension/vue/script/no-global-icons"];
 

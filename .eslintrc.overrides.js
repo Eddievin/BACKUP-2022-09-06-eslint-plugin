@@ -1,8 +1,9 @@
 module.exports = {
   extends: [
-    "./node_modules/@skylib/config/src/eslintrc.allow-nodejs-modules",
-    "./node_modules/@skylib/config/src/eslintrc.allow-type-assertions",
-    "./node_modules/@skylib/config/src/eslintrc.allow-require",
-    "./node_modules/@skylib/config/src/eslintrc.allow-require-unsafe"
+    "plugin:@skylib/functions",
+    "./node_modules/@skylib/config/src/eslintrc/options/allow-nodejs-modules",
+    "./node_modules/@skylib/config/src/eslintrc/options/allow-type-assertions",
+    "./node_modules/@skylib/config/src/eslintrc/options/allow-require",
+    "./node_modules/@skylib/config/src/eslintrc/options/allow-require-unsafe"
   ]
 };

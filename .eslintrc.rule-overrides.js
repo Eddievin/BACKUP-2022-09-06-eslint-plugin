@@ -1,26 +1,25 @@
-// eslint-disable-next-line @skylib/disallow-import/no-internal-modules -- Wait for @skylib/config update
 const { eslint } = require("@skylib/config/api");
 
-const consistentImport = eslint.rules["@skylib/consistent-import/project"];
+const consistentImport = eslint.rules["@skylib/consistent-import"];
 
 module.exports = {
   rules: {
-    "@skylib/consistent-import/project": [
+    "@skylib/consistent-import": [
       "warn",
       {
         sources: [
+          ...consistentImport.sources,
           {
             _id: "utils",
             autoImport: true,
             autoImportSource: "@/utils",
             source: "@skylib/eslint-plugin/src/utils",
-            type: "wildcard"
-          },
-          ...consistentImport.sources
+            wildcard: true
+          }
         ]
       }
     ],
-    "@skylib/disallow-import/project": [
+    "@skylib/disallow-import": [
       "warn",
       { disallow: ["{natural-compare,tsutils,typescript}"] }
     ]
@@ -29,27 +28,7 @@ module.exports = {
     {
       files: ["./src/misc/core/*", "./src/typescript/core/*"],
       rules: {
-        "@skylib/disallow-import/no-relative-parent-imports": [
-          "warn",
-          {
-            disallow: [
-              "../**",
-              "../../**",
-              "../../../**",
-              "../../../../**",
-              "../../../../../**"
-            ],
-            allow: [
-              "../../../misc",
-              "../../../utils",
-              "../../misc",
-              "../../utils",
-              "../misc",
-              "../utils"
-            ]
-          }
-        ],
-        "@skylib/match-filename/project/createRule": [
+        "@skylib/match-filename/createRule": [
           "warn",
           {
             format: "camelCase",
@@ -57,15 +36,35 @@ module.exports = {
               "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > Identifier.id"
           }
         ],
-        "@skylib/match-filename/project/createRule-name": [
+        "@skylib/match-filename/createRule-name": [
           "warn",
           {
-            format: "kebabCase",
+            format: "kebab-case",
             selector:
               "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > CallExpression > ObjectExpression > Property[key.name=name] > Literal.value"
           }
         ],
-        // eslint-disable-next-line @skylib/custom/eslintrc-no-disable -- Ok
+        "@skylib/no-relative-parent-import": [
+          "warn",
+          {
+            allow: [
+              "../../../misc",
+              "../../../utils",
+              "../../misc",
+              "../../utils",
+              "../misc",
+              "../utils"
+            ],
+            disallow: [
+              "../**",
+              "../../**",
+              "../../../**",
+              "../../../../**",
+              "../../../../../**"
+            ]
+          }
+        ],
+        // eslint-disable-next-line @skylib/config/eslintrc-no-disable -- Postponed
         "@skylib/primary-export-only": "off",
         "@skylib/sort-keys": [
           "warn",
@@ -91,7 +90,7 @@ module.exports = {
             ]
           }
         ],
-        "@skylib/statements-order": [
+        "@skylib/sort-statements": [
           "warn",
           {
             rootOrder: [
@@ -117,16 +116,17 @@ module.exports = {
     {
       files: "./src/**",
       rules: {
-        "@skylib/disallow-import/no-relative-parent-imports": [
+        "@skylib/match-filename/wrapRule": [
           "warn",
           {
-            disallow: [
-              "../**",
-              "../../**",
-              "../../../**",
-              "../../../../**",
-              "../../../../../**"
-            ],
+            format: "camelCase",
+            selector:
+              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
+          }
+        ],
+        "@skylib/no-relative-parent-import": [
+          "warn",
+          {
             allow: [
               "../../../misc",
               "../../../typescript",
@@ -135,55 +135,54 @@ module.exports = {
               "../../typescript",
               "../../utils",
               "../misc",
-              "../utils",
-              "../typescript"
+              "../typescript",
+              "../utils"
+            ],
+            disallow: [
+              "../**",
+              "../../**",
+              "../../../**",
+              "../../../../**",
+              "../../../../../**"
             ]
           }
         ],
-        "@skylib/match-filename/project/wrapRule": [
-          "warn",
-          {
-            format: "camelCase",
-            selector:
-              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
-          }
-        ],
-        // eslint-disable-next-line @skylib/custom/eslintrc-no-disable -- Ok
+        // eslint-disable-next-line @skylib/config/eslintrc-no-disable -- Postponed
         "@skylib/primary-export-only": "off"
       }
     },
     {
       files: "./tests/**",
       rules: {
-        "@skylib/custom/project/no-ast": [
+        "@skylib/match-filename/testRule-name": [
+          "warn",
+          {
+            format: "kebab-case",
+            selector:
+              "CallExpression[callee.object.name=utils][callee.property.name=testRule] > Literal:first-child"
+          }
+        ],
+        "@skylib/match-filename/testRule-rule": [
+          "off",
+          {
+            format: "kebab-case",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ],
+        "@skylib/no-restricted-syntax/no-ast": [
           "warn",
           {
             message: "Prefer string literal",
             selector: "Identifier[name=AST_NODE_TYPES]"
           }
         ],
-        "@skylib/custom/project/no-test-only": [
+        "@skylib/no-restricted-syntax/no-test-only": [
           "warn",
           {
             message: "No skipped tests",
             selector:
               "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression > Property > Identifier.key[name=only]"
-          }
-        ],
-        "@skylib/match-filename/project/testRule-name": [
-          "warn",
-          {
-            format: "kebabCase",
-            selector:
-              "CallExpression[callee.object.name=utils][callee.property.name=testRule] > Literal:first-child"
-          }
-        ],
-        "@skylib/match-filename/project/testRule-rule": [
-          "off",
-          {
-            format: "kebabCase",
-            selector:
-              "VariableDeclarator[id.name=rule] > .init > Literal.property"
           }
         ],
         "@skylib/sort-keys": [

@@ -1,4 +1,4 @@
-// eslint-disable-next-line @skylib/disallow-import/project -- Ok
+// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import type * as ts from "typescript";
 import * as utils from "../../utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
@@ -6,14 +6,6 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
-
-export interface Options {
-  readonly excludeSelectors: strings;
-  readonly includeSelectors: strings;
-  readonly interfaces: readonly InterfaceOption[];
-  readonly noDefaultSelectors: boolean;
-  readonly properties: readonly PropertyOption[];
-}
 
 export enum PropertyOption {
   function = "function",
@@ -160,6 +152,7 @@ export const requireJsdoc = utils.createRule({
         } else context.report({ messageId: MessageId.undocumented, node });
     }
 
+    // eslint-disable-next-line @skylib/max-identifier-blocks -- Postponed
     function lintNodeByTypeSymbol(node: TSESTree.Node): void {
       const type = typeCheck.getType(node);
 
@@ -205,3 +198,13 @@ const defaultSelectors: strings = [
   AST_NODE_TYPES.TSMethodSignature,
   AST_NODE_TYPES.TSPropertySignature
 ];
+
+export interface Options {
+  readonly excludeSelectors: strings;
+  readonly includeSelectors: strings;
+  // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
+  readonly interfaces: readonly InterfaceOption[];
+  readonly noDefaultSelectors: boolean;
+  // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
+  readonly properties: readonly PropertyOption[];
+}

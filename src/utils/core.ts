@@ -1,4 +1,6 @@
-/* eslint-disable @skylib/custom/prefer-readonly-array -- Ok */
+/* eslint-disable @skylib/no-sibling-import -- Postponed */
+/* eslint-disable @skylib/typescript/prefer-array-type-alias -- Postponed */
+/* eslint-disable @skylib/typescript/prefer-readonly-array -- Postponed */
 
 import * as _ from "@skylib/lodash-commonjs-es";
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
@@ -153,6 +155,7 @@ export function createFileMatcher(
 ): Matcher {
   if (is.strings(patterns)) {
     const matchers = patterns.map(
+      // eslint-disable-next-line @skylib/typescript/no-complex-return-type -- Postponed
       pattern =>
         (str: string): boolean =>
           minimatch(str, pattern, options)
@@ -188,8 +191,9 @@ export function createRegexpMatcher(
   if (is.string(pattern)) return createRegexpMatcher([pattern], defVal);
 
   const matchers = pattern
-    // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+    // eslint-disable-next-line security/detect-non-literal-regexp -- Postponed
     .map(pt => new RegExp(pt, "u"))
+    // eslint-disable-next-line @skylib/typescript/no-complex-return-type -- Postponed
     .map(re => (str: string) => re.test(str));
 
   return matchers.length
@@ -235,7 +239,7 @@ export function createRule<
         new TypeCheck(context),
         wrapProxyHandler("classToInterface", ProxyHandlerAction.doDefault, {
           get: (target, key) => {
-            // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Postponed
+            // eslint-disable-next-line @skylib/functions/reflect/no-get -- Postponed
             const result2 = reflect.get(target, key);
 
             assert.callable<types.fn.Callable>(result2, "Expecting function");
@@ -346,6 +350,7 @@ export function getSelectors(
 // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 export function mergeListenters(...listenters: RuleListeners): RuleListener {
   const visitorsMap = new Accumulator(
+    // eslint-disable-next-line @skylib/typescript/no-complex-return-type -- Postponed
     listenters.flatMap(visitors =>
       o
         .entries(visitors)
@@ -403,7 +408,7 @@ export function nodeText(
   }
 }
 
-// eslint-disable-next-line @skylib/require-jsdoc -- Ok
+// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 export function prefixKeys<T, P extends string>(
   prefix: P,
   obj: T
@@ -423,7 +428,7 @@ export function prepareForComparison(str: string, priority: string): string {
     keys.map((key, index) => [key, a.get(values, index)])
   );
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Postponed
   const re = new RegExp(`[${s.escapeRegExpSpecialChars(priority)}]`, "gu");
 
   return str.replace(re, callback);
@@ -470,7 +475,7 @@ export function wrapRule<M extends string, O extends readonly unknown[]>(
           {} as Readonly<RuleContext<never, never>>,
           wrapProxyHandler("wrap-rule", ProxyHandlerAction.throw, {
             get: (_target, key) =>
-              // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Postponed
+              // eslint-disable-next-line @skylib/functions/reflect/no-get -- Postponed
               key === "options" ? combined : reflect.get(context, key)
           })
         )

@@ -2,12 +2,6 @@ import * as utils from "../../utils";
 import { a, assert, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 
-export interface Options {
-  readonly message?: string;
-  readonly selector: utils.Selector;
-  readonly trigger: utils.Selector;
-}
-
 export enum MessageId {
   customMessage = "customMessage"
 }
@@ -61,3 +55,9 @@ export const requireSyntax = utils.createRule({
     };
   }
 });
+
+export interface Options {
+  readonly message?: string;
+  readonly selector: utils.Selector;
+  readonly trigger: utils.Selector;
+}

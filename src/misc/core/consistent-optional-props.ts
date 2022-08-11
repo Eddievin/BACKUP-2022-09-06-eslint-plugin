@@ -5,19 +5,6 @@ import type { IndexedRecord } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-export interface Options {
-  readonly classes: Style;
-  readonly interfaces: Style;
-}
-
-export interface SubOptions {
-  readonly _id: string;
-  readonly pattern: utils.Pattern;
-  readonly propertyPattern: utils.Pattern;
-  readonly style: Style;
-  readonly target?: Target;
-}
-
 export enum MessageId {
   combined = "combined",
   combinedId = "combinedId",
@@ -203,6 +190,19 @@ const exclusionTypes = new ReadonlySet([
 ]);
 
 const exclusionStyles = new ReadonlySet([Style.combined, Style.optional]);
+
+export interface Options {
+  readonly classes: Style;
+  readonly interfaces: Style;
+}
+
+export interface SubOptions {
+  readonly _id: string;
+  readonly pattern: utils.Pattern;
+  readonly propertyPattern: utils.Pattern;
+  readonly style: Style;
+  readonly target?: Target;
+}
 
 interface Matchers {
   readonly matcher: utils.Matcher;

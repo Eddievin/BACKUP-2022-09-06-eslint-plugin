@@ -5,10 +5,6 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
-export interface Options {
-  readonly sortingOrder: strings;
-}
-
 export const sortClassMembers = utils.createRule({
   name: "sort-class-members",
   fixable: utils.Fixable.code,
@@ -83,7 +79,6 @@ enum DynamicStatic {
 enum Type {
   accessor = "accessor",
   block = "block",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
   constructor = "constructor",
   field = "field",
   get = "get",
@@ -96,6 +91,10 @@ const functionExpressions = new ReadonlySet([
   AST_NODE_TYPES.ArrowFunctionExpression,
   AST_NODE_TYPES.FunctionExpression
 ]);
+
+export interface Options {
+  readonly sortingOrder: strings;
+}
 
 type Types = readonly Type[];
 

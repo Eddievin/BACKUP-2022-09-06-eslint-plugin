@@ -1,8 +1,7 @@
-/* eslint-disable @skylib/match-filename/project/testRule-name -- Ok */
+/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
 
-import * as utils from "@/utils";
+import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
-import { rules } from "@";
 
 const rule = rules["quasar-extension/extras/no-OwnProps-extends"];
 

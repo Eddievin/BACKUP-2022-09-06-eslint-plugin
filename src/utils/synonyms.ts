@@ -9,7 +9,7 @@ import fs from "node:fs";
  * @param core - Core.
  * @returns Synonyms.
  */
-// eslint-disable-next-line @skylib/only-export-name -- Ok
+// eslint-disable-next-line @skylib/only-export-name -- Postponed
 export function getSynonyms(path: string, core: IndexedObject): IndexedObject {
   if (fs.existsSync(path)) {
     const synonyms: unknown = require(fs.realpathSync(path));
