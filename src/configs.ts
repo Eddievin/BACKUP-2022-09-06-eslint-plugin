@@ -16,11 +16,9 @@ export const configs = {
     plugins: ["@skylib/eslint-plugin"],
     rules: {
       ...rules(misc),
-      "@skylib/disallow-import": "off",
       "@skylib/match-filename": "off",
       "@skylib/no-restricted-syntax": "off",
       "@skylib/require-syntax": "off",
-      "@skylib/sort-array": "off",
       "@skylib/wrap": "off"
     }
   },

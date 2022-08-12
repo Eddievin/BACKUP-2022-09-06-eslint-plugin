@@ -17,7 +17,7 @@ export const disallowImport = utils.createRule({
     [MessageId.disallowedSource]: "Import from this source is not allowed"
   },
   create: context => {
-    const matcher = utils.createFileMatcher(context.options, true, {
+    const matcher = utils.createFileMatcher(context.options, false, {
       dot: true
     });
 
