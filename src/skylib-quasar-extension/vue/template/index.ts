@@ -1,42 +1,42 @@
 import * as utils from "../../../utils";
 import { noMixedClasses } from "./no-mixed-classes";
+import { noQBtn } from "./no-q-btn";
+import { noQCard } from "./no-q-card";
+import { noQCardActions } from "./no-q-card-actions";
+import { noQCardSection } from "./no-q-card-section";
+import { noQExpansionItem } from "./no-q-expansion-item";
+import { noQField } from "./no-q-field";
+import { noQForm } from "./no-q-form";
+import { noQInput } from "./no-q-input";
+import { noQItem } from "./no-q-item";
+import { noQKnob } from "./no-q-knob";
+import { noQMenu } from "./no-q-menu";
+import { noQOptionGroup } from "./no-q-option-group";
+import { noQPopupProxy } from "./no-q-popup-proxy";
+import { noQSelect } from "./no-q-select";
+import { noQToggle } from "./no-q-toggle";
+import { noQTooltip } from "./no-q-tooltip";
 import { preferLabelProp } from "./prefer-label-prop";
 import { preferLangVar } from "./prefer-lang-var";
-import { preferMBtn } from "./prefer-m-btn";
-import { preferMCard } from "./prefer-m-card";
-import { preferMCardActions } from "./prefer-m-card-actions";
-import { preferMCardSection } from "./prefer-m-card-section";
-import { preferMExpansionItem } from "./prefer-m-expansion-item";
-import { preferMField } from "./prefer-m-field";
-import { preferMForm } from "./prefer-m-form";
-import { preferMInput } from "./prefer-m-input";
-import { preferMItem } from "./prefer-m-item";
-import { preferMKnob } from "./prefer-m-knob";
-import { preferMMenu } from "./prefer-m-menu";
-import { preferMOptionGroup } from "./prefer-m-option-group";
-import { preferMPopupProxy } from "./prefer-m-popup-proxy";
-import { preferMSelect } from "./prefer-m-select";
-import { preferMToggle } from "./prefer-m-toggle";
-import { preferMTooltip } from "./prefer-m-tooltip";
 
 export const template = utils.prefixKeys("template/", {
   "no-mixed-classes": noMixedClasses,
+  "no-q-btn": noQBtn,
+  "no-q-card": noQCard,
+  "no-q-card-actions": noQCardActions,
+  "no-q-card-section": noQCardSection,
+  "no-q-expansion-item": noQExpansionItem,
+  "no-q-field": noQField,
+  "no-q-form": noQForm,
+  "no-q-input": noQInput,
+  "no-q-item": noQItem,
+  "no-q-knob": noQKnob,
+  "no-q-menu": noQMenu,
+  "no-q-option-group": noQOptionGroup,
+  "no-q-popup-proxy": noQPopupProxy,
+  "no-q-select": noQSelect,
+  "no-q-toggle": noQToggle,
+  "no-q-tooltip": noQTooltip,
   "prefer-label-prop": preferLabelProp,
-  "prefer-lang-var": preferLangVar,
-  "prefer-m-btn": preferMBtn,
-  "prefer-m-card": preferMCard,
-  "prefer-m-card-actions": preferMCardActions,
-  "prefer-m-card-section": preferMCardSection,
-  "prefer-m-expansion-item": preferMExpansionItem,
-  "prefer-m-field": preferMField,
-  "prefer-m-form": preferMForm,
-  "prefer-m-input": preferMInput,
-  "prefer-m-item": preferMItem,
-  "prefer-m-knob": preferMKnob,
-  "prefer-m-menu": preferMMenu,
-  "prefer-m-option-group": preferMOptionGroup,
-  "prefer-m-popup-proxy": preferMPopupProxy,
-  "prefer-m-select": preferMSelect,
-  "prefer-m-toggle": preferMToggle,
-  "prefer-m-tooltip": preferMTooltip
+  "prefer-lang-var": preferLangVar
 });
