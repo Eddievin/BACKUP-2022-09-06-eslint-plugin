@@ -142,7 +142,7 @@ export const consistentImport = utils.createRule({
     }
 
     function findSubOptions(source: string): SubOptionsExtended | undefined {
-      const subOptions = a.reverse(context.subOptionsArray).find(candidate =>
+      const subOptions = a.reverse(context.options.sources).find(candidate =>
         minimatch(source, candidate.sourcePattern ?? candidate.source, {
           dot: true
         })
@@ -155,7 +155,7 @@ export const consistentImport = utils.createRule({
 
     function lintAutoImport(node: TSESTree.Program): void {
       const fixes = _.uniq(
-        context.subOptionsArray.flatMap(subOptions => {
+        context.options.sources.flatMap(subOptions => {
           const { autoImport, autoImportSource, localName, wildcard } = {
             autoImportSource: subOptions.source,
             localName: utils.getIdentifierFromPath(subOptions.source),

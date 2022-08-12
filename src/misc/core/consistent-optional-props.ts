@@ -58,16 +58,16 @@ export const consistentOptionalProps = utils.createRule({
     [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{_id}})'
   },
   create: (context, typeCheck): RuleListener => {
-    const subOptionsArray = a.reverse(
-      context.subOptionsArray.map((subOptions): Matchers & SubOptions => {
-        const matcher = utils.createRegexpMatcher(subOptions.pattern, true);
+    const overrides = a.reverse(
+      context.options.overrides.map((override): Matchers & SubOptions => {
+        const matcher = utils.createRegexpMatcher(override.pattern, true);
 
         const properyMatcher = utils.createRegexpMatcher(
-          subOptions.propertyPattern,
+          override.propertyPattern,
           true
         );
 
-        return { ...subOptions, matcher, properyMatcher };
+        return { ...override, matcher, properyMatcher };
       })
     );
 
@@ -129,12 +129,12 @@ export const consistentOptionalProps = utils.createRule({
         });
 
         if (got) {
-          const subOptions = evaluate(() => {
+          const override = evaluate(() => {
             const propertyName = context.getMemberName(node);
 
             const targets = new ReadonlySet([target, undefined]);
 
-            return subOptionsArray.find(
+            return overrides.find(
               candidate =>
                 targets.has(candidate.target) &&
                 candidate.matcher(name) &&
@@ -143,9 +143,7 @@ export const consistentOptionalProps = utils.createRule({
           });
 
           const expected = evaluate(() => {
-            const result = subOptions
-              ? subOptions.style
-              : context.options[target];
+            const result = override ? override.style : context.options[target];
 
             return exclusionTypes.has(typeAnnotation.type) &&
               exclusionStyles.has(got) &&
@@ -155,22 +153,18 @@ export const consistentOptionalProps = utils.createRule({
           });
 
           if (expected) {
-            const data: IndexedRecord = subOptions
-              ? { _id: subOptions._id }
-              : {};
+            const data: IndexedRecord = override ? { _id: override._id } : {};
 
             const messageId = evaluate(() => {
               switch (expected) {
                 case Style.combined:
-                  return subOptions ? MessageId.combinedId : MessageId.combined;
+                  return override ? MessageId.combinedId : MessageId.combined;
 
                 case Style.optional:
-                  return subOptions ? MessageId.optionalId : MessageId.optional;
+                  return override ? MessageId.optionalId : MessageId.optional;
 
                 case Style.undefined:
-                  return subOptions
-                    ? MessageId.undefinedId
-                    : MessageId.undefined;
+                  return override ? MessageId.undefinedId : MessageId.undefined;
               }
             });
 

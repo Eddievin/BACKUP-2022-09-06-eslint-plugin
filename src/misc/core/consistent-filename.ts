@@ -31,7 +31,7 @@ export const consistentFilename = utils.createRule({
     const items: Writable<Items> = [];
 
     return utils.mergeListenters(
-      ...context.subOptionsArray.map((subOptions): RuleListener => {
+      ...context.options.overrides.map((subOptions): RuleListener => {
         const selector = a.fromMixed(subOptions.selector).join(", ");
 
         return {

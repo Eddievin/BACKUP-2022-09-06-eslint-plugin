@@ -44,22 +44,22 @@ export const consistentEmptyLines = utils.createRule({
     const nextItems: Writable<Items> = [];
 
     return utils.mergeListenters(
-      ...context.subOptionsArray.flatMap(
+      ...context.options.rules.flatMap(
         // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
-        (subOptions, index): readonly RuleListener[] => {
-          const prev = a.fromMixed(subOptions.prev).join(", ");
+        (rule, index): readonly RuleListener[] => {
+          const prev = a.fromMixed(rule.prev).join(", ");
 
-          const next = a.fromMixed(subOptions.next).join(", ");
+          const next = a.fromMixed(rule.next).join(", ");
 
           return [
             {
               [prev]: (node: TSESTree.Node) => {
-                prevItems.push({ index, node, subOptions });
+                prevItems.push({ index, node, rule });
               }
             },
             {
               [next]: (node: TSESTree.Node) => {
-                nextItems.push({ index, node, subOptions });
+                nextItems.push({ index, node, rule });
               }
             }
           ];
@@ -78,7 +78,7 @@ export const consistentEmptyLines = utils.createRule({
                 for (const prevItem of prevItems)
                   for (const nextItem of nextItems)
                     if (
-                      prevItem.subOptions._id === nextItem.subOptions._id &&
+                      prevItem.rule._id === nextItem.rule._id &&
                       context.isAdjacentNodes(prevItem.node, nextItem.node)
                     )
                       yield nextItem;
@@ -88,7 +88,7 @@ export const consistentEmptyLines = utils.createRule({
           );
 
           for (const item of items) {
-            const { _id, emptyLine } = item.subOptions;
+            const { _id, emptyLine } = item.rule;
 
             if (emptyLine === EmptyLine.any) {
               // Skip check
@@ -146,7 +146,7 @@ export interface SubOptions {
 interface Item {
   readonly index: number;
   readonly node: TSESTree.Node;
-  readonly subOptions: SubOptions;
+  readonly rule: SubOptions;
 }
 
 type Items = readonly Item[];

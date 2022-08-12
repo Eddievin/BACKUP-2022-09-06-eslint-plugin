@@ -91,7 +91,7 @@ export interface CreateRuleOptions<
    * @returns Rule listener.
    */
   readonly create: (
-    context: Context<M, O, S>,
+    context: Context<M, O, S, K>,
     typeCheck: TypeCheck
   ) => RuleListener;
   readonly defaultOptions?: Readonly<Partial<O>>;

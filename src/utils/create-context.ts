@@ -35,7 +35,7 @@ export function createBetterContext<
   context: RuleContext<M, unknowns>,
   ruleOptionsArray: unknowns,
   options: CreateRuleOptions<M, O, S, K>
-): Context<M, O, S> {
+): Context<M, O, S, K> {
   const id = context.id;
 
   const path = context.getFilename();
@@ -177,7 +177,19 @@ export function createBetterContext<
 
       return s.path.canonicalize(source2);
     },
-    options: getRuleOptions(ruleOptionsArray, options),
+    options: (is.not.empty(options.subOptionsKey)
+      ? {
+          ...getRuleOptions(ruleOptionsArray, options),
+          [options.subOptionsKey]: getSubOptionsArray(
+            ruleOptionsArray,
+            options,
+            path
+          )
+        }
+      : getRuleOptions(ruleOptionsArray, options)) as O & {
+      readonly // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
+      [L in K]: ReadonlyArray<S & SharedOptions2>;
+    },
     package: getPackage(),
     path,
     rawContext: context,
@@ -189,8 +201,7 @@ export function createBetterContext<
         if (str.endsWith(ext)) return str.slice(0, -ext.length);
 
       return str;
-    },
-    subOptionsArray: getSubOptionsArray(ruleOptionsArray, options, path)
+    }
   };
 }
 

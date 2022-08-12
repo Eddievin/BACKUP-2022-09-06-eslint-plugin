@@ -7,6 +7,8 @@ import type {
   SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { s, strings, unknowns } from "@skylib/functions";
+// eslint-disable-next-line @skylib/no-sibling-import -- Postponed
+import type { SharedOptions2 } from "./core";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 
@@ -39,7 +41,12 @@ export const isTypeGroup = is.factory(is.enumeration, TypeGroup);
 
 export const isTypeGroups = is.factory(is.array.of, isTypeGroup);
 
-export interface Context<M extends string, O extends object, S extends object> {
+export interface Context<
+  M extends string,
+  O extends object,
+  S extends object,
+  K extends string = never
+> {
   readonly eol: s.Eol;
   // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
   readonly getCommentRanges: (node: TSESTree.Node) => Ranges;
@@ -93,7 +100,10 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly locZero: TSESTree.SourceLocation;
   // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
   readonly normalizeSource: (source: string) => string;
-  readonly options: O;
+  readonly options: O & {
+    readonly // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
+    [L in K]: ReadonlyArray<S & SharedOptions2>;
+  };
   readonly package: Package;
   readonly path: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Postponed
@@ -108,7 +118,6 @@ export interface Context<M extends string, O extends object, S extends object> {
   readonly source: SourceCode;
   // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
   readonly stripExtension: (path: string) => string;
-  readonly subOptionsArray: readonly S[];
 }
 
 // eslint-disable-next-line @skylib/require-jsdoc -- Postponed

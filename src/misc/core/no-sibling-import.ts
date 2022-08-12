@@ -36,18 +36,18 @@ export const noSiblingImport = utils.createRule({
     if (basename === "index" || basename.startsWith("index.")) return {};
 
     const matcher = evaluate(() => {
-      if (context.subOptionsArray.length) {
-        const subOptions = a.last(context.subOptionsArray);
+      if (context.options.folders.length) {
+        const folder = a.last(context.options.folders);
 
-        if (subOptions.allow) return () => true;
+        if (folder.allow) return () => true;
 
-        const index = subOptions.levels.findIndex(level =>
+        const index = folder.levels.findIndex(level =>
           utils.createFileMatcher(level, false, { dot: true })(`./${basename}`)
         );
 
         if (index > 0)
           return utils.createFileMatcher(
-            subOptions.levels.slice(0, index).flat(),
+            folder.levels.slice(0, index).flat(),
             false,
             { dot: true }
           );

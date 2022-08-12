@@ -27,15 +27,15 @@ export const sortKeys = utils.createRule({
     const items: Writable<Items> = [];
 
     return utils.mergeListenters(
-      ...context.subOptionsArray.map((subOptions): RuleListener => {
-        const { _id, selector: mixed } = subOptions;
+      ...context.options.overrides.map((override): RuleListener => {
+        const { _id, selector: mixed } = override;
 
         const selector = a.fromMixed(mixed).join(", ");
 
         return {
           [selector]: (node: TSESTree.Node) => {
             if (node.type === AST_NODE_TYPES.ObjectExpression)
-              items.push({ node, options: { ...subOptions, keyNode } });
+              items.push({ node, options: { ...override, keyNode } });
             else
               context.report({
                 data: { _id },

@@ -3,10 +3,8 @@ import { misc } from "../misc";
 
 export const sortArray = utils.wrapRule(misc["sort-array"], [
   {
-    selector: [
-      "Property[key.name=files] > ArrayExpression",
-      "Property[key.name=/^(?:allow|disallow|filesToLint|filesToSkip|pattern|propertyPattern|selector)$/u] > ArrayExpression"
-    ],
+    selector:
+      "Property[key.name=/^(?:allow|disallow|files|filesToLint|filesToSkip|ignoreSelector|pattern|propertyPattern|selector)$/u] > ArrayExpression",
     triggerByComment: false
   }
 ]);
