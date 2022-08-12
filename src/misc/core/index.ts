@@ -19,6 +19,7 @@ import { sortArray } from "./sort-array";
 import { sortClassMembers } from "./sort-class-members";
 import { sortKeys } from "./sort-keys";
 import { sortStatements } from "./sort-statements";
+import { sortTopComments } from "./sort-top-comments";
 import { switchCaseSpacing } from "./switch-case-spacing";
 import { templateLiteralFormat } from "./template-literal-format";
 import { wrap } from "./wrap";
@@ -45,6 +46,7 @@ export const core = {
   "sort-class-members": sortClassMembers,
   "sort-keys": sortKeys,
   "sort-statements": sortStatements,
+  "sort-top-comments": sortTopComments,
   "switch-case-spacing": switchCaseSpacing,
   "template-literal-format": templateLiteralFormat,
   wrap

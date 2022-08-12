@@ -41,6 +41,13 @@ export const isTypeGroup = is.factory(is.enumeration, TypeGroup);
 
 export const isTypeGroups = is.factory(is.array.of, isTypeGroup);
 
+export interface Comment {
+  readonly range: TSESTree.Range;
+  readonly text: string;
+}
+
+export type Comments = readonly Comment[];
+
 export interface Context<
   M extends string,
   O extends object,

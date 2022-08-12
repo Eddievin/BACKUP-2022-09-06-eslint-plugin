@@ -58,20 +58,20 @@ export function createBetterContext<
 
   return {
     eol: s.detectEol(code),
-    getCommentRanges: (node: TSESTree.Node) =>
+    getCommentRanges: node =>
       source.getCommentsBefore(node).map(comment => comment.range),
-    getComments: (node: TSESTree.Node) =>
+    getComments: node =>
       source
         .getCommentsBefore(node)
         .map(comment => code.slice(...comment.range)),
-    getFullRange: (node: TSESTree.Node) => [
+    getFullRange: node => [
       Math.min(
         node.range[0],
         ...source.getCommentsBefore(node).map(comment => comment.range[0])
       ),
       node.range[1]
     ],
-    getFullText: (node: TSESTree.Node): string =>
+    getFullText: node =>
       code.slice(
         Math.min(
           node.range[0],
@@ -79,7 +79,7 @@ export function createBetterContext<
         ),
         node.range[1]
       ),
-    getLeadingSpaces: (node: TSESTree.Node) => {
+    getLeadingSpaces: node => {
       const end = Math.min(
         node.range[0],
         ...source.getCommentsBefore(node).map(comment => comment.range[0])
@@ -93,9 +93,7 @@ export function createBetterContext<
       end: source.getLocFromIndex(range[1]),
       start: source.getLocFromIndex(range[0])
     }),
-    getMemberName: (
-      node: TSESTree.ClassElement | TSESTree.TypeElement
-    ): string => {
+    getMemberName: node => {
       switch (node.type) {
         case AST_NODE_TYPES.MethodDefinition:
         case AST_NODE_TYPES.PropertyDefinition:
@@ -122,7 +120,7 @@ export function createBetterContext<
       }
     },
     getText,
-    hasTrailingComment: (node): boolean =>
+    hasTrailingComment: node =>
       code.slice(node.range[1]).trimStart().startsWith("//"),
     id,
     isAdjacentNodes: (node1: TSESTree.Node, node2: TSESTree.Node): boolean => {
@@ -143,7 +141,7 @@ export function createBetterContext<
       end: source.getLocFromIndex(0),
       start: source.getLocFromIndex(0)
     },
-    normalizeSource: (source2: string): string => {
+    normalizeSource: source2 => {
       source2 = evaluate(() => {
         if (source2 === "@") {
           assert.not.empty(_package.name, "Missing package name");
@@ -196,7 +194,7 @@ export function createBetterContext<
     report: context.report.bind(context),
     scope: context.getScope(),
     source,
-    stripExtension: (str: string): string => {
+    stripExtension: str => {
       for (const ext of [".js", ".ts", ".vue"])
         if (str.endsWith(ext)) return str.slice(0, -ext.length);
 
