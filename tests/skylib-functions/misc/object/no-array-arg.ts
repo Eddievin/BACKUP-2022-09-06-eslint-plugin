@@ -16,6 +16,10 @@ utils.testRule("no-array-arg", rule, [
       o.keys({});
       o.values({});
     `,
-    errors: [{ line: 1, messageId: MessageId.customMessage }]
+    errors: [
+      { line: 1, messageId: MessageId.customMessage },
+      { line: 2, messageId: MessageId.customMessage },
+      { line: 3, messageId: MessageId.customMessage }
+    ]
   }
 ]);
