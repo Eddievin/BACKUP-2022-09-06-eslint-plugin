@@ -26,7 +26,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["./src/misc/core/*", "./src/typescript/core/*"],
+      files: [
+        "./src/misc/core/*",
+        "./src/typescript/core/*",
+        "./src/vue/core/*"
+      ],
       rules: {
         "@skylib/match-filename/createRule": [
           "warn",

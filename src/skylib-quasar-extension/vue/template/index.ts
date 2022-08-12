@@ -18,7 +18,6 @@ import { preferMPopupProxy } from "./prefer-m-popup-proxy";
 import { preferMSelect } from "./prefer-m-select";
 import { preferMToggle } from "./prefer-m-toggle";
 import { preferMTooltip } from "./prefer-m-tooltip";
-import { sortVBind } from "./sort-v-bind";
 
 export const template = utils.prefixKeys("template/", {
   "no-mixed-classes": noMixedClasses,
@@ -39,6 +38,5 @@ export const template = utils.prefixKeys("template/", {
   "prefer-m-popup-proxy": preferMPopupProxy,
   "prefer-m-select": preferMSelect,
   "prefer-m-toggle": preferMToggle,
-  "prefer-m-tooltip": preferMTooltip,
-  "sort-v-bind": sortVBind
+  "prefer-m-tooltip": preferMTooltip
 });
