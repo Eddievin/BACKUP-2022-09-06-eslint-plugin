@@ -14,7 +14,7 @@ export const sortArray = utils.createRule({
   fixable: utils.Fixable.code,
   vue: true,
   isOptions: is.object.factory<Options>(
-    { selector: utils.isSelector },
+    { selector: utils.isSelector, triggerByComment: is.boolean },
     {
       customOrder: is.strings,
       key: is.string,
@@ -22,20 +22,29 @@ export const sortArray = utils.createRule({
       sendToTop: is.string
     }
   ),
+  defaultOptions: {
+    selector: AST_NODE_TYPES.ArrayExpression,
+    triggerByComment: true
+  },
   messages: {
     ...utils.sort.messages,
     [MessageId.expectingArray]: "Expecting array"
   },
   create: (context): RuleListener => {
-    const { key, selector: mixed } = context.options;
+    const { key, selector: mixed, triggerByComment } = context.options;
 
     const selector = a.fromMixed(mixed).join(", ");
 
     return {
       [selector]: (node: TSESTree.Node) => {
-        if (node.type === AST_NODE_TYPES.ArrayExpression)
-          utils.sort(node.elements, context, { ...context.options, keyNode });
-        else context.report({ messageId: MessageId.expectingArray, node });
+        if (node.type === AST_NODE_TYPES.ArrayExpression) {
+          const sort = triggerByComment
+            ? context.getComments(node).includes("// @sorted")
+            : true;
+
+          if (sort)
+            utils.sort(node.elements, context, { ...context.options, keyNode });
+        } else context.report({ messageId: MessageId.expectingArray, node });
       }
     };
 
@@ -68,4 +77,5 @@ export interface Options {
   readonly selector: utils.Selector;
   readonly sendToBottom?: string;
   readonly sendToTop?: string;
+  readonly triggerByComment: boolean;
 }

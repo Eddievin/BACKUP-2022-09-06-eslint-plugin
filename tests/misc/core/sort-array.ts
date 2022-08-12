@@ -8,13 +8,13 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("sort-array", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "Identifier" }],
+    options: [{ selector: "Identifier", triggerByComment: false }],
     code: "const id = 1;",
     errors: [{ line: 1, messageId: MessageId.expectingArray }]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "ArrayExpression" }],
+    options: [{ triggerByComment: false }],
     code: `
       const x = [
         {},
@@ -39,7 +39,7 @@ utils.testRule("sort-array", rule, [
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "ArrayExpression" }],
+    options: [{ triggerByComment: false }],
     code: `
       const x = [
         "d",
@@ -70,7 +70,8 @@ utils.testRule("sort-array", rule, [
         key: "key",
         selector: "ArrayExpression",
         sendToBottom: /^bottom:/u.source,
-        sendToTop: /^top:/u.source
+        sendToTop: /^top:/u.source,
+        triggerByComment: false
       }
     ],
     code: `
@@ -98,5 +99,21 @@ utils.testRule("sort-array", rule, [
     errors: [
       { line: 3, endLine: 8, messageId: MessageId.incorrectSortingOrder }
     ]
+  },
+  {
+    name: `Test at line ${getCurrentLine().line}`,
+    code: `
+      const x =
+        // @sorted
+        ["b", "a"];
+      const y = ["b", "a"];
+    `,
+    output: `
+      const x =
+        // @sorted
+        ["a", "b"];
+      const y = ["b", "a"];
+    `,
+    errors: [{ line: 3, messageId: MessageId.incorrectSortingOrder }]
   }
 ]);

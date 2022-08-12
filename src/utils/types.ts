@@ -6,7 +6,7 @@ import type {
   RuleListener,
   SourceCode
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { s, unknowns } from "@skylib/functions";
+import type { s, strings, unknowns } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 
@@ -42,7 +42,9 @@ export const isTypeGroups = is.factory(is.array.of, isTypeGroup);
 export interface Context<M extends string, O extends object, S extends object> {
   readonly eol: s.Eol;
   // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-  readonly getComments: (node: TSESTree.Node) => Ranges;
+  readonly getCommentRanges: (node: TSESTree.Node) => Ranges;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly getComments: (node: TSESTree.Node) => strings;
   // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
   readonly getFullRange: (node: TSESTree.Node) => TSESTree.Range;
   // eslint-disable-next-line @skylib/require-jsdoc -- Postponed

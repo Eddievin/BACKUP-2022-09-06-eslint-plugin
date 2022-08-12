@@ -8,6 +8,10 @@ export enum MessageId {
 }
 
 export const sortVBind = utils.createRule({
+  name: "sort-v-bind",
+  fixable: utils.Fixable.code,
+  vue: true,
+  messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
   create: (context): RuleListener => ({
     VStartTag: (node: AST.VStartTag) => {
       const vBindIndex = node.attributes.findIndex(
@@ -26,9 +30,5 @@ export const sortVBind = utils.createRule({
           messageId: MessageId.incorrectSortingOrder
         });
     }
-  }),
-  fixable: utils.Fixable.code,
-  messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
-  name: "element-contents-spacing",
-  vue: true
+  })
 });

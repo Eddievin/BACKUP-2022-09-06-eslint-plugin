@@ -12,6 +12,13 @@ export enum MessageId {
 }
 
 export const elementContentsSpacing = utils.createRule({
+  name: "element-contents-spacing",
+  fixable: utils.Fixable.code,
+  vue: true,
+  messages: {
+    [MessageId.addSpaces]: "Add spaces around double curly",
+    [MessageId.removeSpaces]: "Remove spaces around double curly"
+  },
   create: (context): RuleListener => ({
     VElement: (node: AST.VElement) => {
       if (node.children.length) {
@@ -46,12 +53,5 @@ export const elementContentsSpacing = utils.createRule({
           });
       }
     }
-  }),
-  fixable: utils.Fixable.code,
-  messages: {
-    [MessageId.addSpaces]: "Add spaces around double curly",
-    [MessageId.removeSpaces]: "Remove spaces around double curly"
-  },
-  name: "element-contents-spacing",
-  vue: true
+  })
 });

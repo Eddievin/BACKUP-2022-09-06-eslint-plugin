@@ -22,7 +22,7 @@ export const commentSpacing = utils.createRule({
     ":statement, TSDeclareFunction, TSExportAssignment": (
       node: TSESTree.Node
     ) => {
-      for (const range of context.getComments(node)) {
+      for (const range of context.getCommentRanges(node)) {
         const multiline = isMultiline(context.getText(range));
 
         const nextMultiline = isMultiline(context.getText(range[1]));

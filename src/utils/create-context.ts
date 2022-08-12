@@ -58,8 +58,12 @@ export function createBetterContext<
 
   return {
     eol: s.detectEol(code),
-    getComments: (node: TSESTree.Node) =>
+    getCommentRanges: (node: TSESTree.Node) =>
       source.getCommentsBefore(node).map(comment => comment.range),
+    getComments: (node: TSESTree.Node) =>
+      source
+        .getCommentsBefore(node)
+        .map(comment => code.slice(...comment.range)),
     getFullRange: (node: TSESTree.Node) => [
       Math.min(
         node.range[0],
