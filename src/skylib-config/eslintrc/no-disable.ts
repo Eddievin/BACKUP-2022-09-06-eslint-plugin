@@ -1,7 +1,7 @@
-import * as utils from "../utils";
-import { misc } from "../misc";
+import * as utils from "../../utils";
+import { misc } from "../../misc";
 
-export const eslintrcNoDisable = utils.wrapRule(misc["no-restricted-syntax"], [
+export const noDisable = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: "Do not disable rules",
     selector:

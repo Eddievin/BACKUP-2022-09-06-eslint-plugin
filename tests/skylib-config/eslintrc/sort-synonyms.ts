@@ -1,11 +1,11 @@
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
-const rule = rules["config/sort-eslintrc-synonyms"];
+const rule = rules["config/eslintrc/sort-synonyms"];
 
 const MessageId = utils.getMessageId(rule);
 
-utils.testRule("sort-eslintrc-synonyms", rule, [
+utils.testRule("sort-synonyms", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: "const x = [2, 1];",

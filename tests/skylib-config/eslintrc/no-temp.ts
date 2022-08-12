@@ -1,12 +1,12 @@
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
-const rule = rules["config/eslintrc-no-temp"];
+const rule = rules["config/eslintrc/no-temp"];
 
 const MessageId = utils.getMessageId(rule);
 
 utils.testRule(
-  "eslintrc-no-temp",
+  "no-temp",
   rule,
   [
     {
