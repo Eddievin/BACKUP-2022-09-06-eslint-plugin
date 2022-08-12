@@ -203,17 +203,17 @@ utils.testRule(
         {
           line: 1,
           messageId: MessageId.wildcardRequired,
-          data: { _id: "id1" }
+          data: { _id: "id1", source: "source1" }
         },
         {
           line: 2,
           messageId: MessageId.wildcardRequired,
-          data: { _id: "id2" }
+          data: { _id: "id2", source: "source2" }
         },
         {
           line: 3,
           messageId: MessageId.wildcardDisallowed,
-          data: { _id: "id3" }
+          data: { _id: "id3", source: "source3" }
         }
       ]
     },
@@ -240,12 +240,20 @@ utils.testRule(
         {
           line: 1,
           messageId: MessageId.invalidLocalName,
-          data: { _id: "id1", expectedLocalName: "localName1" }
+          data: {
+            _id: "id1",
+            expectedLocalName: "localName1",
+            source: "source1"
+          }
         },
         {
           line: 2,
           messageId: MessageId.invalidLocalName,
-          data: { _id: "id2", expectedLocalName: "localName2" }
+          data: {
+            _id: "id2",
+            expectedLocalName: "localName2",
+            source: "source2"
+          }
         }
       ]
     },
@@ -313,12 +321,12 @@ utils.testRule(
         {
           line: 1,
           messageId: MessageId.invalidLocalName,
-          data: { _id: "id1", expectedLocalName: "altName1" }
+          data: { _id: "id1", expectedLocalName: "altName1", source: "source1" }
         },
         {
           line: 4,
           messageId: MessageId.invalidLocalName,
-          data: { _id: "id4", expectedLocalName: "altName4" }
+          data: { _id: "id4", expectedLocalName: "altName4", source: "source4" }
         }
       ]
     },
@@ -347,12 +355,12 @@ utils.testRule(
         {
           line: 1,
           messageId: MessageId.wildcardDisallowed,
-          data: { _id: "id1", expectedLocalName: "source1" }
+          data: { _id: "id1", expectedLocalName: "source1", source: "source1" }
         },
         {
           line: 2,
           messageId: MessageId.invalidLocalName,
-          data: { _id: "id2", expectedLocalName: "source2" }
+          data: { _id: "id2", expectedLocalName: "source2", source: "source2" }
         }
       ]
     },
@@ -381,12 +389,12 @@ utils.testRule(
         {
           line: 1,
           messageId: MessageId.wildcardDisallowed,
-          data: { _id: "id1", expectedLocalName: "source1" }
+          data: { _id: "id1", expectedLocalName: "source1", source: "source1" }
         },
         {
           line: 2,
           messageId: MessageId.invalidLocalName,
-          data: { _id: "id2", expectedLocalName: "source2" }
+          data: { _id: "id2", expectedLocalName: "source2", source: "source2" }
         }
       ]
     },
@@ -410,12 +418,66 @@ utils.testRule(
         {
           line: 1,
           messageId: MessageId.wildcardRequired,
-          data: { _id: "id1", expectedLocalName: "source1" }
+          data: { _id: "id1", expectedLocalName: "source1", source: "source1" }
         },
         {
           line: 2,
           messageId: MessageId.invalidLocalName,
-          data: { _id: "id2", expectedLocalName: "source2" }
+          data: { _id: "id2", expectedLocalName: "source2", source: "source2" }
+        }
+      ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          sources: [
+            { _id: "id1", source: "**", wildcard: true },
+            {
+              _id: "id2",
+              source: "@skylib/eslint-plugin/fixtures/source2",
+              wildcard: true
+            },
+            {
+              _id: "id3",
+              source: "@skylib/eslint-plugin/source3",
+              wildcard: true
+            }
+          ]
+        }
+      ],
+      code: `
+        import source1 from "./source1";
+        import source2 from "./source2";
+        import source3 from "../source3";
+      `,
+      errors: [
+        {
+          line: 1,
+          messageId: MessageId.wildcardRequired,
+          data: {
+            _id: "id1",
+            expectedLocalName: "source1",
+            source: "@skylib/eslint-plugin/fixtures/source1"
+          }
+        },
+        {
+          line: 2,
+          messageId: MessageId.wildcardRequired,
+          data: {
+            _id: "id2",
+            expectedLocalName: "source2",
+            source: "@skylib/eslint-plugin/fixtures/source2"
+          }
+        },
+        {
+          line: 3,
+          messageId: MessageId.wildcardRequired,
+          data: {
+            _id: "id3",
+            expectedLocalName: "source3",
+            source: "@skylib/eslint-plugin/source3"
+          }
         }
       ]
     }
