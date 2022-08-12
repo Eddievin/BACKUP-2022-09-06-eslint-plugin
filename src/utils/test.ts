@@ -27,6 +27,7 @@ export type SourceFile =
   | "file.extras.ts"
   | "kebab-case.kebab-case.ts"
   | "kebab-case.ts"
+  | "kebab-PascalCase.ts"
   | "PascalCase.PascalCase.ts"
   | "PascalCase.ts"
   | "subfolder/index.ts"

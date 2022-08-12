@@ -18,7 +18,7 @@ export const isFormat = is.factory(is.enumeration, Format);
  * @param caseOption - Case option.
  * @returns String in given case.
  */
-export function format(str: string, caseOption: Format): string {
+export function format(str: string, caseOption?: Format): string {
   switch (caseOption) {
     case Format.camelCase:
       return _.camelCase(str);
@@ -28,5 +28,8 @@ export function format(str: string, caseOption: Format): string {
 
     case Format.pascalCase:
       return s.ucFirst(_.camelCase(str));
+
+    case undefined:
+      return str;
   }
 }

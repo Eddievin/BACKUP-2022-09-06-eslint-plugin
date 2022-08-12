@@ -11,19 +11,10 @@ export const matchFilename = utils.createRule({
   name: "match-filename",
   vue: true,
   isOptions: is.object.factory<Options>(
-    {
-      format: utils.casing.isFormat,
-      prefix: is.string,
-      selector: utils.isSelector,
-      suffix: is.string
-    },
-    {}
+    { prefix: is.string, selector: utils.isSelector, suffix: is.string },
+    { format: utils.casing.isFormat }
   ),
-  defaultOptions: {
-    format: utils.casing.Format.camelCase,
-    prefix: "",
-    suffix: ""
-  },
+  defaultOptions: { prefix: "", suffix: "" },
   messages: { [MessageId.invalidText]: "Should match file name: {{expected}}" },
   create: (context): RuleListener => {
     const { format, prefix, selector: mixed, suffix } = context.options;
@@ -35,12 +26,7 @@ export const matchFilename = utils.createRule({
         const got = utils.nodeText(node, "?");
 
         const expected =
-          prefix +
-          utils.casing.format(
-            utils.getIdentifierFromPath(context.path, got),
-            format
-          ) +
-          suffix;
+          prefix + utils.getTextFromPath(context.path, got, format) + suffix;
 
         if (got === expected) {
           // Valid
@@ -56,7 +42,7 @@ export const matchFilename = utils.createRule({
 });
 
 export interface Options {
-  readonly format: utils.casing.Format;
+  readonly format?: utils.casing.Format;
   readonly prefix: string;
   readonly selector: utils.Selector;
   readonly suffix: string;

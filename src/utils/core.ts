@@ -1,8 +1,10 @@
+/* eslint-disable @skylib/consistent-import -- Postponed */
 /* eslint-disable @skylib/no-sibling-import -- Postponed */
 /* eslint-disable @skylib/typescript/prefer-array-type-alias -- Postponed */
 /* eslint-disable @skylib/typescript/prefer-readonly-array -- Postponed */
 
 import * as _ from "@skylib/lodash-commonjs-es";
+import * as casing from "./casing";
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
 import {
   Accumulator,
@@ -345,6 +347,35 @@ export function getSelectors(
   assert.toBeTrue(selectors2.length > 0, "Expecting at least one selector");
 
   return selectors2.join(", ");
+}
+
+/**
+ * Gets name from filename.
+ *
+ * @param path - Path.
+ * @param expected - Expected name.
+ * @param caseOption - Case options.
+ * @returns Name.
+ */
+export function getTextFromPath(
+  path: string,
+  expected: string,
+  caseOption: casing.Format | undefined
+): string {
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Postponed
+  const { base, dir, name } = nodePath.parse(path);
+
+  return base.split(".").some(part => getName(part) === expected)
+    ? expected
+    : getName(name === "index" ? nodePath.parse(dir).name : name);
+
+  function getName(x: string): string {
+    x = a.first(x.split("."));
+
+    // eslint-disable-next-line no-warning-comments -- Postponed
+    // fixme
+    return casing.format(x, caseOption);
+  }
 }
 
 // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
