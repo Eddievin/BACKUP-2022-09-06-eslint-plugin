@@ -14,7 +14,11 @@ utils.testRule(
       options: [{ sources: [{ _id: "id", source: "source", wildcard: true }] }],
       code: 'import source from "source"',
       errors: [
-        { line: 1, messageId: MessageId.wildcardRequired, data: { _id: "id" } }
+        {
+          line: 1,
+          messageId: MessageId.wildcardRequired,
+          data: { _id: "id", source: "source" }
+        }
       ]
     },
     {
@@ -34,7 +38,11 @@ utils.testRule(
       ],
       code: 'import source from "source"',
       errors: [
-        { line: 1, messageId: MessageId.wildcardRequired, data: { _id: "id" } }
+        {
+          line: 1,
+          messageId: MessageId.wildcardRequired,
+          data: { _id: "id", source: "source" }
+        }
       ]
     }
   ],
