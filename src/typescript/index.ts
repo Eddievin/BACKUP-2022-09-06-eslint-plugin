@@ -4,6 +4,7 @@ import { core } from "./core";
 import { noComplexDeclaratorType } from "./no-complex-declarator-type";
 import { noComplexReturnType } from "./no-complex-return-type";
 import { noDistributedFunctionProps } from "./no-distributed-function-props";
+import { noNever } from "./no-never";
 import { noShadow } from "./no-shadow";
 import { noThisVoid } from "./no-this-void";
 import { noTrueType } from "./no-true-type";
@@ -22,6 +23,7 @@ export const typescript = utils.prefixKeys("typescript/", {
   "no-complex-declarator-type": noComplexDeclaratorType,
   "no-complex-return-type": noComplexReturnType,
   "no-distributed-function-props": noDistributedFunctionProps,
+  "no-never": noNever,
   "no-shadow": noShadow,
   "no-this-void": noThisVoid,
   "no-true-type": noTrueType,
