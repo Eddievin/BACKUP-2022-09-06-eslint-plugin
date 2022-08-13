@@ -6,7 +6,8 @@ export const preferArrowStaticMethod = utils.wrapRule(
   [
     {
       message: "Prefer arrow function",
-      selector: `:matches(${utils.selectors.method})[static=true]`
+      selector:
+        ":matches(MethodDefinition, TSAbstractMethodDefinition)[static=true]"
     }
   ]
 );

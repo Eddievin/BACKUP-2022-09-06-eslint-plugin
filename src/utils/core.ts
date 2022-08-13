@@ -74,7 +74,6 @@ export const selectors = {
   documentedBlock: "ExportNamedDeclaration, Program, TSModuleBlock",
   function: ":function, TSDeclareFunction, TSFunctionType, TSMethodSignature",
   functionExpression: "ArrowFunctionExpression, FunctionExpression",
-  method: "MethodDefinition, TSAbstractMethodDefinition",
   property: "PropertyDefinition, TSPropertySignature",
   statement: ":statement, TSDeclareFunction, TSExportAssignment"
 } as const;
@@ -290,21 +289,31 @@ export function createRule<
  * @param expected - Expected name.
  * @returns Name.
  */
+// eslint-disable-next-line no-warning-comments -- Postponed
+// fixme - Stip extensions
 export function getIdentifierFromPath(path: string, expected?: string): string {
   // eslint-disable-next-line @typescript-eslint/no-shadow -- Postponed
-  const { base, dir, name } = nodePath.parse(path);
+  const { base, dir } = nodePath.parse(path);
 
   return is.not.empty(expected) &&
     base.split(".").some(part => getName(part) === expected)
     ? expected
-    : getName(name === "index" ? nodePath.parse(dir).name : name);
+    : getName(base === "index" ? getIdentifierFromPath(dir, expected) : base);
 
   function getName(x: string): string {
-    x = a.first(x.split("."));
+    const parts = x.split(".");
+
+    const part1 = a.first(parts);
+
+    const part2 = parts[1];
+
+    const name = part1 === "index" && is.not.empty(part2) ? part2 : part1;
 
     // eslint-disable-next-line no-warning-comments -- Postponed
     // fixme
-    return /^[A-Z]/u.test(x) ? s.ucFirst(_.camelCase(x)) : _.camelCase(x);
+    return /^[A-Z]/u.test(name)
+      ? s.ucFirst(_.camelCase(name))
+      : _.camelCase(name);
   }
 }
 

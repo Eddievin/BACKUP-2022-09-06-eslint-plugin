@@ -578,6 +578,21 @@ utils.testRule(
         import wrongName from "source1";
         import source2 from "source2";
       `
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          sources: [
+            { _id: "id1", source: "index.source1" },
+            { _id: "id2", source: "index.source2", wildcard: true }
+          ]
+        }
+      ],
+      code: `
+        export { source1 } from "index.source1";
+        export * as source2 from "index.source2";
+      `
     }
   ]
 );
