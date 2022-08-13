@@ -13,7 +13,7 @@ export const onlyExportName = utils.createRule({
     utils.ruleTemplates.export(ctx => {
       if (ctx.onlyExport)
         for (const node of ctx.identifiers) {
-          const expected = utils.getIdentifierFromPath(context.path, node.name);
+          const expected = context.identifierFromPath(context.path, node.name);
 
           if ([expected, "default"].includes(node.name)) {
             // Valid

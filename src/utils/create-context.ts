@@ -1,11 +1,12 @@
 /* eslint-disable @skylib/no-sibling-import -- Postponed */
 /* eslint-disable @skylib/only-export-name -- Postponed */
 
+import * as _ from "@skylib/lodash-commonjs-es";
 import type * as estree from "estree";
 // eslint-disable-next-line @typescript-eslint/no-shadow -- Postponeds
 import type { Context, Range } from "./types";
 import type { CreateRuleOptions, SharedOptions2 } from "./core";
-import { assert, cast, evaluate, is, o, s } from "@skylib/functions";
+import { a, assert, cast, evaluate, is, o, s } from "@skylib/functions";
 import { createFileMatcher, getPackage, stripBase } from "./core";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
@@ -54,6 +55,41 @@ export function createBetterContext<
     if (is.array(mixed)) return code.slice(...mixed);
 
     return code.slice(...mixed.range);
+  };
+
+  const stripExtension = (str: string): string => {
+    for (const ext of [".js", ".ts", ".vue"])
+      if (str.endsWith(ext)) return str.slice(0, -ext.length);
+
+    return str;
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Postponed
+  const identifierFromPath = (path: string, expected?: string): string => {
+    const { base, dir } = nodePath.parse(path);
+
+    const name = stripExtension(base);
+
+    return is.not.empty(expected) &&
+      name.split(".").some(part => getName(part) === expected)
+      ? expected
+      : getName(name === "index" ? identifierFromPath(dir, expected) : name);
+
+    function getName(x: string): string {
+      const parts = x.split(".");
+
+      const part1 = a.first(parts);
+
+      const part2 = parts[1];
+
+      const name = part1 === "index" && is.not.empty(part2) ? part2 : part1;
+
+      // eslint-disable-next-line no-warning-comments -- Postponed
+      // fixme
+      return /^[A-Z]/u.test(name)
+        ? s.ucFirst(_.camelCase(name))
+        : _.camelCase(name);
+    }
   };
 
   return {
@@ -123,6 +159,7 @@ export function createBetterContext<
     hasTrailingComment: node =>
       code.slice(node.range[1]).trimStart().startsWith("//"),
     id,
+    identifierFromPath,
     isAdjacentNodes: (node1: TSESTree.Node, node2: TSESTree.Node): boolean => {
       if (node1.parent === node2.parent) {
         const pos = node1.range[1];
@@ -194,12 +231,7 @@ export function createBetterContext<
     report: context.report.bind(context),
     scope: context.getScope(),
     source,
-    stripExtension: str => {
-      for (const ext of [".js", ".ts", ".vue"])
-        if (str.endsWith(ext)) return str.slice(0, -ext.length);
-
-      return str;
-    }
+    stripExtension
   };
 }
 

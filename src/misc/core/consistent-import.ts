@@ -149,7 +149,7 @@ export const consistentImport = utils.createRule({
       );
 
       return subOptions
-        ? { localName: utils.getIdentifierFromPath(source), ...subOptions }
+        ? { localName: context.identifierFromPath(source), ...subOptions }
         : undefined;
     }
 
@@ -158,7 +158,7 @@ export const consistentImport = utils.createRule({
         context.options.sources.flatMap(subOptions => {
           const { autoImport, autoImportSource, localName, wildcard } = {
             autoImportSource: subOptions.source,
-            localName: utils.getIdentifierFromPath(subOptions.source),
+            localName: context.identifierFromPath(subOptions.source),
             ...subOptions
           };
 

@@ -100,6 +100,8 @@ export interface Context<
   readonly hasTrailingComment: (node: TSESTree.Node) => boolean;
   readonly id: string;
   // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+  readonly identifierFromPath: (path: string, expected?: string) => string;
+  // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
   readonly isAdjacentNodes: (
     node1: TSESTree.Node,
     node2: TSESTree.Node

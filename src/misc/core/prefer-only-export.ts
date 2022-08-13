@@ -27,7 +27,7 @@ export const preferOnlyExport = utils.createRule({
           exportMatchingFilename &&
           ctx.identifiers.some(
             node =>
-              node.name === utils.getIdentifierFromPath(context.path, node.name)
+              node.name === context.identifierFromPath(context.path, node.name)
           )
         )
           activated = true;

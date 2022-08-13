@@ -102,6 +102,18 @@ utils.testRule(
           data: { expected: "file" }
         }
       ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      filename: "subfolder/index.ts",
+      code: "export const x = 1;",
+      errors: [
+        {
+          line: 1,
+          messageId: MessageId.invalidName,
+          data: { expected: "subfolder" }
+        }
+      ]
     }
   ],
   [
