@@ -1,4 +1,5 @@
 import { classMatchFilename } from "./class-match-filename";
+import { classOnlyExport } from "./class-only-export";
 import { consistentSourceExtension } from "./consistent-source-extension";
 import { consistentSymbolDescription } from "./consistent-symbol-description";
 import { core } from "./core";
@@ -27,6 +28,7 @@ import { sortConstructSignature } from "./sort-construct-signature";
 export const misc = {
   ...core,
   "class-match-filename": classMatchFilename,
+  "class-only-export": classOnlyExport,
   "consistent-source-extension": consistentSourceExtension,
   "consistent-symbol-description": consistentSymbolDescription,
   "max-identifier-blocks": maxIdentifierBlocks,
