@@ -22,6 +22,12 @@ module.exports = {
     "@skylib/disallow-import": [
       "warn",
       { disallow: ["{natural-compare,tsutils,typescript}"] }
+    ],
+    "@skylib/require-syntax/fix": [
+      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/eslint-plugin update
+      // fixme
+      "off",
+      { selector: "Identifier[name=fix]", trigger: "Identifier[name=fixable]" }
     ]
   },
   overrides: [

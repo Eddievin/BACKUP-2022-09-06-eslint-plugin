@@ -1,4 +1,5 @@
 module.exports = [
+  "@skylib/require-syntax/fix",
   "@skylib/no-restricted-syntax/no-ast",
   "@skylib/no-restricted-syntax/no-test-only",
   "@skylib/disallow-import",
