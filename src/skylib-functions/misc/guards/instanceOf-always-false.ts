@@ -7,9 +7,9 @@ export const instanceOfAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include object, unknown",
+      message: "Always false",
       selector:
-        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=instanceOf] > .arguments:first-child",
+        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:instanceOf|instanceOfU)$/u] > .arguments:first-child",
       typeHasNoneOf: [
         utils.TypeGroup.any,
         utils.TypeGroup.object,

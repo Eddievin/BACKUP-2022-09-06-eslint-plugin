@@ -67,10 +67,10 @@ utils.testRule("sort-array", rule, [
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
-        key: "key",
         selector: "ArrayExpression",
         sendToBottom: /^bottom:/u.source,
         sendToTop: /^top:/u.source,
+        sortKey: "key",
         triggerByComment: false
       }
     ],

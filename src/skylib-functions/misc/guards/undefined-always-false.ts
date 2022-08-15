@@ -5,7 +5,7 @@ export const undefinedAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Unnecessary type guard",
+      message: "Always false",
       selector:
         "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=undefined] > .arguments:first-child",
       typeHasNoneOf: [

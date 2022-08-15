@@ -1,7 +1,5 @@
-/* eslint-disable @skylib/no-at-sign-internal-import -- Postponed */
-/* eslint-disable @skylib/no-internal-modules -- Postponed */
-
 import { rules, utils } from "@";
+// eslint-disable-next-line @skylib/no-at-sign-internal-import, @skylib/no-internal-modules -- Ok
 import { NodeType } from "@/misc/core/sort-statements";
 import getCurrentLine from "get-current-line";
 
@@ -21,8 +19,10 @@ utils.testRule(
         function f3() {}
         type T4 = 1;
         interface T3 {}
-        const x = 1;
-        export const y = 2;
+        const x1 = 1;
+        const x2 = 2;
+        export const x3 = 3;
+        export const x4 = 4;
         export default 1;
         export function f2();
         export function f1() {}
@@ -47,20 +47,22 @@ utils.testRule(
         export { d } from "source1";
         export type { E } from "source2";
         export { e } from "source2";
-        const x = 1;
-        export const y = 2;
         export default 1;
+        export const x3 = 3;
+        export const x4 = 4;
         export interface T1 {}
         export type T2 = 1;
         export function f1() {}
         export function f2();
+        const x1 = 1;
+        const x2 = 2;
         interface T3 {}
         type T4 = 1;
         function f3() {}
         function f4();
       `,
       errors: [
-        { line: 2, endLine: 20, messageId: MessageId.incorrectSortingOrder }
+        { line: 2, endLine: 22, messageId: MessageId.incorrectSortingOrder }
       ]
     },
     {

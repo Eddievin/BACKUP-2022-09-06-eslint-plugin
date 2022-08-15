@@ -4,11 +4,22 @@ import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { Writable, strings } from "@skylib/functions";
 import { a, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import minimatch from "minimatch";
-import type { strings } from "@skylib/functions";
+
+export interface Suboptions {
+  readonly _id: string;
+  readonly altLocalNames: strings;
+  readonly autoImport: boolean;
+  readonly autoImportSource?: string;
+  readonly localName?: string;
+  readonly source: string;
+  readonly sourcePattern?: string;
+  readonly wildcard: boolean;
+}
 
 export enum MessageId {
   autoImport = "autoImport",
@@ -20,7 +31,7 @@ export enum MessageId {
 export const consistentImport = utils.createRule({
   name: "consistent-import",
   fixable: utils.Fixable.code,
-  isSubOptions: is.object.factory<SubOptions>(
+  isSuboptions: is.object.factory<Suboptions>(
     {
       _id: is.string,
       altLocalNames: is.strings,
@@ -34,8 +45,8 @@ export const consistentImport = utils.createRule({
       sourcePattern: is.string
     }
   ),
-  defaultSubOptions: { altLocalNames: [], autoImport: false, wildcard: false },
-  subOptionsKey: "sources",
+  defaultSuboptions: { altLocalNames: [], autoImport: false, wildcard: false },
+  suboptionsKey: "sources",
   messages: {
     [MessageId.autoImport]:
       'Run "eslint --fix" to add missing import statement(s)',
@@ -49,11 +60,10 @@ export const consistentImport = utils.createRule({
   create: (context): RuleListener => {
     const eol = context.eol;
 
-    // eslint-disable-next-line @skylib/functions/prefer-ReadonlySet -- Postponed
+    // eslint-disable-next-line @skylib/functions/prefer-ReadonlySet -- Ok
     const identifiers = new Set<string>();
 
-    // eslint-disable-next-line @skylib/typescript/prefer-readonly-array, @skylib/typescript/prefer-array-type-alias -- Postponed
-    const importDeclarations: TSESTree.ImportDeclaration[] = [];
+    const importDeclarations: Writable<utils.TSESTree.ImportDeclarations> = [];
 
     return {
       ":not(ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, Property) > Identifier":
@@ -64,10 +74,10 @@ export const consistentImport = utils.createRule({
         if (node.exported) {
           const source = context.normalizeSource(node.source.value);
 
-          const subOptions = findSubOptions(source);
+          const suboptions = findSuboptions(source);
 
-          if (subOptions) {
-            const { _id, localName, wildcard } = subOptions;
+          if (suboptions) {
+            const { _id, localName, wildcard } = suboptions;
 
             if (wildcard)
               if (node.exported.name === localName) {
@@ -91,10 +101,10 @@ export const consistentImport = utils.createRule({
         if (node.source) {
           const source = context.normalizeSource(node.source.value);
 
-          const subOptions = findSubOptions(source);
+          const suboptions = findSuboptions(source);
 
-          if (subOptions) {
-            const { _id, localName, wildcard } = subOptions;
+          if (suboptions) {
+            const { _id, localName, wildcard } = suboptions;
 
             if (wildcard)
               context.report({
@@ -141,25 +151,25 @@ export const consistentImport = utils.createRule({
         : localName;
     }
 
-    function findSubOptions(source: string): SubOptionsExtended | undefined {
-      const subOptions = a.reverse(context.options.sources).find(candidate =>
+    function findSuboptions(source: string): SuboptionsExtended | undefined {
+      const suboptions = a.reverse(context.options.sources).find(candidate =>
         minimatch(source, candidate.sourcePattern ?? candidate.source, {
           dot: true
         })
       );
 
-      return subOptions
-        ? { localName: context.identifierFromPath(source), ...subOptions }
+      return suboptions
+        ? { localName: context.identifierFromPath(source), ...suboptions }
         : undefined;
     }
 
     function lintAutoImport(node: TSESTree.Program): void {
       const fixes = _.uniq(
-        context.options.sources.flatMap(subOptions => {
+        context.options.sources.flatMap(suboptions => {
           const { autoImport, autoImportSource, localName, wildcard } = {
-            autoImportSource: subOptions.source,
-            localName: context.identifierFromPath(subOptions.source),
-            ...subOptions
+            autoImportSource: suboptions.source,
+            localName: context.identifierFromPath(suboptions.source),
+            ...suboptions
           };
 
           return autoImport
@@ -202,19 +212,19 @@ export const consistentImport = utils.createRule({
       for (const node of importDeclarations) {
         const source = context.normalizeSource(node.source.value);
 
-        const subOptions = findSubOptions(source);
+        const suboptions = findSuboptions(source);
 
-        if (subOptions) {
-          const { _id, altLocalNames, localName, wildcard } = subOptions;
-
-          const defaultSpecifier = node.specifiers.find(
-            specifier =>
-              specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier
-          );
+        if (suboptions) {
+          const { _id, altLocalNames, localName, wildcard } = suboptions;
 
           const wildcardSpecifier = node.specifiers.find(
-            specifier =>
-              specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
+            candidate =>
+              candidate.type === AST_NODE_TYPES.ImportNamespaceSpecifier
+          );
+
+          const defaultSpecifier = node.specifiers.find(
+            candidate =>
+              candidate.type === AST_NODE_TYPES.ImportDefaultSpecifier
           );
 
           if (wildcard)
@@ -281,17 +291,6 @@ export const consistentImport = utils.createRule({
   }
 });
 
-export interface SubOptions {
-  readonly _id: string;
-  readonly altLocalNames: strings;
-  readonly autoImport: boolean;
-  readonly autoImportSource?: string;
-  readonly localName?: string;
-  readonly source: string;
-  readonly sourcePattern?: string;
-  readonly wildcard: boolean;
-}
-
-interface SubOptionsExtended extends SubOptions {
+interface SuboptionsExtended extends Suboptions {
   readonly localName: string;
 }

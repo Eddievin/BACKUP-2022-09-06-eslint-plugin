@@ -8,8 +8,9 @@ export const noComplexDeclaratorType = utils.wrapRule(
       message: "Avoid complex declarator type",
       selector: [
         "ExportDefaultDeclaration > .declaration",
+        "VariableDeclarator[init.type=ArrayExpression] > Identifier.id[typeAnnotation=undefined]",
         "VariableDeclarator[init.type=ArrayExpression] > ArrayPattern > Identifier",
-        "VariableDeclarator[init.type=/^(?:ArrayExpression|ObjectExpression)/u] > Identifier.id[typeAnnotation=undefined]",
+        "VariableDeclarator[init.type=ObjectExpression] > Identifier.id[typeAnnotation=undefined]",
         "VariableDeclarator[init.type=ObjectExpression] > ObjectPattern > Property > Identifier.value"
       ],
       typeIs: utils.TypeGroup.complex

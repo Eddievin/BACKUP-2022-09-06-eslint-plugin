@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const noQTooltip = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "m-tooltip" component',
+    message: 'Use "m-tooltip" component instead',
     selector: "VElement[name=q-tooltip]"
   }
 ]);

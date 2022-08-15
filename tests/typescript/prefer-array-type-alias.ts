@@ -44,7 +44,7 @@ utils.testRule("prefer-array-type-alias", rule, [
     code: `
       type T1<T extends string[]> = T;
       type T2<T = string[]> = T;
-      type T2<T = []> = T;
+      type T3<T = []> = T;
     `,
     errors: [
       { line: 1, messageId: MessageId.customMessage },

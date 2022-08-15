@@ -3,7 +3,7 @@ import { core } from "./core";
 
 export const noNever = utils.wrapRule(core["no-restricted-syntax"], [
   {
-    message: "Avoid complex declarator type",
+    message: 'Avoid "never" type',
     selector: "Identifier",
     typeIs: utils.TypeGroup.never
   }

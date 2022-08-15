@@ -8,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("set-always-false", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "is.set(false, is.string);",
+    code: "is.set(1, is.string);",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

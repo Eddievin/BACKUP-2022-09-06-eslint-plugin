@@ -7,7 +7,7 @@ export const requireRefTypeParam = utils.wrapRule(
     {
       message: "Missing type parameter",
       selector:
-        "CallExpression[typeParameters=undefined][arguments.length=0] > Identifier.callee[name=ref]"
+        "CallExpression[arguments.length=0][typeParameters=undefined] > Identifier.callee[name=ref]"
     }
   ]
 );

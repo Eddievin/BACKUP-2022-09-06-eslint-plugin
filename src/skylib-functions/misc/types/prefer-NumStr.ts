@@ -5,7 +5,7 @@ import { misc } from "../../../misc";
 
 export const preferNumStr = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "NumStr" type',
+    message: 'Use "NumStr" type instead',
     selector: [
       "TSUnionType[types.0.type=TSNumberKeyword][types.1.type=TSStringKeyword]",
       "TSUnionType[types.0.type=TSNumberKeyword][types.2.type=TSStringKeyword]",

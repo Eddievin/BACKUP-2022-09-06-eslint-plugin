@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const preferAssign = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "o.assign" function',
+    message: 'Use "o.assign" function instead',
     selector:
       "CallExpression > .callee[object.name=Object][property.name=assign]"
   }

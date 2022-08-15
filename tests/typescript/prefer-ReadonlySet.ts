@@ -1,16 +1,14 @@
-/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
-
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
-const rule = rules["quasar-extension/extras/prefer-Slots-interface"];
+const rule = rules["typescript/prefer-ReadonlySet"];
 
 const MessageId = utils.getMessageId(rule);
 
-utils.testRule("prefer-Slots-interface", rule, [
+utils.testRule("prefer-ReadonlySet", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "type Slots = { x: string }",
+    code: "function f(x: Set<string>) {}",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

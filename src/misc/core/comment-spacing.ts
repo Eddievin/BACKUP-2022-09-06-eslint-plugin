@@ -53,10 +53,10 @@ export const commentSpacing = utils.createRule({
 });
 
 /**
- * Checks if string is multiline comment.
+ * Checks if string starts with multiline comment.
  *
  * @param str - String.
- * @returns _True_ if string is multiline comment, _false_ otherwise.
+ * @returns _True_ if string starts with multiline comment, _false_ otherwise.
  */
 function isMultiline(str: string): boolean {
   str = str.trimStart();

@@ -12,9 +12,7 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       filename: "subfolder/index.ts",
-      options: [
-        { format: utils.casing.Format.camelCase, selector: "Identifier" }
-      ],
+      options: [{ format: utils.Casing.camelCase, selector: "Identifier" }],
       code: `
         export const x = 1;
         export const subfolder = 2;
@@ -30,9 +28,7 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       filename: "kebab-case.ts",
-      options: [
-        { format: utils.casing.Format.pascalCase, selector: "Identifier" }
-      ],
+      options: [{ format: utils.Casing.pascalCase, selector: "Identifier" }],
       code: `
         export class ClassName {}
         export class KebabCase {}

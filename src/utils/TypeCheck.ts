@@ -1,18 +1,17 @@
-/* eslint-disable @skylib/no-sibling-import -- Postponed */
-/* eslint-disable complexity -- Postponed */
-/* eslint-disable @skylib/require-jsdoc -- Postponed */
-
-// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import * as ts from "typescript";
-// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import * as tsutils from "tsutils";
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
-import type { NumStrU, unknowns } from "@skylib/functions";
 import type { ParserServices, TSESTree } from "@typescript-eslint/utils";
 import { ReadonlySet, as, assert, is } from "@skylib/functions";
+import type {
+  Signatures,
+  TypeFlagsArray,
+  TypeParts
+} from "./TypeCheck.internal";
 import type { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 import { TypeGroup } from "./types";
 import type { TypeGroups } from "./types";
+import type { unknowns } from "@skylib/functions";
 
 export class TypeCheck {
   public readonly checker: ts.TypeChecker;
@@ -25,32 +24,38 @@ export class TypeCheck {
   public constructor(context: RuleContext<never, unknowns>) {
     const parser = ESLintUtils.getParserServices(context);
 
+    const { esTreeNodeToTSNodeMap, program } = parser;
+
     assert.toBeTrue(
       tsutils.isStrictCompilerOptionEnabled(
-        parser.program.getCompilerOptions(),
+        program.getCompilerOptions(),
         "strictNullChecks"
       ),
       'Expecting "strictNullChecks" compiler option to be enabled'
     );
-    this.checker = parser.program.getTypeChecker();
+    this.checker = program.getTypeChecker();
     this.code = context.getSourceCode().getText();
-    this.toTsNode = parser.esTreeNodeToTSNodeMap.get.bind(
-      parser.esTreeNodeToTSNodeMap
-    );
+    this.toTsNode = esTreeNodeToTSNodeMap.get.bind(esTreeNodeToTSNodeMap);
   }
 
   /**
-   * Checks if node is an array.
+   * Extracts call signatures from node.
    *
    * @param node - Node.
-   * @returns _True_ if node is an array, _false_ otherwise.
+   * @returns Call signatures.
    */
-  public getCallSignatures(node: TSESTree.Node): TypeCheck.Signatures {
+  public getCallSignatures(node: TSESTree.Node): Signatures {
     const type = this.getType(node);
 
     return this.checker.getSignaturesOfType(type, ts.SignatureKind.Call);
   }
 
+  /**
+   * Extracts constructor type from node.
+   *
+   * @param node - Node.
+   * @returns Constructor type.
+   */
   public getConstructorType(node: TSESTree.Node): ts.Type | undefined {
     const tsNode = this.toTsNode(node);
 
@@ -62,6 +67,12 @@ export class TypeCheck {
       : undefined;
   }
 
+  /**
+   * Determines contextual type of the node.
+   *
+   * @param node - Node.
+   * @returns Contextual type.
+   */
   public getContextualType(node: TSESTree.Node): ts.Type | undefined {
     const tsNode = this.toTsNode(node);
 
@@ -70,6 +81,13 @@ export class TypeCheck {
     return this.checker.getContextualType(tsNode);
   }
 
+  /**
+   * Extracts index info from type.
+   *
+   * @param type - Type.
+   * @param kind - Index kind.
+   * @returns Index info.
+   */
   public getIndexInfo(
     type: ts.Type,
     kind: ts.IndexKind
@@ -77,16 +95,34 @@ export class TypeCheck {
     return this.checker.getIndexInfoOfType(type, kind);
   }
 
+  /**
+   * Extracts return type from signature.
+   *
+   * @param signature - Signature.
+   * @returns Return type.
+   */
   public getReturnType(signature: ts.Signature): ts.Type {
     return this.checker.getReturnTypeOfSignature(signature);
   }
 
+  /**
+   * Finds symbol at node location.
+   *
+   * @param node - Node.
+   * @returns Symbol.
+   */
   public getSymbol(node: TSESTree.Node): ts.Symbol | undefined {
     const tsNode = this.toTsNode(node);
 
     return this.checker.getSymbolAtLocation(tsNode);
   }
 
+  /**
+   * Determines type of the node.
+   *
+   * @param node - Node.
+   * @returns Type.
+   */
   public getType(node: TSESTree.Node): ts.Type {
     const tsNode = this.toTsNode(node);
 
@@ -94,27 +130,31 @@ export class TypeCheck {
   }
 
   /**
-   * Checks if signature or symbol is missing doc comment.
+   * Checks if mixed has doc comment.
    *
-   * @param mixed - Signature or symbol.
-   * @returns _True_ if signature or symbol is missing doc comment, _false_ otherwise.
+   * @param mixed - Mixed.
+   * @returns _True_ if mixed has doc comment, _false_ otherwise.
    */
   public hasDocComment(mixed: ts.Signature | ts.Symbol): boolean {
     return mixed.getDocumentationComment(this.checker).length > 0;
   }
 
   /**
-   * Checks if node is an array.
+   * Checks if node is an array or a tuple.
    *
    * @param node - Node.
-   * @returns _True_ if node is an array, _false_ otherwise.
+   * @returns _True_ if node is an array or a tuple, _false_ otherwise.
    */
   public isArrayOrTuple(node: TSESTree.Node): boolean {
-    const type = this.getType(node);
-
-    return this.checker.isArrayType(type) || this.checker.isTupleType(type);
+    return this.isArrayOrTupleType(this.getType(node));
   }
 
+  /**
+   * Checks if type is an array or a tuple.
+   *
+   * @param type - Type.
+   * @returns _True_ if type is an array or a tuple, _false_ otherwise.
+   */
   public isArrayOrTupleType(
     type: ts.Type
   ): type is ts.TupleTypeReference | ts.TypeReference {
@@ -122,13 +162,37 @@ export class TypeCheck {
   }
 
   /**
-   * Checks if type is boolean.
+   * Checks if type is an object.
    *
    * @param type - Type.
-   * @returns _True_ if type is boolean, _false_ otherwise.
+   * @returns _True_ if type is an object, _false_ otherwise.
    */
-  public readonly isBoolish = (type: ts.Type): boolean => {
-    if (safeTypes.has(type.getFlags())) return true;
+  public readonly isObjectType = (type: ts.Type): type is ts.ObjectType =>
+    tsutils.isObjectType(type);
+
+  /**
+   * Checks if property is readonly in type.
+   *
+   * @param property - Property.
+   * @param type - Type.
+   * @returns _True_ if property is readonly in type, _false_ otherwise.
+   */
+  public isReadonlyProperty(property: ts.Symbol, type: ts.Type): boolean {
+    return tsutils.isPropertyReadonlyInType(
+      type,
+      property.getEscapedName(),
+      this.checker
+    );
+  }
+
+  /**
+   * Checks if type is safe boolean condition.
+   *
+   * @param type - Type.
+   * @returns _True_ if type is safe boolean condition, _false_ otherwise.
+   */
+  public readonly isSafeBooleanCondition = (type: ts.Type): boolean => {
+    if (safeBoolean.has(type.getFlags())) return true;
 
     if (tsutils.isUnionType(type)) {
       const parts = tsutils.unionTypeParts(type);
@@ -153,7 +217,7 @@ export class TypeCheck {
           return true;
 
         if (
-          parts.some(part => safeTypesWithUndefined.has(part.getFlags())) &&
+          parts.some(part => safeBooleanWithUndefined.has(part.getFlags())) &&
           parts.some(part => part.getFlags() === ts.TypeFlags.Undefined)
         )
           return true;
@@ -163,17 +227,13 @@ export class TypeCheck {
     return false;
   };
 
-  public readonly isObjectType = (type: ts.Type): type is ts.ObjectType =>
-    tsutils.isObjectType(type);
-
-  public isReadonlyProperty(property: ts.Symbol, type: ts.Type): boolean {
-    return tsutils.isPropertyReadonlyInType(
-      type,
-      property.getEscapedName(),
-      this.checker
-    );
-  }
-
+  /**
+   * Checks if type contains type group.
+   *
+   * @param type - Type.
+   * @param expected - Expected type group.
+   * @returns _True_ if type contains type group, _false_ otherwise.
+   */
   public typeHas(type: ts.Type, expected?: TypeGroup): boolean {
     return expected
       ? this.typeIs(type, expected) ||
@@ -182,28 +242,53 @@ export class TypeCheck {
       : true;
   }
 
+  /**
+   * Checks if type contains none of type groups.
+   *
+   * @param type - Type.
+   * @param expected - Expected type groups.
+   * @returns _True_ if type contains none of type groups, _false_ otherwise.
+   */
   public typeHasNoneOf(type: ts.Type, expected?: TypeGroups): boolean {
     return expected ? expected.every(x => !this.typeHas(type, x)) : true;
   }
 
+  /**
+   * Checks if type contains one of type groups.
+   *
+   * @param type - Type.
+   * @param expected - Expected type groups.
+   * @returns _True_ if type contains one of type groups, _false_ otherwise.
+   */
   public typeHasOneOf(type: ts.Type, expected?: TypeGroups): boolean {
     return expected ? expected.some(x => this.typeHas(type, x)) : true;
   }
 
+  /**
+   * Checks if type belongs to type group.
+   *
+   * @param type - Type.
+   * @param expected - Expected type group.
+   * @returns _True_ if type belongs to type group, _false_ otherwise.
+   */
+  // eslint-disable-next-line complexity -- Wait for @skylib/config update
   public typeIs(type: ts.Type, expected: TypeGroup | undefined): boolean {
     if (expected)
       switch (expected) {
         case TypeGroup.any:
-          return this.zzz(type, ts.TypeFlags.Any);
+          return checkTypeFlags(type, ts.TypeFlags.Any);
 
         case TypeGroup.array:
           return (
-            this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-            this.checker.isArrayType(type)
+            checkTypeFlags(
+              type,
+              ts.TypeFlags.NonPrimitive,
+              ts.TypeFlags.Object
+            ) && this.checker.isArrayType(type)
           );
 
         case TypeGroup.boolean:
-          return this.zzz(
+          return checkTypeFlags(
             type,
             ts.TypeFlags.Boolean,
             ts.TypeFlags.BooleanLike,
@@ -219,33 +304,45 @@ export class TypeCheck {
 
             assert.not.empty(subtypes, "Missing type arguments");
 
-            return subtypes.some(subtype => this.typeIs(subtype, expected));
+            return subtypes.some(subtype =>
+              this.typeIs(subtype, TypeGroup.complex)
+            );
           }
 
           if (type.isUnionOrIntersection())
-            return type.types.some(subtype => this.typeIs(subtype, expected));
+            return type.types.some(subtype =>
+              this.typeIs(subtype, TypeGroup.complex)
+            );
 
           const symbol = type.getSymbol();
 
           return symbol && symbol.name.startsWith("__")
-            ? this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object)
+            ? type.getProperties().length > 0 &&
+                checkTypeFlags(
+                  type,
+                  ts.TypeFlags.NonPrimitive,
+                  ts.TypeFlags.Object
+                )
             : false;
         }
 
         case TypeGroup.function:
           return (
-            this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-            type.getCallSignatures().length > 0
+            checkTypeFlags(
+              type,
+              ts.TypeFlags.NonPrimitive,
+              ts.TypeFlags.Object
+            ) && type.getCallSignatures().length > 0
           );
 
         case TypeGroup.never:
-          return this.zzz(type, ts.TypeFlags.Never);
+          return checkTypeFlags(type, ts.TypeFlags.Never);
 
         case TypeGroup.null:
-          return this.zzz(type, ts.TypeFlags.Null);
+          return checkTypeFlags(type, ts.TypeFlags.Null);
 
         case TypeGroup.number:
-          return this.zzz(
+          return checkTypeFlags(
             type,
             ts.TypeFlags.Number,
             ts.TypeFlags.NumberLike,
@@ -254,9 +351,14 @@ export class TypeCheck {
 
         case TypeGroup.object:
           return (
-            this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
+            checkTypeFlags(
+              type,
+              ts.TypeFlags.NonPrimitive,
+              ts.TypeFlags.Object
+            ) &&
             !this.typeIs(type, TypeGroup.array) &&
-            !this.typeIs(type, TypeGroup.function)
+            !this.typeIs(type, TypeGroup.function) &&
+            !this.typeIs(type, TypeGroup.tuple)
           );
 
         case TypeGroup.parameter:
@@ -274,7 +376,7 @@ export class TypeCheck {
             );
 
         case TypeGroup.string:
-          return this.zzz(
+          return checkTypeFlags(
             type,
             ts.TypeFlags.String,
             ts.TypeFlags.StringLike,
@@ -282,7 +384,7 @@ export class TypeCheck {
           );
 
         case TypeGroup.symbol:
-          return this.zzz(
+          return checkTypeFlags(
             type,
             ts.TypeFlags.ESSymbol,
             ts.TypeFlags.ESSymbolLike,
@@ -291,44 +393,98 @@ export class TypeCheck {
 
         case TypeGroup.tuple:
           return (
-            this.zzz(type, ts.TypeFlags.NonPrimitive, ts.TypeFlags.Object) &&
-            this.checker.isTupleType(type)
+            checkTypeFlags(
+              type,
+              ts.TypeFlags.NonPrimitive,
+              ts.TypeFlags.Object
+            ) && this.checker.isTupleType(type)
           );
 
         case TypeGroup.undefined:
-          return this.zzz(type, ts.TypeFlags.Undefined);
+          return checkTypeFlags(type, ts.TypeFlags.Undefined);
 
         case TypeGroup.unknown:
-          return this.zzz(type, ts.TypeFlags.Unknown);
+          return checkTypeFlags(type, ts.TypeFlags.Unknown);
       }
 
     return true;
   }
 
+  /**
+   * Checks if type belongs to none of type groups.
+   *
+   * @param type - Type.
+   * @param expected - Expected type groups.
+   * @returns _True_ if type belongs to none of type groups, _false_ otherwise.
+   */
   public typeIsNoneOf(type: ts.Type, expected?: TypeGroups): boolean {
     return expected ? expected.every(x => !this.typeIs(type, x)) : true;
   }
 
+  /**
+   * Checks if type belongs to one of type groups.
+   *
+   * @param type - Type.
+   * @param expected - Expected type groups.
+   * @returns _True_ if type belongs to one of type groups, _false_ otherwise.
+   */
   public typeIsOneOf(type: ts.Type, expected?: TypeGroups): boolean {
     return expected ? expected.some(x => this.typeIs(type, x)) : true;
   }
 
   /**
-   * Gets type parts.
+   * Extracts type parts from node.
    *
    * @param node - Node.
    * @returns Type parts.
    */
-  public unionTypeParts(node: TSESTree.Node): TypeCheck.TypeParts {
+  public typeParts(node: TSESTree.Node): TypeParts {
     return node.type === AST_NODE_TYPES.UnaryExpression &&
       node.operator === "typeof"
-      ? recurs(this.checker.getTypeAtLocation(this.toTsNode(node.argument)))
-      : this.unionTypeParts2(node);
+      ? this.typePartsTypeof(node)
+      : this.typePartsNoTypeof(node);
+  }
 
-    function recurs(type: ts.Type): TypeCheck.TypeParts {
-      if (type.getCallSignatures().length) return ["function"];
+  protected readonly code: string;
 
-      if (type.getConstructSignatures().length) return ["function"];
+  protected readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
+
+  /**
+   * Extracts type parts from node.
+   *
+   * @param node - Node.
+   * @returns Type parts.
+   */
+  protected typePartsNoTypeof(node: TSESTree.Node): TypeParts {
+    return recurs(this.checker.getTypeAtLocation(this.toTsNode(node)));
+
+    function recurs(type: ts.Type): TypeParts {
+      if (type.isNumberLiteral()) return [type.value];
+
+      if (type.isStringLiteral()) return [type.value];
+
+      if (type.isUnion())
+        return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
+
+      return [type];
+    }
+  }
+
+  /**
+   * Extracts type parts from node.
+   *
+   * @param node - Node.
+   * @returns Type parts.
+   */
+  protected typePartsTypeof(node: TSESTree.UnaryExpression): TypeParts {
+    return recurs(this.checker.getTypeAtLocation(this.toTsNode(node.argument)));
+
+    function recurs(type: ts.Type): TypeParts {
+      if (
+        type.getCallSignatures().length ||
+        type.getConstructSignatures().length
+      )
+        return ["function"];
 
       if (type.isUnion())
         return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
@@ -363,77 +519,7 @@ export class TypeCheck {
       }
     }
   }
-
-  protected readonly code: string;
-
-  protected readonly toTsNode: ParserServices["esTreeNodeToTSNodeMap"]["get"];
-
-  /**
-   * Gets type parts.
-   *
-   * @param node - Node.
-   * @returns Type parts.
-   */
-  protected unionTypeParts2(node: TSESTree.Node): TypeCheck.TypeParts {
-    return recurs(this.checker.getTypeAtLocation(this.toTsNode(node)));
-
-    function recurs(type: ts.Type): TypeCheck.TypeParts {
-      if (type.isNumberLiteral()) return [type.value];
-
-      if (type.isStringLiteral()) return [type.value];
-
-      if (type.isUnion())
-        return tsutils.unionTypeParts(type).flatMap(part => recurs(part));
-
-      return [type];
-    }
-  }
-
-  protected readonly zzz = (
-    type: ts.Type,
-    // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
-    ...flags: readonly ts.TypeFlags[]
-  ): boolean => {
-    if (type.isTypeParameter()) {
-      const constraint = type.getConstraint();
-
-      if (is.not.empty(constraint)) type = constraint;
-      else return flags.includes(ts.TypeFlags.Unknown);
-    }
-
-    return (
-      flags.includes(type.getFlags()) ||
-      (type.isUnion() &&
-        type.types.every(subtype => flags.includes(subtype.getFlags())))
-    );
-  };
 }
-
-export namespace TypeCheck {
-  export type Signatures = readonly ts.Signature[];
-
-  export type TypePart = NumStrU | ts.Type;
-
-  export type TypeParts = readonly TypePart[];
-}
-
-const safeTypes = new ReadonlySet([
-  ts.TypeFlags.BigInt,
-  ts.TypeFlags.BigIntLiteral,
-  ts.TypeFlags.Boolean,
-  ts.TypeFlags.BooleanLiteral,
-  ts.TypeFlags.Number,
-  ts.TypeFlags.NumberLiteral,
-  ts.TypeFlags.String,
-  ts.TypeFlags.StringLiteral
-]);
-
-const safeTypesWithUndefined = new ReadonlySet([
-  ts.TypeFlags.ESSymbol,
-  ts.TypeFlags.Object,
-  ts.TypeFlags.NonPrimitive,
-  ts.TypeFlags.UniqueESSymbol
-]);
 
 const isExpectedFlags: is.Guard<ExpectedFlags> = is.factory(is.enumeration, {
   [ts.TypeFlags.BigInt]: ts.TypeFlags.BigInt,
@@ -451,6 +537,24 @@ const isExpectedFlags: is.Guard<ExpectedFlags> = is.factory(is.enumeration, {
   [ts.TypeFlags.Void]: ts.TypeFlags.Void
 } as const);
 
+const safeBoolean = new ReadonlySet([
+  ts.TypeFlags.BigInt,
+  ts.TypeFlags.BigIntLiteral,
+  ts.TypeFlags.Boolean,
+  ts.TypeFlags.BooleanLiteral,
+  ts.TypeFlags.Number,
+  ts.TypeFlags.NumberLiteral,
+  ts.TypeFlags.String,
+  ts.TypeFlags.StringLiteral
+]);
+
+const safeBooleanWithUndefined = new ReadonlySet([
+  ts.TypeFlags.ESSymbol,
+  ts.TypeFlags.Object,
+  ts.TypeFlags.NonPrimitive,
+  ts.TypeFlags.UniqueESSymbol
+]);
+
 type ExpectedFlags =
   | ts.TypeFlags.BigInt
   | ts.TypeFlags.BigIntLiteral
@@ -466,9 +570,37 @@ type ExpectedFlags =
   | ts.TypeFlags.UniqueESSymbol
   | ts.TypeFlags.Void;
 
+/**
+ * Asserts node to be expression.
+ *
+ * @param tsNode - Typescript node.
+ * @param error - Error.
+ */
 function assertExpression(
   tsNode: ts.Node,
   error: assert.ErrorArg
 ): asserts tsNode is ts.Expression {
   assert.toBeTrue(tsutils.isExpression(tsNode), error);
+}
+
+/**
+ * Checks type flags.
+ *
+ * @param type - Type.
+ * @param flags - Flags.
+ * @returns _True_ if type has one of given flags, _false_ otherwise.
+ */
+function checkTypeFlags(type: ts.Type, ...flags: TypeFlagsArray): boolean {
+  if (type.isTypeParameter()) {
+    const constraint = type.getConstraint();
+
+    if (is.not.empty(constraint)) type = constraint;
+    else return flags.includes(ts.TypeFlags.Unknown);
+  }
+
+  return (
+    flags.includes(type.getFlags()) ||
+    (type.isUnion() &&
+      type.types.every(subtype => flags.includes(subtype.getFlags())))
+  );
 }

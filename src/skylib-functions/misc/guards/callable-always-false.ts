@@ -5,9 +5,9 @@ export const callableAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include function or unknown",
+      message: "Always false",
       selector:
-        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=callable] > .arguments:first-child",
+        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:callable|callableU)$/u] > .arguments:first-child",
       typeHasNoneOf: [
         utils.TypeGroup.any,
         utils.TypeGroup.function,

@@ -5,8 +5,12 @@ export enum Type {
   import = "import"
 }
 
-// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
 export interface Callback {
+  /**
+   * Callback.
+   *
+   * @param ctx - Context.
+   */
   (ctx: Ctx): void;
 }
 

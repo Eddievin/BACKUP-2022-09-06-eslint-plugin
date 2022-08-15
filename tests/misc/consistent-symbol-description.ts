@@ -10,7 +10,7 @@ utils.testRule("consistent-symbol-description", rule, [
     name: `Test at line ${getCurrentLine().line}`,
     code: `
       const x = Symbol("PascalCase");
-      const y = Symbol("kebab-case");
+      const y = Symbol("kebab-case__kebab-case");
     `,
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }

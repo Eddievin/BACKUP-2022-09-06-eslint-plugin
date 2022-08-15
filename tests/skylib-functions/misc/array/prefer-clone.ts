@@ -1,16 +1,14 @@
-/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
-
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
-const rule = rules["typescript/prefer-ReadonlySet"];
+const rule = rules["functions/array/prefer-clone"];
 
 const MessageId = utils.getMessageId(rule);
 
-utils.testRule("prefer-ReadonlySet", rule, [
+utils.testRule("prefer-clone", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "function f(x: Set<string>) {}",
+    code: "const x = [...arr];",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

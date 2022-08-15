@@ -2,9 +2,5 @@
   "compilerOptions": {
     "jsx": "preserve",
     "strictNullChecks": true
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.vue"
-  ]
+  }
 }

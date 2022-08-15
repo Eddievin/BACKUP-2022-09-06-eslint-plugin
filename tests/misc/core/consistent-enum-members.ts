@@ -10,10 +10,14 @@ utils.testRule("consistent-enum-members", rule, [
     name: `Test at line ${getCurrentLine().line}`,
     code: `
       enum E {
-        a = "x",
-        b = "b"
+        a = "a",
+        b = "c",
+        c = 1
       }
     `,
-    errors: [{ line: 2, messageId: MessageId.inconsistentMember }]
+    errors: [
+      { line: 3, messageId: MessageId.inconsistentMember },
+      { line: 4, messageId: MessageId.inconsistentMember }
+    ]
   }
 ]);

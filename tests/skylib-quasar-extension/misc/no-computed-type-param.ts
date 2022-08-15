@@ -8,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("no-computed-type-param", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "computed<T>(() => {});",
+    code: "computed<T>();",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

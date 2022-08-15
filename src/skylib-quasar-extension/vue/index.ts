@@ -1,5 +1,5 @@
-import * as utils from "../../utils";
+import { o } from "@skylib/functions";
 import { script } from "./script";
 import { template } from "./template";
 
-export const vue = utils.prefixKeys("vue/", { ...script, ...template });
+export const vue = o.prefixKeys({ ...script, ...template }, "vue/");

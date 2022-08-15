@@ -3,7 +3,12 @@ import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import { a, is, num, s } from "@skylib/functions";
+import { is, num, s } from "@skylib/functions";
+
+export interface Options {
+  readonly maxLineLength: number;
+  readonly maxObjectSize: number;
+}
 
 export enum MessageId {
   preferMultiline = "preferMultiline",
@@ -40,8 +45,8 @@ export const objectFormat = utils.createRule({
 
         if (texts.length) {
           const expectMultiline =
-            texts.length > maxObjectSize ||
             predictedLength() > maxLineLength ||
+            texts.length > maxObjectSize ||
             texts.some(s.multiline) ||
             node.properties.some(context.hasTrailingComment);
 
@@ -73,7 +78,8 @@ export const objectFormat = utils.createRule({
 
           const brackets = 4;
 
-          const tail = firstLine(context.getText(node.range[1]))
+          const tail = s
+            .firstLine(context.getText(node.range[1]))
             // eslint-disable-next-line regexp/optimal-quantifier-concatenation -- Wait for https://github.com/ota-meshi/eslint-plugin-regexp/issues/451
             .replace(/^((?: as const)?\S*).*/u, "$1").length;
 
@@ -83,20 +89,3 @@ export const objectFormat = utils.createRule({
     };
   }
 });
-
-export interface Options {
-  readonly maxLineLength: number;
-  readonly maxObjectSize: number;
-}
-
-/**
- * Returns first line.
- *
- * @param str - String.
- * @returns First line.
- */
-// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
-// fixme
-function firstLine(str: string): string {
-  return a.first(s.lines(str));
-}

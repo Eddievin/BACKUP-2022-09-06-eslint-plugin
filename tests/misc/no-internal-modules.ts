@@ -9,13 +9,17 @@ utils.testRule("no-internal-modules", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      import x from "./dir/source";
-      import y from "@scope/package/source";
-      import z from "@scope/package";
+      import x1 from "./folder/internal";
+      import x2 from "package/internal";
+      import x3 from "@scope/package/internal";
+      import x4 from "./folder";
+      import x5 from "package";
+      import x6 from "@scope/package";
     `,
     errors: [
       { line: 1, messageId: MessageId.disallowedSource },
-      { line: 2, messageId: MessageId.disallowedSource }
+      { line: 2, messageId: MessageId.disallowedSource },
+      { line: 3, messageId: MessageId.disallowedSource }
     ]
   }
 ]);

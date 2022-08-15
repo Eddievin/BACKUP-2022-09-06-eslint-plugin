@@ -5,7 +5,7 @@ export const numberAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include number, unknown",
+      message: "Always false",
       selector:
         "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:number|numberU)$/u] > .arguments:first-child",
       typeHasNoneOf: [

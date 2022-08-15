@@ -8,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("prefer-reflect", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: 'Reflect.get({}, "x")',
+    code: "Reflect.get();",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

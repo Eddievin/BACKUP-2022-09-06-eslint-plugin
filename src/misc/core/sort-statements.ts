@@ -1,16 +1,25 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "../../utils";
 import type { Rec, stringU, strings } from "@skylib/functions";
-import { assert, is } from "@skylib/functions";
+import { a, assert, evaluate, is, o, s } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
+export interface Options {
+  readonly blockOrder: NodeTypes;
+  readonly moduleOrder: NodeTypes;
+  readonly order: NodeTypes;
+  readonly programOrder: NodeTypes;
+}
+
 export enum NodeType {
   ExportAllDeclaration = "ExportAllDeclaration",
   ExportDeclaration = "ExportDeclaration",
+  ExportDefaultDeclaration = "ExportDefaultDeclaration",
   ExportFunctionDeclaration = "ExportFunctionDeclaration",
   ExportTypeDeclaration = "ExportTypeDeclaration",
+  ExportUnknown = "ExportUnknown",
   FunctionDeclaration = "FunctionDeclaration",
   ImportDeclaration = "ImportDeclaration",
   JestTest = "JestTest",
@@ -74,19 +83,44 @@ const defaultOrder: NodeTypes = [
   NodeType.ImportDeclaration,
   NodeType.ExportAllDeclaration,
   NodeType.ExportDeclaration,
-  NodeType.Unknown,
+  NodeType.ExportDefaultDeclaration,
+  NodeType.ExportUnknown,
   NodeType.ExportTypeDeclaration,
   NodeType.ExportFunctionDeclaration,
+  NodeType.Unknown,
   NodeType.TypeDeclaration,
   NodeType.FunctionDeclaration,
   NodeType.JestTest
 ];
 
+const prepareForComparison = evaluate((): PrepareForComparison => {
+  const priority = ":,.";
+
+  const keys = a.fromString(priority);
+
+  const values = a.sort(a.fromString(priority));
+
+  const map = o.fromEntries(
+    keys.map((key, index) => [key, a.get(values, index)])
+  );
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+  const re = new RegExp(`[${s.escapeRegExpSpecialChars(priority)}]`, "gu");
+
+  return (str: string): string => str.replace(re, callback);
+
+  function callback(char: string): string {
+    return map[char] as string;
+  }
+});
+
 const sortable: Rec<NodeType, boolean> = {
   [NodeType.ExportAllDeclaration]: true,
   [NodeType.ExportDeclaration]: true,
+  [NodeType.ExportDefaultDeclaration]: false,
   [NodeType.ExportFunctionDeclaration]: true,
   [NodeType.ExportTypeDeclaration]: true,
+  [NodeType.ExportUnknown]: false,
   [NodeType.FunctionDeclaration]: true,
   [NodeType.ImportDeclaration]: false,
   [NodeType.JestTest]: true,
@@ -94,14 +128,28 @@ const sortable: Rec<NodeType, boolean> = {
   [NodeType.Unknown]: false
 };
 
-export interface Options {
-  readonly blockOrder: NodeTypes;
-  readonly moduleOrder: NodeTypes;
-  readonly order: NodeTypes;
-  readonly programOrder: NodeTypes;
+type NodeTypes = readonly NodeType[];
+
+interface PrepareForComparison {
+  /**
+   * Prepares string for comparison.
+   *
+   * @param str - String.
+   * @returns Prepared string.
+   */
+  (str: string): string;
 }
 
-type NodeTypes = readonly NodeType[];
+/**
+ * Checks identifier name.
+ *
+ * @param node - Node.
+ * @param names - Expected names.
+ * @returns _True_ if node is an identifier with expected name, _false_ otherwise.
+ */
+function checkIdentifierName(node: TSESTree.Node, ...names: strings): boolean {
+  return node.type === AST_NODE_TYPES.Identifier && names.includes(node.name);
+}
 
 /**
  * Returns Jest test name.
@@ -123,20 +171,20 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
       if (
         (callee.type === AST_NODE_TYPES.Identifier && callee.name === "test") ||
         (callee.type === AST_NODE_TYPES.MemberExpression &&
-          isIdentifier(callee.object, "test") &&
-          isIdentifier(callee.property, "only", "skip")) ||
+          checkIdentifierName(callee.object, "test") &&
+          checkIdentifierName(callee.property, "only", "skip")) ||
         (callee.type === AST_NODE_TYPES.CallExpression &&
           callee.callee.type === AST_NODE_TYPES.MemberExpression &&
-          isIdentifier(callee.callee.object, "test") &&
-          isIdentifier(callee.callee.property, "each")) ||
+          checkIdentifierName(callee.callee.object, "test") &&
+          checkIdentifierName(callee.callee.property, "each")) ||
         (callee.type === AST_NODE_TYPES.CallExpression &&
           callee.callee.type === AST_NODE_TYPES.MemberExpression &&
           callee.callee.object.type === AST_NODE_TYPES.MemberExpression &&
-          isIdentifier(callee.callee.object.object, "test") &&
-          isIdentifier(callee.callee.object.property, "only", "skip") &&
-          isIdentifier(callee.callee.property, "each"))
+          checkIdentifierName(callee.callee.object.object, "test") &&
+          checkIdentifierName(callee.callee.object.property, "only", "skip") &&
+          checkIdentifierName(callee.callee.property, "each"))
       )
-        return utils.prepareForComparison(argument.value, ":,.");
+        return prepareForComparison(argument.value);
     }
   }
 
@@ -144,20 +192,9 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
 }
 
 /**
- * Checks if node is an identifier.
- *
- * @param node - Node.
- * @param names - Allowed names.
- * @returns _True_ if node is an identifier, _false_ otherwise.
- */
-function isIdentifier(node: TSESTree.Node, ...names: strings): boolean {
-  return node.type === AST_NODE_TYPES.Identifier && names.includes(node.name);
-}
-
-/**
  * Creates sorting order function.
  *
- * @param order - Order by node type.
+ * @param order - Order.
  * @returns Sorting order function.
  */
 function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
@@ -168,6 +205,9 @@ function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
           NodeType.ExportAllDeclaration,
           `${node.source.value}\u0002${node.exportKind}`
         );
+
+      case AST_NODE_TYPES.ExportDefaultDeclaration:
+        return buildResult(NodeType.ExportDefaultDeclaration);
 
       case AST_NODE_TYPES.ExportNamedDeclaration:
         if (node.declaration)
@@ -189,7 +229,7 @@ function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
               );
 
             default:
-              return buildResult(NodeType.Unknown);
+              return buildResult(NodeType.ExportUnknown);
           }
 
         return buildResult(

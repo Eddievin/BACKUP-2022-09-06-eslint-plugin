@@ -7,7 +7,7 @@ export const indexedObjectAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to be unknown",
+      message: "Always false",
       selector:
         "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:indexedObject|indexedObjectU)$/u] > .arguments:first-child",
       typeHasNoneOf: [

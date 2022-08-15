@@ -3,7 +3,7 @@ import { misc } from "../../misc";
 
 export const noTemp = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: "Temp configurations",
+    message: "Remove temp configuration",
     selector: "AssignmentExpression > ObjectExpression[properties.length>0]"
   }
 ]);

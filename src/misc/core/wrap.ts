@@ -1,7 +1,6 @@
 import * as utils from "../../utils";
 import {
   ProxyHandlerAction,
-  a,
   as,
   is,
   reflect,
@@ -16,6 +15,13 @@ import type {
 import type { Writable, strings } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 
+export interface Options {
+  readonly lint: utils.Selector;
+  readonly plugin: string;
+  readonly rule: string;
+  readonly skip: utils.Selector;
+}
+
 export enum MessageId {
   customMessage = "customMessage"
 }
@@ -26,25 +32,25 @@ export const wrap = utils.createRule({
   vue: true,
   isOptions: is.object.factory<Options>(
     {
-      lintSelector: utils.isSelector,
+      lint: utils.isSelector,
       plugin: is.string,
       rule: is.string,
-      skipSelector: utils.isSelector
+      skip: utils.isSelector
     },
     {}
   ),
-  defaultOptions: { lintSelector: [], skipSelector: [] },
+  defaultOptions: { lint: [], skip: [] },
   messages: { [MessageId.customMessage]: "{{message}}" },
   create: (context): RuleListener => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Postponed
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
     const plugin = require(context.options.plugin);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Postponed
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Ok
     const rule = plugin.rules[context.options.rule] as RuleModule<string>;
 
-    const lintSelector = a.fromMixed(context.options.lintSelector).join(", ");
+    const lint = utils.selector(context.options.lint);
 
-    const skipSelector = a.fromMixed(context.options.skipSelector).join(", ");
+    const skip = utils.selector(context.options.skip);
 
     const lintIds: Writable<strings> = [];
 
@@ -52,80 +58,70 @@ export const wrap = utils.createRule({
 
     const reports: Writable<utils.ReportDescriptors> = [];
 
-    const listener1 = rule.create(
-      new Proxy(
-        {} as Readonly<RuleContext<never, never>>,
-        wrapProxyHandler("eslint-wrap-rule", ProxyHandlerAction.throw, {
-          get: (_target, key) =>
-            key === "report"
-              ? (report: utils.ReportDescriptor) => {
-                  reports.push(report);
-                }
-              : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Postponed
-                reflect.get(context.rawContext, key)
-        })
-      )
-    );
+    return utils.mergeListeners(
+      rule.create(
+        new Proxy(
+          {} as Readonly<RuleContext<never, never>>,
+          wrapProxyHandler("eslint-wrap-rule", ProxyHandlerAction.throw, {
+            get: (_target, key) =>
+              key === "report"
+                ? (report: utils.ReportDescriptor) => {
+                    reports.push(report);
+                  }
+                : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Wait for @skylib/eslint-plugin update
+                  reflect.get(context.rawContext, key)
+          })
+        )
+      ),
+      lint
+        ? typedef<RuleListener>({
+            [lint]: (node: TSESTree.Node) => {
+              lintIds.push(nodeId(node));
+            }
+          })
+        : {},
+      skip
+        ? typedef<RuleListener>({
+            [skip]: (node: TSESTree.Node) => {
+              skipIds.push(nodeId(node));
+            }
+          })
+        : {},
+      {
+        "Program:exit": () => {
+          const lintMatcher = lintIds.length
+            ? (report: utils.ReportDescriptor) =>
+                "node" in report && lintIds.includes(nodeId(report.node))
+            : () => true;
 
-    const listener2 = lintSelector
-      ? typedef<RuleListener>({
-          [lintSelector]: (node: TSESTree.Node) => {
-            lintIds.push(nodeId(node));
-          }
-        })
-      : {};
+          const skipMatcher = skipIds.length
+            ? (report: utils.ReportDescriptor) =>
+                "node" in report && skipIds.includes(nodeId(report.node))
+            : () => false;
 
-    const listener3 = skipSelector
-      ? typedef<RuleListener>({
-          [skipSelector]: (node: TSESTree.Node) => {
-            skipIds.push(nodeId(node));
-          }
-        })
-      : {};
+          for (const report of reports)
+            if (lintMatcher(report) && !skipMatcher(report)) {
+              const { data, messageId } = { data: {}, ...report } as const;
 
-    const listener4: RuleListener = {
-      "Program:exit": () => {
-        const lintMatcher = lintIds.length
-          ? (report: utils.ReportDescriptor) =>
-              "node" in report && lintIds.includes(nodeId(report.node))
-          : () => true;
+              const message = as.not
+                .empty(rule.meta.messages[messageId])
+                .replace(/\{\{\s*(\w+)\s*\}\}/gu, (_str, match1: string) => {
+                  const result = data[match1];
 
-        const skipMatcher = skipIds.length
-          ? (report: utils.ReportDescriptor) =>
-              "node" in report && skipIds.includes(nodeId(report.node))
-          : () => false;
+                  return as.numStr(result).toString();
+                });
 
-        for (const report of reports)
-          if (lintMatcher(report) && !skipMatcher(report)) {
-            const { data, messageId } = { data: {}, ...report } as const;
-
-            const message = as.not
-              .empty(rule.meta.messages[messageId])
-              .replace(/\{\{\s*(\w+)\s*\}\}/gu, (_str, match1: string) => {
-                const result = data[match1];
-
-                return as.numStr(result).toString();
+              context.rawContext.report({
+                ...report,
+                data: { message },
+                messageId: MessageId.customMessage
               });
-
-            context.rawContext.report({
-              ...report,
-              data: { message },
-              messageId: MessageId.customMessage
-            });
-          }
+            }
+        }
       }
-    };
-
-    return utils.mergeListenters(listener1, listener2, listener3, listener4);
+    );
   }
 });
-
-export interface Options {
-  readonly lintSelector: utils.Selector;
-  readonly plugin: string;
-  readonly rule: string;
-  readonly skipSelector: utils.Selector;
-}
 
 /**
  * Generates node ID.

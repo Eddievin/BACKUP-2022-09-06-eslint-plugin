@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const noTsToolbelt = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "@skylib/functions" type',
+    message: 'Use "@skylib/functions" type instead',
     selector: [
       "ImportDeclaration > Literal.source[value=ts-toolbelt/out/Object/FilterKeys]",
       "ImportDeclaration > Literal.source[value=ts-toolbelt/out/Object/Optional]",

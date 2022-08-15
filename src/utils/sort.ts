@@ -1,15 +1,11 @@
-/* eslint-disable @skylib/no-sibling-import -- Postponed */
-/* eslint-disable @skylib/typescript/prefer-array-type-alias -- Postponed */
-/* eslint-disable @skylib/typescript/prefer-readonly-array -- Postponed */
-
+import type { Context, RuleFixes } from "./types";
+import type { KeyNode, SortingOrder } from "./sort.internal";
 import type { Writable, numberU, stringU, strings } from "@skylib/functions";
 import { a, as, defineFn, fn, is } from "@skylib/functions";
-import type { Context } from "./types";
 import { MessageId } from "./sort.internal";
-import type { RuleFix } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { compare } from "./compare";
-import { nodeText } from "./core";
+import { nodeText } from "./misc";
 
 export const sort = defineFn(
   /**
@@ -26,24 +22,23 @@ export const sort = defineFn(
   ): void => {
     const { customOrder, keyNode, sendToBottom, sendToTop, sortingOrder } = {
       customOrder: [],
-      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
-      // fixme -- Use fn.never
-      keyNode: fn.noop as (node: T) => TSESTree.Node,
+      keyNode: fn.never as KeyNode<T>,
       sortingOrder: (node: T): stringU => {
-        const node2 = keyNode(node);
+        const kNode = keyNode(node);
 
-        if (node2) {
-          const key = nodeText(node2, () => `\u0001${context.getText(node2)}`);
+        if (kNode) {
+          const key = nodeText(kNode, () => `\u0002${context.getText(kNode)}`);
 
           const index = customOrder.indexOf(key);
 
-          if (index >= 0) return `${1000 + index}:${key}`;
+          if (index >= 0) return `${1000 + index}`;
 
-          if (sendToTopRe && sendToTopRe.test(key)) return `2001:${key}`;
+          if (sendToTopRe && sendToTopRe.test(key)) return `2001\u0001${key}`;
 
-          if (sendToBottomRe && sendToBottomRe.test(key)) return `2003:${key}`;
+          if (sendToBottomRe && sendToBottomRe.test(key))
+            return `2003\u0001${key}`;
 
-          return `2002:${key}`;
+          return `2002\u0001${key}`;
         }
 
         return undefined;
@@ -52,12 +47,12 @@ export const sort = defineFn(
     } as const;
 
     const sendToTopRe = is.not.empty(sendToTop)
-      ? // eslint-disable-next-line security/detect-non-literal-regexp -- Postponed
+      ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
         new RegExp(sendToTop, "u")
       : undefined;
 
     const sendToBottomRe = is.not.empty(sendToBottom)
-      ? // eslint-disable-next-line security/detect-non-literal-regexp -- Postponed
+      ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
         new RegExp(sendToBottom, "u")
       : undefined;
 
@@ -80,23 +75,21 @@ export const sort = defineFn(
     messages: {
       [MessageId.incorrectSortingOrder]: "Incorrect sorting order",
       [MessageId.incorrectSortingOrderId]: "Incorrect sorting order ({{_id}})"
-    }
+    } as const
   }
 );
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare -- Postponed
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Ok
 export namespace sort {
   export type MessageId = import("./sort.internal").MessageId;
 
-  export interface Options<T extends TSESTree.Node = TSESTree.Node> {
+  export interface Options<T extends TSESTree.Node> {
     readonly _id?: string;
     readonly customOrder?: strings;
-    // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-    readonly keyNode?: (node: T) => TSESTree.Node | undefined;
+    readonly keyNode?: KeyNode<T>;
     readonly sendToBottom?: string;
     readonly sendToTop?: string;
-    // eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-    readonly sortingOrder?: (node: T) => stringU;
+    readonly sortingOrder?: SortingOrder<T>;
   }
 }
 
@@ -108,7 +101,13 @@ interface Item {
 
 type Items = readonly Item[];
 
-// eslint-disable-next-line @skylib/require-jsdoc -- Ppstponed
+/**
+ * Sorts items.
+ *
+ * @param items - Items.
+ * @param options - Options.
+ * @param context - Context.
+ */
 function sortGroup<T extends TSESTree.Node = TSESTree.Node>(
   items: Items,
   options: sort.Options<T>,
@@ -123,7 +122,7 @@ function sortGroup<T extends TSESTree.Node = TSESTree.Node>(
       compare(item1.key, item2.key)
     );
 
-    const fixes: RuleFix[] = [];
+    const fixes: Writable<RuleFixes> = [];
 
     let min: numberU;
 
@@ -149,19 +148,20 @@ function sortGroup<T extends TSESTree.Node = TSESTree.Node>(
         a.get(items, as.not.empty(max)).node.range[1]
       ]);
 
-      if (is.not.empty(_id))
-        context.report({
-          data: { _id },
-          fix: () => fixes,
-          loc,
-          messageId: sort.MessageId.incorrectSortingOrderId
-        });
-      else
-        context.report({
-          fix: () => fixes,
-          loc,
-          messageId: sort.MessageId.incorrectSortingOrder
-        });
+      context.report(
+        is.not.empty(_id)
+          ? {
+              data: { _id },
+              fix: () => fixes,
+              loc,
+              messageId: MessageId.incorrectSortingOrderId
+            }
+          : {
+              fix: () => fixes,
+              loc,
+              messageId: MessageId.incorrectSortingOrder
+            }
+      );
     }
   }
 }

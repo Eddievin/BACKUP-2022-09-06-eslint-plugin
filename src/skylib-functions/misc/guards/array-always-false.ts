@@ -5,7 +5,7 @@ export const arrayAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include array or unknown",
+      message: "Always false",
       selector:
         "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:array|arrayU)$/u] > .arguments:first-child",
       typeHasNoneOf: [

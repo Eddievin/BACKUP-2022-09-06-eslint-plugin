@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const noQPopupProxy = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "m-popup-proxy" component',
+    message: 'Use "m-popup-proxy" component instead',
     selector: "VElement[name=q-popup-proxy]"
   }
 ]);

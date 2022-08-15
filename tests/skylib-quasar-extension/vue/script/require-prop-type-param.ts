@@ -8,7 +8,15 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("require-prop-type-param", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "prop();",
-    errors: [{ line: 1, messageId: MessageId.customMessage }]
+    code: `
+      prop();
+      prop.default();
+      prop.required();
+    `,
+    errors: [
+      { line: 1, messageId: MessageId.customMessage },
+      { line: 2, messageId: MessageId.customMessage },
+      { line: 3, messageId: MessageId.customMessage }
+    ]
   }
 ]);

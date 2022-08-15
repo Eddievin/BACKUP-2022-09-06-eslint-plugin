@@ -3,8 +3,8 @@ import { core } from "./core";
 
 export const noTrueType = utils.wrapRule(core["no-restricted-syntax"], [
   {
-    message: 'Prefer "boolean" type',
+    message: 'Use "boolean" type instead',
     selector:
-      "TSPropertySignature[optional=true] > .typeAnnotation > TSLiteralType.typeAnnotation > .literal[value=true]"
+      "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType.typeAnnotation > Literal[value=true]"
   }
 ]);

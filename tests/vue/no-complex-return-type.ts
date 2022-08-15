@@ -12,6 +12,11 @@ utils.testRule("no-complex-return-type", rule, [
       function f() { return { x: 1 } }
       function g(): object { return { x: 1 } }
       interface I { (): unknown; }
+      class C {
+        public constructor() {}
+        *f(): IterableIterator<string[]> {}
+      }
+      export default defineComponent({ setup: () => ({ x: 1 }) });
     `,
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }

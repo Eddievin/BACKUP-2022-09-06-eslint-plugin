@@ -1,4 +1,4 @@
-/* eslint-disable @skylib/consistent-filename -- Postponed */
+/* eslint-disable @skylib/consistent-filename -- Ok */
 
 import * as utils from "../utils";
 import { typescript } from "../typescript";
@@ -7,7 +7,7 @@ export const preferToBe = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: 'Prefer "toBe" matcher',
+      message: 'Use "toBe" matcher instead',
       selector:
         "CallExpression[callee.property.name=toStrictEqual] > .arguments",
       typeIsOneOf: [

@@ -7,7 +7,6 @@ import { maxIdentifierBlocks } from "./max-identifier-blocks";
 import { noAtSignImport } from "./no-at-sign-import";
 import { noAtSignInternalImport } from "./no-at-sign-internal-import";
 import { noChainCoalescenceMixture } from "./no-chain-coalescence-mixture";
-import { noEmptyInterfaces } from "./no-empty-interfaces";
 import { noIndexImport } from "./no-index-import";
 import { noInternalModules } from "./no-internal-modules";
 import { noLanguageMixing } from "./no-language-mixing";
@@ -35,7 +34,6 @@ export const misc = {
   "no-at-sign-import": noAtSignImport,
   "no-at-sign-internal-import": noAtSignInternalImport,
   "no-chain-coalescence-mixture": noChainCoalescenceMixture,
-  "no-empty-interfaces": noEmptyInterfaces,
   "no-index-import": noIndexImport,
   "no-internal-modules": noInternalModules,
   "no-language-mixing": noLanguageMixing,

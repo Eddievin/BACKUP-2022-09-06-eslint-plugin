@@ -1,6 +1,13 @@
 import * as utils from "../../utils";
-import { a, assert, is } from "@skylib/functions";
+import { assert, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+
+export interface Options {
+  readonly message?: string;
+  readonly once: boolean;
+  readonly selector: utils.Selector;
+  readonly trigger: utils.Selector;
+}
 
 export enum MessageId {
   customMessage = "customMessage"
@@ -24,9 +31,9 @@ export const requireSyntax = utils.createRule({
       trigger: mixedTrigger
     } = context.options;
 
-    const selector = a.fromMixed(mixedSelector).join(", ");
+    const selector = utils.selector(mixedSelector);
 
-    const trigger = a.fromMixed(mixedTrigger).join(", ");
+    const trigger = utils.selector(mixedTrigger);
 
     let selectorCount = 0;
 
@@ -35,37 +42,38 @@ export const requireSyntax = utils.createRule({
     assert.toBeTrue(selector !== "", "Expecting selector");
     assert.toBeTrue(trigger !== "", "Expecting trigger");
 
-    return {
-      "Program:exit": () => {
-        if (triggerCount) {
-          if (selectorCount === 0)
-            context.report({
-              data: { message: message ?? `Missing syntax: ${selector}` },
-              loc: context.locZero,
-              messageId: MessageId.customMessage
-            });
-
-          if (selectorCount > 1 && once)
-            context.report({
-              data: { message: message ?? `Require syntax once: ${selector}` },
-              loc: context.locZero,
-              messageId: MessageId.customMessage
-            });
+    return utils.mergeListeners(
+      {
+        [selector]: () => {
+          selectorCount++;
         }
       },
-      [selector]: () => {
-        selectorCount++;
+      {
+        [trigger]: () => {
+          triggerCount++;
+        }
       },
-      [trigger]: () => {
-        triggerCount++;
+      {
+        "Program:exit": () => {
+          if (triggerCount) {
+            if (selectorCount === 0)
+              context.report({
+                data: { message: message ?? `Missing syntax: ${selector}` },
+                loc: context.locZero,
+                messageId: MessageId.customMessage
+              });
+
+            if (selectorCount > 1 && once)
+              context.report({
+                data: {
+                  message: message ?? `Require syntax once: ${selector}`
+                },
+                loc: context.locZero,
+                messageId: MessageId.customMessage
+              });
+          }
+        }
       }
-    };
+    );
   }
 });
-
-export interface Options {
-  readonly message?: string;
-  readonly once: boolean;
-  readonly selector: utils.Selector;
-  readonly trigger: utils.Selector;
-}

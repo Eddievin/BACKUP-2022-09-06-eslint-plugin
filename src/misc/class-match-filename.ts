@@ -3,7 +3,7 @@ import { core } from "./core";
 
 export const classMatchFilename = utils.wrapRule(core["match-filename"], [
   {
-    format: utils.casing.Format.pascalCase,
+    format: utils.Casing.pascalCase,
     selector: "ClassDeclaration > Identifier.id"
   }
 ]);

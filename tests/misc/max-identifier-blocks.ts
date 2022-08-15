@@ -13,6 +13,8 @@ utils.testRule("max-identifier-blocks", rule, [
       const aaaBbbCccDddEee = 1;
       const AaaBbbCccDdd = 1;
       const aaaBbbCccDdd = 1;
+      const AaaBbbCccDddE = 1;
+      const aaaBbbCccDddE = 1;
     `,
     errors: [
       { line: 1, messageId: MessageId.customMessage },

@@ -1,3 +1,5 @@
+/* eslint-disable @skylib/config/eslintrc-no-disable -- Ok */
+
 const { eslint } = require("@skylib/config/api");
 
 const consistentImport = eslint.rules["@skylib/consistent-import"];
@@ -10,18 +12,67 @@ module.exports = {
         sources: [
           ...consistentImport.sources,
           {
+            _id: "rule-templates",
+            autoImport: true,
+            autoImportSource: "@/rule-templates",
+            source: "@skylib/eslint-plugin/src/rule-templates",
+            wildcard: true
+          },
+          {
             _id: "utils",
             autoImport: true,
             autoImportSource: "@/utils",
             source: "@skylib/eslint-plugin/src/utils",
             wildcard: true
+          },
+          {
+            _id: "utils/casing",
+            source: "@skylib/eslint-plugin/src/utils/casing",
+            wildcard: true
+          },
+          {
+            _id: "utils/configurable-selector",
+            source: "@skylib/eslint-plugin/src/utils/configurable-selector",
+            wildcard: true
+          },
+          {
+            _id: "utils/types/TSESTree",
+            localName: "TSESTree",
+            source: "@skylib/eslint-plugin/src/utils/types/TSESTree",
+            wildcard: true
           }
         ]
       }
     ],
-    "@skylib/disallow-import": [
+    "@skylib/disallow-import/natural-compare": [
+      "off",
+      { disallow: ["natural-compare"] }
+    ],
+    "@skylib/disallow-import/typescript": [
+      "off",
+      { disallow: ["{tsutils,typescript}"] }
+    ],
+    "@skylib/no-sibling-import": [
       "warn",
-      { disallow: ["{natural-compare,tsutils,typescript}"] }
+      {
+        folders: [
+          {
+            filesToLint: ["./*"],
+            levels: [["./jest.config"], ["./jest.config.fast"]]
+          },
+          {
+            filesToLint: ["./src/utils/*"],
+            levels: [
+              ["./TypeCheck", "./compare", "./misc"],
+              ["./create-rule", "./create-rule.internal", "./sort", "./test"]
+            ]
+          },
+          {
+            filesToLint: ["./src/utils/types/*"],
+            levels: [["./misc"], ["./context"]]
+          }
+        ]
+      }
     ],
     "@skylib/require-syntax/fix": [
       // eslint-disable-next-line no-warning-comments -- Wait for @skylib/eslint-plugin update
@@ -31,6 +82,19 @@ module.exports = {
     ]
   },
   overrides: [
+    { files: "./fixtures/**", rules: { "@skylib/consistent-filename": "off" } },
+    {
+      files: "./src/utils/compare.ts",
+      rules: { "@skylib/disallow-import/natural-compare": "off" }
+    },
+    {
+      files: [
+        "./src/dev/typescript.d.ts",
+        "./src/utils/TypeCheck.internal.ts",
+        "./src/utils/TypeCheck.ts"
+      ],
+      rules: { "@skylib/disallow-import/typescript": "off" }
+    },
     {
       files: [
         "./src/misc/core/*",
@@ -59,10 +123,13 @@ module.exports = {
           {
             allow: [
               "../../../misc",
+              "../../../rule-templates",
               "../../../utils",
               "../../misc",
+              "../../rule-templates",
               "../../utils",
               "../misc",
+              "../rule-templates",
               "../utils"
             ],
             disallow: [
@@ -74,7 +141,6 @@ module.exports = {
             ]
           }
         ],
-        // eslint-disable-next-line @skylib/config/eslintrc-no-disable -- Postponed
         "@skylib/primary-export-only": "off",
         "@skylib/sort-keys": [
           "warn",
@@ -88,9 +154,9 @@ module.exports = {
                   "vue",
                   "isOptions",
                   "defaultOptions",
-                  "isSubOptions",
-                  "defaultSubOptions",
-                  "subOptionsKey",
+                  "isSuboptions",
+                  "defaultSuboptions",
+                  "suboptionsKey",
                   "messages",
                   "create"
                 ],
@@ -103,20 +169,15 @@ module.exports = {
         "@skylib/sort-statements": [
           "warn",
           {
-            rootOrder: [
+            programOrder: [
               "ImportDeclaration",
-              "GlobalModuleDeclaration",
               "ExportAllDeclaration",
               "ExportDeclaration",
-              "ExportDefaultDeclaration",
               "ExportTypeDeclaration",
               "ExportFunctionDeclaration",
-              "ExportModuleDeclaration",
-              "ExportUnknown",
               "Unknown",
               "TypeDeclaration",
               "FunctionDeclaration",
-              "ModuleDeclaration",
               "JestTest"
             ]
           }
@@ -127,7 +188,7 @@ module.exports = {
       files: "./src/**",
       rules: {
         "@skylib/match-filename/wrapRule": [
-          "warn",
+          "off",
           {
             format: "camelCase",
             selector:
@@ -139,12 +200,15 @@ module.exports = {
           {
             allow: [
               "../../../misc",
+              "../../../rule-templates",
               "../../../typescript",
               "../../../utils",
               "../../misc",
+              "../../rule-templates",
               "../../typescript",
               "../../utils",
               "../misc",
+              "../rule-templates",
               "../typescript",
               "../utils"
             ],
@@ -157,7 +221,6 @@ module.exports = {
             ]
           }
         ],
-        // eslint-disable-next-line @skylib/config/eslintrc-no-disable -- Postponed
         "@skylib/primary-export-only": "off"
       }
     },
@@ -165,7 +228,9 @@ module.exports = {
       files: "./tests/**",
       rules: {
         "@skylib/match-filename/testRule-name": [
-          "warn",
+          // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
+          // fixme
+          "off",
           {
             format: "kebab-case",
             selector:
@@ -173,6 +238,8 @@ module.exports = {
           }
         ],
         "@skylib/match-filename/testRule-rule": [
+          // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
+          // fixme
           "off",
           {
             format: "kebab-case",

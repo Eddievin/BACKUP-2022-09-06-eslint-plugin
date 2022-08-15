@@ -5,7 +5,7 @@ import { misc } from "../../../misc";
 
 export const preferFromIterable = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "a.fromIterable" function',
+    message: 'Use "a.fromIterable" function instead',
     selector: "ArrayExpression[elements.length=1] > SpreadElement"
   }
 ]);

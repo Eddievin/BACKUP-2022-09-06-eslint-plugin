@@ -369,40 +369,6 @@ utils.testRule(
       options: [
         {
           sources: [
-            { _id: "id1", source: "source1" },
-            { _id: "id2", source: "source2", wildcard: true },
-            {
-              _id: "id3",
-              localName: "localName3",
-              source: "source3",
-              wildcard: true
-            }
-          ]
-        }
-      ],
-      code: `
-        export * as localName1 from "source1";
-        export * as localName2 from "source2";
-        export * as localName3 from "source3";
-      `,
-      errors: [
-        {
-          line: 1,
-          messageId: MessageId.wildcardDisallowed,
-          data: { _id: "id1", expectedLocalName: "source1", source: "source1" }
-        },
-        {
-          line: 2,
-          messageId: MessageId.invalidLocalName,
-          data: { _id: "id2", expectedLocalName: "source2", source: "source2" }
-        }
-      ]
-    },
-    {
-      name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        {
-          sources: [
             { _id: "id1", source: "source1", wildcard: true },
             { _id: "id2", source: "source2" },
             { _id: "id3", localName: "localName3", source: "source3" }
@@ -574,10 +540,7 @@ utils.testRule(
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      code: `
-        import wrongName from "source1";
-        import source2 from "source2";
-      `
+      code: 'import someName from "source";'
     },
     {
       name: `Test at line ${getCurrentLine().line}`,

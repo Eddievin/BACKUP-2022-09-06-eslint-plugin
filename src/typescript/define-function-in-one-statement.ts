@@ -1,7 +1,8 @@
 import * as utils from "../utils";
 import { core } from "./core";
 
-export const noDistributedFunctionProps = utils.wrapRule(
+// eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
+export const defineFunctionInOneStatement = utils.wrapRule(
   core["no-restricted-syntax"],
   [
     {

@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const noQOptionGroup = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "m-option-group" component',
+    message: 'Use "m-option-group" component instead',
     selector: "VElement[name=q-option-group]"
   }
 ]);

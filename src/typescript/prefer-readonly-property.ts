@@ -6,7 +6,8 @@ export const preferReadonlyProperty = utils.wrapRule(
   [
     {
       message: "Prefer readonly property",
-      selector: `:matches(${utils.selectors.property})[readonly!=true]`
+      selector:
+        ":matches(PropertyDefinition, TSPropertySignature)[readonly!=true]"
     }
   ]
 );

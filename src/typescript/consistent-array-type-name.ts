@@ -5,9 +5,9 @@ export const consistentArrayTypeName = utils.wrapRule(
   core["no-restricted-syntax"],
   [
     {
-      message: 'Array type name should end with "s"',
+      message: 'Prefer array type name to end with "s" or "Array" suffix',
       selector:
-        "TSTypeAliasDeclaration > Identifier[name=/(?<!Array|[^s]s)$/u]",
+        "TSTypeAliasDeclaration > Identifier[name=/(?<![^s]s|Array)$/u]",
       typeIs: utils.TypeGroup.array
     }
   ]

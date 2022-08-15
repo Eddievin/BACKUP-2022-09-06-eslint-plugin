@@ -5,7 +5,7 @@ export const emptyAlwaysTrue = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include null, undefined or unknown",
+      message: "Always true",
       selector:
         "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=empty] > .arguments:first-child",
       typeIsOneOf: [utils.TypeGroup.null, utils.TypeGroup.undefined]

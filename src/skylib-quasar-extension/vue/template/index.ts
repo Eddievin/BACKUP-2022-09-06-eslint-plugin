@@ -1,4 +1,3 @@
-import * as utils from "../../../utils";
 import { noMixedClasses } from "./no-mixed-classes";
 import { noQBtn } from "./no-q-btn";
 import { noQCard } from "./no-q-card";
@@ -16,27 +15,31 @@ import { noQPopupProxy } from "./no-q-popup-proxy";
 import { noQSelect } from "./no-q-select";
 import { noQToggle } from "./no-q-toggle";
 import { noQTooltip } from "./no-q-tooltip";
+import { o } from "@skylib/functions";
 import { preferLabelProp } from "./prefer-label-prop";
 import { preferLangVar } from "./prefer-lang-var";
 
-export const template = utils.prefixKeys("template/", {
-  "no-mixed-classes": noMixedClasses,
-  "no-q-btn": noQBtn,
-  "no-q-card": noQCard,
-  "no-q-card-actions": noQCardActions,
-  "no-q-card-section": noQCardSection,
-  "no-q-expansion-item": noQExpansionItem,
-  "no-q-field": noQField,
-  "no-q-form": noQForm,
-  "no-q-input": noQInput,
-  "no-q-item": noQItem,
-  "no-q-knob": noQKnob,
-  "no-q-menu": noQMenu,
-  "no-q-option-group": noQOptionGroup,
-  "no-q-popup-proxy": noQPopupProxy,
-  "no-q-select": noQSelect,
-  "no-q-toggle": noQToggle,
-  "no-q-tooltip": noQTooltip,
-  "prefer-label-prop": preferLabelProp,
-  "prefer-lang-var": preferLangVar
-});
+export const template = o.prefixKeys(
+  {
+    "no-mixed-classes": noMixedClasses,
+    "no-q-btn": noQBtn,
+    "no-q-card": noQCard,
+    "no-q-card-actions": noQCardActions,
+    "no-q-card-section": noQCardSection,
+    "no-q-expansion-item": noQExpansionItem,
+    "no-q-field": noQField,
+    "no-q-form": noQForm,
+    "no-q-input": noQInput,
+    "no-q-item": noQItem,
+    "no-q-knob": noQKnob,
+    "no-q-menu": noQMenu,
+    "no-q-option-group": noQOptionGroup,
+    "no-q-popup-proxy": noQPopupProxy,
+    "no-q-select": noQSelect,
+    "no-q-toggle": noQToggle,
+    "no-q-tooltip": noQTooltip,
+    "prefer-label-prop": preferLabelProp,
+    "prefer-lang-var": preferLangVar
+  },
+  "template/"
+);

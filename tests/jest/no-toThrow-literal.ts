@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
-
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
@@ -10,7 +8,10 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("no-toThrow-literal", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: 'expect(() => {}).toThrow("Error message");',
+    code: `
+      expect(f).toThrow("str");
+      expect(f).toThrow(new Error("str"));
+    `,
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

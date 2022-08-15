@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
-
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 

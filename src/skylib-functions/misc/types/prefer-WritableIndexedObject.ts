@@ -1,4 +1,4 @@
-/* eslint-disable @skylib/consistent-filename -- Postponed */
+/* eslint-disable @skylib/consistent-filename -- Ok */
 
 import * as utils from "../../../utils";
 import { misc } from "../../../misc";
@@ -7,9 +7,9 @@ export const preferWritableIndexedObject = utils.wrapRule(
   misc["no-restricted-syntax"],
   [
     {
-      message: 'Prefer "WritableIndexedObject" type',
+      message: 'Use "WritableIndexedObject" type instead',
       selector:
-        "TSTypeReference[typeName.name=WritableRecord] > .typeParameters > .params:first-child > .typeName[name=PropertyKey]"
+        "TSTypeReference[typeName.name=WritableRecord] > TSTypeParameterInstantiation > TSTypeReference:first-child > Identifier.typeName[name=PropertyKey]"
     }
   ]
 );

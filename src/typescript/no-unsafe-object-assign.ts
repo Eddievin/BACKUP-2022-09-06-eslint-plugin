@@ -7,7 +7,7 @@ export const noUnsafeObjectAssign = utils.wrapRule(
     {
       message: "Do not assign to readonly object",
       selector:
-        "CallExpression[callee.object.name=Object][callee.property.name=assign] > Identifier.arguments",
+        "CallExpression[callee.object.name=Object][callee.property.name=assign] > Identifier.arguments:first-child",
       typeIs: utils.TypeGroup.readonly
     }
   ]

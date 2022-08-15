@@ -5,9 +5,9 @@ export const enumerationAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include string, unknown",
+      message: "Always false",
       selector:
-        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=enumeration] > .arguments:first-child",
+        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:enumeration|enumerationU)$/u] > .arguments:first-child",
       typeHasNoneOf: [
         utils.TypeGroup.any,
         utils.TypeGroup.string,

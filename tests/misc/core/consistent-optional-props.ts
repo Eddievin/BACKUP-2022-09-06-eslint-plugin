@@ -1,6 +1,4 @@
-/* eslint-disable @skylib/no-at-sign-internal-import -- Postponed */
-/* eslint-disable @skylib/no-internal-modules -- Postponed */
-
+// eslint-disable-next-line @skylib/no-at-sign-internal-import, @skylib/no-internal-modules -- Ok
 import { Style, Target } from "@/misc/core/consistent-optional-props";
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
@@ -247,6 +245,15 @@ utils.testRule(
         { line: 2, messageId: MessageId.combinedId, data: { _id: "id1" } },
         { line: 3, messageId: MessageId.optionalId, data: { _id: "id2" } }
       ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      code: `
+        class C {
+          [f()]: string | undefined;
+        }
+      `,
+      errors: [{ line: 2, messageId: MessageId.combined }]
     }
   ],
   [

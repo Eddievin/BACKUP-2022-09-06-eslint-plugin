@@ -1,5 +1,5 @@
 import { array } from "./array";
-import { cast } from "./converters";
+import { converters } from "./converters";
 import { guards } from "./guards";
 import { json } from "./json";
 import { noEvaluateTypeParam } from "./no-evaluate-type-param";
@@ -23,7 +23,7 @@ export const misc = {
   "require-jsdoc": requireJsdoc,
   "require-return-in-defineFn": requireReturnInDefineFn,
   ...array,
-  ...cast,
+  ...converters,
   ...guards,
   ...json,
   ...object,

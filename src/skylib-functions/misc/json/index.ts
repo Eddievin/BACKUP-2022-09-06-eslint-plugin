@@ -1,4 +1,4 @@
-import * as utils from "../../../utils";
+import { o } from "@skylib/functions";
 import { preferJson } from "./prefer-json";
 
-export const json = utils.prefixKeys("json/", { "prefer-json": preferJson });
+export const json = o.prefixKeys({ "prefer-json": preferJson }, "json/");

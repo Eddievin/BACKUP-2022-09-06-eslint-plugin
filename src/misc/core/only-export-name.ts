@@ -1,3 +1,4 @@
+import * as ruleTemplates from "../../rule-templates";
 import * as utils from "../../utils";
 
 export enum MessageId {
@@ -10,10 +11,13 @@ export const onlyExportName = utils.createRule({
     [MessageId.invalidName]: "Only export should match file name: {{expected}}"
   },
   create: context =>
-    utils.ruleTemplates.export(ctx => {
+    ruleTemplates.export(ctx => {
       if (ctx.onlyExport)
         for (const node of ctx.identifiers) {
-          const expected = context.identifierFromPath(context.path, node.name);
+          const expected = context.identifierFromPath(
+            context.filename,
+            node.name
+          );
 
           if ([expected, "default"].includes(node.name)) {
             // Valid

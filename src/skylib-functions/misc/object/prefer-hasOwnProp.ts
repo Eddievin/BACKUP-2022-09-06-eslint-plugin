@@ -5,7 +5,7 @@ import { misc } from "../../../misc";
 
 export const preferHasOwnProp = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "o.hasOwnProp" function',
+    message: 'Use "o.hasOwnProp" function instead',
     selector:
       "CallExpression > .callee[object.object.object.name=Object][object.object.property.name=prototype][object.property.name=hasOwnProperty][property.name=call]"
   }

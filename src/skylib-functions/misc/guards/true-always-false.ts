@@ -5,9 +5,9 @@ export const trueAlwaysFalse = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include boolean or unknown",
+      message: "Always false",
       selector:
-        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=true] > .arguments:first-child",
+        "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:true|trueU)$/u] > .arguments:first-child",
       typeHasNoneOf: [
         utils.TypeGroup.any,
         utils.TypeGroup.boolean,

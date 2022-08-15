@@ -1,9 +1,18 @@
 import * as utils from "../../utils";
-import { a, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
+
+export interface Options {
+  readonly customOrder?: strings;
+  readonly selector: utils.Selector;
+  readonly sendToBottom?: string;
+  readonly sendToTop?: string;
+  readonly sortKey?: string;
+  readonly triggerByComment: boolean;
+}
 
 export enum MessageId {
   expectingArray = "expectingArray"
@@ -17,9 +26,9 @@ export const sortArray = utils.createRule({
     { selector: utils.isSelector, triggerByComment: is.boolean },
     {
       customOrder: is.strings,
-      key: is.string,
       sendToBottom: is.string,
-      sendToTop: is.string
+      sendToTop: is.string,
+      sortKey: is.string
     }
   ),
   defaultOptions: {
@@ -31,9 +40,13 @@ export const sortArray = utils.createRule({
     [MessageId.expectingArray]: "Expecting array"
   },
   create: (context): RuleListener => {
-    const { key, selector: mixed, triggerByComment } = context.options;
+    const {
+      selector: mixedSelector,
+      sortKey,
+      triggerByComment
+    } = context.options;
 
-    const selector = a.fromMixed(mixed).join(", ");
+    const selector = utils.selector(mixedSelector);
 
     return {
       [selector]: (node: TSESTree.Node) => {
@@ -51,11 +64,11 @@ export const sortArray = utils.createRule({
     function keyNode(node: TSESTree.Node): TSESTree.Node | undefined {
       switch (node.type) {
         case AST_NODE_TYPES.ObjectExpression:
-          if (is.not.empty(key))
+          if (is.not.empty(sortKey))
             for (const property of node.properties)
               if (
                 property.type === AST_NODE_TYPES.Property &&
-                utils.nodeText(property.key, "?") === key
+                utils.nodeText(property.key, "?") === sortKey
               )
                 return property.value;
 
@@ -70,12 +83,3 @@ export const sortArray = utils.createRule({
     }
   }
 });
-
-export interface Options {
-  readonly customOrder?: strings;
-  readonly key?: string;
-  readonly selector: utils.Selector;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-  readonly triggerByComment: boolean;
-}

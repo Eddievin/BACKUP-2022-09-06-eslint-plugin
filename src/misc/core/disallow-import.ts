@@ -1,6 +1,14 @@
+import * as ruleTemplates from "../../rule-templates";
 import * as utils from "../../utils";
 import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
+
+export interface Options {
+  // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+  // fixme
+  readonly allow: strings | string;
+  readonly disallow: strings | string;
+}
 
 export enum MessageId {
   disallowedSource = "disallowedSource"
@@ -9,7 +17,7 @@ export enum MessageId {
 export const disallowImport = utils.createRule({
   name: "disallow-import",
   isOptions: is.object.factory<Options>(
-    { allow: is.strings, disallow: is.strings },
+    { allow: utils.isStringOrStrings, disallow: utils.isStringOrStrings },
     {}
   ),
   defaultOptions: { allow: [], disallow: [] },
@@ -21,7 +29,7 @@ export const disallowImport = utils.createRule({
       dot: true
     });
 
-    return utils.ruleTemplates.source(ctx => {
+    return ruleTemplates.source(ctx => {
       if (matcher(ctx.source))
         context.report({
           messageId: MessageId.disallowedSource,
@@ -30,8 +38,3 @@ export const disallowImport = utils.createRule({
     });
   }
 });
-
-export interface Options {
-  readonly allow: strings;
-  readonly disallow: strings;
-}

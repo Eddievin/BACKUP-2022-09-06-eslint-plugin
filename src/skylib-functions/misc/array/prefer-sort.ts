@@ -5,7 +5,7 @@ export const preferSort = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: 'No mutation side-effect, use "a.sort" instead',
+      message: 'Use "a.sort" instead (avoid mutation side-effects)',
       selector: ".callee[property.name=sort] > .object",
       typeHas: utils.TypeGroup.array
     }

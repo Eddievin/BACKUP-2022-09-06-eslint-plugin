@@ -1,57 +1,23 @@
-/* eslint-disable @skylib/no-sibling-import -- Postponed */
-/* eslint-disable @skylib/typescript/prefer-array-type-alias -- Postponed */
-
 import type {
   InvalidTestCase as BaseInvalidTestCase,
-  TestCaseError as BaseTestCaseError,
   ValidTestCase as BaseValidTestCase,
   RuleModule
 } from "@typescript-eslint/utils/dist/ts-eslint";
+import type {
+  InvalidTestCases,
+  TestCaseError,
+  ValidTestCases
+} from "./test.internal";
 import type { Rec, unknowns } from "@skylib/functions";
 import { o, s } from "@skylib/functions";
 import { TSESLint } from "@typescript-eslint/utils";
-import { base } from "./core";
-
-export interface InvalidTestCase<M extends string, O extends readonly unknown[]>
-  extends BaseInvalidTestCase<M, O> {
-  readonly errors: ReadonlyArray<TestCaseError<M>>;
-  readonly filename?: SourceFile;
-  readonly name: string;
-}
-
-export type SourceFile =
-  // eslint-disable-next-line @skylib/typescript/prefer-enum -- Postponed
-  | "camelCase.camelCase.ts"
-  | "camelCase.ts"
-  | "Component.vue"
-  | "file.extras.ts"
-  | "kebab-case.kebab-case.ts"
-  | "kebab-case.ts"
-  | "kebab-PascalCase.ts"
-  | "PascalCase.PascalCase.ts"
-  | "PascalCase.ts"
-  | "subfolder/index.ts"
-  | "vue.d.ts";
-
-export interface TestCaseError<T extends string> extends BaseTestCaseError<T> {
-  readonly line: number;
-}
-
-export interface ValidTestCase<O extends readonly unknown[]>
-  extends BaseValidTestCase<O> {
-  readonly filename?: SourceFile;
-  readonly name: string;
-}
-
-export type ValidTestCases<O extends readonly unknown[]> = ReadonlyArray<
-  ValidTestCase<O>
->;
+import { projectRoot } from "./misc";
 
 /**
- * Gets MessageId enum from rule.
+ * Extracts MessageId from rule.
  *
  * @param rule - Rule.
- * @returns MessageId enum.
+ * @returns MessageId.
  */
 export function getMessageId<T extends string>(
   rule: RuleModule<T, unknowns>
@@ -72,11 +38,11 @@ export function getMessageId<T extends string>(
 export function testRule<
   K extends string,
   M extends string,
-  O extends readonly unknown[]
+  O extends unknowns
 >(
   name: K,
   rule: RuleModule<M, O>,
-  invalid: ReadonlyArray<InvalidTestCase<M, O>>,
+  invalid: InvalidTestCases<M, O>,
   valid: ValidTestCases<O> = []
 ): void {
   const tester = new TSESLint.RuleTester({
@@ -85,41 +51,33 @@ export function testRule<
       ecmaFeatures: { jsx: true },
       ecmaVersion: 2017,
       extraFileExtensions: [".vue"],
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Ok
       // @ts-expect-error
       parser: "@typescript-eslint/parser",
       project: "./tsconfig.json",
       sourceType: "module",
-      tsconfigRootDir: `${base}fixtures`
+      tsconfigRootDir: `${projectRoot}fixtures`
     }
   });
 
   tester.run(name, rule, {
-    invalid: invalid.map((invalidTest): BaseInvalidTestCase<M, O> => {
-      const code = s.unpadMultiline(invalidTest.code);
-
-      const output = s.unpadMultiline(invalidTest.output ?? invalidTest.code);
-
-      const errors = invalidTest.errors.map(
-        (error): TestCaseError<M> => ({ endLine: error.line, ...error })
-      );
-
-      return {
-        ...invalidTest,
-        code,
-        errors,
-        filename: `${base}fixtures/${invalidTest.filename ?? "file.ts"}`,
-        output
-      };
-    }),
-    valid: valid.map((validTest): BaseValidTestCase<O> => {
-      const code = s.unpadMultiline(validTest.code);
-
-      return {
-        ...validTest,
-        code,
-        filename: `${base}fixtures/${validTest.filename ?? "file.ts"}`
-      };
-    })
+    invalid: invalid.map(
+      (test): BaseInvalidTestCase<M, O> => ({
+        ...test,
+        code: s.unpadMultiline(test.code),
+        errors: test.errors.map(
+          (error): TestCaseError<M> => ({ endLine: error.line, ...error })
+        ),
+        filename: `${projectRoot}fixtures/${test.filename ?? "file.ts"}`,
+        output: s.unpadMultiline(test.output ?? test.code)
+      })
+    ),
+    valid: valid.map(
+      (test): BaseValidTestCase<O> => ({
+        ...test,
+        code: s.unpadMultiline(test.code),
+        filename: `${projectRoot}fixtures/${test.filename ?? "file.ts"}`
+      })
+    )
   });
 }

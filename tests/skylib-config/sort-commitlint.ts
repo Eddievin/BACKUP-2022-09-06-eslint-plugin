@@ -8,8 +8,8 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("sort-commitlint", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: 'module.exports = ["b", "a"];',
-    output: 'module.exports = ["a", "b"];',
+    code: "module.exports = [2, 1];",
+    output: "module.exports = [1, 2];",
     errors: [{ line: 1, messageId: MessageId.incorrectSortingOrder }]
   }
 ]);

@@ -1,7 +1,5 @@
-/* eslint-disable @skylib/no-at-sign-internal-import -- Postponed */
-/* eslint-disable @skylib/no-internal-modules -- Postponed */
-
 import { rules, utils } from "@";
+// eslint-disable-next-line @skylib/no-at-sign-internal-import, @skylib/no-internal-modules -- Ok
 import { EmptyLine } from "@/misc/core/consistent-empty-lines";
 import getCurrentLine from "get-current-line";
 
@@ -21,14 +19,12 @@ utils.testRule(
             {
               _id: "id1",
               emptyLine: EmptyLine.always,
-              next: "ImportDeclaration, TSExportAssignment",
-              prev: "ImportDeclaration, TSExportAssignment"
+              selector: "ImportDeclaration, TSExportAssignment"
             },
             {
               _id: "id2",
               emptyLine: EmptyLine.never,
-              next: "ImportDeclaration",
-              prev: "ImportDeclaration"
+              selector: "ImportDeclaration"
             }
           ]
         }

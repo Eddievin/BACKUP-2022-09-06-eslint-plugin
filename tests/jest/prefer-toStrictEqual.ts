@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
-
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
@@ -13,8 +11,8 @@ utils.testRule("jest-prefer-toStrictEqual", rule, [
     code: `
       const x = {};
       const y = 1;
-      expect(1).toBe(x);
-      expect(1).toBe(y);
+      expect(z).toBe(x);
+      expect(z).toBe(y);
     `,
     errors: [{ line: 3, messageId: MessageId.customMessage }]
   }

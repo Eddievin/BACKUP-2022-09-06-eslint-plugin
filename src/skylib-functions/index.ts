@@ -1,8 +1,8 @@
-import * as utils from "../utils";
 import { jest } from "./jest";
 import { misc } from "./misc";
+import { o } from "@skylib/functions";
 
 export const skylibFunctions = {
-  jest: utils.prefixKeys("functions/", jest),
-  misc: utils.prefixKeys("functions/", misc)
+  jest: o.prefixKeys(jest, "functions/"),
+  misc: o.prefixKeys(misc, "functions/")
 } as const;

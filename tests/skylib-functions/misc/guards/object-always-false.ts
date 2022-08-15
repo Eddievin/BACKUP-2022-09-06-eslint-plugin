@@ -8,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("object-always-false", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "is.object(false);",
+    code: "is.object(1);",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

@@ -1,8 +1,16 @@
+import * as ruleTemplates from "../../rule-templates";
 import * as utils from "../../utils";
 import { a, evaluate, is } from "@skylib/functions";
 import fs from "node:fs";
 import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
+
+export interface Suboptions {
+  readonly allow: boolean;
+  readonly levels: stringsArray;
+}
+
+export type stringsArray = readonly strings[];
 
 export enum MessageId {
   disallowedSource = "disallowedSource"
@@ -10,24 +18,24 @@ export enum MessageId {
 
 export const isStringsArray = is.factory(is.array.of, is.strings);
 
-export const isSubOptions = is.object.factory<SubOptions>(
+export const isSuboptions = is.object.factory<Suboptions>(
   { allow: is.boolean, levels: isStringsArray },
   {}
 );
 
 export const noSiblingImport = utils.createRule({
   name: "no-sibling-import",
-  isSubOptions: is.object.factory<SubOptions>(
+  isSuboptions: is.object.factory<Suboptions>(
     { allow: is.boolean, levels: isStringsArray },
     {}
   ),
-  defaultSubOptions: { allow: false, levels: [] },
-  subOptionsKey: "folders",
+  defaultSuboptions: { allow: false, levels: [] },
+  suboptionsKey: "folders",
   messages: {
     [MessageId.disallowedSource]: "Import from this source is not allowed"
   },
   create: context => {
-    const path = context.stripExtension(context.path);
+    const path = context.stripExtension(context.filename);
 
     const dir = nodePath.dirname(path);
 
@@ -56,7 +64,7 @@ export const noSiblingImport = utils.createRule({
       return () => false;
     });
 
-    return utils.ruleTemplates.source(ctx => {
+    return ruleTemplates.source(ctx => {
       const source = context.stripExtension(ctx.source);
 
       const parts = source.split("/");
@@ -85,10 +93,3 @@ export const noSiblingImport = utils.createRule({
     });
   }
 });
-
-export interface SubOptions {
-  readonly allow: boolean;
-  readonly levels: stringsArray;
-}
-
-export type stringsArray = readonly strings[];

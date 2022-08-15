@@ -13,7 +13,7 @@ export const arrayCallbackReturnType = utils.createRule({
   messages: { [MessageId.invalidType]: "Expecting boolean return type" },
   create: (context, typeCheck): RuleListener => ({
     CallExpression: node => {
-      const callee = node.callee;
+      const { callee } = node;
 
       if (
         callee.type === AST_NODE_TYPES.MemberExpression &&
@@ -24,13 +24,12 @@ export const arrayCallbackReturnType = utils.createRule({
         const argument = node.arguments[0];
 
         if (argument) {
-          const isBoolishReturnType = typeCheck
+          const isSafeBooleanCondition = typeCheck
             .getCallSignatures(argument)
-            // eslint-disable-next-line @typescript-eslint/unbound-method -- Wait for @skylib/functions update
             .map(typeCheck.getReturnType)
-            .every(typeCheck.isBoolish);
+            .every(typeCheck.isSafeBooleanCondition);
 
-          if (isBoolishReturnType) {
+          if (isSafeBooleanCondition) {
             // Valid
           } else
             context.report({

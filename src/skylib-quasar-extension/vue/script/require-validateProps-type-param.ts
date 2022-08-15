@@ -10,7 +10,7 @@ export const requireValidatePropsTypeParam = utils.wrapRule(
     {
       message: 'Expecting "OwnProps" type parameter',
       selector: [
-        "CallExpression[callee.name=validateProps] > TSTypeParameterInstantiation.typeParameters > TSTypeReference.params > TSQualifiedName.typeName > Identifier.right[name!=OwnProps]",
+        "CallExpression[callee.name=validateProps] > TSTypeParameterInstantiation > TSTypeReference > TSQualifiedName.typeName > Identifier.right[name!=OwnProps]",
         "CallExpression[callee.name=validateProps][typeParameters=undefined]"
       ]
     }

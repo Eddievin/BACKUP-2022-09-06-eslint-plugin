@@ -30,7 +30,7 @@ export const sortTopComments = utils.createRule({
       } else {
         const ranges = context.getCommentRanges(node);
 
-        const range: TSESTree.Range = [a.first(ranges)[0], a.last(ranges)[1]];
+        const range: utils.esRange = [a.first(ranges)[0], a.last(ranges)[1]];
 
         context.report({
           fix: (): RuleFix => ({ range, text: expected }),

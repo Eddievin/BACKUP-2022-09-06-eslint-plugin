@@ -1,13 +1,17 @@
-/* eslint-disable @skylib/only-export-name -- Postponed */
-
 import { defineFn, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { Callback } from "./source.internal";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { Type } from "./source.internal";
 
+// eslint-disable-next-line @skylib/only-export-name -- Ok
 export const create = defineFn(
-  // eslint-disable-next-line @skylib/functions/require-jsdoc -- Postponed
+  /**
+   * Creates rule listener.
+   *
+   * @param callback - Callback.
+   * @returns Rule listener.
+   */
   (callback: Callback): RuleListener => ({
     CallExpression: node => {
       if (

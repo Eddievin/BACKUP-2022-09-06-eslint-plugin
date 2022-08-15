@@ -9,8 +9,8 @@ utils.testRule("no-at-sign-internal-import", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      import y from "@/source";
-      import x from "@";
+      import x from "@/source";
+      import y from "@";
     `,
     errors: [{ line: 1, messageId: MessageId.disallowedSource }]
   }

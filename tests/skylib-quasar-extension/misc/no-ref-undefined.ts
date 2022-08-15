@@ -8,7 +8,15 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("no-ref-undefined", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "ref(undefined);",
-    errors: [{ line: 1, messageId: MessageId.customMessage }]
+    code: `
+      ref(undefined);
+      ref<stringU>();
+      ref<string | undefined>();
+    `,
+    errors: [
+      { line: 1, messageId: MessageId.customMessage },
+      { line: 2, messageId: MessageId.customMessage },
+      { line: 3, messageId: MessageId.customMessage }
+    ]
   }
 ]);

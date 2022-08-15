@@ -39,7 +39,7 @@ utils.testRule("wrap", rule, [
     name: `Test at line ${getCurrentLine().line}`,
     options: [
       {
-        lintSelector: "TSEnumDeclaration[id.name=E] *",
+        lint: "TSEnumDeclaration[id.name=E] *",
         plugin: "@typescript-eslint/eslint-plugin",
         rule: "no-shadow"
       }
@@ -66,7 +66,7 @@ utils.testRule("wrap", rule, [
       {
         plugin: "@typescript-eslint/eslint-plugin",
         rule: "no-shadow",
-        skipSelector: "TSEnumDeclaration[id.name=F] *"
+        skip: "TSEnumDeclaration[id.name=F] *"
       }
     ],
     code: `

@@ -1,6 +1,7 @@
-import * as utils from "../../utils";
+import { o } from "@skylib/functions";
 import { preferMockCallsToBe } from "./prefer-mockCallsToBe";
 
-export const jest = utils.prefixKeys("jest/", {
-  "prefer-mockCallsToBe": preferMockCallsToBe
-});
+export const jest = o.prefixKeys(
+  { "prefer-mockCallsToBe": preferMockCallsToBe },
+  "jest/"
+);

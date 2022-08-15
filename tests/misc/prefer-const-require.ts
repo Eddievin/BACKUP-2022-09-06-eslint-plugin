@@ -9,7 +9,7 @@ utils.testRule("prefer-const-require", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      require("source").map(x => x);
+      require("source");
       const x = require("source");
       function f() { return require("source"); }
     `,

@@ -1,38 +1,31 @@
 import * as _ from "@skylib/lodash-commonjs-es";
+import type { Callback } from "./export.internal";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 import { is } from "@skylib/functions";
+import type { utils } from "..";
 
-// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-export interface ProgramExit {
-  (context: ProgramExitContext): void;
-}
+/**
+ * Creates rule listener.
+ *
+ * @param callback - Callback.
+ * @returns Rule listener.
+ */
+// eslint-disable-next-line @skylib/only-export-name -- Ok
+export function create(callback: Callback): RuleListener {
+  const exportAllDeclarations: Writable<utils.TSESTree.ExportAllDeclarations> =
+    [];
 
-export interface ProgramExitContext {
-  readonly exportAllDeclarations: ExportAllDeclarations;
-  readonly exportDeclarations: ExportDeclarations;
-  readonly exportDefaultDeclarations: ExportDefaultDeclarations;
-  readonly exportNamedDeclarations: ExportNamedDeclarations;
-  readonly identifiers: Identifiers;
-  readonly onlyExport: boolean;
-}
+  const exportDefaultDeclarations: Writable<utils.TSESTree.ExportDefaultDeclarations> =
+    [];
 
-// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-export function create(
-  callback: ProgramExit,
-  rules: RuleListener = {}
-): RuleListener {
-  const exportAllDeclarations: Writable<ExportAllDeclarations> = [];
+  const exportNamedDeclarations: Writable<utils.TSESTree.ExportNamedDeclarations> =
+    [];
 
-  const exportDefaultDeclarations: Writable<ExportDefaultDeclarations> = [];
-
-  const exportNamedDeclarations: Writable<ExportNamedDeclarations> = [];
-
-  const identifiers: Writable<Identifiers> = [];
+  const identifiers: Writable<utils.TSESTree.Identifiers> = [];
 
   return {
-    ...rules,
     [[
       "Program > ExportAllDeclaration > Identifier",
       "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id",
@@ -80,18 +73,3 @@ export function create(
     }
   };
 }
-
-type ExportAllDeclarations = readonly TSESTree.ExportAllDeclaration[];
-
-type ExportDeclaration =
-  | TSESTree.ExportAllDeclaration
-  | TSESTree.ExportDefaultDeclaration
-  | TSESTree.ExportNamedDeclaration;
-
-type ExportDeclarations = readonly ExportDeclaration[];
-
-type ExportDefaultDeclarations = readonly TSESTree.ExportDefaultDeclaration[];
-
-type ExportNamedDeclarations = readonly TSESTree.ExportNamedDeclaration[];
-
-type Identifiers = readonly TSESTree.Identifier[];

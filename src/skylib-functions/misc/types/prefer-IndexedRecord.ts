@@ -1,4 +1,4 @@
-/* eslint-disable @skylib/consistent-filename -- Postponed */
+/* eslint-disable @skylib/consistent-filename -- Ok */
 
 import * as utils from "../../../utils";
 import { misc } from "../../../misc";
@@ -7,9 +7,9 @@ export const preferIndexedRecord = utils.wrapRule(
   misc["no-restricted-syntax"],
   [
     {
-      message: 'Prefer "IndexedRecord" type',
+      message: 'Use "IndexedRecord" type instead',
       selector:
-        "TSTypeReference[typeName.name=Rec] > .typeParameters > TSStringKeyword.params:first-child"
+        "TSTypeReference[typeName.name=Rec] > TSTypeParameterInstantiation > TSStringKeyword:first-child"
     }
   ]
 );

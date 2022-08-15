@@ -18,9 +18,9 @@ export const exhaustiveSwitch = utils.createRule({
         const got = node.cases
           .map(switchCase => switchCase.test)
           .filter(is.not.empty)
-          .flatMap(expression => typeCheck.unionTypeParts(expression));
+          .flatMap(expression => typeCheck.typeParts(expression));
 
-        const expected = typeCheck.unionTypeParts(node.discriminant);
+        const expected = typeCheck.typeParts(node.discriminant);
 
         if (_.difference(expected, got).length)
           context.report({

@@ -1,10 +1,21 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "../../utils";
-import { a, is } from "@skylib/functions";
+import { a, as, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 import path from "node:path";
+
+export interface Options {
+  readonly format: utils.Casing;
+}
+
+export interface Suboptions {
+  readonly _id: string;
+  readonly format?: utils.Casing;
+  readonly match: boolean;
+  readonly selector: utils.Selector;
+}
 
 export enum MessageId {
   invalidFilename = "invalidFilename",
@@ -14,14 +25,14 @@ export enum MessageId {
 export const consistentFilename = utils.createRule({
   name: "consistent-filename",
   vue: true,
-  isOptions: is.object.factory<Options>({ format: utils.casing.isFormat }, {}),
-  defaultOptions: { format: utils.casing.Format.kebabCase },
-  isSubOptions: is.object.factory<SubOptions>(
+  isOptions: is.object.factory<Options>({ format: utils.isCasing }, {}),
+  defaultOptions: { format: utils.Casing.kebabCase },
+  isSuboptions: is.object.factory<Suboptions>(
     { _id: is.string, match: is.boolean, selector: utils.isSelector },
-    { format: utils.casing.isFormat }
+    { format: utils.isCasing }
   ),
-  defaultSubOptions: { match: false },
-  subOptionsKey: "overrides",
+  defaultSuboptions: { match: false },
+  suboptionsKey: "overrides",
   messages: {
     [MessageId.invalidFilename]: "Expecting file name to be: {{expected}}",
     [MessageId.invalidFilenameId]:
@@ -30,39 +41,29 @@ export const consistentFilename = utils.createRule({
   create: (context): RuleListener => {
     const items: Writable<Items> = [];
 
-    return utils.mergeListenters(
-      ...context.options.overrides.map((subOptions): RuleListener => {
-        const selector = a.fromMixed(subOptions.selector).join(", ");
+    return utils.mergeListeners(
+      ...context.options.overrides.map((suboptions): RuleListener => {
+        const selector = utils.selector(suboptions.selector);
 
         return {
           [selector]: (node: TSESTree.Node) => {
-            items.push({ node, subOptions });
+            items.push({ node, suboptions });
           }
         };
       }),
       {
         "Program:exit": () => {
-          const { base: got } = path.parse(context.path);
+          const { base: got } = path.parse(context.filename);
 
           if (items.length) {
             const item = a.last(items);
 
             const { _id, format, match } = {
               format: context.options.format,
-              ...item.subOptions
+              ...item.suboptions
             };
 
-            const expected = got
-              .split(".")
-              .map((part, index) =>
-                index === 0
-                  ? utils.casing.format(
-                      match ? utils.nodeText(item.node, part) : part,
-                      format
-                    )
-                  : _.kebabCase(part)
-              )
-              .join(".");
+            const expected = getExpected(got, format, match, item.node);
 
             if (got === expected) {
               // Valid
@@ -73,16 +74,7 @@ export const consistentFilename = utils.createRule({
                 messageId: MessageId.invalidFilenameId
               });
           } else {
-            const { format } = context.options;
-
-            const expected = got
-              .split(".")
-              .map((part, index) =>
-                index === 0
-                  ? utils.casing.format(part, format)
-                  : _.kebabCase(part)
-              )
-              .join(".");
+            const expected = getExpected(got, context.options.format);
 
             if (got === expected) {
               // Valid
@@ -96,23 +88,31 @@ export const consistentFilename = utils.createRule({
         }
       }
     );
+
+    function getExpected(
+      got: string,
+      format: utils.Casing,
+      match = false,
+      node?: TSESTree.Node
+    ): string {
+      return got
+        .split(".")
+        .map((part, index) =>
+          index === 0
+            ? utils.setCasing(
+                match ? utils.nodeText(as.not.empty(node), part) : part,
+                format
+              )
+            : _.kebabCase(part)
+        )
+        .join(".");
+    }
   }
 });
 
-export interface Options {
-  readonly format: utils.casing.Format;
-}
-
-export interface SubOptions {
-  readonly _id: string;
-  readonly format?: utils.casing.Format;
-  readonly match: boolean;
-  readonly selector: utils.Selector;
-}
-
 interface Item {
   readonly node: TSESTree.Node;
-  readonly subOptions: SubOptions;
+  readonly suboptions: Suboptions;
 }
 
 type Items = readonly Item[];

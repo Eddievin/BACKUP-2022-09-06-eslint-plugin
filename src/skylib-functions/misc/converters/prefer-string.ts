@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const preferString = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "cast.string" function',
+    message: 'Use "cast.string" function instead',
     selector: "CallExpression > .callee[name=String]"
   }
 ]);

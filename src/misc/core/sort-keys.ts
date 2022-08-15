@@ -6,6 +6,14 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
+export interface Suboptions {
+  readonly _id: string;
+  readonly customOrder?: strings;
+  readonly selector: utils.Selector;
+  readonly sendToBottom?: string;
+  readonly sendToTop?: string;
+}
+
 export enum MessageId {
   expectingObject = "expectingObject"
 }
@@ -14,11 +22,11 @@ export const sortKeys = utils.createRule({
   name: "sort-keys",
   fixable: utils.Fixable.code,
   vue: true,
-  isSubOptions: is.object.factory<SubOptions>(
+  isSuboptions: is.object.factory<Suboptions>(
     { _id: is.string, selector: utils.isSelector },
     { customOrder: is.strings, sendToBottom: is.string, sendToTop: is.string }
   ),
-  subOptionsKey: "overrides",
+  suboptionsKey: "overrides",
   messages: {
     ...utils.sort.messages,
     [MessageId.expectingObject]: "Expecting object ({{_id}})"
@@ -26,11 +34,11 @@ export const sortKeys = utils.createRule({
   create: (context): RuleListener => {
     const items: Writable<Items> = [];
 
-    return utils.mergeListenters(
+    return utils.mergeListeners(
       ...context.options.overrides.map((override): RuleListener => {
-        const { _id, selector: mixed } = override;
+        const { _id, selector: mixedSelector } = override;
 
-        const selector = a.fromMixed(mixed).join(", ");
+        const selector = utils.selector(mixedSelector);
 
         return {
           [selector]: (node: TSESTree.Node) => {
@@ -61,14 +69,6 @@ export const sortKeys = utils.createRule({
     }
   }
 });
-
-export interface SubOptions {
-  readonly _id: string;
-  readonly customOrder?: strings;
-  readonly selector: utils.Selector;
-  readonly sendToBottom?: string;
-  readonly sendToTop?: string;
-}
 
 interface Item {
   readonly node: TSESTree.ObjectExpression;

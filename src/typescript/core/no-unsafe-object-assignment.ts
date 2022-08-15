@@ -1,4 +1,3 @@
-// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import * as ts from "typescript";
 import * as utils from "../../utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
@@ -24,27 +23,39 @@ export const noUnsafeObjectAssignment = utils.createRule({
         if (node.body.type === AST_NODE_TYPES.BlockStatement) {
           // Сhecked by ReturnStatement visitor
         } else if (node.returnType)
-          lintPair(node.returnType.typeAnnotation, node.body);
+          lintDestSource(node.returnType.typeAnnotation, node.body);
         else {
           // No return type to check
         }
       },
       AssignmentExpression: node => {
-        lintPair(node.left, node.right);
+        lintDestSource(node.left, node.right);
       },
       CallExpression: node => {
         for (const arg of node.arguments) lintNode(arg);
       },
       PropertyDefinition: node => {
-        if (node.value) lintPair(node.key, node.value);
+        if (node.value) lintDestSource(node.key, node.value);
       },
       ReturnStatement: node => {
         if (node.argument) lintNode(node.argument);
       },
       VariableDeclarator: node => {
-        if (node.init) lintPair(node.id, node.init);
+        if (node.init) lintDestSource(node.id, node.init);
       }
     };
+
+    function lintDestSource(dest: TSESTree.Node, source: TSESTree.Node): void {
+      if (source.type === AST_NODE_TYPES.ObjectExpression) {
+        // Ignore
+      } else {
+        const destType = typeCheck.getType(dest);
+
+        const sourceType = typeCheck.getType(source);
+
+        lintTypes(destType, sourceType, source);
+      }
+    }
 
     function lintNode(node: TSESTree.Node): void {
       if (node.type === AST_NODE_TYPES.ObjectExpression) {
@@ -55,18 +66,6 @@ export const noUnsafeObjectAssignment = utils.createRule({
         const sourceType = typeCheck.getType(node);
 
         if (destType) lintTypes(destType, sourceType, node);
-      }
-    }
-
-    function lintPair(dest: TSESTree.Node, source: TSESTree.Node): void {
-      if (source.type === AST_NODE_TYPES.ObjectExpression) {
-        // Ignore
-      } else {
-        const destType = typeCheck.getType(dest);
-
-        const sourceType = typeCheck.getType(source);
-
-        lintTypes(destType, sourceType, source);
       }
     }
 

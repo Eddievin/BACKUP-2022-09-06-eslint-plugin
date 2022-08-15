@@ -12,7 +12,7 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       filename: "camelCase.ts",
-      options: [{ format: utils.casing.Format.pascalCase }],
+      options: [{ format: utils.Casing.pascalCase }],
       code: "export const x = 1;",
       errors: [
         {
@@ -30,12 +30,12 @@ utils.testRule(
           overrides: [
             {
               _id: "PascalCase",
-              format: utils.casing.Format.pascalCase,
+              format: utils.Casing.pascalCase,
               selector: "Identifier[name=x]"
             },
             {
               _id: "kebab-case",
-              format: utils.casing.Format.kebabCase,
+              format: utils.Casing.kebabCase,
               selector: "Identifier[name=x]"
             }
           ]
@@ -53,7 +53,7 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       filename: "kebab-case.ts",
-      options: [{ format: utils.casing.Format.pascalCase }],
+      options: [{ format: utils.Casing.pascalCase }],
       code: "export const x = 1;",
       errors: [
         {
@@ -71,7 +71,7 @@ utils.testRule(
           overrides: [
             {
               _id: "camelCase",
-              format: utils.casing.Format.camelCase,
+              format: utils.Casing.camelCase,
               selector: "Identifier[name=x]"
             }
           ]
@@ -89,7 +89,7 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       filename: "PascalCase.ts",
-      options: [{ format: utils.casing.Format.camelCase }],
+      options: [{ format: utils.Casing.camelCase }],
       code: "export const x = 1;",
       errors: [
         {
@@ -107,7 +107,7 @@ utils.testRule(
           overrides: [
             {
               _id: "kebab-case",
-              format: utils.casing.Format.kebabCase,
+              format: utils.Casing.kebabCase,
               selector: "Identifier[name=x]"
             }
           ]
@@ -172,7 +172,7 @@ utils.testRule(
           overrides: [
             {
               _id: "class",
-              format: utils.casing.Format.pascalCase,
+              format: utils.Casing.pascalCase,
               match: true,
               selector: "ClassDeclaration > Identifier.id"
             }
@@ -189,7 +189,7 @@ utils.testRule(
           overrides: [
             {
               _id: "defineComponent",
-              format: utils.casing.Format.pascalCase,
+              format: utils.Casing.pascalCase,
               selector: "Identifier[name=defineComponent]"
             }
           ]

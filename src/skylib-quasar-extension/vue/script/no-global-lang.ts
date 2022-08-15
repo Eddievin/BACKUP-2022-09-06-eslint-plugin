@@ -5,6 +5,6 @@ export const noGlobalLang = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: "No global lang",
     selector:
-      "ImportDeclaration[source.value=@skylib/facades] > ImportSpecifier[imported.name=lang]"
+      "ImportDeclaration[importKind=value][source.value=@skylib/facades] > ImportSpecifier[imported.name=lang]"
   }
 ]);

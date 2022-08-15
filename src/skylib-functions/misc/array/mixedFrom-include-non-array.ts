@@ -1,14 +1,14 @@
-/* eslint-disable @skylib/consistent-filename -- Postponed */
+/* eslint-disable @skylib/consistent-filename -- Ok */
 
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-// eslint-disable-next-line @skylib/max-identifier-blocks -- Postponed
+// eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
 export const mixedFromIncludeNonArray = utils.wrapRule(
   typescript["typescript/no-restricted-syntax"],
   [
     {
-      message: "Expecting type to include array",
+      message: "Expecting type to include non-array",
       selector:
         "CallExpression[callee.object.name=a][callee.property.name=fromMixed] > .arguments:first-child",
       typeHasNoneOf: [

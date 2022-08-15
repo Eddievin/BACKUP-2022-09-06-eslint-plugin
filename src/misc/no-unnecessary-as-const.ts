@@ -6,8 +6,10 @@ export const noUnnecessaryAsConst = utils.wrapRule(
   [
     {
       message: 'Unnecessary "as const"',
-      selector:
+      selector: [
+        "VariableDeclarator > TSAsExpression[expression.properties.length=0] > TSTypeReference > Identifier[name=const]",
         "VariableDeclarator[id.typeAnnotation] > TSAsExpression > TSTypeReference > Identifier[name=const]"
+      ]
     }
   ]
 );

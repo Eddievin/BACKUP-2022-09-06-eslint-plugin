@@ -9,6 +9,14 @@ utils.testRule("prefer-reverse", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: "[].reverse();",
-    errors: [{ line: 1, messageId: MessageId.customMessage }]
+    errors: [
+      {
+        line: 1,
+        messageId: MessageId.customMessage,
+        data: {
+          message: 'Use "a.reverse" instead (avoid mutation side-effects)'
+        }
+      }
+    ]
   }
 ]);

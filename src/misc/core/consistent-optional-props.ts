@@ -1,18 +1,37 @@
 import * as utils from "../../utils";
 import { ReadonlySet, a, evaluate, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { IndexedRecord } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
+
+export interface Options {
+  readonly classes: Style;
+  readonly interfaces: Style;
+}
+
+export interface Suboptions {
+  readonly _id: string;
+  readonly pattern: utils.RegexpPattern;
+  readonly propertyPattern: utils.RegexpPattern;
+  readonly style: Style;
+  readonly target?: Target;
+}
 
 export enum MessageId {
   combined = "combined",
   combinedId = "combinedId",
   optional = "optional",
   optionalId = "optionalId",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
   undefined = "undefined",
   undefinedId = "undefinedId"
+}
+
+export enum Style {
+  combined = "combined",
+  optional = "optional",
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
+  undefined = "undefined"
 }
 
 export enum Target {
@@ -20,16 +39,9 @@ export enum Target {
   interfaces = "interfaces"
 }
 
-export const isTarget = is.factory(is.enumeration, Target);
-
-export enum Style {
-  combined = "combined",
-  optional = "optional",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
-  undefined = "undefined"
-}
-
 export const isStyle = is.factory(is.enumeration, Style);
+
+export const isTarget = is.factory(is.enumeration, Target);
 
 export const consistentOptionalProps = utils.createRule({
   name: "consistent-optional-props",
@@ -38,34 +50,33 @@ export const consistentOptionalProps = utils.createRule({
     {}
   ),
   defaultOptions: { classes: Style.combined, interfaces: Style.combined },
-  isSubOptions: is.object.factory<SubOptions>(
+  isSuboptions: is.object.factory<Suboptions>(
     {
       _id: is.string,
-      pattern: utils.isPattern,
-      propertyPattern: utils.isPattern,
+      pattern: utils.isRegexpPattern,
+      propertyPattern: utils.isRegexpPattern,
       style: isStyle
     },
     { target: isTarget }
   ),
-  defaultSubOptions: { pattern: [], propertyPattern: [] },
-  subOptionsKey: "overrides",
+  defaultSuboptions: { pattern: [], propertyPattern: [] },
+  suboptionsKey: "overrides",
   messages: {
-    [MessageId.combined]: 'Prefer "x?: T | undefined" style',
-    [MessageId.combinedId]: 'Prefer "x?: T | undefined" style ({{_id}})',
-    [MessageId.optional]: 'Prefer "x?: T" style',
-    [MessageId.optionalId]: 'Prefer "x?: T" style ({{_id}})',
-    [MessageId.undefined]: 'Prefer "x: T | undefined" style',
-    [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{_id}})'
+    [MessageId.combined]: 'Use "x?: T | undefined" style instead',
+    [MessageId.combinedId]: 'Use "x?: T | undefined" style instead ({{_id}})',
+    [MessageId.optional]: 'Use "x?: T" style instead',
+    [MessageId.optionalId]: 'Use "x?: T" style instead ({{_id}})',
+    [MessageId.undefined]: 'Use "x: T | undefined" style instead',
+    [MessageId.undefinedId]: 'Use "x: T | undefined" style instead ({{_id}})'
   },
   create: (context, typeCheck): RuleListener => {
     const overrides = a.reverse(
-      context.options.overrides.map((override): Matchers & SubOptions => {
-        const matcher = utils.createRegexpMatcher(override.pattern, true);
+      context.options.overrides.map((override): Matchers & Suboptions => {
+        const { pattern, propertyPattern } = override;
 
-        const properyMatcher = utils.createRegexpMatcher(
-          override.propertyPattern,
-          true
-        );
+        const matcher = utils.createRegexpMatcher(pattern, true);
+
+        const properyMatcher = utils.createRegexpMatcher(propertyPattern, true);
 
         return { ...override, matcher, properyMatcher };
       })
@@ -76,6 +87,15 @@ export const consistentOptionalProps = utils.createRule({
       ClassExpression: lintClass,
       TSInterfaceDeclaration: lintInterface
     };
+
+    function getPropertyName(
+      node:
+        | TSESTree.PropertyDefinition
+        | TSESTree.TSAbstractPropertyDefinition
+        | TSESTree.TSPropertySignature
+    ): string {
+      return utils.nodeText(node.key, () => context.getText(node.key));
+    }
 
     function lintClass(
       node: TSESTree.ClassDeclaration | TSESTree.ClassExpression
@@ -130,7 +150,7 @@ export const consistentOptionalProps = utils.createRule({
 
         if (got) {
           const override = evaluate(() => {
-            const propertyName = context.getMemberName(node);
+            const propertyName = getPropertyName(node);
 
             const targets = new ReadonlySet([target, undefined]);
 
@@ -152,26 +172,32 @@ export const consistentOptionalProps = utils.createRule({
               : result;
           });
 
-          if (expected) {
-            const data: IndexedRecord = override ? { _id: override._id } : {};
-
-            const messageId = evaluate(() => {
-              switch (expected) {
-                case Style.combined:
-                  return override ? MessageId.combinedId : MessageId.combined;
-
-                case Style.optional:
-                  return override ? MessageId.optionalId : MessageId.optional;
-
-                case Style.undefined:
-                  return override ? MessageId.undefinedId : MessageId.undefined;
-              }
-            });
-
+          if (expected)
             if (got === expected) {
               // Valid
-            } else context.report({ data, messageId, node });
-          }
+            } else
+              context.report({
+                data: override ? { _id: override._id } : {},
+                messageId: evaluate(() => {
+                  switch (expected) {
+                    case Style.combined:
+                      return override
+                        ? MessageId.combinedId
+                        : MessageId.combined;
+
+                    case Style.optional:
+                      return override
+                        ? MessageId.optionalId
+                        : MessageId.optional;
+
+                    case Style.undefined:
+                      return override
+                        ? MessageId.undefinedId
+                        : MessageId.undefined;
+                  }
+                }),
+                node
+              });
         }
       }
     }
@@ -184,19 +210,6 @@ const exclusionTypes = new ReadonlySet([
 ]);
 
 const exclusionStyles = new ReadonlySet([Style.combined, Style.optional]);
-
-export interface Options {
-  readonly classes: Style;
-  readonly interfaces: Style;
-}
-
-export interface SubOptions {
-  readonly _id: string;
-  readonly pattern: utils.Pattern;
-  readonly propertyPattern: utils.Pattern;
-  readonly style: Style;
-  readonly target?: Target;
-}
 
 interface Matchers {
   readonly matcher: utils.Matcher;

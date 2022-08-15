@@ -5,6 +5,6 @@ export const noRefTypeParam = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: "Unnecessary type parameter",
     selector:
-      "CallExpression[callee.name=ref][arguments.0.type=Literal] > TSTypeParameterInstantiation.typeParameters > :matches(TSBooleanKeyword, TSNumberKeyword, TSStringKeyword).params"
+      "CallExpression[callee.name=ref][arguments.0.type=Literal] > TSTypeParameterInstantiation > :matches(TSBooleanKeyword, TSNumberKeyword, TSStringKeyword)"
   }
 ]);

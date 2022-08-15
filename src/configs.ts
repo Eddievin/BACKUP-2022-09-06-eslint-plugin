@@ -1,4 +1,4 @@
-import type { IndexedObject } from "@skylib/functions";
+import type { IndexedRecord } from "@skylib/functions";
 import { eslintrc } from "./eslintrc";
 import { jest } from "./jest";
 import { misc } from "./misc";
@@ -80,11 +80,20 @@ export const configs = {
   },
   "vue": {
     plugins: ["@skylib/eslint-plugin"],
-    rules: { ...rules(vue), "@skylib/typescript/no-complex-return-type": "off" }
+    rules: {
+      ...rules(vue),
+      "@skylib/typescript/no-complex-declarator-type": "off",
+      "@skylib/typescript/no-complex-return-type": "off"
+    }
   }
 } as const;
 
-// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
-function rules(source: IndexedObject): object {
+/**
+ * Converts rules to configuration.
+ *
+ * @param source - Rules.
+ * @returns Configuration.
+ */
+function rules(source: IndexedRecord): object {
   return o.fromEntries(o.keys(source).map(key => [`@skylib/${key}`, "warn"]));
 }

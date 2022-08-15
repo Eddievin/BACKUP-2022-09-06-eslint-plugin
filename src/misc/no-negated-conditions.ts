@@ -8,9 +8,9 @@ export const noNegatedConditions = utils.wrapRule(
       message: "No negated condition",
       selector: [
         'IfStatement > BinaryExpression[operator="!=="]',
+        'IfStatement > UnaryExpression[operator="!"]',
         'IfStatement > LogicalExpression > BinaryExpression.left[operator="!=="]',
-        'IfStatement > LogicalExpression > UnaryExpression.left[operator="!"]',
-        'IfStatement > UnaryExpression[operator="!"]'
+        'IfStatement > LogicalExpression > UnaryExpression.left[operator="!"]'
       ]
     }
   ]

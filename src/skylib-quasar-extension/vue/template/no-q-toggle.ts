@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const noQToggle = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Prefer "m-toggle" component',
+    message: 'Use "m-toggle" component instead',
     selector: "VElement[name=q-toggle]"
   }
 ]);

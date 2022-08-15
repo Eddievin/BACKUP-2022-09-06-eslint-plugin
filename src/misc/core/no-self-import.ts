@@ -1,8 +1,9 @@
+import * as ruleTemplates from "../../rule-templates";
 import * as utils from "../../utils";
 import path from "node:path";
 
 export enum MessageId {
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
   noSelfImport = "noSelfImport"
 }
 
@@ -10,14 +11,16 @@ export const noSelfImport = utils.createRule({
   name: "no-self-import",
   messages: { [MessageId.noSelfImport]: "Self-import is not allowed" },
   create: context => {
-    const basename = context.stripExtension(path.basename(context.path));
+    const basename = context.stripExtension(path.basename(context.filename));
 
-    return utils.ruleTemplates.source(ctx => {
+    return ruleTemplates.source(ctx => {
+      const { node, source } = ctx;
+
       if (
-        path.dirname(ctx.source) === "." &&
-        context.stripExtension(path.basename(ctx.source)) === basename
+        path.dirname(source) === "." &&
+        context.stripExtension(path.basename(source)) === basename
       )
-        context.report({ messageId: MessageId.noSelfImport, node: ctx.node });
+        context.report({ messageId: MessageId.noSelfImport, node });
     });
   }
 });

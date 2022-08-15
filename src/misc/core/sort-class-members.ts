@@ -5,6 +5,10 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { strings } from "@skylib/functions";
 
+export interface Options {
+  readonly sortingOrder: strings;
+}
+
 export const sortClassMembers = utils.createRule({
   name: "sort-class-members",
   fixable: utils.Fixable.code,
@@ -53,7 +57,7 @@ export const sortClassMembers = utils.createRule({
                 )
               );
 
-            const name = context.getMemberName(member);
+            const name = getMemberName(member);
 
             const accessorType = getMemberAccessorType(member);
 
@@ -62,6 +66,20 @@ export const sortClassMembers = utils.createRule({
         });
       }
     };
+
+    function getMemberName(node: TSESTree.ClassElement): string {
+      switch (node.type) {
+        case AST_NODE_TYPES.MethodDefinition:
+        case AST_NODE_TYPES.PropertyDefinition:
+        case AST_NODE_TYPES.TSAbstractMethodDefinition:
+        case AST_NODE_TYPES.TSAbstractPropertyDefinition:
+          return utils.nodeText(node.key, () => context.getText(node.key));
+
+        case AST_NODE_TYPES.StaticBlock:
+        case AST_NODE_TYPES.TSIndexSignature:
+          return "";
+      }
+    }
   }
 });
 
@@ -92,14 +110,10 @@ const functionExpressions = new ReadonlySet([
   AST_NODE_TYPES.FunctionExpression
 ]);
 
-export interface Options {
-  readonly sortingOrder: strings;
-}
-
 type Types = readonly Type[];
 
 /**
- * Gets member accessibility.
+ * Returns member accessibility.
  *
  * @param node - Node.
  * @returns Member accessibility.
@@ -121,7 +135,7 @@ function getMemberAccessibility(
 }
 
 /**
- * Gets member accessor type.
+ * Returns member accessor type.
  *
  * @param node - Node.
  * @returns Member accessor type.
@@ -147,7 +161,7 @@ function getMemberAccessorType(node: TSESTree.ClassElement): AccessorType {
 }
 
 /**
- * Gets member dynamic/static state.
+ * Returns member dynamic/static state.
  *
  * @param node - Node.
  * @returns Member dynamic/static state.
@@ -169,7 +183,7 @@ function getMemberDynamicStatic(node: TSESTree.ClassElement): DynamicStatic {
 }
 
 /**
- * Gets member types.
+ * Returns member types.
  *
  * @param node - Node.
  * @returns Member types.

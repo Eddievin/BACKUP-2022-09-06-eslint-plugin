@@ -8,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("disallow-import", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ allow: ["source1", "*/source1"], disallow: ["**/source1"] }],
+    options: [{ allow: ["source1", "*/source1"], disallow: "**/source1" }],
     code: `
       import "source1";
       import "source2";
@@ -21,7 +21,7 @@ utils.testRule("disallow-import", rule, [
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ allow: ["*/source1"] }],
+    options: [{ allow: "*/source1" }],
     code: `
       import "source1";
       import "source2";

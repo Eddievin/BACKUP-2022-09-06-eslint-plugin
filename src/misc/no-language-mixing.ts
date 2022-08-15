@@ -2,16 +2,14 @@ import * as utils from "../utils";
 import { core } from "./core";
 import { evaluate } from "@skylib/functions";
 
-// eslint-disable-next-line no-warning-comments -- Wait for @skylib/config
-// fixme
 export const noLanguageMixing = evaluate(() => {
+  const br = "[\\d_]*";
+
   const eng = "\\w";
 
-  const int = "[^\\u0000-\\u00FF]";
+  const international = "[^\\u0000-\\u00FF]";
 
-  const sep = "[\\d_]*";
-
-  const re = `/${eng}${sep}${int}|${int}${sep}${eng}/u`;
+  const re = `/${eng}${br}${international}|${international}${br}${eng}/u`;
 
   return utils.wrapRule(core["no-restricted-syntax"], [
     {

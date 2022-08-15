@@ -8,32 +8,59 @@ import { a, evaluate, is, s } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 
+export type Suboptions = Suboptions1 | Suboptions2;
+
+export interface Suboptions1 {
+  readonly _id: string;
+  readonly emptyLine: EmptyLine;
+  readonly selector: utils.Selector;
+}
+
+export interface Suboptions2 {
+  readonly _id: string;
+  readonly emptyLine: EmptyLine;
+  readonly next: utils.Selector;
+  readonly prev: utils.Selector;
+}
+
 export enum EmptyLine {
   always = "always",
   any = "any",
   never = "never"
 }
 
-export const isEmptyLine = is.factory(is.enumeration, EmptyLine);
-
 export enum MessageId {
   addEmptyLine = "addEmptyLine",
   removeEmptyLine = "removeEmptyLine"
 }
 
+const isEmptyLine = is.factory(is.enumeration, EmptyLine);
+
+const isSuboptions1 = is.object.factory<Suboptions1>(
+  { _id: is.string, emptyLine: isEmptyLine, selector: utils.isSelector },
+  {}
+);
+
+const isSuboptions2 = is.object.factory<Suboptions2>(
+  {
+    _id: is.string,
+    emptyLine: isEmptyLine,
+    next: utils.isSelector,
+    prev: utils.isSelector
+  },
+  {}
+);
+
+const isSuboptions: is.Guard<Suboptions> = is.or.factory(
+  isSuboptions1,
+  isSuboptions2
+);
+
 export const consistentEmptyLines = utils.createRule({
   name: "consistent-empty-lines",
   fixable: utils.Fixable.whitespace,
-  isSubOptions: is.object.factory<SubOptions>(
-    {
-      _id: is.string,
-      emptyLine: isEmptyLine,
-      next: utils.isSelector,
-      prev: utils.isSelector
-    },
-    {}
-  ),
-  subOptionsKey: "rules",
+  isSuboptions,
+  suboptionsKey: "rules",
   messages: {
     [MessageId.addEmptyLine]: "Add empty line before ({{_id}})",
     [MessageId.removeEmptyLine]: "Remove empty line before ({{_id}})"
@@ -43,33 +70,30 @@ export const consistentEmptyLines = utils.createRule({
 
     const nextItems: Writable<Items> = [];
 
-    return utils.mergeListenters(
-      ...context.options.rules.flatMap(
-        // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
-        (rule, index): readonly RuleListener[] => {
-          const prev = a.fromMixed(rule.prev).join(", ");
+    return utils.mergeListeners(
+      ...context.options.rules.flatMap((rule, index): utils.RuleListeners => {
+        const prev = utils.selector("prev" in rule ? rule.prev : rule.selector);
 
-          const next = a.fromMixed(rule.next).join(", ");
+        const next = utils.selector("next" in rule ? rule.next : rule.selector);
 
-          return [
-            {
-              [prev]: (node: TSESTree.Node) => {
-                prevItems.push({ index, node, rule });
-              }
-            },
-            {
-              [next]: (node: TSESTree.Node) => {
-                nextItems.push({ index, node, rule });
-              }
+        return [
+          {
+            [prev]: (node: TSESTree.Node) => {
+              prevItems.push({ index, node, rule });
             }
-          ];
-        }
-      ),
+          },
+          {
+            [next]: (node: TSESTree.Node) => {
+              nextItems.push({ index, node, rule });
+            }
+          }
+        ];
+      }),
       {
         "Program:exit": () => {
-          // eslint-disable-next-line @skylib/functions/array/prefer-sort -- Postponed
+          // eslint-disable-next-line @skylib/functions/array/prefer-sort -- Ok
           prevItems.sort(reverseCompare);
-          // eslint-disable-next-line @skylib/functions/array/prefer-sort -- Postponed
+          // eslint-disable-next-line @skylib/functions/array/prefer-sort -- Ok
           nextItems.sort(reverseCompare);
 
           const items = _.uniqBy(
@@ -88,13 +112,13 @@ export const consistentEmptyLines = utils.createRule({
           );
 
           for (const item of items) {
-            const { _id, emptyLine } = item.rule;
+            const { node, rule } = item;
+
+            const { _id, emptyLine } = rule;
 
             if (emptyLine === EmptyLine.any) {
               // Skip check
             } else {
-              const { node } = item;
-
               const spread = evaluate(() => {
                 switch (emptyLine) {
                   case EmptyLine.always:
@@ -136,17 +160,10 @@ export const consistentEmptyLines = utils.createRule({
   }
 });
 
-export interface SubOptions {
-  readonly _id: string;
-  readonly emptyLine: EmptyLine;
-  readonly next: utils.Selector;
-  readonly prev: utils.Selector;
-}
-
 interface Item {
   readonly index: number;
   readonly node: TSESTree.Node;
-  readonly rule: SubOptions;
+  readonly rule: Suboptions;
 }
 
 type Items = readonly Item[];

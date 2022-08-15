@@ -10,7 +10,7 @@ export const requireValidateEmitTypeParam = utils.wrapRule(
     {
       message: 'Expecting "OwnProps" type parameter',
       selector: [
-        "CallExpression[callee.name=validateEmit] > TSTypeParameterInstantiation.typeParameters > TSTypeReference.params > TSQualifiedName.typeName > Identifier.right[name!=OwnProps]",
+        "CallExpression[callee.name=validateEmit] > TSTypeParameterInstantiation > TSTypeReference > TSQualifiedName.typeName > Identifier.right[name!=OwnProps]",
         "CallExpression[callee.name=validateEmit][typeParameters=undefined]"
       ]
     }

@@ -8,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("prefer-string", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "String(1);",
+    code: "String(false);",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

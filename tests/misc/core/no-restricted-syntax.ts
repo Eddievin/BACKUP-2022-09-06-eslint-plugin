@@ -69,12 +69,18 @@ utils.testRule("no-restricted-syntax", rule, [
       { ignoreSelector: "Identifier[name=id2]", selector: "Identifier" }
     ],
     code: `
-      const id1 = [];
-      const id2 = [];
+      <template>
+        <div
+          @click="
+            id1 = [];
+            id2 = [];
+          "
+        ></div>
+      </template>
     `,
     errors: [
       {
-        line: 1,
+        line: 4,
         messageId: MessageId.customMessage,
         data: { _id: "id", message: "This syntax is not allowed: Identifier" }
       }

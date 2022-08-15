@@ -1,4 +1,3 @@
-// eslint-disable-next-line @skylib/disallow-import -- Postponed
 import type * as ts from "typescript";
 import * as utils from "../../utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
@@ -6,6 +5,15 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { is } from "@skylib/functions";
 import type { strings } from "@skylib/functions";
+
+export type InterfaceOptions = readonly InterfaceOption[];
+
+export interface Options extends utils.configurableSelector.Options {
+  readonly interfaces: InterfaceOptions;
+  readonly properties: PropertyOptions;
+}
+
+export type PropertyOptions = readonly PropertyOption[];
 
 export enum PropertyOption {
   function = "function",
@@ -22,15 +30,15 @@ export enum InterfaceOption {
   interface = "interface"
 }
 
-export const isInterfaceOption = is.factory(is.enumeration, InterfaceOption);
-
-export const isInterfaceOptions = is.factory(is.array.of, isInterfaceOption);
-
 export enum MessageId {
   undocumented = "undocumented",
   undocumentedCallSignature = "undocumentedCallSignature",
   undocumentedConstructSignature = "undocumentedConstructSignature"
 }
+
+export const isInterfaceOption = is.factory(is.enumeration, InterfaceOption);
+
+export const isInterfaceOptions = is.factory(is.array.of, isInterfaceOption);
 
 export const requireJsdoc = utils.createRule({
   name: "require-jsdoc",
@@ -63,10 +71,13 @@ export const requireJsdoc = utils.createRule({
       "Missing documentation for constructor signature"
   },
   create: (context, typeCheck): RuleListener => {
-    const selectors = utils.getSelectors(context.options, defaultSelectors);
+    const selector = utils.configurableSelector.get(
+      context.options,
+      defaultSelectors
+    );
 
     return {
-      [selectors]: (node: TSESTree.Node) => {
+      [selector]: (node: TSESTree.Node) => {
         switch (node.type) {
           case AST_NODE_TYPES.TSInterfaceDeclaration:
             lintInterface(node);
@@ -152,7 +163,7 @@ export const requireJsdoc = utils.createRule({
         } else context.report({ messageId: MessageId.undocumented, node });
     }
 
-    // eslint-disable-next-line @skylib/max-identifier-blocks -- Postponed
+    // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
     function lintNodeByTypeSymbol(node: TSESTree.Node): void {
       const type = typeCheck.getType(node);
 
@@ -198,13 +209,3 @@ const defaultSelectors: strings = [
   AST_NODE_TYPES.TSMethodSignature,
   AST_NODE_TYPES.TSPropertySignature
 ];
-
-export interface Options {
-  readonly excludeSelectors: strings;
-  readonly includeSelectors: strings;
-  // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
-  readonly interfaces: readonly InterfaceOption[];
-  readonly noDefaultSelectors: boolean;
-  // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Postponed
-  readonly properties: readonly PropertyOption[];
-}

@@ -1,6 +1,4 @@
-/* eslint-disable @skylib/no-at-sign-internal-import -- Postponed */
-/* eslint-disable @skylib/no-internal-modules -- Postponed */
-
+// eslint-disable-next-line @skylib/no-at-sign-internal-import, @skylib/no-internal-modules -- Ok
 import { InterfaceOption, PropertyOption } from "@/misc/core/require-jsdoc";
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";

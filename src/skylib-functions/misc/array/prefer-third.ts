@@ -3,7 +3,7 @@ import { misc } from "../../../misc";
 
 export const preferThird = utils.wrapRule(misc["no-restricted-syntax"], [
   {
-    message: 'Use "a.third" instead',
+    message: 'Use "a.third" function instead',
     selector:
       "CallExpression[callee.object.name=a][callee.property.name=get] > Literal.arguments:nth-child(2)[value=2]"
   }

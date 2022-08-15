@@ -10,6 +10,7 @@ utils.testRule("no-empty-interfaces", rule, [
     name: `Test at line ${getCurrentLine().line}`,
     code: `
       interface I {}
+      interface J { x: string; }
       interface Props {}
       interface Slots {}
     `,

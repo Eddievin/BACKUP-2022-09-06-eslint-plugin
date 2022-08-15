@@ -4,7 +4,9 @@ import { misc } from "../../misc";
 export const noDisable = utils.wrapRule(misc["no-restricted-syntax"], [
   {
     message: "Do not disable rules",
-    selector:
+    selector: [
+      "Property[key.name=rules] > ObjectExpression > Property > ArrayExpression > Literal:first-child[value=off]",
       "Property[key.name=rules] > ObjectExpression > Property > Literal.value[value=off]"
+    ]
   }
 ]);

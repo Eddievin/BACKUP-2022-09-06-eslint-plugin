@@ -23,13 +23,13 @@ utils.testRule("no-self-import", rule, [
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
-    filename: "file.extras.ts",
+    filename: "kebab-case.kebab-case.ts",
     code: `
-      import("./file.extras");
-      import("./file.extras.ts");
+      import("./kebab-case.kebab-case");
+      import("./kebab-case.kebab-case.ts");
       import("./file");
-      import("@/file.extras");
-      import("@/file.extras.ts");
+      import("@/kebab-case.kebab-case");
+      import("@/kebab-case.kebab-case.ts");
       import("@/file");
     `,
     errors: [
@@ -39,13 +39,13 @@ utils.testRule("no-self-import", rule, [
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
-    filename: "file.extras.ts",
+    filename: "kebab-case.kebab-case.ts",
     code: `
-      require("./file.extras");
-      require("./file.extras.ts");
+      require("./kebab-case.kebab-case");
+      require("./kebab-case.kebab-case.ts");
       require("./file");
-      require("@/file.extras");
-      require("@/file.extras.ts");
+      require("@/kebab-case.kebab-case");
+      require("@/kebab-case.kebab-case.ts");
       require("@/file");
     `,
     errors: [

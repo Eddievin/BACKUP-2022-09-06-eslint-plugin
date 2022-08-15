@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
-
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
@@ -10,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("no-OwnSlots-extends", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "interface OwnSlots extends SampleInterface {}",
+    code: "interface OwnSlots extends I {}",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

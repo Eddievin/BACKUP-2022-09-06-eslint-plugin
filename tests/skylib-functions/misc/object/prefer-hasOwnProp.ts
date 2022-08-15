@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/match-filename/testRule-name -- Postponed */
-
 import { rules, utils } from "@";
 import getCurrentLine from "get-current-line";
 
@@ -10,7 +8,7 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("prefer-hasOwnProp", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "Object.prototype.hasOwnProperty.call({});",
+    code: "Object.prototype.hasOwnProperty.call();",
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

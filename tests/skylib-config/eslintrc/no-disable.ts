@@ -11,10 +11,14 @@ utils.testRule("no-disable", rule, [
     code: `
       module.exports = {
         rules: {
-          rule: "off"
+          rule1: "off",
+          rule2: ["off", {}]
         }
       };
     `,
-    errors: [{ line: 3, messageId: MessageId.customMessage }]
+    errors: [
+      { line: 3, messageId: MessageId.customMessage },
+      { line: 4, messageId: MessageId.customMessage }
+    ]
   }
 ]);

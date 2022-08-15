@@ -10,7 +10,7 @@ utils.testRule("no-mixed-classes", rule, [
     name: `Test at line ${getCurrentLine().line}`,
     code: `
       <template>
-        <div :class="\`\${$style.sampleClass} sample-class\`"></div>
+        <div :class="\`\${$style.x} y\`"></div>
       </template>
     `,
     errors: [{ line: 2, messageId: MessageId.customMessage }]
