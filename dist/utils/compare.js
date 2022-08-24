@@ -2,13 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compare = void 0;
 const tslib_1 = require("tslib");
-// eslint-disable-next-line @skylib/disallow-import/project -- Ok
 const natural_compare_1 = tslib_1.__importDefault(require("natural-compare"));
 /**
  * Compares two strings.
  *
- * @param x - Value 1.
- * @param y - Value 2.
+ * @param x - First value.
+ * @param y - Second value.
  * @returns Comparison result.
  */
 function compare(x, y) {

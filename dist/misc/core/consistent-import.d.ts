@@ -1,7 +1,6 @@
-import * as utils from "../../utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { strings } from "@skylib/functions";
-export interface SubOptions {
+export interface Suboptions {
     readonly _id: string;
     readonly altLocalNames: strings;
     readonly autoImport: boolean;
@@ -17,7 +16,5 @@ export declare enum MessageId {
     wildcardDisallowed = "wildcardDisallowed",
     wildcardRequired = "wildcardRequired"
 }
-export declare const consistentImport: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<MessageId, [object & {
-    readonly sources?: readonly Partial<SubOptions & utils.SharedOptions2>[];
-}], RuleListener>;
+export declare const consistentImport: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<MessageId, import("../../utils/create-rule.internal").PartialOptionsArray<object, Suboptions, "sources">, RuleListener>;
 //# sourceMappingURL=consistent-import.d.ts.map

@@ -5,13 +5,11 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../utils"));
 const core_1 = require("./core");
 const functions_1 = require("@skylib/functions");
-// eslint-disable-next-line no-warning-comments -- Wait for @skylib/config
-// fixme
 exports.noLanguageMixing = (0, functions_1.evaluate)(() => {
+    const br = "[\\d_]*";
     const eng = "\\w";
-    const int = "[^\\u0000-\\u00FF]";
-    const sep = "[\\d_]*";
-    const re = `/${eng}${sep}${int}|${int}${sep}${eng}/u`;
+    const international = "[^\\u0000-\\u00FF]";
+    const re = `/${eng}${br}${international}|${international}${br}${eng}/u`;
     return utils.wrapRule(core_1.core["no-restricted-syntax"], [
         {
             message: "No language mixing",

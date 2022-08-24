@@ -7,8 +7,8 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.preferWritableIndexedObject = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "WritableIndexedObject" type',
-        selector: "TSTypeReference[typeName.name=WritableRecord] > .typeParameters > .params:first-child > .typeName[name=PropertyKey]"
+        message: 'Use "WritableIndexedObject" type instead',
+        selector: "TSTypeReference[typeName.name=WritableRecord] > TSTypeParameterInstantiation > TSTypeReference:first-child > Identifier.typeName[name=PropertyKey]"
     }
 ]);
 //# sourceMappingURL=prefer-WritableIndexedObject.js.map

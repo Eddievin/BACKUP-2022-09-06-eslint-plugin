@@ -1,0 +1,1 @@
+{"version":3,"file":"no-shadow.js","sourceRoot":"","sources":["../../src/typescript/no-shadow.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,kCAA+B;AAElB,QAAA,QAAQ,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,IAAI,EAAE;IAChD;QACE,MAAM,EAAE,kCAAkC;QAC1C,IAAI,EAAE,WAAW;QACjB,IAAI,EAAE,qBAAqB;KAC5B;CACF,CAAC,CAAC"}

@@ -7,7 +7,7 @@ const core_1 = require("./core");
 exports.noUnsafeObjectAssign = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
         message: "Do not assign to readonly object",
-        selector: "CallExpression[callee.object.name=Object][callee.property.name=assign] > Identifier.arguments",
+        selector: "CallExpression[callee.object.name=Object][callee.property.name=assign] > Identifier.arguments:first-child",
         typeIs: utils.TypeGroup.readonly
     }
 ]);

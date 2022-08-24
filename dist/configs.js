@@ -15,7 +15,7 @@ const vue_1 = require("./vue");
 exports.configs = {
     "all": {
         plugins: ["@skylib/eslint-plugin"],
-        rules: Object.assign(Object.assign({}, rules(misc_1.misc)), { "@skylib/disallow-import": "off", "@skylib/match-filename": "off", "@skylib/no-restricted-syntax": "off", "@skylib/require-syntax": "off", "@skylib/sort-array": "off", "@skylib/wrap": "off" })
+        rules: Object.assign(Object.assign({}, rules(misc_1.misc)), { "@skylib/match-filename": "off", "@skylib/no-restricted-syntax": "off", "@skylib/require-syntax": "off", "@skylib/wrap": "off" })
     },
     "config": { plugins: ["@skylib/eslint-plugin"], rules: rules(skylib_config_1.skylibConfig) },
     "eslintrc": { plugins: ["@skylib/eslint-plugin"], rules: rules(eslintrc_1.eslintrc) },
@@ -72,10 +72,15 @@ exports.configs = {
     },
     "vue": {
         plugins: ["@skylib/eslint-plugin"],
-        rules: Object.assign(Object.assign({}, rules(vue_1.vue)), { "@skylib/typescript/no-complex-return-type": "off" })
+        rules: Object.assign(Object.assign({}, rules(vue_1.vue)), { "@skylib/typescript/no-complex-declarator-type": "off", "@skylib/typescript/no-complex-return-type": "off" })
     }
 };
-// eslint-disable-next-line @skylib/require-jsdoc -- Postponed
+/**
+ * Converts rules to configuration.
+ *
+ * @param source - Rules.
+ * @returns Configuration.
+ */
 function rules(source) {
     return functions_1.o.fromEntries(functions_1.o.keys(source).map(key => [`@skylib/${key}`, "warn"]));
 }

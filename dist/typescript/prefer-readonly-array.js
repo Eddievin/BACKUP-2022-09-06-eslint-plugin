@@ -8,7 +8,7 @@ exports.preferReadonlyArray = utils.wrapRule(core_1.core["no-restricted-syntax"]
     {
         message: "Prefer readonly array",
         selector: [
-            `:not(TSTypeOperator[operator=readonly]) > :matches(${utils.selectors.arrayType})`,
+            ":not(TSTypeOperator[operator=readonly]) > :matches(TSArrayType, TSTupleType)",
             "TSTypeReference > Identifier[name=Array]"
         ]
     }

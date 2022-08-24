@@ -1,11 +1,10 @@
 "use strict";
-/* eslint-disable @skylib/custom/prefer-readonly-array -- Postponed */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sort = void 0;
 const functions_1 = require("@skylib/functions");
 const sort_internal_1 = require("./sort.internal");
 const compare_1 = require("./compare");
-const core_1 = require("./core");
+const misc_1 = require("./misc");
 exports.sort = (0, functions_1.defineFn)(
 /**
  * Sorts nodes.
@@ -15,30 +14,27 @@ exports.sort = (0, functions_1.defineFn)(
  * @param options - Options.
  */
 (nodes, context, options) => {
-    const { customOrder, keyNode, sendToBottom, sendToTop, sortingOrder } = Object.assign({ customOrder: [], 
-        // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
-        // fixme -- Use fn.never
-        keyNode: functions_1.fn.noop, sortingOrder: (node) => {
-            const node2 = keyNode(node);
-            if (node2) {
-                const key = (0, core_1.nodeText)(node2, () => `\u0001${context.getText(node2)}`);
+    const { customOrder, keyNode, sendToBottom, sendToTop, sortingOrder } = Object.assign({ customOrder: [], keyNode: functions_1.fn.never, sortingOrder: (node) => {
+            const kNode = keyNode(node);
+            if (kNode) {
+                const key = (0, misc_1.nodeText)(kNode, () => `\u0002${context.getText(kNode)}`);
                 const index = customOrder.indexOf(key);
                 if (index >= 0)
-                    return `${1000 + index}:${key}`;
+                    return `${1000 + index}`;
                 if (sendToTopRe && sendToTopRe.test(key))
-                    return `2001:${key}`;
+                    return `2001\u0001${key}`;
                 if (sendToBottomRe && sendToBottomRe.test(key))
-                    return `2003:${key}`;
-                return `2002:${key}`;
+                    return `2003\u0001${key}`;
+                return `2002\u0001${key}`;
             }
             return undefined;
         } }, options);
     const sendToTopRe = functions_1.is.not.empty(sendToTop)
-        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Postponed
+        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
             new RegExp(sendToTop, "u")
         : undefined;
     const sendToBottomRe = functions_1.is.not.empty(sendToBottom)
-        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Postponed
+        ? // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
             new RegExp(sendToBottom, "u")
         : undefined;
     const items = [];
@@ -59,7 +55,13 @@ exports.sort = (0, functions_1.defineFn)(
         [sort_internal_1.MessageId.incorrectSortingOrderId]: "Incorrect sorting order ({{_id}})"
     }
 });
-// eslint-disable-next-line @skylib/require-jsdoc -- Ppstponed
+/**
+ * Sorts items.
+ *
+ * @param items - Items.
+ * @param options - Options.
+ * @param context - Context.
+ */
 function sortGroup(items, options, context) {
     if (items.length >= 2) {
         items = items.map((item, index) => (Object.assign(Object.assign({}, item), { index })));
@@ -86,18 +88,17 @@ function sortGroup(items, options, context) {
                 functions_1.a.get(items, functions_1.as.not.empty(min)).node.range[0],
                 functions_1.a.get(items, functions_1.as.not.empty(max)).node.range[1]
             ]);
-            if (functions_1.is.not.empty(_id))
-                context.report({
+            context.report(functions_1.is.not.empty(_id)
+                ? {
                     data: { _id },
                     fix: () => fixes,
                     loc,
-                    messageId: exports.sort.MessageId.incorrectSortingOrderId
-                });
-            else
-                context.report({
+                    messageId: sort_internal_1.MessageId.incorrectSortingOrderId
+                }
+                : {
                     fix: () => fixes,
                     loc,
-                    messageId: exports.sort.MessageId.incorrectSortingOrder
+                    messageId: sort_internal_1.MessageId.incorrectSortingOrder
                 });
         }
     }

@@ -9,9 +9,9 @@ exports.noNegatedConditions = utils.wrapRule(core_1.core["no-restricted-syntax"]
         message: "No negated condition",
         selector: [
             'IfStatement > BinaryExpression[operator="!=="]',
+            'IfStatement > UnaryExpression[operator="!"]',
             'IfStatement > LogicalExpression > BinaryExpression.left[operator="!=="]',
-            'IfStatement > LogicalExpression > UnaryExpression.left[operator="!"]',
-            'IfStatement > UnaryExpression[operator="!"]'
+            'IfStatement > LogicalExpression > UnaryExpression.left[operator="!"]'
         ]
     }
 ]);

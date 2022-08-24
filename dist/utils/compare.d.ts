@@ -1,8 +1,8 @@
 /**
  * Compares two strings.
  *
- * @param x - Value 1.
- * @param y - Value 2.
+ * @param x - First value.
+ * @param y - Second value.
  * @returns Comparison result.
  */
 export declare function compare(x: string, y: string): -1 | 0 | 1;

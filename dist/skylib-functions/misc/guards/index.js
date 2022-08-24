@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.guards = void 0;
-const tslib_1 = require("tslib");
-const utils = tslib_1.__importStar(require("../../../utils"));
 const array_always_false_1 = require("./array-always-false");
 const array_always_true_1 = require("./array-always-true");
 const boolean_always_false_1 = require("./boolean-always-false");
@@ -25,8 +23,10 @@ const numStr_always_false_1 = require("./numStr-always-false");
 const numStr_always_true_1 = require("./numStr-always-true");
 const number_always_false_1 = require("./number-always-false");
 const number_always_true_1 = require("./number-always-true");
+const functions_1 = require("@skylib/functions");
 const object_always_false_1 = require("./object-always-false");
 const object_always_true_1 = require("./object-always-true");
+const require_object_type_param_1 = require("./require-object-type-param");
 const set_always_false_1 = require("./set-always-false");
 const string_always_false_1 = require("./string-always-false");
 const string_always_true_1 = require("./string-always-true");
@@ -36,7 +36,7 @@ const true_always_false_1 = require("./true-always-false");
 const tuple_always_false_1 = require("./tuple-always-false");
 const undefined_always_false_1 = require("./undefined-always-false");
 const undefined_always_true_1 = require("./undefined-always-true");
-exports.guards = utils.prefixKeys("guards/", {
+exports.guards = functions_1.o.prefixKeys({
     "array-always-false": array_always_false_1.arrayAlwaysFalse,
     "array-always-true": array_always_true_1.arrayAlwaysTrue,
     "boolean-always-false": boolean_always_false_1.booleanAlwaysFalse,
@@ -61,6 +61,7 @@ exports.guards = utils.prefixKeys("guards/", {
     "number-always-true": number_always_true_1.numberAlwaysTrue,
     "object-always-false": object_always_false_1.objectAlwaysFalse,
     "object-always-true": object_always_true_1.objectAlwaysTrue,
+    "require-object-type-param": require_object_type_param_1.requireObjectTypeParam,
     "set-always-false": set_always_false_1.setAlwaysFalse,
     "string-always-false": string_always_false_1.stringAlwaysFalse,
     "string-always-true": string_always_true_1.stringAlwaysTrue,
@@ -70,5 +71,5 @@ exports.guards = utils.prefixKeys("guards/", {
     "tuple-always-false": tuple_always_false_1.tupleAlwaysFalse,
     "undefined-always-false": undefined_always_false_1.undefinedAlwaysFalse,
     "undefined-always-true": undefined_always_true_1.undefinedAlwaysTrue
-});
+}, "guards/");
 //# sourceMappingURL=index.js.map

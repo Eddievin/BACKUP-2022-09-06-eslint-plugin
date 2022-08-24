@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sortArray = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
-const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
+const functions_1 = require("@skylib/functions");
 var MessageId;
 (function (MessageId) {
     MessageId["expectingArray"] = "expectingArray";
@@ -13,20 +13,29 @@ exports.sortArray = utils.createRule({
     name: "sort-array",
     fixable: utils.Fixable.code,
     vue: true,
-    isOptions: functions_1.is.object.factory({ selector: utils.isSelector }, {
+    isOptions: functions_1.is.object.factory({ selector: utils.isSelector, triggerByComment: functions_1.is.boolean }, {
         customOrder: functions_1.is.strings,
-        key: functions_1.is.string,
         sendToBottom: functions_1.is.string,
-        sendToTop: functions_1.is.string
+        sendToTop: functions_1.is.string,
+        sortKey: functions_1.is.string
     }),
+    defaultOptions: {
+        selector: utils_1.AST_NODE_TYPES.ArrayExpression,
+        triggerByComment: true
+    },
     messages: Object.assign(Object.assign({}, utils.sort.messages), { [MessageId.expectingArray]: "Expecting array" }),
     create: (context) => {
-        const { key, selector: mixed } = context.options;
-        const selector = functions_1.a.fromMixed(mixed).join(", ");
+        const { selector: mixedSelector, sortKey, triggerByComment } = context.options;
+        const selector = utils.selector(mixedSelector);
         return {
             [selector]: (node) => {
-                if (node.type === utils_1.AST_NODE_TYPES.ArrayExpression)
-                    utils.sort(node.elements, context, Object.assign(Object.assign({}, context.options), { keyNode }));
+                if (node.type === utils_1.AST_NODE_TYPES.ArrayExpression) {
+                    const sort = triggerByComment
+                        ? context.getComments(node).includes("// @sorted")
+                        : true;
+                    if (sort)
+                        utils.sort(node.elements, context, Object.assign(Object.assign({}, context.options), { keyNode }));
+                }
                 else
                     context.report({ messageId: MessageId.expectingArray, node });
             }
@@ -34,10 +43,10 @@ exports.sortArray = utils.createRule({
         function keyNode(node) {
             switch (node.type) {
                 case utils_1.AST_NODE_TYPES.ObjectExpression:
-                    if (functions_1.is.not.empty(key))
+                    if (functions_1.is.not.empty(sortKey))
                         for (const property of node.properties)
                             if (property.type === utils_1.AST_NODE_TYPES.Property &&
-                                utils.nodeText(property.key, "?") === key)
+                                utils.nodeText(property.key, "?") === sortKey)
                                 return property.value;
                     return node;
                 case utils_1.AST_NODE_TYPES.SpreadElement:

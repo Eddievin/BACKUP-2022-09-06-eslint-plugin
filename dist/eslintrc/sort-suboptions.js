@@ -7,8 +7,9 @@ const misc_1 = require("../misc");
 exports.sortSuboptions = utils.wrapRule(misc_1.misc["sort-array"], [
     {
         customOrder: ["catch-all"],
-        key: "_id",
-        selector: "Property[key.value=/@skylib\\u002F/u] > ArrayExpression > ObjectExpression > Property[key.name=/^(?:exclusions|overrides|rules|sources)$/u] > ArrayExpression"
+        selector: "Property[key.value=/@skylib\\u002F/u] > ArrayExpression > ObjectExpression > Property[key.name=/^(?:exclusions|overrides|rules|sources)$/u] > ArrayExpression",
+        sortKey: "_id",
+        triggerByComment: false
     }
 ]);
 //# sourceMappingURL=sort-suboptions.js.map

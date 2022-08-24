@@ -9,8 +9,10 @@ export interface Options {
 export declare enum NodeType {
     ExportAllDeclaration = "ExportAllDeclaration",
     ExportDeclaration = "ExportDeclaration",
+    ExportDefaultDeclaration = "ExportDefaultDeclaration",
     ExportFunctionDeclaration = "ExportFunctionDeclaration",
     ExportTypeDeclaration = "ExportTypeDeclaration",
+    ExportUnknown = "ExportUnknown",
     FunctionDeclaration = "FunctionDeclaration",
     ImportDeclaration = "ImportDeclaration",
     JestTest = "JestTest",
@@ -19,7 +21,7 @@ export declare enum NodeType {
 }
 export declare const isNodeType: is.Guard<NodeType>;
 export declare const isNodeTypes: is.Guard<readonly NodeType[]>;
-export declare const sortStatements: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../utils/sort.internal").MessageId, [Partial<Options> & {}], RuleListener>;
+export declare const sortStatements: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../utils/sort.internal").MessageId, import("../../utils/create-rule.internal").PartialOptionsArray<Options, object, never>, RuleListener>;
 declare type NodeTypes = readonly NodeType[];
 export {};
 //# sourceMappingURL=sort-statements.d.ts.map

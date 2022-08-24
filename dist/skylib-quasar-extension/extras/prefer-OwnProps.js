@@ -8,7 +8,7 @@ const misc_1 = require("../../misc");
 exports.preferOwnProps = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: 'Use "OwnProps" interface',
-        selector: "TSInterfaceDeclaration[id.name=/^(?:Props|ParentProps)$/u] > TSInterfaceBody.body > .body"
+        selector: "TSInterfaceDeclaration[id.name=/^(?:Props|ParentProps)$/u] > TSInterfaceBody.body[body.length>0]"
     }
 ]);
 //# sourceMappingURL=prefer-OwnProps.js.map

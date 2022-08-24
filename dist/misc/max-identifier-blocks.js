@@ -7,7 +7,7 @@ const core_1 = require("./core");
 exports.maxIdentifierBlocks = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
         message: "Identifier should not contain more than 4 blocks",
-        selector: `:matches(${utils.selectors.function}, ${utils.selectors.property}, VariableDeclarator) > Identifier[name=/^[A-Z]*[^A-Z]+([^A-Z]+[A-Z]+){4}/u]`
+        selector: "Identifier[name=/^[A-Z]*[^A-Z]+([A-Z]+[^A-Z]+){4}/u]"
     }
 ]);
 //# sourceMappingURL=max-identifier-blocks.js.map

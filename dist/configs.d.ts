@@ -2,11 +2,9 @@ export declare const configs: {
     readonly all: {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: {
-            readonly "@skylib/disallow-import": "off";
             readonly "@skylib/match-filename": "off";
             readonly "@skylib/no-restricted-syntax": "off";
             readonly "@skylib/require-syntax": "off";
-            readonly "@skylib/sort-array": "off";
             readonly "@skylib/wrap": "off";
         };
     };
@@ -85,6 +83,7 @@ export declare const configs: {
     readonly vue: {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: {
+            readonly "@skylib/typescript/no-complex-declarator-type": "off";
             readonly "@skylib/typescript/no-complex-return-type": "off";
         };
     };

@@ -1,1 +1,1 @@
-{"version":3,"file":"sort-array.js","sourceRoot":"","sources":["../../src/eslintrc/sort-array.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,kCAA+B;AAElB,QAAA,SAAS,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,YAAY,CAAC,EAAE;IAC1D;QACE,QAAQ,EAAE;YACR,4CAA4C;YAC5C,uHAAuH;SACxH;KACF;CACF,CAAC,CAAC"}
+{"version":3,"file":"sort-array.js","sourceRoot":"","sources":["../../src/eslintrc/sort-array.ts"],"names":[],"mappings":";;;;AAAA,wDAAkC;AAClC,kCAA+B;AAElB,QAAA,SAAS,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,YAAY,CAAC,EAAE;IAC1D;QACE,QAAQ,EACN,4IAA4I;QAC9I,gBAAgB,EAAE,KAAK;KACxB;CACF,CAAC,CAAC"}

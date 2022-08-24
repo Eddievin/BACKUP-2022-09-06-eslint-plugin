@@ -1,0 +1,1 @@
+{"version":3,"file":"prefer-clone.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/array/prefer-clone.ts"],"names":[],"mappings":";;;;AAAA,8DAAwC;AACxC,wCAAqC;AAExB,QAAA,WAAW,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IACtE;QACE,OAAO,EAAE,gCAAgC;QACzC,QAAQ,EAAE,oDAAoD;KAC/D;CACF,CAAC,CAAC"}

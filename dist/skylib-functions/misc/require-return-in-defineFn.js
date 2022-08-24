@@ -5,15 +5,17 @@ exports.requireReturnInDefineFn = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const misc_1 = require("../../misc");
+const prefix = ":matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator[id.typeAnnotation=undefined] > CallExpression[callee.name=defineFn]";
+// eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
 exports.requireReturnInDefineFn = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: "Missing return type on function",
+        message: "Missing return type",
         selector: [
-            "ArrowFunctionExpression[returnType=undefined]",
-            "FunctionExpression[returnType=undefined]",
-            "ObjectExpression > Property > ArrowFunctionExpression[returnType=undefined]",
-            "ObjectExpression > Property > FunctionExpression[returnType=undefined]"
-        ].map(selector => `:matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator[id.typeAnnotation=undefined] > CallExpression[callee.name=defineFn] > ${selector}`)
+            `${prefix} > ArrowFunctionExpression[returnType=undefined]`,
+            `${prefix} > FunctionExpression[returnType=undefined]`,
+            `${prefix} > ObjectExpression > Property > ArrowFunctionExpression[returnType=undefined]`,
+            `${prefix} > ObjectExpression > Property > FunctionExpression[returnType=undefined]`
+        ]
     }
 ]);
 //# sourceMappingURL=require-return-in-defineFn.js.map

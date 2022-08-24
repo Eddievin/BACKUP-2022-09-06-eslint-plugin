@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.consistentOptionalProps = exports.isStyle = exports.Style = exports.isTarget = exports.Target = exports.MessageId = void 0;
+exports.consistentOptionalProps = exports.isTarget = exports.isStyle = exports.Target = exports.Style = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const functions_1 = require("@skylib/functions");
@@ -11,55 +11,59 @@ var MessageId;
     MessageId["combinedId"] = "combinedId";
     MessageId["optional"] = "optional";
     MessageId["optionalId"] = "optionalId";
-    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
+    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
     MessageId["undefined"] = "undefined";
     MessageId["undefinedId"] = "undefinedId";
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
+var Style;
+(function (Style) {
+    Style["combined"] = "combined";
+    Style["optional"] = "optional";
+    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
+    Style["undefined"] = "undefined";
+})(Style = exports.Style || (exports.Style = {}));
 var Target;
 (function (Target) {
     Target["classes"] = "classes";
     Target["interfaces"] = "interfaces";
 })(Target = exports.Target || (exports.Target = {}));
-exports.isTarget = functions_1.is.factory(functions_1.is.enumeration, Target);
-var Style;
-(function (Style) {
-    Style["combined"] = "combined";
-    Style["optional"] = "optional";
-    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
-    Style["undefined"] = "undefined";
-})(Style = exports.Style || (exports.Style = {}));
 exports.isStyle = functions_1.is.factory(functions_1.is.enumeration, Style);
+exports.isTarget = functions_1.is.factory(functions_1.is.enumeration, Target);
 exports.consistentOptionalProps = utils.createRule({
     name: "consistent-optional-props",
     isOptions: functions_1.is.object.factory({ classes: exports.isStyle, interfaces: exports.isStyle }, {}),
     defaultOptions: { classes: Style.combined, interfaces: Style.combined },
-    isSubOptions: functions_1.is.object.factory({
+    isSuboptions: functions_1.is.object.factory({
         _id: functions_1.is.string,
-        pattern: utils.isPattern,
-        propertyPattern: utils.isPattern,
+        pattern: utils.isRegexpPattern,
+        propertyPattern: utils.isRegexpPattern,
         style: exports.isStyle
     }, { target: exports.isTarget }),
-    defaultSubOptions: { pattern: [], propertyPattern: [] },
-    subOptionsKey: "overrides",
+    defaultSuboptions: { pattern: [], propertyPattern: [] },
+    suboptionsKey: "overrides",
     messages: {
-        [MessageId.combined]: 'Prefer "x?: T | undefined" style',
-        [MessageId.combinedId]: 'Prefer "x?: T | undefined" style ({{_id}})',
-        [MessageId.optional]: 'Prefer "x?: T" style',
-        [MessageId.optionalId]: 'Prefer "x?: T" style ({{_id}})',
-        [MessageId.undefined]: 'Prefer "x: T | undefined" style',
-        [MessageId.undefinedId]: 'Prefer "x: T | undefined" style ({{_id}})'
+        [MessageId.combined]: 'Use "x?: T | undefined" style instead',
+        [MessageId.combinedId]: 'Use "x?: T | undefined" style instead ({{_id}})',
+        [MessageId.optional]: 'Use "x?: T" style instead',
+        [MessageId.optionalId]: 'Use "x?: T" style instead ({{_id}})',
+        [MessageId.undefined]: 'Use "x: T | undefined" style instead',
+        [MessageId.undefinedId]: 'Use "x: T | undefined" style instead ({{_id}})'
     },
     create: (context, typeCheck) => {
-        const subOptionsArray = functions_1.a.reverse(context.subOptionsArray.map((subOptions) => {
-            const matcher = utils.createRegexpMatcher(subOptions.pattern, true);
-            const properyMatcher = utils.createRegexpMatcher(subOptions.propertyPattern, true);
-            return Object.assign(Object.assign({}, subOptions), { matcher, properyMatcher });
+        const overrides = functions_1.a.reverse(context.options.overrides.map((override) => {
+            const { pattern, propertyPattern } = override;
+            const matcher = utils.createRegexpMatcher(pattern, true);
+            const properyMatcher = utils.createRegexpMatcher(propertyPattern, true);
+            return Object.assign(Object.assign({}, override), { matcher, properyMatcher });
         }));
         return {
             ClassDeclaration: lintClass,
             ClassExpression: lintClass,
             TSInterfaceDeclaration: lintInterface
         };
+        function getPropertyName(node) {
+            return utils.nodeText(node.key, () => context.getText(node.key));
+        }
         function lintClass(node) {
             const name = node.id ? node.id.name : "?";
             for (const property of node.body.body)
@@ -90,45 +94,46 @@ exports.consistentOptionalProps = utils.createRule({
                     return undefined;
                 });
                 if (got) {
-                    const subOptions = (0, functions_1.evaluate)(() => {
-                        const propertyName = context.getMemberName(node);
+                    const override = (0, functions_1.evaluate)(() => {
+                        const propertyName = getPropertyName(node);
                         const targets = new functions_1.ReadonlySet([target, undefined]);
-                        return subOptionsArray.find(candidate => targets.has(candidate.target) &&
+                        return overrides.find(candidate => targets.has(candidate.target) &&
                             candidate.matcher(name) &&
                             candidate.properyMatcher(propertyName));
                     });
                     const expected = (0, functions_1.evaluate)(() => {
-                        const result = subOptions
-                            ? subOptions.style
-                            : context.options[target];
+                        const result = override ? override.style : context.options[target];
                         return exclusionTypes.has(typeAnnotation.type) &&
                             exclusionStyles.has(got) &&
                             exclusionStyles.has(result)
                             ? undefined
                             : result;
                     });
-                    if (expected) {
-                        const data = subOptions
-                            ? { _id: subOptions._id }
-                            : {};
-                        const messageId = (0, functions_1.evaluate)(() => {
-                            switch (expected) {
-                                case Style.combined:
-                                    return subOptions ? MessageId.combinedId : MessageId.combined;
-                                case Style.optional:
-                                    return subOptions ? MessageId.optionalId : MessageId.optional;
-                                case Style.undefined:
-                                    return subOptions
-                                        ? MessageId.undefinedId
-                                        : MessageId.undefined;
-                            }
-                        });
+                    if (expected)
                         if (got === expected) {
                             // Valid
                         }
                         else
-                            context.report({ data, messageId, node });
-                    }
+                            context.report({
+                                data: override ? { _id: override._id } : {},
+                                messageId: (0, functions_1.evaluate)(() => {
+                                    switch (expected) {
+                                        case Style.combined:
+                                            return override
+                                                ? MessageId.combinedId
+                                                : MessageId.combined;
+                                        case Style.optional:
+                                            return override
+                                                ? MessageId.optionalId
+                                                : MessageId.optional;
+                                        case Style.undefined:
+                                            return override
+                                                ? MessageId.undefinedId
+                                                : MessageId.undefined;
+                                    }
+                                }),
+                                node
+                            });
                 }
             }
         }

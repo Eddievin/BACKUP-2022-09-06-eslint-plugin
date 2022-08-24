@@ -5,6 +5,6 @@ const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../utils"));
 const core_1 = require("./core");
 exports.noInternalModules = utils.wrapRule(core_1.core["disallow-import"], [
-    { disallow: ["./*/**", "@*/*/**", "[^@]*/**"] }
+    { disallow: ["./*/**", "[^@]*/**", "@*/*/**"] }
 ]);
 //# sourceMappingURL=no-internal-modules.js.map

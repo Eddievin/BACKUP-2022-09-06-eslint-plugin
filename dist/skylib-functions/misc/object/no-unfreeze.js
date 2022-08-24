@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.noUnfreeze = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: "Avoid unsafe function (o.unfreeze)",
+        message: 'Using "o.unfreeze" is unsafe',
         selector: "CallExpression > .callee[object.name=o][property.name=unfreeze]"
     }
 ]);

@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const typescript_1 = require("../../../typescript");
 exports.notEmptyAlwaysFalse = utils.wrapRule(typescript_1.typescript["typescript/no-restricted-syntax"], [
     {
-        message: "Expecting type to include null, undefined or unknown",
+        message: "Always false",
         selector: "CallExpression[callee.object.object.name=/^(?:as|assert|is)$/u][callee.object.property.name=not][callee.property.name=empty] > .arguments:first-child",
         typeIsOneOf: [utils.TypeGroup.null, utils.TypeGroup.undefined]
     }

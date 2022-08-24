@@ -5,10 +5,10 @@ export interface Options {
     readonly classes: Style;
     readonly interfaces: Style;
 }
-export interface SubOptions {
+export interface Suboptions {
     readonly _id: string;
-    readonly pattern: utils.Pattern;
-    readonly propertyPattern: utils.Pattern;
+    readonly pattern: utils.RegexpPattern;
+    readonly propertyPattern: utils.RegexpPattern;
     readonly style: Style;
     readonly target?: Target;
 }
@@ -20,18 +20,16 @@ export declare enum MessageId {
     undefined = "undefined",
     undefinedId = "undefinedId"
 }
-export declare enum Target {
-    classes = "classes",
-    interfaces = "interfaces"
-}
-export declare const isTarget: is.Guard<Target>;
 export declare enum Style {
     combined = "combined",
     optional = "optional",
     undefined = "undefined"
 }
+export declare enum Target {
+    classes = "classes",
+    interfaces = "interfaces"
+}
 export declare const isStyle: is.Guard<Style>;
-export declare const consistentOptionalProps: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<MessageId, [Partial<Options> & {
-    readonly overrides?: readonly Partial<SubOptions & utils.SharedOptions2>[];
-}], RuleListener>;
+export declare const isTarget: is.Guard<Target>;
+export declare const consistentOptionalProps: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<MessageId, import("../../utils/create-rule.internal").PartialOptionsArray<Options, Suboptions, "overrides">, RuleListener>;
 //# sourceMappingURL=consistent-optional-props.d.ts.map

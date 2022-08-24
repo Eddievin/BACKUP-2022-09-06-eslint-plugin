@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.preferClone = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "o.clone" function',
+        message: 'Use "o.clone" function instead',
         selector: "ObjectExpression[properties.length=1] > SpreadElement"
     }
 ]);

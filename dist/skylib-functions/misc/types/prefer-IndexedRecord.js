@@ -7,8 +7,8 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.preferIndexedRecord = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "IndexedRecord" type',
-        selector: "TSTypeReference[typeName.name=Rec] > .typeParameters > TSStringKeyword.params:first-child"
+        message: 'Use "IndexedRecord" type instead',
+        selector: "TSTypeReference[typeName.name=Rec] > TSTypeParameterInstantiation > TSStringKeyword:first-child"
     }
 ]);
 //# sourceMappingURL=prefer-IndexedRecord.js.map

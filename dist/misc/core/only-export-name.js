@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.onlyExportName = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
+const ruleTemplates = tslib_1.__importStar(require("../../rule-templates"));
 const utils = tslib_1.__importStar(require("../../utils"));
 var MessageId;
 (function (MessageId) {
@@ -12,10 +13,10 @@ exports.onlyExportName = utils.createRule({
     messages: {
         [MessageId.invalidName]: "Only export should match file name: {{expected}}"
     },
-    create: context => utils.ruleTemplates.export(ctx => {
+    create: context => ruleTemplates.export(ctx => {
         if (ctx.onlyExport)
             for (const node of ctx.identifiers) {
-                const expected = utils.getIdentifierFromPath(context.path, node.name);
+                const expected = context.identifierFromPath(context.filename, node.name);
                 if ([expected, "default"].includes(node.name)) {
                     // Valid
                 }

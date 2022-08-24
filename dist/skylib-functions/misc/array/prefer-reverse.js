@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const typescript_1 = require("../../../typescript");
 exports.preferReverse = utils.wrapRule(typescript_1.typescript["typescript/no-restricted-syntax"], [
     {
-        message: 'No mutation side-effect, use "a.reverse" instead',
+        message: 'Use "a.reverse" instead (avoid mutation side-effects)',
         selector: ".callee[property.name=reverse] > .object",
         typeHas: utils.TypeGroup.array
     }

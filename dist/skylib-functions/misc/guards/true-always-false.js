@@ -6,8 +6,8 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const typescript_1 = require("../../../typescript");
 exports.trueAlwaysFalse = utils.wrapRule(typescript_1.typescript["typescript/no-restricted-syntax"], [
     {
-        message: "Expecting type to include boolean or unknown",
-        selector: "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=true] > .arguments:first-child",
+        message: "Always false",
+        selector: "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:true|trueU)$/u] > .arguments:first-child",
         typeHasNoneOf: [
             utils.TypeGroup.any,
             utils.TypeGroup.boolean,

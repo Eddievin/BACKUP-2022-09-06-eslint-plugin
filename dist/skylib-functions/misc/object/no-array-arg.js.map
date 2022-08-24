@@ -1,0 +1,1 @@
+{"version":3,"file":"no-array-arg.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/object/no-array-arg.ts"],"names":[],"mappings":";;;;AAAA,8DAAwC;AACxC,oDAAiD;AAEpC,QAAA,UAAU,GAAG,KAAK,CAAC,QAAQ,CACtC,uBAAU,CAAC,iCAAiC,CAAC,EAC7C;IACE;QACE,OAAO,EAAE,4BAA4B;QACrC,QAAQ,EACN,kHAAkH;QACpH,MAAM,EAAE,KAAK,CAAC,SAAS,CAAC,KAAK;KAC9B;CACF,CACF,CAAC"}

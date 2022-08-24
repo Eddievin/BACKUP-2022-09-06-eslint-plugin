@@ -1,10 +1,10 @@
-import type { IndexedObject } from "@skylib/functions";
+import type { IndexedRecord } from "@skylib/functions";
 /**
- * Gets synonyms.
+ * Creates synonyms object.
  *
- * @param path - Path.
- * @param core - Core.
- * @returns Synonyms.
+ * @param config - Path to synonyms configuration.
+ * @param core - Core rules.
+ * @returns Synonyms object.
  */
-export declare function getSynonyms(path: string, core: IndexedObject): IndexedObject;
+export declare function getSynonyms(config: string, core: IndexedRecord): IndexedRecord;
 //# sourceMappingURL=synonyms.d.ts.map

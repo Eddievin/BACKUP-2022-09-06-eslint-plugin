@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../utils"));
 const core_1 = require("./core");
 exports.restrictIdentifierCharacters = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
-        message: "Identifier must consist of word characters and dollar sign",
+        message: "Identifier must consist of english characters and dollar sign",
         selector: "Identifier[name=/[^$\\w]/u]"
     }
 ]);

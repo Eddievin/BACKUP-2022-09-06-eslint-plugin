@@ -14,36 +14,31 @@ var MessageId;
 exports.consistentFilename = utils.createRule({
     name: "consistent-filename",
     vue: true,
-    isOptions: functions_1.is.object.factory({ format: utils.casing.isFormat }, {}),
-    defaultOptions: { format: utils.casing.Format.kebabCase },
-    isSubOptions: functions_1.is.object.factory({ _id: functions_1.is.string, match: functions_1.is.boolean, selector: utils.isSelector }, { format: utils.casing.isFormat }),
-    defaultSubOptions: { match: false },
-    subOptionsKey: "overrides",
+    isOptions: functions_1.is.object.factory({ format: utils.isCasing }, {}),
+    defaultOptions: { format: utils.Casing.kebabCase },
+    isSuboptions: functions_1.is.object.factory({ _id: functions_1.is.string, match: functions_1.is.boolean, selector: utils.isSelector }, { format: utils.isCasing }),
+    defaultSuboptions: { match: false },
+    suboptionsKey: "overrides",
     messages: {
         [MessageId.invalidFilename]: "Expecting file name to be: {{expected}}",
         [MessageId.invalidFilenameId]: "Expecting file name to be: {{expected}} ({{_id}})"
     },
     create: (context) => {
         const items = [];
-        return utils.mergeListenters(...context.subOptionsArray.map((subOptions) => {
-            const selector = functions_1.a.fromMixed(subOptions.selector).join(", ");
+        return utils.mergeListeners(...context.options.overrides.map((suboptions) => {
+            const selector = utils.selector(suboptions.selector);
             return {
                 [selector]: (node) => {
-                    items.push({ node, subOptions });
+                    items.push({ node, suboptions });
                 }
             };
         }), {
             "Program:exit": () => {
-                const { base: got } = node_path_1.default.parse(context.path);
+                const { base: got } = node_path_1.default.parse(context.filename);
                 if (items.length) {
                     const item = functions_1.a.last(items);
-                    const { _id, format, match } = Object.assign({ format: context.options.format }, item.subOptions);
-                    const expected = got
-                        .split(".")
-                        .map((part, index) => index === 0
-                        ? utils.casing.format(match ? utils.nodeText(item.node, part) : part, format)
-                        : _.kebabCase(part))
-                        .join(".");
+                    const { _id, format, match } = Object.assign({ format: context.options.format }, item.suboptions);
+                    const expected = getExpected(got, format, match, item.node);
                     if (got === expected) {
                         // Valid
                     }
@@ -55,13 +50,7 @@ exports.consistentFilename = utils.createRule({
                         });
                 }
                 else {
-                    const { format } = context.options;
-                    const expected = got
-                        .split(".")
-                        .map((part, index) => index === 0
-                        ? utils.casing.format(part, format)
-                        : _.kebabCase(part))
-                        .join(".");
+                    const expected = getExpected(got, context.options.format);
                     if (got === expected) {
                         // Valid
                     }
@@ -74,6 +63,14 @@ exports.consistentFilename = utils.createRule({
                 }
             }
         });
+        function getExpected(got, format, match = false, node) {
+            return got
+                .split(".")
+                .map((part, index) => index === 0
+                ? utils.setCasing(match ? utils.nodeText(functions_1.as.not.empty(node), part) : part, format)
+                : _.kebabCase(part))
+                .join(".");
+        }
     }
 });
 //# sourceMappingURL=consistent-filename.js.map

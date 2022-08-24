@@ -8,7 +8,7 @@ const misc_1 = require("../../misc");
 exports.preferOwnSlots = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: 'Use "OwnSlots" interface',
-        selector: "TSInterfaceDeclaration[id.name=/^(?:Slots|ParentSlots)$/u] > TSInterfaceBody.body > .body"
+        selector: "TSInterfaceDeclaration[id.name=/^(?:Slots|ParentSlots)$/u] > TSInterfaceBody.body[body.length>0]"
     }
 ]);
 //# sourceMappingURL=prefer-OwnSlots.js.map

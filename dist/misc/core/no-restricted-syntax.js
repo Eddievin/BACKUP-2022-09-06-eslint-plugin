@@ -17,53 +17,46 @@ exports.noRestrictedSyntax = utils.createRule({
     defaultOptions: { ignoreSelector: [] },
     messages: { [MessageId.customMessage]: "{{message}}" },
     create: (context) => {
-        const { ignoreSelector: ignoreMixed, message, replacement, search, selector: mixed } = context.options;
-        const selector = functions_1.a.fromMixed(mixed).join(", ");
-        const ignoreSelector = functions_1.a.fromMixed(ignoreMixed).join(", ");
+        const { ignoreSelector: mixedIgnoreSelector, message, replacement, search, selector: mixedSelector } = context.options;
+        const selector = utils.selector(mixedSelector);
+        const ignoreSelector = utils.selector(mixedIgnoreSelector);
         functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
         const nodes = [];
         const ignoreNodes = [];
-        const listener1 = {
+        return utils.mergeListeners({
             [selector]: (node) => {
-                if (ignoreSelector)
-                    nodes.push(node);
-                else
-                    lintNode(node);
+                nodes.push(node);
             }
-        };
-        const listener2 = ignoreSelector
+        }, ignoreSelector
             ? (0, functions_1.typedef)({
                 [ignoreSelector]: (node) => {
                     ignoreNodes.push(node);
                 }
             })
-            : {};
-        const listener3 = {
+            : {}, {
             "Program:exit": () => {
                 for (const node of _.difference(nodes, ignoreNodes))
-                    lintNode(node);
+                    context.report({
+                        data: {
+                            message: message !== null && message !== void 0 ? message : `This syntax is not allowed: ${selector}`
+                        },
+                        fix: () => functions_1.is.not.empty(replacement)
+                            ? [
+                                {
+                                    range: node.range,
+                                    text: functions_1.is.not.empty(search)
+                                        ? context.getText(node).replace(
+                                        // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+                                        new RegExp(search, "u"), replacement)
+                                        : replacement
+                                }
+                            ]
+                            : [],
+                        messageId: MessageId.customMessage,
+                        node
+                    });
             }
-        };
-        return utils.mergeListenters(listener1, listener2, listener3);
-        function lintNode(node) {
-            context.report({
-                data: { message: message !== null && message !== void 0 ? message : `This syntax is not allowed: ${selector}` },
-                fix: () => functions_1.is.not.empty(replacement)
-                    ? [
-                        {
-                            range: node.range,
-                            text: functions_1.is.not.empty(search)
-                                ? context.getText(node).replace(
-                                // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
-                                new RegExp(search, "u"), replacement)
-                                : replacement
-                        }
-                    ]
-                    : [],
-                messageId: MessageId.customMessage,
-                node
-            });
-        }
+        });
     }
 });
 //# sourceMappingURL=no-restricted-syntax.js.map

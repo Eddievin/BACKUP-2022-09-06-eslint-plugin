@@ -8,9 +8,9 @@ exports.requirePropTypeParam = utils.wrapRule(misc_1.misc["no-restricted-syntax"
     {
         message: "Missing type parameter",
         selector: [
-            "CallExpression[arguments.length=0][typeParameters=undefined] > Identifier.callee[name=prop]",
-            "CallExpression[arguments.length=0][typeParameters=undefined] > MemberExpression.callee[object.name=prop][property.name=required]",
-            "CallExpression[arguments.length=1][typeParameters=undefined] > MemberExpression.callee[object.name=prop][property.name=default]"
+            "CallExpression[typeParameters=undefined] > Identifier.callee[name=prop]",
+            "CallExpression[typeParameters=undefined] > MemberExpression.callee[object.name=prop][property.name=default]",
+            "CallExpression[typeParameters=undefined] > MemberExpression.callee[object.name=prop][property.name=required]"
         ]
     }
 ]);

@@ -7,7 +7,7 @@ const misc_1 = require("../../../misc");
 exports.noGlobalLang = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: "No global lang",
-        selector: "ImportDeclaration[source.value=@skylib/facades] > ImportSpecifier[imported.name=lang]"
+        selector: "ImportDeclaration[importKind=value][source.value=@skylib/facades] > ImportSpecifier[imported.name=lang]"
     }
 ]);
 //# sourceMappingURL=no-global-lang.js.map

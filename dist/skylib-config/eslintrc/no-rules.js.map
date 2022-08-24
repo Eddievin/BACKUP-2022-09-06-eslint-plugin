@@ -1,0 +1,1 @@
+{"version":3,"file":"no-rules.js","sourceRoot":"","sources":["../../../src/skylib-config/eslintrc/no-rules.ts"],"names":[],"mappings":";;;;AAAA,2DAAqC;AACrC,qCAAkC;AAErB,QAAA,OAAO,GAAG,KAAK,CAAC,QAAQ,CAAC,WAAI,CAAC,sBAAsB,CAAC,EAAE;IAClE;QACE,OAAO,EAAE,6BAA6B;QACtC,QAAQ,EAAE,uCAAuC;KAClD;CACF,CAAC,CAAC"}

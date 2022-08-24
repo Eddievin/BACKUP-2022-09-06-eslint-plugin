@@ -10,6 +10,13 @@ var MessageId;
     MessageId["removeSpaces"] = "removeSpaces";
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.elementContentsSpacing = utils.createRule({
+    name: "element-contents-spacing",
+    fixable: utils.Fixable.code,
+    vue: true,
+    messages: {
+        [MessageId.addSpaces]: "Add spaces around double curly",
+        [MessageId.removeSpaces]: "Remove spaces around double curly"
+    },
     create: (context) => ({
         VElement: (node) => {
             if (node.children.length) {
@@ -36,13 +43,6 @@ exports.elementContentsSpacing = utils.createRule({
                     });
             }
         }
-    }),
-    fixable: utils.Fixable.code,
-    messages: {
-        [MessageId.addSpaces]: "Add spaces around double curly",
-        [MessageId.removeSpaces]: "Remove spaces around double curly"
-    },
-    name: "element-contents-spacing",
-    vue: true
+    })
 });
 //# sourceMappingURL=element-contents-spacing.js.map

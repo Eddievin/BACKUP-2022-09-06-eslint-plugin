@@ -14,18 +14,18 @@ exports.sortKeys = utils.createRule({
     name: "sort-keys",
     fixable: utils.Fixable.code,
     vue: true,
-    isSubOptions: functions_1.is.object.factory({ _id: functions_1.is.string, selector: utils.isSelector }, { customOrder: functions_1.is.strings, sendToBottom: functions_1.is.string, sendToTop: functions_1.is.string }),
-    subOptionsKey: "overrides",
+    isSuboptions: functions_1.is.object.factory({ _id: functions_1.is.string, selector: utils.isSelector }, { customOrder: functions_1.is.strings, sendToBottom: functions_1.is.string, sendToTop: functions_1.is.string }),
+    suboptionsKey: "overrides",
     messages: Object.assign(Object.assign({}, utils.sort.messages), { [MessageId.expectingObject]: "Expecting object ({{_id}})" }),
     create: (context) => {
         const items = [];
-        return utils.mergeListenters(...context.subOptionsArray.map((subOptions) => {
-            const { _id, selector: mixed } = subOptions;
-            const selector = functions_1.a.fromMixed(mixed).join(", ");
+        return utils.mergeListeners(...context.options.overrides.map((override) => {
+            const { _id, selector: mixedSelector } = override;
+            const selector = utils.selector(mixedSelector);
             return {
                 [selector]: (node) => {
                     if (node.type === utils_1.AST_NODE_TYPES.ObjectExpression)
-                        items.push({ node, options: Object.assign(Object.assign({}, subOptions), { keyNode }) });
+                        items.push({ node, options: Object.assign(Object.assign({}, override), { keyNode }) });
                     else
                         context.report({
                             data: { _id },

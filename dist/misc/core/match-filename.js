@@ -11,27 +11,16 @@ var MessageId;
 exports.matchFilename = utils.createRule({
     name: "match-filename",
     vue: true,
-    isOptions: functions_1.is.object.factory({
-        format: utils.casing.isFormat,
-        prefix: functions_1.is.string,
-        selector: utils.isSelector,
-        suffix: functions_1.is.string
-    }, {}),
-    defaultOptions: {
-        format: utils.casing.Format.camelCase,
-        prefix: "",
-        suffix: ""
-    },
+    isOptions: functions_1.is.object.factory({ prefix: functions_1.is.string, selector: utils.isSelector, suffix: functions_1.is.string }, { format: utils.isCasing }),
+    defaultOptions: { prefix: "", suffix: "" },
     messages: { [MessageId.invalidText]: "Should match file name: {{expected}}" },
     create: (context) => {
-        const { format, prefix, selector: mixed, suffix } = context.options;
-        const selector = functions_1.a.fromMixed(mixed).join(", ");
+        const { format, prefix, selector: mixedSelector, suffix } = context.options;
+        const selector = utils.selector(mixedSelector);
         return {
             [selector]: (node) => {
                 const got = utils.nodeText(node, "?");
-                const expected = prefix +
-                    utils.casing.format(utils.getIdentifierFromPath(context.path, got), format) +
-                    suffix;
+                const expected = prefix + context.textFromPath(context.filename, got, format) + suffix;
                 if (got === expected) {
                     // Valid
                 }

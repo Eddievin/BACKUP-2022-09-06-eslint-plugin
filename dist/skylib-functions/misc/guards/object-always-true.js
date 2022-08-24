@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const typescript_1 = require("../../../typescript");
 exports.objectAlwaysTrue = utils.wrapRule(typescript_1.typescript["typescript/no-restricted-syntax"], [
     {
-        message: "Expecting type to include object, unknown",
+        message: "Always true",
         selector: "CallExpression[callee.object.name=/^(?:as|assert|is)$/u][callee.property.name=/^(?:object|objectU)$/u] > .arguments:first-child",
         typeIs: utils.TypeGroup.object
     }

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.noUnsafeObjectAssignment = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
-// eslint-disable-next-line @skylib/disallow-import/project -- Ok
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("../../utils"));
 const utils_1 = require("@typescript-eslint/utils");
@@ -24,13 +23,13 @@ exports.noUnsafeObjectAssignment = utils.createRule({
                     // Сhecked by ReturnStatement visitor
                 }
                 else if (node.returnType)
-                    lintPair(node.returnType.typeAnnotation, node.body);
+                    lintDestSource(node.returnType.typeAnnotation, node.body);
                 else {
                     // No return type to check
                 }
             },
             AssignmentExpression: node => {
-                lintPair(node.left, node.right);
+                lintDestSource(node.left, node.right);
             },
             CallExpression: node => {
                 for (const arg of node.arguments)
@@ -38,7 +37,7 @@ exports.noUnsafeObjectAssignment = utils.createRule({
             },
             PropertyDefinition: node => {
                 if (node.value)
-                    lintPair(node.key, node.value);
+                    lintDestSource(node.key, node.value);
             },
             ReturnStatement: node => {
                 if (node.argument)
@@ -46,9 +45,19 @@ exports.noUnsafeObjectAssignment = utils.createRule({
             },
             VariableDeclarator: node => {
                 if (node.init)
-                    lintPair(node.id, node.init);
+                    lintDestSource(node.id, node.init);
             }
         };
+        function lintDestSource(dest, source) {
+            if (source.type === utils_1.AST_NODE_TYPES.ObjectExpression) {
+                // Ignore
+            }
+            else {
+                const destType = typeCheck.getType(dest);
+                const sourceType = typeCheck.getType(source);
+                lintTypes(destType, sourceType, source);
+            }
+        }
         function lintNode(node) {
             if (node.type === utils_1.AST_NODE_TYPES.ObjectExpression) {
                 // Ignore
@@ -58,16 +67,6 @@ exports.noUnsafeObjectAssignment = utils.createRule({
                 const sourceType = typeCheck.getType(node);
                 if (destType)
                     lintTypes(destType, sourceType, node);
-            }
-        }
-        function lintPair(dest, source) {
-            if (source.type === utils_1.AST_NODE_TYPES.ObjectExpression) {
-                // Ignore
-            }
-            else {
-                const destType = typeCheck.getType(dest);
-                const sourceType = typeCheck.getType(source);
-                lintTypes(destType, sourceType, source);
             }
         }
         function lintTypes(dest, source, node) {

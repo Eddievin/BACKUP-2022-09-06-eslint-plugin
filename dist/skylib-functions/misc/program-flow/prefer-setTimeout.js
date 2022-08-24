@@ -7,7 +7,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.preferSetTimeout = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "programFlow.setTimeout" function',
+        message: 'Use "programFlow.setTimeout" function instead',
         selector: "CallExpression > .callee[name=setTimeout]"
     }
 ]);

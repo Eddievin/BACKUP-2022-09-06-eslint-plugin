@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.skylibQuasarExtension = void 0;
-const tslib_1 = require("tslib");
-const utils = tslib_1.__importStar(require("../utils"));
 const extras_1 = require("./extras");
 const jest_1 = require("./jest");
 const misc_1 = require("./misc");
+const functions_1 = require("@skylib/functions");
 const vue_1 = require("./vue");
 exports.skylibQuasarExtension = {
-    extras: utils.prefixKeys("quasar-extension/", extras_1.extras),
-    jest: utils.prefixKeys("quasar-extension/", jest_1.jest),
-    misc: utils.prefixKeys("quasar-extension/", misc_1.misc),
-    vue: utils.prefixKeys("quasar-extension/", vue_1.vue)
+    extras: functions_1.o.prefixKeys(extras_1.extras, "quasar-extension/"),
+    jest: functions_1.o.prefixKeys(jest_1.jest, "quasar-extension/"),
+    misc: functions_1.o.prefixKeys(misc_1.misc, "quasar-extension/"),
+    vue: functions_1.o.prefixKeys(vue_1.vue, "quasar-extension/")
 };
 //# sourceMappingURL=index.js.map

@@ -1,1 +1,1 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/skylib-quasar-extension/index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,UAAU,CAAC;AAMlC,eAAO,MAAM,qBAAqB;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CAKxB,CAAC"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/skylib-quasar-extension/index.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,CAAC,EAAE,MAAM,mBAAmB,CAAC;AAGtC,eAAO,MAAM,qBAAqB;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CAKxB,CAAC"}

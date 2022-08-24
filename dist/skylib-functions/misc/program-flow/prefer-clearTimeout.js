@@ -7,7 +7,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.preferClearTimeout = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "programFlow.clearTimeout" function',
+        message: 'Use "programFlow.clearTimeout" function instead',
         selector: "CallExpression > .callee[name=clearTimeout]"
     }
 ]);

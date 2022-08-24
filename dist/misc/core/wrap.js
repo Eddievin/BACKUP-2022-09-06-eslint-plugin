@@ -13,46 +13,43 @@ exports.wrap = utils.createRule({
     fixable: utils.Fixable.code,
     vue: true,
     isOptions: functions_1.is.object.factory({
-        lintSelector: utils.isSelector,
+        lint: utils.isSelector,
         plugin: functions_1.is.string,
         rule: functions_1.is.string,
-        skipSelector: utils.isSelector
+        skip: utils.isSelector
     }, {}),
-    defaultOptions: { lintSelector: [], skipSelector: [] },
+    defaultOptions: { lint: [], skip: [] },
     messages: { [MessageId.customMessage]: "{{message}}" },
     create: (context) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
         const plugin = require(context.options.plugin);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Ok
         const rule = plugin.rules[context.options.rule];
-        const lintSelector = functions_1.a.fromMixed(context.options.lintSelector).join(", ");
-        const skipSelector = functions_1.a.fromMixed(context.options.skipSelector).join(", ");
+        const lint = utils.selector(context.options.lint);
+        const skip = utils.selector(context.options.skip);
         const lintIds = [];
         const skipIds = [];
         const reports = [];
-        const listener1 = rule.create(new Proxy({}, (0, functions_1.wrapProxyHandler)("eslint-wrap-rule", functions_1.ProxyHandlerAction.throw, {
+        return utils.mergeListeners(rule.create(new Proxy({}, (0, functions_1.wrapProxyHandler)("eslint-wrap-rule", functions_1.ProxyHandlerAction.throw, {
             get: (_target, key) => key === "report"
                 ? (report) => {
                     reports.push(report);
                 }
-                : // eslint-disable-next-line @skylib/custom/functions/no-reflect-get -- Ok
+                : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Wait for @skylib/eslint-plugin update
                     functions_1.reflect.get(context.rawContext, key)
-        })));
-        const listener2 = lintSelector
+        }))), lint
             ? (0, functions_1.typedef)({
-                [lintSelector]: (node) => {
+                [lint]: (node) => {
                     lintIds.push(nodeId(node));
                 }
             })
-            : {};
-        const listener3 = skipSelector
+            : {}, skip
             ? (0, functions_1.typedef)({
-                [skipSelector]: (node) => {
+                [skip]: (node) => {
                     skipIds.push(nodeId(node));
                 }
             })
-            : {};
-        const listener4 = {
+            : {}, {
             "Program:exit": () => {
                 const lintMatcher = lintIds.length
                     ? (report) => "node" in report && lintIds.includes(nodeId(report.node))
@@ -72,8 +69,7 @@ exports.wrap = utils.createRule({
                         context.rawContext.report(Object.assign(Object.assign({}, report), { data: { message }, messageId: MessageId.customMessage }));
                     }
             }
-        };
-        return utils.mergeListenters(listener1, listener2, listener3, listener4);
+        });
     }
 });
 /**

@@ -1,1 +1,1 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/converters/index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,gBAAgB,CAAC;AAIxC,eAAO,MAAM,IAAI;;;iBAGf,CAAC"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/converters/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,mBAAmB,CAAC;AAItC,eAAO,MAAM,UAAU;;;iBAGtB,CAAC"}

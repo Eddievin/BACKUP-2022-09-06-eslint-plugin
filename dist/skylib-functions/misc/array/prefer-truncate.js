@@ -6,8 +6,8 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const typescript_1 = require("../../../typescript");
 exports.preferTruncate = utils.wrapRule(typescript_1.typescript["typescript/no-restricted-syntax"], [
     {
-        message: 'Use "a.truncate" instead',
-        selector: "AssignmentExpression[right.value=0] > MemberExpression.left > .object",
+        message: 'Use "a.truncate" function instead',
+        selector: "AssignmentExpression[right.value=0] > MemberExpression.left[property.name=length] > .object",
         typeIs: utils.TypeGroup.array
     }
 ]);

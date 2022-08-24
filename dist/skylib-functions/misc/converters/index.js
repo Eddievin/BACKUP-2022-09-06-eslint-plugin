@@ -1,12 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cast = void 0;
-const tslib_1 = require("tslib");
-const utils = tslib_1.__importStar(require("../../../utils"));
+exports.converters = void 0;
+const functions_1 = require("@skylib/functions");
 const prefer_number_1 = require("./prefer-number");
 const prefer_string_1 = require("./prefer-string");
-exports.cast = utils.prefixKeys("converters/", {
-    "prefer-number": prefer_number_1.preferNumber,
-    "prefer-string": prefer_string_1.preferString
-});
+exports.converters = functions_1.o.prefixKeys({ "prefer-number": prefer_number_1.preferNumber, "prefer-string": prefer_string_1.preferString }, "converters/");
 //# sourceMappingURL=index.js.map

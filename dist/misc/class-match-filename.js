@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../utils"));
 const core_1 = require("./core");
 exports.classMatchFilename = utils.wrapRule(core_1.core["match-filename"], [
     {
-        format: utils.casing.Format.pascalCase,
+        format: utils.Casing.pascalCase,
         selector: "ClassDeclaration > Identifier.id"
     }
 ]);

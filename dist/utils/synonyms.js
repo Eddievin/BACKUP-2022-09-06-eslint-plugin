@@ -5,20 +5,25 @@ const tslib_1 = require("tslib");
 const functions_1 = require("@skylib/functions");
 const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
 /**
- * Gets synonyms.
+ * Creates synonyms object.
  *
- * @param path - Path.
- * @param core - Core.
- * @returns Synonyms.
+ * @param config - Path to synonyms configuration.
+ * @param core - Core rules.
+ * @returns Synonyms object.
  */
 // eslint-disable-next-line @skylib/only-export-name -- Ok
-function getSynonyms(path, core) {
-    if (node_fs_1.default.existsSync(path)) {
-        const synonyms = require(node_fs_1.default.realpathSync(path));
-        return functions_1.o.fromEntries(functions_1.as.array.of(synonyms, functions_1.is.string).map(synonym => {
-            const name = synonym.replace(/^@skylib\//u, "");
-            return [name, functions_1.o.get(core, functions_1.a.first(name.split("/")))];
-        }));
+function getSynonyms(config, core) {
+    if (node_fs_1.default.existsSync(config)) {
+        const items = functions_1.o.entries(core).map(([name, rule]) => ({ name, rule }));
+        const synonyms = require(node_fs_1.default.realpathSync(config));
+        functions_1.assert.array.of(synonyms, functions_1.is.string, "Expecting array of strings");
+        const entries = synonyms
+            .map((synonym) => {
+            const item = items.find(({ name }) => synonym.startsWith(`${name}/`));
+            return item ? [synonym, item.rule] : undefined;
+        })
+            .filter(functions_1.is.not.empty);
+        return functions_1.o.fromEntries(entries);
     }
     return {};
 }

@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.preferEntries = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "o.entries" function',
+        message: 'Use "o.entries" function instead',
         selector: "CallExpression > .callee[object.name=Object][property.name=entries]"
     }
 ]);

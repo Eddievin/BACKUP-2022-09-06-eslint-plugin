@@ -18,7 +18,7 @@ exports.commentSpacing = utils.createRule({
     },
     create: (context) => ({
         ":statement, TSDeclareFunction, TSExportAssignment": (node) => {
-            for (const range of context.getComments(node)) {
+            for (const range of context.getCommentRanges(node)) {
                 const multiline = isMultiline(context.getText(range));
                 const nextMultiline = isMultiline(context.getText(range[1]));
                 const spread = multiline && !nextMultiline;
@@ -43,10 +43,10 @@ exports.commentSpacing = utils.createRule({
     })
 });
 /**
- * Checks if string is multiline comment.
+ * Checks if string starts with multiline comment.
  *
  * @param str - String.
- * @returns _True_ if string is multiline comment, _false_ otherwise.
+ * @returns _True_ if string starts with multiline comment, _false_ otherwise.
  */
 function isMultiline(str) {
     str = str.trimStart();

@@ -7,7 +7,7 @@ const utils = tslib_1.__importStar(require("../utils"));
 const misc_1 = require("../misc");
 exports.preferUniqueIdFacade = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "uniqueId" facade',
+        message: 'Use "uniqueId" facade instead',
         selector: "CallExpression > MemberExpression.callee[object.name=_][property.name=uniqueId]"
     }
 ]);

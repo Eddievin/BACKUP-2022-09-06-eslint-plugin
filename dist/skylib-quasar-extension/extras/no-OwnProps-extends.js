@@ -7,7 +7,7 @@ const utils = tslib_1.__importStar(require("../../utils"));
 const misc_1 = require("../../misc");
 exports.noOwnPropsExtends = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Do not extend "OwnProps" interface',
+        message: 'No extends in "OwnProps" interface',
         selector: "TSInterfaceDeclaration[id.name=OwnProps] > TSInterfaceHeritage.extends"
     }
 ]);

@@ -12,37 +12,45 @@ exports.requireSyntax = utils.createRule({
     name: "require-syntax",
     fixable: utils.Fixable.code,
     vue: true,
-    isOptions: functions_1.is.object.factory({ selector: utils.isSelector, trigger: utils.isSelector }, { message: functions_1.is.string }),
-    defaultOptions: { trigger: "Program" },
+    isOptions: functions_1.is.object.factory({ once: functions_1.is.boolean, selector: utils.isSelector, trigger: utils.isSelector }, { message: functions_1.is.string }),
+    defaultOptions: { once: false, trigger: "Program" },
     messages: { [MessageId.customMessage]: "{{message}}" },
     create: (context) => {
-        const { message, selector: mixedSelector, trigger: mixedTrigger } = context.options;
-        const selector = functions_1.a.fromMixed(mixedSelector).join(", ");
-        const trigger = functions_1.a.fromMixed(mixedTrigger).join(", ");
+        const { message, once, selector: mixedSelector, trigger: mixedTrigger } = context.options;
+        const selector = utils.selector(mixedSelector);
+        const trigger = utils.selector(mixedTrigger);
         let selectorCount = 0;
         let triggerCount = 0;
         functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
         functions_1.assert.toBeTrue(trigger !== "", "Expecting trigger");
-        return {
+        return utils.mergeListeners({
+            [selector]: () => {
+                selectorCount++;
+            }
+        }, {
+            [trigger]: () => {
+                triggerCount++;
+            }
+        }, {
             "Program:exit": () => {
-                if (triggerCount)
-                    if (selectorCount === 1) {
-                        // Valid
-                    }
-                    else
+                if (triggerCount) {
+                    if (selectorCount === 0)
                         context.report({
                             data: { message: message !== null && message !== void 0 ? message : `Missing syntax: ${selector}` },
                             loc: context.locZero,
                             messageId: MessageId.customMessage
                         });
-            },
-            [selector]: () => {
-                selectorCount++;
-            },
-            [trigger]: () => {
-                triggerCount++;
+                    if (selectorCount > 1 && once)
+                        context.report({
+                            data: {
+                                message: message !== null && message !== void 0 ? message : `Require syntax once: ${selector}`
+                            },
+                            loc: context.locZero,
+                            messageId: MessageId.customMessage
+                        });
+                }
             }
-        };
+        });
     }
 });
 //# sourceMappingURL=require-syntax.js.map

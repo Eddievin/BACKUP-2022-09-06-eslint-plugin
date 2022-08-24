@@ -8,7 +8,7 @@ exports.noComplexReturnType = utils.wrapRule(typescript_1.typescript["typescript
     {
         checkReturnType: true,
         message: "Avoid complex return type",
-        selector: ":not(Property[key.name=setup]) > :matches(:function, TSDeclareFunction, TSFunctionType, TSMethodSignature)[returnType=undefined]",
+        selector: ":not(MethodDefinition[kind=constructor], Property[key.name=setup]) > :matches(:function, TSDeclareFunction, TSFunctionType, TSMethodSignature)[returnType=undefined]",
         typeIs: utils.TypeGroup.complex
     }
 ]);

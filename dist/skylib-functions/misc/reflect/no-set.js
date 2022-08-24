@@ -6,7 +6,8 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.noSet = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "o.set" function',
+        ignoreSelector: "CallExpression[callee.name=wrapProxyHandler] *",
+        message: 'Use "o.set" function instead',
         selector: "CallExpression > .callee[object.name=reflect][property.name=set]"
     }
 ]);

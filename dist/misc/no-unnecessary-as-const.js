@@ -7,7 +7,10 @@ const core_1 = require("./core");
 exports.noUnnecessaryAsConst = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
         message: 'Unnecessary "as const"',
-        selector: "VariableDeclarator[id.typeAnnotation] > TSAsExpression > TSTypeReference > Identifier[name=const]"
+        selector: [
+            "VariableDeclarator > TSAsExpression[expression.properties.length=0] > TSTypeReference > Identifier[name=const]",
+            "VariableDeclarator[id.typeAnnotation] > TSAsExpression > TSTypeReference > Identifier[name=const]"
+        ]
     }
 ]);
 //# sourceMappingURL=no-unnecessary-as-const.js.map

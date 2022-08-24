@@ -7,7 +7,7 @@ const misc_1 = require("../../misc");
 exports.requireRefTypeParam = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: "Missing type parameter",
-        selector: "CallExpression[typeParameters=undefined][arguments.length=0] > Identifier.callee[name=ref]"
+        selector: "CallExpression[arguments.length=0][typeParameters=undefined] > Identifier.callee[name=ref]"
     }
 ]);
 //# sourceMappingURL=require-ref-type-param.js.map

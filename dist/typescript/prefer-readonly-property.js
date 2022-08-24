@@ -7,7 +7,7 @@ const core_1 = require("./core");
 exports.preferReadonlyProperty = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
         message: "Prefer readonly property",
-        selector: `:matches(${utils.selectors.property})[readonly!=true]`
+        selector: ":matches(PropertyDefinition, TSPropertySignature)[readonly!=true]"
     }
 ]);
 //# sourceMappingURL=prefer-readonly-property.js.map

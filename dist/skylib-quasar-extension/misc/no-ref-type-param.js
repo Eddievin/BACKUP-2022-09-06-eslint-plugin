@@ -7,7 +7,7 @@ const misc_1 = require("../../misc");
 exports.noRefTypeParam = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
         message: "Unnecessary type parameter",
-        selector: "CallExpression[callee.name=ref][arguments.0.type=Literal] > TSTypeParameterInstantiation.typeParameters > :matches(TSBooleanKeyword, TSNumberKeyword, TSStringKeyword).params"
+        selector: "CallExpression[callee.name=ref][arguments.0.type=Literal] > TSTypeParameterInstantiation > :matches(TSBooleanKeyword, TSNumberKeyword, TSStringKeyword)"
     }
 ]);
 //# sourceMappingURL=no-ref-type-param.js.map

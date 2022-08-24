@@ -6,8 +6,8 @@ const utils = tslib_1.__importStar(require("../utils"));
 const core_1 = require("./core");
 exports.consistentArrayTypeName = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
-        message: 'Array type name should end with "s"',
-        selector: "TSTypeAliasDeclaration > Identifier[name=/(?<!Array|[^s]s)$/u]",
+        message: 'Prefer array type name to end with "s" or "Array" suffix',
+        selector: "TSTypeAliasDeclaration > Identifier[name=/(?<![^s]s|Array)$/u]",
         typeIs: utils.TypeGroup.array
     }
 ]);

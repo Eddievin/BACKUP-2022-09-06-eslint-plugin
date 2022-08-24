@@ -39,13 +39,25 @@ exports.sortClassMembers = utils.createRule({
                                 sortingOrders.get(`${z}-${x}-${y}`),
                                 sortingOrders.get(`${z}-${y}-${x}`)
                             ].filter(functions_1.is.not.empty))));
-                        const name = context.getMemberName(member);
+                        const name = getMemberName(member);
                         const accessorType = getMemberAccessorType(member);
                         return `${sortingOrder}\u0001${name}\u0001${accessorType}`;
                     }
                 });
             }
         };
+        function getMemberName(node) {
+            switch (node.type) {
+                case utils_1.AST_NODE_TYPES.MethodDefinition:
+                case utils_1.AST_NODE_TYPES.PropertyDefinition:
+                case utils_1.AST_NODE_TYPES.TSAbstractMethodDefinition:
+                case utils_1.AST_NODE_TYPES.TSAbstractPropertyDefinition:
+                    return utils.nodeText(node.key, () => context.getText(node.key));
+                case utils_1.AST_NODE_TYPES.StaticBlock:
+                case utils_1.AST_NODE_TYPES.TSIndexSignature:
+                    return "";
+            }
+        }
     }
 });
 var AccessorType;
@@ -63,7 +75,6 @@ var Type;
 (function (Type) {
     Type["accessor"] = "accessor";
     Type["block"] = "block";
-    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for https://github.com/typescript-eslint/typescript-eslint/issues/5337
     Type["constructor"] = "constructor";
     Type["field"] = "field";
     Type["get"] = "get";
@@ -76,7 +87,7 @@ const functionExpressions = new functions_1.ReadonlySet([
     utils_1.AST_NODE_TYPES.FunctionExpression
 ]);
 /**
- * Gets member accessibility.
+ * Returns member accessibility.
  *
  * @param node - Node.
  * @returns Member accessibility.
@@ -95,7 +106,7 @@ function getMemberAccessibility(node) {
     }
 }
 /**
- * Gets member accessor type.
+ * Returns member accessor type.
  *
  * @param node - Node.
  * @returns Member accessor type.
@@ -117,7 +128,7 @@ function getMemberAccessorType(node) {
     }
 }
 /**
- * Gets member dynamic/static state.
+ * Returns member dynamic/static state.
  *
  * @param node - Node.
  * @returns Member dynamic/static state.
@@ -138,7 +149,7 @@ function getMemberDynamicStatic(node) {
     }
 }
 /**
- * Gets member types.
+ * Returns member types.
  *
  * @param node - Node.
  * @returns Member types.

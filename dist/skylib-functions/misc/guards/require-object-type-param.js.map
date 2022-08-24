@@ -1,0 +1,1 @@
+{"version":3,"file":"require-object-type-param.js","sourceRoot":"","sources":["../../../../src/skylib-functions/misc/guards/require-object-type-param.ts"],"names":[],"mappings":";;;;AAAA,8DAAwC;AACxC,oDAAiD;AAEpC,QAAA,sBAAsB,GAAG,KAAK,CAAC,QAAQ,CAClD,uBAAU,CAAC,iCAAiC,CAAC,EAC7C;IACE;QACE,OAAO,EAAE,wBAAwB;QACjC,QAAQ,EACN,qJAAqJ;KACxJ;CACF,CACF,CAAC"}

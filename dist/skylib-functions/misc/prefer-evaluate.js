@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../utils"));
 const misc_1 = require("../../misc");
 exports.preferEvaluate = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Use "evaluate" instead',
+        message: 'Use "evaluate" function instead',
         selector: "CallExpression[arguments.length=0] > ArrowFunctionExpression.callee"
     }
 ]);

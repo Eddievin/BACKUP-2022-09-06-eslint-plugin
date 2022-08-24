@@ -8,7 +8,6 @@ const consistent_filename_1 = require("./consistent-filename");
 const consistent_import_1 = require("./consistent-import");
 const consistent_optional_props_1 = require("./consistent-optional-props");
 const disallow_import_1 = require("./disallow-import");
-const export_all_name_1 = require("./export-all-name");
 const match_filename_1 = require("./match-filename");
 const no_expression_empty_lines_1 = require("./no-expression-empty-lines");
 const no_restricted_syntax_1 = require("./no-restricted-syntax");
@@ -23,6 +22,7 @@ const sort_array_1 = require("./sort-array");
 const sort_class_members_1 = require("./sort-class-members");
 const sort_keys_1 = require("./sort-keys");
 const sort_statements_1 = require("./sort-statements");
+const sort_top_comments_1 = require("./sort-top-comments");
 const switch_case_spacing_1 = require("./switch-case-spacing");
 const template_literal_format_1 = require("./template-literal-format");
 const wrap_1 = require("./wrap");
@@ -34,7 +34,6 @@ exports.core = {
     "consistent-import": consistent_import_1.consistentImport,
     "consistent-optional-props": consistent_optional_props_1.consistentOptionalProps,
     "disallow-import": disallow_import_1.disallowImport,
-    "export-all-name": export_all_name_1.exportAllName,
     "match-filename": match_filename_1.matchFilename,
     "no-expression-empty-lines": no_expression_empty_lines_1.noExpressionEmptyLines,
     "no-restricted-syntax": no_restricted_syntax_1.noRestrictedSyntax,
@@ -49,6 +48,7 @@ exports.core = {
     "sort-class-members": sort_class_members_1.sortClassMembers,
     "sort-keys": sort_keys_1.sortKeys,
     "sort-statements": sort_statements_1.sortStatements,
+    "sort-top-comments": sort_top_comments_1.sortTopComments,
     "switch-case-spacing": switch_case_spacing_1.switchCaseSpacing,
     "template-literal-format": template_literal_format_1.templateLiteralFormat,
     wrap: wrap_1.wrap

@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const misc_1 = require("../../../misc");
 exports.preferString = utils.wrapRule(misc_1.misc["no-restricted-syntax"], [
     {
-        message: 'Prefer "cast.string" function',
+        message: 'Use "cast.string" function instead',
         selector: "CallExpression > .callee[name=String]"
     }
 ]);

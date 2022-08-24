@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.noSiblingImport = exports.isSubOptions = exports.isStringsArray = exports.MessageId = void 0;
+exports.noSiblingImport = exports.isSuboptions = exports.isStringsArray = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
+const ruleTemplates = tslib_1.__importStar(require("../../rule-templates"));
 const utils = tslib_1.__importStar(require("../../utils"));
 const functions_1 = require("@skylib/functions");
 const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
@@ -11,33 +12,33 @@ var MessageId;
     MessageId["disallowedSource"] = "disallowedSource";
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.isStringsArray = functions_1.is.factory(functions_1.is.array.of, functions_1.is.strings);
-exports.isSubOptions = functions_1.is.object.factory({ allow: functions_1.is.boolean, levels: exports.isStringsArray }, {});
+exports.isSuboptions = functions_1.is.object.factory({ allow: functions_1.is.boolean, levels: exports.isStringsArray }, {});
 exports.noSiblingImport = utils.createRule({
     name: "no-sibling-import",
-    isSubOptions: functions_1.is.object.factory({ allow: functions_1.is.boolean, levels: exports.isStringsArray }, {}),
-    defaultSubOptions: { allow: false, levels: [] },
-    subOptionsKey: "folders",
+    isSuboptions: functions_1.is.object.factory({ allow: functions_1.is.boolean, levels: exports.isStringsArray }, {}),
+    defaultSuboptions: { allow: false, levels: [] },
+    suboptionsKey: "folders",
     messages: {
         [MessageId.disallowedSource]: "Import from this source is not allowed"
     },
     create: context => {
-        const path = context.stripExtension(context.path);
+        const path = context.stripExtension(context.filename);
         const dir = node_path_1.default.dirname(path);
         const basename = node_path_1.default.basename(path);
         if (basename === "index" || basename.startsWith("index."))
             return {};
         const matcher = (0, functions_1.evaluate)(() => {
-            if (context.subOptionsArray.length) {
-                const subOptions = functions_1.a.last(context.subOptionsArray);
-                if (subOptions.allow)
+            if (context.options.folders.length) {
+                const folder = functions_1.a.last(context.options.folders);
+                if (folder.allow)
                     return () => true;
-                const index = subOptions.levels.findIndex(level => utils.createFileMatcher(level, false, { dot: true })(`./${basename}`));
+                const index = folder.levels.findIndex(level => utils.createFileMatcher(level, false, { dot: true })(`./${basename}`));
                 if (index > 0)
-                    return utils.createFileMatcher(subOptions.levels.slice(0, index).flat(), false, { dot: true });
+                    return utils.createFileMatcher(folder.levels.slice(0, index).flat(), false, { dot: true });
             }
             return () => false;
         });
-        return utils.ruleTemplates.source(ctx => {
+        return ruleTemplates.source(ctx => {
             const source = context.stripExtension(ctx.source);
             const parts = source.split("/");
             if (parts.length === 2) {

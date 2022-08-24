@@ -15,19 +15,18 @@ exports.arrayCallbackReturnType = utils.createRule({
     messages: { [MessageId.invalidType]: "Expecting boolean return type" },
     create: (context, typeCheck) => ({
         CallExpression: node => {
-            const callee = node.callee;
+            const { callee } = node;
             if (callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
                 callee.property.type === utils_1.AST_NODE_TYPES.Identifier &&
                 arrayCallbacks.has(callee.property.name) &&
                 typeCheck.isArrayOrTuple(callee.object)) {
                 const argument = node.arguments[0];
                 if (argument) {
-                    const isBoolishReturnType = typeCheck
+                    const isSafeBooleanCondition = typeCheck
                         .getCallSignatures(argument)
-                        // eslint-disable-next-line @typescript-eslint/unbound-method -- Wait for @skylib/functions update
                         .map(typeCheck.getReturnType)
-                        .every(typeCheck.isBoolish);
-                    if (isBoolishReturnType) {
+                        .every(typeCheck.isSafeBooleanCondition);
+                    if (isSafeBooleanCondition) {
                         // Valid
                     }
                     else

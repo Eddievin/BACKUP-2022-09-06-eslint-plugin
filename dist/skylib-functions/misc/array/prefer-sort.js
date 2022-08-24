@@ -6,7 +6,7 @@ const utils = tslib_1.__importStar(require("../../../utils"));
 const typescript_1 = require("../../../typescript");
 exports.preferSort = utils.wrapRule(typescript_1.typescript["typescript/no-restricted-syntax"], [
     {
-        message: 'No mutation side-effect, use "a.sort" instead',
+        message: 'Use "a.sort" instead (avoid mutation side-effects)',
         selector: ".callee[property.name=sort] > .object",
         typeHas: utils.TypeGroup.array
     }

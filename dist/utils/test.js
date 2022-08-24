@@ -1,15 +1,14 @@
 "use strict";
-/* eslint-disable @skylib/custom/no-literal-union-type -- Ok */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testRule = exports.getMessageId = void 0;
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
-const core_1 = require("./core");
+const misc_1 = require("./misc");
 /**
- * Gets MessageId enum from rule.
+ * Extracts MessageId from rule.
  *
  * @param rule - Rule.
- * @returns MessageId enum.
+ * @returns MessageId.
  */
 function getMessageId(rule) {
     return functions_1.o.fromEntries.exhaustive(functions_1.o.keys(rule.meta.messages).map(key => [key, key]));
@@ -30,27 +29,22 @@ function testRule(name, rule, invalid, valid = []) {
             ecmaFeatures: { jsx: true },
             ecmaVersion: 2017,
             extraFileExtensions: [".vue"],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Ok
             // @ts-expect-error
             parser: "@typescript-eslint/parser",
             project: "./tsconfig.json",
             sourceType: "module",
-            tsconfigRootDir: `${core_1.base}fixtures`
+            tsconfigRootDir: `${misc_1.projectRoot}fixtures`
         }
     });
     tester.run(name, rule, {
-        invalid: invalid.map((invalidTest) => {
+        invalid: invalid.map((test) => {
             var _a, _b;
-            const code = functions_1.s.unpadMultiline(invalidTest.code);
-            const output = functions_1.s.unpadMultiline((_a = invalidTest.output) !== null && _a !== void 0 ? _a : invalidTest.code);
-            const errors = invalidTest.errors.map((error) => (Object.assign({ endLine: error.line }, error)));
-            return Object.assign(Object.assign({}, invalidTest), { code,
-                errors, filename: `${core_1.base}fixtures/${(_b = invalidTest.filename) !== null && _b !== void 0 ? _b : "file.ts"}`, output });
+            return (Object.assign(Object.assign({}, test), { code: functions_1.s.unpadMultiline(test.code), errors: test.errors.map((error) => (Object.assign({ endLine: error.line }, error))), filename: `${misc_1.projectRoot}fixtures/${(_a = test.filename) !== null && _a !== void 0 ? _a : "file.ts"}`, output: functions_1.s.unpadMultiline((_b = test.output) !== null && _b !== void 0 ? _b : test.code) }));
         }),
-        valid: valid.map((validTest) => {
+        valid: valid.map((test) => {
             var _a;
-            const code = functions_1.s.unpadMultiline(validTest.code);
-            return Object.assign(Object.assign({}, validTest), { code, filename: `${core_1.base}fixtures/${(_a = validTest.filename) !== null && _a !== void 0 ? _a : "file.ts"}` });
+            return (Object.assign(Object.assign({}, test), { code: functions_1.s.unpadMultiline(test.code), filename: `${misc_1.projectRoot}fixtures/${(_a = test.filename) !== null && _a !== void 0 ? _a : "file.ts"}` }));
         })
     });
 }

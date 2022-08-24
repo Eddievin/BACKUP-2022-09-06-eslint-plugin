@@ -7,7 +7,7 @@ const core_1 = require("./core");
 exports.preferArrowStaticMethod = utils.wrapRule(core_1.core["no-restricted-syntax"], [
     {
         message: "Prefer arrow function",
-        selector: `:matches(${utils.selectors.method})[static=true]`
+        selector: "MethodDefinition[static=true]"
     }
 ]);
 //# sourceMappingURL=prefer-arrow-static-method.js.map

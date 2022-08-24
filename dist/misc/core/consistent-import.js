@@ -17,7 +17,7 @@ var MessageId;
 exports.consistentImport = utils.createRule({
     name: "consistent-import",
     fixable: utils.Fixable.code,
-    isSubOptions: functions_1.is.object.factory({
+    isSuboptions: functions_1.is.object.factory({
         _id: functions_1.is.string,
         altLocalNames: functions_1.is.strings,
         autoImport: functions_1.is.boolean,
@@ -28,18 +28,18 @@ exports.consistentImport = utils.createRule({
         localName: functions_1.is.string,
         sourcePattern: functions_1.is.string
     }),
-    defaultSubOptions: { altLocalNames: [], autoImport: false, wildcard: false },
-    subOptionsKey: "sources",
+    defaultSuboptions: { altLocalNames: [], autoImport: false, wildcard: false },
+    suboptionsKey: "sources",
     messages: {
         [MessageId.autoImport]: 'Run "eslint --fix" to add missing import statement(s)',
-        [MessageId.invalidLocalName]: "Expecting local name to be: {{expectedLocalName}} ({{_id}})",
-        [MessageId.wildcardDisallowed]: "Wildcard import disallowed ({{_id}})",
-        [MessageId.wildcardRequired]: "Wildcard import required ({{_id}})"
+        [MessageId.invalidLocalName]: "Expecting local name to be: {{expectedLocalName}} ({{_id}}, source: {{source}})",
+        [MessageId.wildcardDisallowed]: "Wildcard import disallowed ({{_id}}, source: {{source}})",
+        [MessageId.wildcardRequired]: "Wildcard import required ({{_id}}, source: {{source}})"
     },
     create: (context) => {
         const eol = context.eol;
+        // eslint-disable-next-line @skylib/functions/prefer-ReadonlySet -- Ok
         const identifiers = new Set();
-        // eslint-disable-next-line @skylib/custom/prefer-readonly-array -- Postponed
         const importDeclarations = [];
         return {
             ":not(ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, Property) > Identifier": (node) => {
@@ -47,22 +47,23 @@ exports.consistentImport = utils.createRule({
             },
             "ExportAllDeclaration": node => {
                 if (node.exported) {
-                    const subOptions = findSubOptions(node.source);
-                    if (subOptions) {
-                        const { _id, localName, wildcard } = subOptions;
+                    const source = context.normalizeSource(node.source.value);
+                    const suboptions = findSuboptions(source);
+                    if (suboptions) {
+                        const { _id, localName, wildcard } = suboptions;
                         if (wildcard)
                             if (node.exported.name === localName) {
                                 // Valid name
                             }
                             else
                                 context.report({
-                                    data: { _id, expectedLocalName: localName },
+                                    data: { _id, expectedLocalName: localName, source },
                                     messageId: MessageId.invalidLocalName,
                                     node
                                 });
                         else
                             context.report({
-                                data: { _id },
+                                data: { _id, source },
                                 messageId: MessageId.wildcardDisallowed,
                                 node
                             });
@@ -71,12 +72,13 @@ exports.consistentImport = utils.createRule({
             },
             "ExportNamedDeclaration": node => {
                 if (node.source) {
-                    const subOptions = findSubOptions(node.source);
-                    if (subOptions) {
-                        const { _id, localName, wildcard } = subOptions;
+                    const source = context.normalizeSource(node.source.value);
+                    const suboptions = findSuboptions(source);
+                    if (suboptions) {
+                        const { _id, localName, wildcard } = suboptions;
                         if (wildcard)
                             context.report({
-                                data: { _id },
+                                data: { _id, source },
                                 messageId: MessageId.wildcardRequired,
                                 node
                             });
@@ -88,7 +90,7 @@ exports.consistentImport = utils.createRule({
                                 }
                                 else
                                     context.report({
-                                        data: { _id, expectedLocalName: localName },
+                                        data: { _id, expectedLocalName: localName, source },
                                         messageId: MessageId.invalidLocalName,
                                         node
                                     });
@@ -112,20 +114,19 @@ exports.consistentImport = utils.createRule({
                 ? altLocalNames.join(", ")
                 : localName;
         }
-        function findSubOptions(node) {
-            const source = context.normalizeSource(node.value);
-            const subOptions = functions_1.a.reverse(context.subOptionsArray).find(candidate => {
+        function findSuboptions(source) {
+            const suboptions = functions_1.a.reverse(context.options.sources).find(candidate => {
                 var _a;
                 return (0, minimatch_1.default)(source, (_a = candidate.sourcePattern) !== null && _a !== void 0 ? _a : candidate.source, {
                     dot: true
                 });
             });
-            return subOptions
-                ? Object.assign({ localName: utils.getIdentifierFromPath(source) }, subOptions) : undefined;
+            return suboptions
+                ? Object.assign({ localName: context.identifierFromPath(source) }, suboptions) : undefined;
         }
         function lintAutoImport(node) {
-            const fixes = _.uniq(context.subOptionsArray.flatMap(subOptions => {
-                const { autoImport, autoImportSource, localName, wildcard } = Object.assign({ autoImportSource: subOptions.source, localName: utils.getIdentifierFromPath(subOptions.source) }, subOptions);
+            const fixes = _.uniq(context.options.sources.flatMap(suboptions => {
+                const { autoImport, autoImportSource, localName, wildcard } = Object.assign({ autoImportSource: suboptions.source, localName: context.identifierFromPath(suboptions.source) }, suboptions);
                 return autoImport
                     ? context.scope.through
                         .map(ref => {
@@ -158,11 +159,12 @@ exports.consistentImport = utils.createRule({
         }
         function lintConsistentImport() {
             for (const node of importDeclarations) {
-                const subOptions = findSubOptions(node.source);
-                if (subOptions) {
-                    const { _id, altLocalNames, localName, wildcard } = subOptions;
-                    const defaultSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
-                    const wildcardSpecifier = node.specifiers.find(specifier => specifier.type === utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
+                const source = context.normalizeSource(node.source.value);
+                const suboptions = findSuboptions(source);
+                if (suboptions) {
+                    const { _id, altLocalNames, localName, wildcard } = suboptions;
+                    const wildcardSpecifier = node.specifiers.find(candidate => candidate.type === utils_1.AST_NODE_TYPES.ImportNamespaceSpecifier);
+                    const defaultSpecifier = node.specifiers.find(candidate => candidate.type === utils_1.AST_NODE_TYPES.ImportDefaultSpecifier);
                     if (wildcard)
                         if (wildcardSpecifier)
                             if (wildcardSpecifier.local.name === localName) {
@@ -176,14 +178,15 @@ exports.consistentImport = utils.createRule({
                                 context.report({
                                     data: {
                                         _id,
-                                        expectedLocalName: expectedLocalName(localName, altLocalNames)
+                                        expectedLocalName: expectedLocalName(localName, altLocalNames),
+                                        source
                                     },
                                     messageId: MessageId.invalidLocalName,
                                     node
                                 });
                         else
                             context.report({
-                                data: { _id },
+                                data: { _id, source },
                                 messageId: MessageId.wildcardRequired,
                                 node
                             });
@@ -200,14 +203,15 @@ exports.consistentImport = utils.createRule({
                                 context.report({
                                     data: {
                                         _id,
-                                        expectedLocalName: expectedLocalName(localName, altLocalNames)
+                                        expectedLocalName: expectedLocalName(localName, altLocalNames),
+                                        source
                                     },
                                     messageId: MessageId.invalidLocalName,
                                     node
                                 });
                         if (wildcardSpecifier)
                             context.report({
-                                data: { _id },
+                                data: { _id, source },
                                 messageId: MessageId.wildcardDisallowed,
                                 node
                             });

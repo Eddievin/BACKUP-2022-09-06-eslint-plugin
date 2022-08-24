@@ -10,8 +10,10 @@ var NodeType;
 (function (NodeType) {
     NodeType["ExportAllDeclaration"] = "ExportAllDeclaration";
     NodeType["ExportDeclaration"] = "ExportDeclaration";
+    NodeType["ExportDefaultDeclaration"] = "ExportDefaultDeclaration";
     NodeType["ExportFunctionDeclaration"] = "ExportFunctionDeclaration";
     NodeType["ExportTypeDeclaration"] = "ExportTypeDeclaration";
+    NodeType["ExportUnknown"] = "ExportUnknown";
     NodeType["FunctionDeclaration"] = "FunctionDeclaration";
     NodeType["ImportDeclaration"] = "ImportDeclaration";
     NodeType["JestTest"] = "JestTest";
@@ -61,24 +63,50 @@ const defaultOrder = [
     NodeType.ImportDeclaration,
     NodeType.ExportAllDeclaration,
     NodeType.ExportDeclaration,
-    NodeType.Unknown,
+    NodeType.ExportDefaultDeclaration,
+    NodeType.ExportUnknown,
     NodeType.ExportTypeDeclaration,
     NodeType.ExportFunctionDeclaration,
+    NodeType.Unknown,
     NodeType.TypeDeclaration,
     NodeType.FunctionDeclaration,
     NodeType.JestTest
 ];
+const prepareForComparison = (0, functions_1.evaluate)(() => {
+    const priority = ":,.";
+    const keys = functions_1.a.fromString(priority);
+    const values = functions_1.a.sort(functions_1.a.fromString(priority));
+    const map = functions_1.o.fromEntries(keys.map((key, index) => [key, functions_1.a.get(values, index)]));
+    // eslint-disable-next-line security/detect-non-literal-regexp -- Ok
+    const re = new RegExp(`[${functions_1.s.escapeRegExpSpecialChars(priority)}]`, "gu");
+    return (str) => str.replace(re, callback);
+    function callback(char) {
+        return map[char];
+    }
+});
 const sortable = {
     [NodeType.ExportAllDeclaration]: true,
     [NodeType.ExportDeclaration]: true,
+    [NodeType.ExportDefaultDeclaration]: false,
     [NodeType.ExportFunctionDeclaration]: true,
     [NodeType.ExportTypeDeclaration]: true,
+    [NodeType.ExportUnknown]: false,
     [NodeType.FunctionDeclaration]: true,
     [NodeType.ImportDeclaration]: false,
     [NodeType.JestTest]: true,
     [NodeType.TypeDeclaration]: true,
     [NodeType.Unknown]: false
 };
+/**
+ * Checks identifier name.
+ *
+ * @param node - Node.
+ * @param names - Expected names.
+ * @returns _True_ if node is an identifier with expected name, _false_ otherwise.
+ */
+function checkIdentifierName(node, ...names) {
+    return node.type === utils_1.AST_NODE_TYPES.Identifier && names.includes(node.name);
+}
 /**
  * Returns Jest test name.
  *
@@ -94,44 +122,36 @@ function getJestTestName(node) {
             const { callee } = node.expression;
             if ((callee.type === utils_1.AST_NODE_TYPES.Identifier && callee.name === "test") ||
                 (callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
-                    isIdentifier(callee.object, "test") &&
-                    isIdentifier(callee.property, "only", "skip")) ||
+                    checkIdentifierName(callee.object, "test") &&
+                    checkIdentifierName(callee.property, "only", "skip")) ||
                 (callee.type === utils_1.AST_NODE_TYPES.CallExpression &&
                     callee.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
-                    isIdentifier(callee.callee.object, "test") &&
-                    isIdentifier(callee.callee.property, "each")) ||
+                    checkIdentifierName(callee.callee.object, "test") &&
+                    checkIdentifierName(callee.callee.property, "each")) ||
                 (callee.type === utils_1.AST_NODE_TYPES.CallExpression &&
                     callee.callee.type === utils_1.AST_NODE_TYPES.MemberExpression &&
                     callee.callee.object.type === utils_1.AST_NODE_TYPES.MemberExpression &&
-                    isIdentifier(callee.callee.object.object, "test") &&
-                    isIdentifier(callee.callee.object.property, "only", "skip") &&
-                    isIdentifier(callee.callee.property, "each")))
-                return utils.prepareForComparison(argument.value, ":,.");
+                    checkIdentifierName(callee.callee.object.object, "test") &&
+                    checkIdentifierName(callee.callee.object.property, "only", "skip") &&
+                    checkIdentifierName(callee.callee.property, "each")))
+                return prepareForComparison(argument.value);
         }
     }
     return undefined;
 }
 /**
- * Checks if node is an identifier.
- *
- * @param node - Node.
- * @param names - Allowed names.
- * @returns _True_ if node is an identifier, _false_ otherwise.
- */
-function isIdentifier(node, ...names) {
-    return node.type === utils_1.AST_NODE_TYPES.Identifier && names.includes(node.name);
-}
-/**
  * Creates sorting order function.
  *
- * @param order - Order by node type.
+ * @param order - Order.
  * @returns Sorting order function.
  */
 function sortingOrder(order) {
-    return (node) => {
+    return node => {
         switch (node.type) {
             case utils_1.AST_NODE_TYPES.ExportAllDeclaration:
                 return buildResult(NodeType.ExportAllDeclaration, `${node.source.value}\u0002${node.exportKind}`);
+            case utils_1.AST_NODE_TYPES.ExportDefaultDeclaration:
+                return buildResult(NodeType.ExportDefaultDeclaration);
             case utils_1.AST_NODE_TYPES.ExportNamedDeclaration:
                 if (node.declaration)
                     switch (node.declaration.type) {
@@ -143,7 +163,7 @@ function sortingOrder(order) {
                         case utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration:
                             return buildResult(NodeType.ExportTypeDeclaration, node.declaration.id.name);
                         default:
-                            return buildResult(NodeType.Unknown);
+                            return buildResult(NodeType.ExportUnknown);
                     }
                 return buildResult(NodeType.ExportDeclaration, node.source ? `${node.source.value}\u0002${node.exportKind}` : "");
             case utils_1.AST_NODE_TYPES.ExpressionStatement: {

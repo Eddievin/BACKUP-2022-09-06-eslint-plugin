@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.requireJsdoc = exports.MessageId = exports.isInterfaceOptions = exports.isInterfaceOption = exports.InterfaceOption = exports.isPropertyOptions = exports.isPropertyOption = exports.PropertyOption = void 0;
+exports.requireJsdoc = exports.isInterfaceOptions = exports.isInterfaceOption = exports.MessageId = exports.InterfaceOption = exports.isPropertyOptions = exports.isPropertyOption = exports.PropertyOption = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../utils"));
 const utils_1 = require("@typescript-eslint/utils");
@@ -18,14 +18,14 @@ var InterfaceOption;
     InterfaceOption["constructSignatures"] = "constructSignatures";
     InterfaceOption["interface"] = "interface";
 })(InterfaceOption = exports.InterfaceOption || (exports.InterfaceOption = {}));
-exports.isInterfaceOption = functions_1.is.factory(functions_1.is.enumeration, InterfaceOption);
-exports.isInterfaceOptions = functions_1.is.factory(functions_1.is.array.of, exports.isInterfaceOption);
 var MessageId;
 (function (MessageId) {
     MessageId["undocumented"] = "undocumented";
     MessageId["undocumentedCallSignature"] = "undocumentedCallSignature";
     MessageId["undocumentedConstructSignature"] = "undocumentedConstructSignature";
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
+exports.isInterfaceOption = functions_1.is.factory(functions_1.is.enumeration, InterfaceOption);
+exports.isInterfaceOptions = functions_1.is.factory(functions_1.is.array.of, exports.isInterfaceOption);
 exports.requireJsdoc = utils.createRule({
     name: "require-jsdoc",
     isOptions: functions_1.is.object.factory({
@@ -52,9 +52,9 @@ exports.requireJsdoc = utils.createRule({
         [MessageId.undocumentedConstructSignature]: "Missing documentation for constructor signature"
     },
     create: (context, typeCheck) => {
-        const selectors = utils.getSelectors(context.options, defaultSelectors);
+        const selector = utils.configurableSelector.get(context.options, defaultSelectors);
         return {
-            [selectors]: (node) => {
+            [selector]: (node) => {
                 switch (node.type) {
                     case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
                         lintInterface(node);
@@ -124,6 +124,7 @@ exports.requireJsdoc = utils.createRule({
                 else
                     context.report({ messageId: MessageId.undocumented, node });
         }
+        // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
         function lintNodeByTypeSymbol(node) {
             const type = typeCheck.getType(node);
             const symbol = type.getSymbol();

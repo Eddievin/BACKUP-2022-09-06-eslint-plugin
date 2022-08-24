@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.preferOnlyExport = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
+const ruleTemplates = tslib_1.__importStar(require("../../rule-templates"));
 const utils = tslib_1.__importStar(require("../../utils"));
 const functions_1 = require("@skylib/functions");
 var MessageId;
@@ -15,27 +16,29 @@ exports.preferOnlyExport = utils.createRule({
     defaultOptions: { exportMatchingFilename: false, selector: [] },
     messages: { [MessageId.invalidExport]: "Expecting only export" },
     create: context => {
-        const { exportMatchingFilename, selector: mixed } = context.options;
-        const selector = functions_1.a.fromMixed(mixed).join(", ");
+        const { exportMatchingFilename, selector: mixedSelector } = context.options;
+        const selector = utils.selector(mixedSelector);
         let activated = false;
-        return utils.ruleTemplates.export(ctx => {
-            if (exportMatchingFilename &&
-                ctx.identifiers.some(node => node.name === utils.getIdentifierFromPath(context.path, node.name)))
-                activated = true;
-            if (activated)
-                if (ctx.onlyExport) {
-                    // Valid
-                }
-                else
-                    for (const node of ctx.identifiers)
-                        context.report({ messageId: MessageId.invalidExport, node });
-        }, selector
-            ? {
+        return utils.mergeListeners(selector
+            ? (0, functions_1.typedef)({
                 [selector]: () => {
                     activated = true;
                 }
-            }
-            : {});
+            })
+            : {}, ruleTemplates.export(ctx => {
+            const { identifiers, onlyExport } = ctx;
+            if (exportMatchingFilename &&
+                identifiers.some(node => node.name ===
+                    context.identifierFromPath(context.filename, node.name)))
+                activated = true;
+            if (activated)
+                if (onlyExport) {
+                    // Valid
+                }
+                else
+                    for (const node of identifiers)
+                        context.report({ messageId: MessageId.invalidExport, node });
+        }));
     }
 });
 //# sourceMappingURL=prefer-only-export.js.map
