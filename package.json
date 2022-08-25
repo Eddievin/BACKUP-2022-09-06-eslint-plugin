@@ -62,14 +62,14 @@
     "@skylib/lodash-commonjs-es": "^1.0.0",
     "@skylib/typescript-types": "^1.0.0",
     "@types/estree": "^1.0.0",
-    "@types/minimatch": "^3.0.5",
+    "@types/minimatch": "^5.1.0",
     "@types/natural-compare": "^1.4.1",
     "minimatch": "^5.1.0",
     "natural-compare": "^1.4.0"
   },
   "devDependencies": {
-    "@skylib/config": "^3.35.0",
-    "@skylib/eslint-plugin": "^0.1.48",
+    "@skylib/config": "^3.37.0",
+    "@skylib/eslint-plugin": "^0.1.49",
     "get-current-line": "^6.6.0"
   },
   "peerDependencies": {
