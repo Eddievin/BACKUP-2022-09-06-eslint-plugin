@@ -1,12 +1,14 @@
 import * as utils from "../utils";
 import { core } from "./core";
+import { evaluate } from "@skylib/functions";
 
-export const maxIdentifierBlocks = utils.wrapRule(
-  core["no-restricted-syntax"],
-  [
+export const maxIdentifierBlocks = evaluate(() => {
+  const suffix = "[name=/^[A-Z]*[^A-Z]+([A-Z]+[^A-Z]+){4}/u]";
+
+  return utils.wrapRule(core["no-restricted-syntax"], [
     {
       message: "Identifier should not contain more than 4 blocks",
-      selector: "Identifier[name=/^[A-Z]*[^A-Z]+([A-Z]+[^A-Z]+){4}/u]"
+      selector: [`.id${suffix}`, `.key${suffix}`]
     }
-  ]
-);
+  ]);
+});
