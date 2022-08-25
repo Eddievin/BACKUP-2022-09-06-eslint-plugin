@@ -21,6 +21,7 @@ export const sortVBind = utils.createRule({
       );
 
       if (
+        vBindIndex >= 0 &&
         node.attributes.some(
           (attribute, index) => index > vBindIndex && !attribute.directive
         )

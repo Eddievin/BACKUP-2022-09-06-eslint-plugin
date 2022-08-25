@@ -13,6 +13,7 @@ utils.testRule("sort-v-bind", rule, [
         <slot v-bind="obj" prop="abc" @click="click"></slot>
         <slot prop="abc" v-bind="obj" @click="click"></slot>
         <slot prop="abc" @click="click" v-bind="obj"></slot>
+        <slot prop="abc" @click="click"></slot>
       </template>
     `,
     errors: [{ line: 2, messageId: MessageId.incorrectSortingOrder }]
