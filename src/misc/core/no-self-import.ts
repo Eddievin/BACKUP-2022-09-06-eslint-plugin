@@ -3,7 +3,6 @@ import * as utils from "../../utils";
 import path from "node:path";
 
 export enum MessageId {
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
   noSelfImport = "noSelfImport"
 }
 

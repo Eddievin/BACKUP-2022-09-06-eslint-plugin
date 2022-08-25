@@ -1,15 +1,14 @@
 /* eslint-disable @skylib/consistent-filename -- Ok */
 
 import * as utils from "../../utils";
+import { evaluate } from "@skylib/functions";
 import { misc } from "../../misc";
 
-const prefix =
-  ":matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator[id.typeAnnotation=undefined] > CallExpression[callee.name=defineFn]";
+export const requireReturnInDefineFn = evaluate(() => {
+  const prefix =
+    ":matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator[id.typeAnnotation=undefined] > CallExpression[callee.name=defineFn]";
 
-// eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
-export const requireReturnInDefineFn = utils.wrapRule(
-  misc["no-restricted-syntax"],
-  [
+  return utils.wrapRule(misc["no-restricted-syntax"], [
     {
       message: "Missing return type",
       selector: [
@@ -19,5 +18,5 @@ export const requireReturnInDefineFn = utils.wrapRule(
         `${prefix} > ObjectExpression > Property > FunctionExpression[returnType=undefined]`
       ]
     }
-  ]
-);
+  ]);
+});

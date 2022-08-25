@@ -1,1 +1,1 @@
-export const skylibFramework = {} as const;
+export const skylibFramework = {};

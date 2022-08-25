@@ -5,8 +5,8 @@ import type {
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { unknowns } from "@skylib/functions";
 
+// eslint-disable-next-line @skylib/typescript/prefer-enum -- Ok
 export type Filename =
-  // eslint-disable-next-line @skylib/typescript/prefer-enum -- Ok
   | "camelCase.camelCase.ts"
   | "camelCase.ts"
   | "kebab-case.kebab-case.ts"

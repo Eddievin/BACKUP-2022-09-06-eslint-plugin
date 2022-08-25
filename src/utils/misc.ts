@@ -12,15 +12,16 @@ import {
   s,
   wrapProxyHandler
 } from "@skylib/functions";
-import { Casing, TypeGroup } from "./types";
-import type { Entry, unknowns } from "@skylib/functions";
 import type {
+  AllowDisallowPatterns,
   FilePattern,
   Matcher,
   RegexpPattern,
   RuleListeners,
   Selector
 } from "./types";
+import { Casing, TypeGroup } from "./types";
+import type { Entry, unknowns } from "@skylib/functions";
 import type {
   RuleContext,
   RuleFunction,
@@ -37,7 +38,7 @@ export const isStringOrStrings = is.or.factory(is.string, is.strings);
 
 export const isFilePattern: is.Guard<FilePattern> = is.or.factory(
   isStringOrStrings,
-  is.object.factory(
+  is.object.factory<AllowDisallowPatterns>(
     { allow: isStringOrStrings, disallow: isStringOrStrings },
     {}
   )
@@ -233,8 +234,7 @@ export function wrapRule<M extends string, O extends unknowns>(
             get: (_target, key) =>
               key === "options"
                 ? optionsOverridesArray
-                : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Ok
-                  reflect.get(context, key)
+                : reflect.get(context, key)
           })
         )
       );

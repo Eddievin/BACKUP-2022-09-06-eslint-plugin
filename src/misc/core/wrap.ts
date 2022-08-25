@@ -68,8 +68,7 @@ export const wrap = utils.createRule({
                 ? (report: utils.ReportDescriptor) => {
                     reports.push(report);
                   }
-                : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Wait for @skylib/eslint-plugin update
-                  reflect.get(context.rawContext, key)
+                : reflect.get(context.rawContext, key)
           })
         )
       ),

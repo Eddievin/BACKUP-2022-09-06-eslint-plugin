@@ -22,7 +22,6 @@ export enum MessageId {
   combinedId = "combinedId",
   optional = "optional",
   optionalId = "optionalId",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
   undefined = "undefined",
   undefinedId = "undefinedId"
 }
@@ -30,7 +29,6 @@ export enum MessageId {
 export enum Style {
   combined = "combined",
   optional = "optional",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
   undefined = "undefined"
 }
 

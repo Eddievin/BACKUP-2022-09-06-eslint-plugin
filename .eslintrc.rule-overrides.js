@@ -1,4 +1,4 @@
-/* eslint-disable @skylib/config/eslintrc-no-disable -- Ok */
+/* eslint-disable @skylib/config/eslintrc/no-disable -- Ok */
 
 const { eslint } = require("@skylib/config/api");
 
@@ -75,8 +75,6 @@ module.exports = {
       }
     ],
     "@skylib/require-syntax/fix": [
-      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/eslint-plugin update
-      // fixme
       "off",
       { selector: "Identifier[name=fix]", trigger: "Identifier[name=fixable]" }
     ]
@@ -173,8 +171,10 @@ module.exports = {
               "ImportDeclaration",
               "ExportAllDeclaration",
               "ExportDeclaration",
+              "ExportDefaultDeclaration",
               "ExportTypeDeclaration",
               "ExportFunctionDeclaration",
+              "ExportUnknown",
               "Unknown",
               "TypeDeclaration",
               "FunctionDeclaration",
@@ -228,8 +228,6 @@ module.exports = {
       files: "./tests/**",
       rules: {
         "@skylib/match-filename/testRule-name": [
-          // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
-          // fixme
           "off",
           {
             format: "kebab-case",
@@ -238,8 +236,6 @@ module.exports = {
           }
         ],
         "@skylib/match-filename/testRule-rule": [
-          // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
-          // fixme
           "off",
           {
             format: "kebab-case",

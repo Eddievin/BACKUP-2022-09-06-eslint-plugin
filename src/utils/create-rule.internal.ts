@@ -28,11 +28,6 @@ export const isProjectConfig: is.Guard<ProjectConfig> = is.factory(
   { name: is.string }
 );
 
-const isSharedSuboptions = is.object.factory<SharedSuboptions>(
-  {},
-  { filesToLint: is.strings, filesToSkip: is.strings }
-);
-
 export type ContextOptionsArray = readonly [object];
 
 export interface CreateRuleOptions<
@@ -317,6 +312,11 @@ export function getProjectConfig(path = "package.json"): ProjectConfig {
 
   return {};
 }
+
+const isSharedSuboptions = is.object.factory<SharedSuboptions>(
+  {},
+  { filesToLint: is.strings, filesToSkip: is.strings }
+);
 
 /**
  * Determines if file should be linted.

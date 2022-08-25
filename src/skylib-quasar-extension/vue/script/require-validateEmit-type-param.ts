@@ -3,7 +3,6 @@
 import * as utils from "../../../utils";
 import { misc } from "../../../misc";
 
-// eslint-disable-next-line @skylib/max-identifier-blocks -- Postponed
 export const requireValidateEmitTypeParam = utils.wrapRule(
   misc["no-restricted-syntax"],
   [

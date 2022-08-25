@@ -3,7 +3,6 @@ import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { AllowDisallowPattern } from "./misc.internal";
 import type { strings } from "@skylib/functions";
 
 export enum Casing {
@@ -34,14 +33,20 @@ export enum TypeGroup {
   string = "string",
   symbol = "symbol",
   tuple = "tuple",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
   undefined = "undefined",
   unknown = "unknown"
 }
 
+export interface AllowDisallowPatterns {
+  // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+  // fixme
+  readonly allow: strings | string;
+  readonly disallow: strings | string;
+}
+
 // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
 // fixme
-export type FilePattern = AllowDisallowPattern | strings | string;
+export type FilePattern = AllowDisallowPatterns | strings | string;
 
 export interface Matcher {
   /**
