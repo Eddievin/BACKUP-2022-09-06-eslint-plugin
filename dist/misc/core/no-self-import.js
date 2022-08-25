@@ -7,7 +7,6 @@ const utils = tslib_1.__importStar(require("../../utils"));
 const node_path_1 = tslib_1.__importDefault(require("node:path"));
 var MessageId;
 (function (MessageId) {
-    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
     MessageId["noSelfImport"] = "noSelfImport";
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.noSelfImport = utils.createRule({

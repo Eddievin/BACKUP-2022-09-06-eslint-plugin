@@ -5,7 +5,6 @@ exports.mixedFromIncludeNonArray = void 0;
 const tslib_1 = require("tslib");
 const utils = tslib_1.__importStar(require("../../../utils"));
 const typescript_1 = require("../../../typescript");
-// eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
 exports.mixedFromIncludeNonArray = utils.wrapRule(typescript_1.typescript["typescript/no-restricted-syntax"], [
     {
         message: "Expecting type to include non-array",

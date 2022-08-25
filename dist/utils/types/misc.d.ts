@@ -1,5 +1,4 @@
 import type { ReportDescriptor as BaseReportDescriptor, RuleFix, RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { AllowDisallowPattern } from "./misc.internal";
 import type { strings } from "@skylib/functions";
 export declare enum Casing {
     camelCase = "camelCase",
@@ -28,7 +27,11 @@ export declare enum TypeGroup {
     undefined = "undefined",
     unknown = "unknown"
 }
-export declare type FilePattern = AllowDisallowPattern | strings | string;
+export interface AllowDisallowPatterns {
+    readonly allow: strings | string;
+    readonly disallow: strings | string;
+}
+export declare type FilePattern = AllowDisallowPatterns | strings | string;
 export interface Matcher {
     /**
      * Checks if string matches condition.

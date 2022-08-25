@@ -1,7 +1,7 @@
 import { fn, is } from "@skylib/functions";
+import type { FilePattern, Matcher, RegexpPattern, RuleListeners, Selector } from "./types";
 import { Casing, TypeGroup } from "./types";
 import type { unknowns } from "@skylib/functions";
-import type { FilePattern, Matcher, RegexpPattern, RuleListeners, Selector } from "./types";
 import type { RuleListener, RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import minimatch from "minimatch";

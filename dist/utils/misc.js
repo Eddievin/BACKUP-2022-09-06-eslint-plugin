@@ -144,8 +144,7 @@ function wrapRule(rule, optionsArray) {
             return rule.create(new Proxy({}, (0, functions_1.wrapProxyHandler)("wrap-rule", functions_1.ProxyHandlerAction.throw, {
                 get: (_target, key) => key === "options"
                     ? optionsOverridesArray
-                    : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Ok
-                        functions_1.reflect.get(context, key)
+                    : functions_1.reflect.get(context, key)
             })));
         } });
 }

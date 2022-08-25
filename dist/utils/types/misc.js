@@ -30,7 +30,6 @@ var TypeGroup;
     TypeGroup["string"] = "string";
     TypeGroup["symbol"] = "symbol";
     TypeGroup["tuple"] = "tuple";
-    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
     TypeGroup["undefined"] = "undefined";
     TypeGroup["unknown"] = "unknown";
 })(TypeGroup = exports.TypeGroup || (exports.TypeGroup = {}));

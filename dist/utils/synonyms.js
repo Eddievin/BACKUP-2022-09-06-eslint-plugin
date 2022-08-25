@@ -19,8 +19,8 @@ function getSynonyms(config, core) {
         functions_1.assert.array.of(synonyms, functions_1.is.string, "Expecting array of strings");
         const entries = synonyms
             .map((synonym) => {
-            const item = items.find(({ name }) => synonym.startsWith(`${name}/`));
-            return item ? [synonym, item.rule] : undefined;
+            const item = items.find(({ name }) => synonym.startsWith(`@skylib/${name}/`));
+            return item ? [synonym.slice(8), item.rule] : undefined;
         })
             .filter(functions_1.is.not.empty);
         return functions_1.o.fromEntries(entries);

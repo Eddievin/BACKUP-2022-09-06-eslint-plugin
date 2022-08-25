@@ -35,8 +35,7 @@ exports.wrap = utils.createRule({
                 ? (report) => {
                     reports.push(report);
                 }
-                : // eslint-disable-next-line @skylib/functions/reflect/no-get -- Wait for @skylib/eslint-plugin update
-                    functions_1.reflect.get(context.rawContext, key)
+                : functions_1.reflect.get(context.rawContext, key)
         }))), lint
             ? (0, functions_1.typedef)({
                 [lint]: (node) => {

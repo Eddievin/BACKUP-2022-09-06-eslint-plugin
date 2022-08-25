@@ -8,7 +8,6 @@ const misc_1 = require("./misc");
 const node_fs_1 = tslib_1.__importDefault(require("node:fs"));
 const node_path_1 = tslib_1.__importDefault(require("node:path"));
 exports.isProjectConfig = functions_1.is.factory(functions_1.is.object.of, {}, { name: functions_1.is.string });
-const isSharedSuboptions = functions_1.is.object.factory({}, { filesToLint: functions_1.is.strings, filesToSkip: functions_1.is.strings });
 /**
  * Creates context.
  *
@@ -162,6 +161,7 @@ function getProjectConfig(path = "package.json") {
     return {};
 }
 exports.getProjectConfig = getProjectConfig;
+const isSharedSuboptions = functions_1.is.object.factory({}, { filesToLint: functions_1.is.strings, filesToSkip: functions_1.is.strings });
 /**
  * Determines if file should be linted.
  *

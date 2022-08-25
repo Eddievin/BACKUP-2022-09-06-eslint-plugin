@@ -17,7 +17,8 @@ exports.sortVBind = utils.createRule({
         VStartTag: (node) => {
             const vBindIndex = node.attributes.findIndex(attribute => attribute.key.type === "VDirectiveKey" &&
                 attribute.key.name.name === "bind");
-            if (node.attributes.some((attribute, index) => index > vBindIndex && !attribute.directive))
+            if (vBindIndex >= 0 &&
+                node.attributes.some((attribute, index) => index > vBindIndex && !attribute.directive))
                 context.report({
                     loc: context.getLoc(functions_1.a.get(node.attributes, vBindIndex).range),
                     messageId: MessageId.incorrectSortingOrder

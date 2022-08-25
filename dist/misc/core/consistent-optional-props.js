@@ -11,7 +11,6 @@ var MessageId;
     MessageId["combinedId"] = "combinedId";
     MessageId["optional"] = "optional";
     MessageId["optionalId"] = "optionalId";
-    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
     MessageId["undefined"] = "undefined";
     MessageId["undefinedId"] = "undefinedId";
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
@@ -19,7 +18,6 @@ var Style;
 (function (Style) {
     Style["combined"] = "combined";
     Style["optional"] = "optional";
-    // eslint-disable-next-line @typescript-eslint/no-shadow -- Wait for @skylib/config update
     Style["undefined"] = "undefined";
 })(Style = exports.Style || (exports.Style = {}));
 var Target;
