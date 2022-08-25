@@ -25,6 +25,7 @@ module.exports = {
     "prefer-readonly-props",
     "prefer-ts-toolbelt",
     "primary-export-only",
+    "require-prop-type-param",
     "statements-order",
     "switch-case-empty-lines",
     "utils.readonliness",
