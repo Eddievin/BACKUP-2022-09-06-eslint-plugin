@@ -23,9 +23,11 @@ export function getSynonyms(
 
     const entries = synonyms
       .map((synonym): Entry<string, unknown> | undefined => {
-        const item = items.find(({ name }) => synonym.startsWith(`${name}/`));
+        const item = items.find(({ name }) =>
+          synonym.startsWith(`@skylib/${name}/`)
+        );
 
-        return item ? [synonym, item.rule] : undefined;
+        return item ? [synonym.slice(8), item.rule] : undefined;
       })
       .filter(is.not.empty);
 
