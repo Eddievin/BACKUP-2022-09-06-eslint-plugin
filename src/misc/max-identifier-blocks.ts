@@ -7,6 +7,7 @@ export const maxIdentifierBlocks = evaluate(() => {
 
   return utils.wrapRule(core["no-restricted-syntax"], [
     {
+      ignoreSelector: "Property[shorthand=true] > Identifier.key",
       message: "Identifier should not contain more than 4 blocks",
       selector: [`.id${suffix}`, `.key${suffix}`]
     }

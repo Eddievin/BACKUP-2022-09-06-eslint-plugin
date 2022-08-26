@@ -48,7 +48,8 @@ utils.testRule(
       code: `
         aaaBbbCccDddEee.x;
         x.aaaBbbCccDddEee;
-        const y = { value: aaaBbbCccDddEee };
+        const y = { aaaBbbCccDddEee };
+        const z = { value: aaaBbbCccDddEee };
       `
     }
   ]
