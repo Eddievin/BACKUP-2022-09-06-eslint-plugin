@@ -14,22 +14,25 @@ export const sortVBind = utils.createRule({
   messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
   create: (context): RuleListener => ({
     VStartTag: (node: AST.VStartTag) => {
-      const vBindIndex = node.attributes.findIndex(
-        attribute =>
-          attribute.key.type === "VDirectiveKey" &&
-          attribute.key.name.name === "bind"
-      );
+      if (node.attributes.length > 1) {
+        const vBindIndex = node.attributes.findIndex(
+          attribute =>
+            attribute.key.type === "VDirectiveKey" &&
+            attribute.key.argument === null &&
+            attribute.key.name.name === "bind"
+        );
 
-      if (
-        vBindIndex >= 0 &&
-        node.attributes.some(
-          (attribute, index) => index > vBindIndex && !attribute.directive
+        if (
+          vBindIndex >= 0 &&
+          node.attributes.some(
+            (attribute, index) => index > vBindIndex && !attribute.directive
+          )
         )
-      )
-        context.report({
-          loc: context.getLoc(a.get(node.attributes, vBindIndex).range),
-          messageId: MessageId.incorrectSortingOrder
-        });
+          context.report({
+            loc: context.getLoc(a.get(node.attributes, vBindIndex).range),
+            messageId: MessageId.incorrectSortingOrder
+          });
+      }
     }
   })
 });
