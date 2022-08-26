@@ -14,6 +14,7 @@ export interface Options {
 }
 
 export enum NodeType {
+  DeclareGlobal = "DeclareGlobal",
   ExportAllDeclaration = "ExportAllDeclaration",
   ExportDeclaration = "ExportDeclaration",
   ExportDefaultDeclaration = "ExportDefaultDeclaration",
@@ -81,6 +82,7 @@ export const sortStatements = utils.createRule({
 
 const defaultOrder: NodeTypes = [
   NodeType.ImportDeclaration,
+  NodeType.DeclareGlobal,
   NodeType.ExportAllDeclaration,
   NodeType.ExportDeclaration,
   NodeType.ExportDefaultDeclaration,
@@ -115,6 +117,7 @@ const prepareForComparison = evaluate((): PrepareForComparison => {
 });
 
 const sortable: Rec<NodeType, boolean> = {
+  [NodeType.DeclareGlobal]: true,
   [NodeType.ExportAllDeclaration]: true,
   [NodeType.ExportDeclaration]: true,
   [NodeType.ExportDefaultDeclaration]: false,
@@ -257,6 +260,11 @@ function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
       case AST_NODE_TYPES.TSInterfaceDeclaration:
       case AST_NODE_TYPES.TSTypeAliasDeclaration:
         return buildResult(NodeType.TypeDeclaration, node.id.name);
+
+      case AST_NODE_TYPES.TSModuleDeclaration:
+        return buildResult(
+          node.global ?? false ? NodeType.DeclareGlobal : NodeType.Unknown
+        );
 
       default:
         return buildResult(NodeType.Unknown);

@@ -21,8 +21,10 @@ utils.testRule(
         interface T3 {}
         const x1 = 1;
         const x2 = 2;
+        namespace N1 {}
         export const x3 = 3;
         export const x4 = 4;
+        export namespace N2 {}
         export default 1;
         export function f2();
         export function f1() {}
@@ -35,11 +37,13 @@ utils.testRule(
         export { A, B, C };
         export * as source2 from "source2";
         export * from "source1";
+        declare global {}
         import "source1";
       `,
       output: `
         import "source2";
         import "source1";
+        declare global {}
         export * from "source1";
         export * as source2 from "source2";
         export { A, B, C };
@@ -50,19 +54,21 @@ utils.testRule(
         export default 1;
         export const x3 = 3;
         export const x4 = 4;
+        export namespace N2 {}
         export interface T1 {}
         export type T2 = 1;
         export function f1() {}
         export function f2();
         const x1 = 1;
         const x2 = 2;
+        namespace N1 {}
         interface T3 {}
         type T4 = 1;
         function f3() {}
         function f4();
       `,
       errors: [
-        { line: 2, endLine: 22, messageId: MessageId.incorrectSortingOrder }
+        { line: 2, endLine: 25, messageId: MessageId.incorrectSortingOrder }
       ]
     },
     {
