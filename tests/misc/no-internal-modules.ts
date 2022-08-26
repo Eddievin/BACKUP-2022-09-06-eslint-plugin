@@ -15,6 +15,9 @@ utils.testRule("no-internal-modules", rule, [
       import x4 from "./folder";
       import x5 from "package";
       import x6 from "@scope/package";
+      import x7 from "@";
+      import x8 from "@/folder";
+      import x9 from "@/folder/subfolder";
     `,
     errors: [
       { line: 1, messageId: MessageId.disallowedSource },

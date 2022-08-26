@@ -9,7 +9,7 @@ utils.testRule("no-at-sign-internal-import", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      import x from "@/source";
+      import x from "@/folder";
       import y from "@";
     `,
     errors: [{ line: 1, messageId: MessageId.disallowedSource }]
