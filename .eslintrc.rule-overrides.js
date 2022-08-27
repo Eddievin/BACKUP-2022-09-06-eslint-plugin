@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/config/eslintrc/no-disable -- Ok */
-
 const { eslint } = require("@skylib/config/api");
 
 const consistentImport = eslint.rules["@skylib/consistent-import"];
@@ -26,11 +24,6 @@ module.exports = {
             wildcard: true
           },
           {
-            _id: "utils/casing",
-            source: "@skylib/eslint-plugin/src/utils/casing",
-            wildcard: true
-          },
-          {
             _id: "utils/configurable-selector",
             source: "@skylib/eslint-plugin/src/utils/configurable-selector",
             wildcard: true
@@ -45,12 +38,12 @@ module.exports = {
       }
     ],
     "@skylib/disallow-import/natural-compare": [
-      "off",
-      { disallow: ["natural-compare"] }
+      "warn",
+      { disallow: "natural-compare" }
     ],
     "@skylib/disallow-import/typescript": [
-      "off",
-      { disallow: ["{tsutils,typescript}"] }
+      "warn",
+      { disallow: ["tsutils", "typescript"] }
     ],
     "@skylib/no-sibling-import": [
       "warn",
@@ -75,32 +68,28 @@ module.exports = {
       }
     ],
     "@skylib/require-syntax/fix": [
-      "off",
-      { selector: "Identifier[name=fix]", trigger: "Identifier[name=fixable]" }
+      "warn",
+      {
+        message: 'Add "fix" or "utils.sort"',
+        selector:
+          "Identifier[name=fix], MemberExpression[object.name=utils][property.name=sort]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property > Identifier[name=fixable]"
+      }
     ]
   },
   overrides: [
-    { files: "./fixtures/**", rules: { "@skylib/consistent-filename": "off" } },
     {
-      files: "./src/utils/compare.ts",
-      rules: { "@skylib/disallow-import/natural-compare": "off" }
-    },
-    {
-      files: [
-        "./src/dev/typescript.d.ts",
-        "./src/utils/TypeCheck.internal.ts",
-        "./src/utils/TypeCheck.ts"
-      ],
-      rules: { "@skylib/disallow-import/typescript": "off" }
-    },
-    {
-      files: [
-        "./src/misc/core/*",
-        "./src/typescript/core/*",
-        "./src/vue/core/*"
-      ],
+      files: "./fixtures/**",
       rules: {
-        "@skylib/match-filename/createRule": [
+        // eslint-disable-next-line @skylib/config/eslintrc/no-disable -- Ok
+        "@skylib/consistent-filename": "off"
+      }
+    },
+    {
+      files: "./src/**",
+      rules: {
+        "@skylib/match-filename/createRule-id": [
           "warn",
           {
             format: "camelCase",
@@ -116,30 +105,33 @@ module.exports = {
               "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > CallExpression > ObjectExpression > Property[key.name=name] > Literal.value"
           }
         ],
+        "@skylib/match-filename/wrapRule": [
+          "warn",
+          {
+            format: "camelCase",
+            selector:
+              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
+          }
+        ],
         "@skylib/no-relative-parent-import": [
           "warn",
           {
             allow: [
               "../../../misc",
               "../../../rule-templates",
+              "../../../typescript",
               "../../../utils",
               "../../misc",
               "../../rule-templates",
+              "../../typescript",
               "../../utils",
               "../misc",
               "../rule-templates",
+              "../typescript",
               "../utils"
-            ],
-            disallow: [
-              "../**",
-              "../../**",
-              "../../../**",
-              "../../../../**",
-              "../../../../../**"
             ]
           }
         ],
-        "@skylib/primary-export-only": "off",
         "@skylib/sort-keys": [
           "warn",
           {
@@ -163,7 +155,27 @@ module.exports = {
               }
             ]
           }
-        ],
+        ]
+      }
+    },
+    {
+      files: [
+        "./src/dev/typescript.d.ts",
+        "./src/utils/TypeCheck.internal.ts",
+        "./src/utils/TypeCheck.ts"
+      ],
+      rules: {
+        // eslint-disable-next-line @skylib/config/eslintrc/no-disable -- Ok
+        "@skylib/disallow-import/typescript": "off"
+      }
+    },
+    {
+      files: [
+        "./src/misc/core/*",
+        "./src/typescript/core/*",
+        "./src/vue/core/*"
+      ],
+      rules: {
         "@skylib/sort-statements": [
           "warn",
           {
@@ -185,58 +197,24 @@ module.exports = {
       }
     },
     {
-      files: "./src/**",
+      files: "./src/utils/compare.ts",
       rules: {
-        "@skylib/match-filename/wrapRule": [
-          "off",
-          {
-            format: "camelCase",
-            selector:
-              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
-          }
-        ],
-        "@skylib/no-relative-parent-import": [
-          "warn",
-          {
-            allow: [
-              "../../../misc",
-              "../../../rule-templates",
-              "../../../typescript",
-              "../../../utils",
-              "../../misc",
-              "../../rule-templates",
-              "../../typescript",
-              "../../utils",
-              "../misc",
-              "../rule-templates",
-              "../typescript",
-              "../utils"
-            ],
-            disallow: [
-              "../**",
-              "../../**",
-              "../../../**",
-              "../../../../**",
-              "../../../../../**"
-            ]
-          }
-        ],
-        "@skylib/primary-export-only": "off"
+        // eslint-disable-next-line @skylib/config/eslintrc/no-disable -- Ok
+        "@skylib/disallow-import/natural-compare": "off"
       }
     },
     {
       files: "./tests/**",
       rules: {
         "@skylib/match-filename/testRule-name": [
-          "off",
+          "warn",
           {
-            format: "kebab-case",
             selector:
               "CallExpression[callee.object.name=utils][callee.property.name=testRule] > Literal:first-child"
           }
         ],
         "@skylib/match-filename/testRule-rule": [
-          "off",
+          "warn",
           {
             format: "kebab-case",
             selector:
@@ -250,7 +228,7 @@ module.exports = {
             selector: "Identifier[name=AST_NODE_TYPES]"
           }
         ],
-        "@skylib/no-restricted-syntax/no-test-only": [
+        "@skylib/no-restricted-syntax/no-skipped-tests": [
           "warn",
           {
             message: "No skipped tests",
@@ -263,7 +241,7 @@ module.exports = {
           {
             overrides: [
               {
-                _id: "utils-testRule",
+                _id: "testRule",
                 customOrder: [
                   "only",
                   "name",
@@ -278,12 +256,311 @@ module.exports = {
                   "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression"
               },
               {
-                _id: "utils-testRule-errors",
+                _id: "testRule.errors",
                 customOrder: ["line", "endLine", "messageId"],
                 selector:
                   "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression > Property[key.name=errors] > ArrayExpression > ObjectExpression"
               }
             ]
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/eslintrc/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "eslintrc/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/jest/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "jest/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-config/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "config/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-config/eslintrc/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "config/eslintrc/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-facades/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "facades/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/jest/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/jest/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/array/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/array/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/array/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/array/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/converters/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/converters/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/guards/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/guards/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/json/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/json/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/object/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/object/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/program-flow/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/program-flow/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/reflect/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/reflect/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-functions/misc/types/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "functions/types/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-quasar-extension/extras/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "quasar-extension/extras/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-quasar-extension/jest/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "quasar-extension/jest/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-quasar-extension/misc/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "quasar-extension/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-quasar-extension/vue/script/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "quasar-extension/vue/script/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/skylib-quasar-extension/vue/template/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "quasar-extension/vue/template/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/typescript/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "typescript/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
+          }
+        ]
+      }
+    },
+    {
+      files: "./tests/vue/**",
+      rules: {
+        "@skylib/match-filename/testRule-rule": [
+          "warn",
+          {
+            prefix: "vue/",
+            selector:
+              "VariableDeclarator[id.name=rule] > .init > Literal.property"
           }
         ]
       }
