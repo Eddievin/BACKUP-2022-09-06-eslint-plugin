@@ -4,6 +4,7 @@ import * as utils from "../../utils";
 import { evaluate } from "@skylib/functions";
 import { misc } from "../../misc";
 
+// eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
 export const requireReturnInDefineFn = evaluate(() => {
   const prefix =
     ":matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator[id.typeAnnotation=undefined] > CallExpression[callee.name=defineFn]";

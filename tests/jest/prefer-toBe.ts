@@ -5,7 +5,7 @@ const rule = rules["jest/prefer-toBe"];
 
 const MessageId = utils.getMessageId(rule);
 
-utils.testRule("jest-prefer-toBe", rule, [
+utils.testRule("prefer-toBe", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `

@@ -5,7 +5,7 @@ const rule = rules["jest/prefer-toStrictEqual"];
 
 const MessageId = utils.getMessageId(rule);
 
-utils.testRule("jest-prefer-toStrictEqual", rule, [
+utils.testRule("prefer-toStrictEqual", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `

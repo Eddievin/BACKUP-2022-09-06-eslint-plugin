@@ -9,7 +9,6 @@ export enum MessageId {
 
 export const sortVBind = utils.createRule({
   name: "sort-v-bind",
-  fixable: utils.Fixable.code,
   vue: true,
   messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
   create: (context): RuleListener => ({

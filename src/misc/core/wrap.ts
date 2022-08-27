@@ -1,3 +1,5 @@
+/* eslint-disable @skylib/require-syntax/fix -- Ok */
+
 import * as utils from "../../utils";
 import {
   ProxyHandlerAction,

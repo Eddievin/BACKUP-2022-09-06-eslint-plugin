@@ -24,6 +24,7 @@ export class TypeCheck {
   public constructor(context: RuleContext<never, unknowns>) {
     const parser = ESLintUtils.getParserServices(context);
 
+    // eslint-disable-next-line @skylib/max-identifier-blocks -- Wait for @skylib/eslint-plugin update
     const { esTreeNodeToTSNodeMap, program } = parser;
 
     assert.toBeTrue(
@@ -155,6 +156,7 @@ export class TypeCheck {
    * @param type - Type.
    * @returns _True_ if type is an array or a tuple, _false_ otherwise.
    */
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   public isArrayOrTupleType(
     type: ts.Type
   ): type is ts.TupleTypeReference | ts.TypeReference {

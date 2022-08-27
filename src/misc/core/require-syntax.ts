@@ -15,7 +15,6 @@ export enum MessageId {
 
 export const requireSyntax = utils.createRule({
   name: "require-syntax",
-  fixable: utils.Fixable.code,
   vue: true,
   isOptions: is.object.factory<Options>(
     { once: is.boolean, selector: utils.isSelector, trigger: utils.isSelector },
