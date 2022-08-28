@@ -8,5 +8,8 @@ module.exports = [
   "@skylib/match-filename/wrapRule",
   "@skylib/no-restricted-syntax/no-ast",
   "@skylib/no-restricted-syntax/no-skipped-tests",
-  "@skylib/require-syntax/fix"
+  "@skylib/require-syntax/fix",
+  "@skylib/require-syntax/isOptions",
+  "@skylib/require-syntax/isSuboptions",
+  "@skylib/require-syntax/suboptionsKey"
 ];

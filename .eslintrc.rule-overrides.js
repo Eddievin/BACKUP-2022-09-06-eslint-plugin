@@ -76,6 +76,30 @@ module.exports = {
         trigger:
           "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property > Identifier[name=fixable]"
       }
+    ],
+    "@skylib/require-syntax/isOptions": [
+      "warn",
+      {
+        message: 'Add "isOptions"',
+        selector: "Identifier[name=isOptions]",
+        trigger: "Identifier[name=defaultOptions]"
+      }
+    ],
+    "@skylib/require-syntax/isSuboptions": [
+      "warn",
+      {
+        message: 'Add "isSuboptions"',
+        selector: "Identifier[name=isSuboptions]",
+        trigger: "Identifier[name=/^(?:defaultSuboptions|suboptionsKey)/u]"
+      }
+    ],
+    "@skylib/require-syntax/suboptionsKey": [
+      "warn",
+      {
+        message: 'Add "isSuboptions"',
+        selector: "Identifier[name=suboptionsKey]",
+        trigger: "Identifier[name=/^(?:defaultSuboptions|isSuboptions)/u]"
+      }
     ]
   },
   overrides: [
