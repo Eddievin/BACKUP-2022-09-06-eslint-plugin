@@ -47,9 +47,10 @@ utils.testRule(
       name: `Test at line ${getCurrentLine().line}`,
       code: `
         aaaBbbCccDddEee.x;
-        x.aaaBbbCccDddEee;
-        const y = { aaaBbbCccDddEee };
-        const z = { value: aaaBbbCccDddEee };
+        x1.aaaBbbCccDddEee;
+        const x2 = { aaaBbbCccDddEee };
+        const x3 = { value: aaaBbbCccDddEee };
+        const { aaaBbbCccDddEee } = x4;
       `
     }
   ]
