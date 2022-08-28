@@ -1,3 +1,5 @@
+/* eslint-disable @skylib/require-syntax/isOptions -- Ok */
+
 import type {
   ContextOptionsArray,
   CreateRuleOptions,

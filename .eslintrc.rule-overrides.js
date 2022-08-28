@@ -39,7 +39,7 @@ module.exports = {
     ],
     "@skylib/disallow-import/natural-compare": [
       "warn",
-      { disallow: "natural-compare" }
+      { disallow: ["natural-compare"] }
     ],
     "@skylib/disallow-import/typescript": [
       "warn",
