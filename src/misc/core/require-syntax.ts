@@ -1,6 +1,8 @@
 import * as utils from "../../utils";
 import { assert, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { Writable } from "@skylib/functions";
 
 export interface Options {
   readonly message?: string;
@@ -34,9 +36,9 @@ export const requireSyntax = utils.createRule({
 
     const trigger = utils.selector(mixedTrigger);
 
-    let selectorCount = 0;
+    let count = 0;
 
-    let triggerCount = 0;
+    const nodes: Writable<utils.TSESTree.Nodes> = [];
 
     assert.toBeTrue(selector !== "", "Expecting selector");
     assert.toBeTrue(trigger !== "", "Expecting trigger");
@@ -44,30 +46,36 @@ export const requireSyntax = utils.createRule({
     return utils.mergeListeners(
       {
         [selector]: () => {
-          selectorCount++;
+          count++;
         }
       },
       {
-        [trigger]: () => {
-          triggerCount++;
+        [trigger]: (node: TSESTree.Node) => {
+          nodes.push(node);
         }
       },
       {
         "Program:exit": () => {
-          if (triggerCount) {
-            if (selectorCount === 0)
+          for (const node of nodes) {
+            if (count === 0)
               context.report({
                 data: { message: message ?? `Missing syntax: ${selector}` },
-                loc: context.locZero,
+                loc:
+                  trigger === "Program"
+                    ? context.locZero
+                    : context.getLoc(node.range),
                 messageId: MessageId.customMessage
               });
 
-            if (selectorCount > 1 && once)
+            if (count > 1 && once)
               context.report({
                 data: {
                   message: message ?? `Require syntax once: ${selector}`
                 },
-                loc: context.locZero,
+                loc:
+                  trigger === "Program"
+                    ? context.locZero
+                    : context.getLoc(node.range),
                 messageId: MessageId.customMessage
               });
           }

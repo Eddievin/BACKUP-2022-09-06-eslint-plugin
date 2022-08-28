@@ -104,14 +104,17 @@ utils.testRule(
       options: [
         {
           message: "Sample message",
-          selector: "Identifier[name=x]",
+          selector: "Identifier[name=z]",
           trigger: "Identifier[name=y]"
         }
       ],
-      code: "const y = 1;",
+      code: `
+        const x = 1;
+        const y = 1;
+      `,
       errors: [
         {
-          line: 1,
+          line: 2,
           messageId: MessageId.customMessage,
           data: { message: "Sample message" }
         }
