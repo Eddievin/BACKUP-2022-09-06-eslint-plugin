@@ -31,10 +31,7 @@ export function createRule<
 >(
   options: CreateRuleOptions<M, O, S, K>
 ): RuleModule<M, PartialOptionsArray<O, S, K>> {
-  const { create, defaultOptions, fixable, messages, vue } = {
-    vue: false,
-    ...options
-  } as const;
+  const { create, defaultOptions, fixable, messages, vue } = options;
 
   const ruleCreator = ESLintUtils.RuleCreator(
     (name: string) => `https://ilyub.github.io/eslint-plugin/${name}.html`

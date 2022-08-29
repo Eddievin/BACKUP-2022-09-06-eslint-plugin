@@ -93,12 +93,40 @@ module.exports = {
         trigger: "Identifier[name=/^(?:defaultSuboptions|suboptionsKey)/u]"
       }
     ],
+    "@skylib/require-syntax/no-restricted-syntax": [
+      "warn",
+      {
+        message: 'Use "no-restricted-syntax" instead',
+        selector: "[name=/^type[A-Z]/u]",
+        trigger: 'Literal[value="typescript/no-restricted-syntax"]'
+      }
+    ],
     "@skylib/require-syntax/suboptionsKey": [
       "warn",
       {
         message: 'Add "isSuboptions"',
         selector: "Identifier[name=suboptionsKey]",
         trigger: "Identifier[name=/^(?:defaultSuboptions|isSuboptions)/u]"
+      }
+    ],
+    "@skylib/require-syntax/vue-false": [
+      "warn",
+      {
+        message: 'Use "vue = false"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=create] > ArrowFunctionExpression[params.length<=1]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=vue][value.value=true]"
+      }
+    ],
+    "@skylib/require-syntax/vue-true": [
+      "warn",
+      {
+        message: 'Use "vue = true"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=create] > ArrowFunctionExpression[params.length>=2]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=vue][value.value=false]"
       }
     ]
   },

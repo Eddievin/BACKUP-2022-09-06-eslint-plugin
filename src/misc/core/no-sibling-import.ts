@@ -24,6 +24,7 @@ export const isSuboptions = is.object.factory<Suboptions>(
 
 export const noSiblingImport = utils.createRule({
   name: "no-sibling-import",
+  vue: true,
   isSuboptions: is.object.factory<Suboptions>(
     { allowedDependencies: isStringsArray },
     {}

@@ -55,7 +55,7 @@ export interface CreateRuleOptions<
   readonly messages: Rec<M, string>;
   readonly name: string;
   readonly suboptionsKey?: K;
-  readonly vue?: boolean;
+  readonly vue: boolean;
 }
 
 export type PartialOptions<

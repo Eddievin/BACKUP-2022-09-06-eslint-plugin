@@ -8,6 +8,7 @@ export enum MessageId {
 
 export const noMultiTypeTuples = utils.createRule({
   name: "no-multi-type-tuples",
+  vue: true,
   messages: { [MessageId.multiTypeTuple]: "Multi-type tuples are not allowed" },
   create: (context): RuleListener => ({
     TSTupleType: node => {

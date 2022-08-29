@@ -9,7 +9,7 @@ export enum MessageId {
 
 export const arrayCallbackReturnType = utils.createRule({
   name: "array-callback-return-type",
-  vue: true,
+  vue: false,
   messages: { [MessageId.invalidType]: "Expecting boolean return type" },
   create: (context, typeCheck): RuleListener => ({
     CallExpression: node => {

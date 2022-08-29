@@ -8,8 +8,12 @@ module.exports = [
   "@skylib/match-filename/wrapRule",
   "@skylib/no-restricted-syntax/no-ast",
   "@skylib/no-restricted-syntax/no-skipped-tests",
+  "@skylib/no-restricted-syntax/vue",
   "@skylib/require-syntax/fix",
   "@skylib/require-syntax/isOptions",
   "@skylib/require-syntax/isSuboptions",
-  "@skylib/require-syntax/suboptionsKey"
+  "@skylib/require-syntax/no-restricted-syntax",
+  "@skylib/require-syntax/suboptionsKey",
+  "@skylib/require-syntax/vue-false",
+  "@skylib/require-syntax/vue-true"
 ];

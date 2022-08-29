@@ -1,8 +1,8 @@
 import * as utils from "../../../utils";
-import { typescript } from "../../../typescript";
+import { misc } from "../../../misc";
 
 export const requireObjectTypeParam = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
+  misc["no-restricted-syntax"],
   [
     {
       message: "Missing type parameter",
