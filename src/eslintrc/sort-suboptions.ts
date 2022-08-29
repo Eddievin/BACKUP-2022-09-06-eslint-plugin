@@ -5,7 +5,7 @@ export const sortSuboptions = utils.wrapRule(misc["sort-array"], [
   {
     customOrder: ["catch-all"],
     selector:
-      "Property[key.value=/@skylib\\u002F/u] > ArrayExpression > ObjectExpression > Property[key.name=/^(?:overrides|rules|sources)$/u] > ArrayExpression",
+      "Property[key.value=/@skylib\\u002F/u] > ArrayExpression > ObjectExpression > Property[key.name=/^(?:folders|overrides|rules|sources)$/u] > ArrayExpression",
     sortKey: "_id",
     triggerByComment: false
   }

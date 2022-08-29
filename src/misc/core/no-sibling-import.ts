@@ -6,8 +6,7 @@ import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 
 export interface Suboptions {
-  readonly allow: boolean;
-  readonly levels: stringsArray;
+  readonly allowedDependencies: stringsArray;
 }
 
 export type stringsArray = readonly strings[];
@@ -19,18 +18,18 @@ export enum MessageId {
 export const isStringsArray = is.factory(is.array.of, is.strings);
 
 export const isSuboptions = is.object.factory<Suboptions>(
-  { allow: is.boolean, levels: isStringsArray },
+  { allowedDependencies: isStringsArray },
   {}
 );
 
 export const noSiblingImport = utils.createRule({
   name: "no-sibling-import",
   isSuboptions: is.object.factory<Suboptions>(
-    { allow: is.boolean, levels: isStringsArray },
+    { allowedDependencies: isStringsArray },
     {}
   ),
-  defaultSuboptions: { allow: false, levels: [] },
-  suboptionsKey: "folders",
+  defaultSuboptions: { allowedDependencies: [] },
+  suboptionsKey: "rules",
   messages: {
     [MessageId.disallowedSource]: "Import from this source is not allowed"
   },
@@ -44,24 +43,23 @@ export const noSiblingImport = utils.createRule({
     if (basename === "index" || basename.startsWith("index.")) return {};
 
     const matcher = evaluate(() => {
-      if (context.options.folders.length) {
-        const folder = a.last(context.options.folders);
-
-        if (folder.allow) return () => true;
-
-        const index = folder.levels.findIndex(level =>
-          utils.createFileMatcher(level, false, { dot: true })(`./${basename}`)
+      const rules = context.options.rules.map((rule): SuboptionsExtended => {
+        const matchers = rule.allowedDependencies.map(pattern =>
+          utils.createFileMatcher(pattern, false, { dot: true })
         );
 
-        if (index > 0)
-          return utils.createFileMatcher(
-            folder.levels.slice(0, index).flat(),
-            false,
-            { dot: true }
-          );
-      }
+        const index = findLastIndex(matchers, ruleMatcher =>
+          ruleMatcher(`./${basename}`)
+        );
 
-      return () => false;
+        return {
+          ...rule,
+          matcher: str =>
+            findLastIndex(matchers, ruleMatcher => ruleMatcher(str)) <= index
+        };
+      });
+
+      return (str: string) => rules.some(rule => rule.matcher(str));
     });
 
     return ruleTemplates.source(ctx => {
@@ -93,3 +91,35 @@ export const noSiblingImport = utils.createRule({
     });
   }
 });
+
+// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+// fixme
+interface Callback<T> {
+  /**
+   * Callback.
+   *
+   * @param value - Value.
+   * @param index - Index.
+   * @param arr - Array.
+   */
+  (value: T, index: number, arr: readonly T[]): boolean;
+}
+
+interface SuboptionsExtended extends Suboptions {
+  readonly matcher: utils.Matcher;
+}
+
+/**
+ * Finds last index.
+ *
+ * @param arr - Array.
+ * @param callback - Callback.
+ * @returns Last matching index.
+ */
+// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+// fixme
+function findLastIndex<T>(arr: readonly T[], callback: Callback<T>): number {
+  const index = a.reverse(arr).findIndex(callback);
+
+  return index === -1 ? -1 : arr.length - index - 1;
+}

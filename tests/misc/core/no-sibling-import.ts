@@ -13,25 +13,24 @@ utils.testRule(
       name: `Test at line ${getCurrentLine().line}`,
       code: 'import * as source from "./source";',
       errors: [{ line: 1, messageId: MessageId.disallowedSource }]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ rules: [{ allowedDependencies: [["./*"], ["./source"]] }] }],
+      code: 'import * as source from "./source";',
+      errors: [{ line: 1, messageId: MessageId.disallowedSource }]
     }
   ],
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ folders: [{ allow: true, filesToLint: ["./fixtures/*"] }] }],
+      options: [{ rules: [{ allowedDependencies: [["./*"]] }] }],
       code: 'import * as source from "./source";'
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          folders: [
-            {
-              filesToLint: ["./fixtures/*"],
-              levels: [["./source"], ["./file"]]
-            }
-          ]
-        }
+        { rules: [{ allowedDependencies: [["./source"], ["./file"]] }] }
       ],
       code: 'import * as source from "./source";'
     },
@@ -47,14 +46,7 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [
-        {
-          folders: [
-            {
-              filesToLint: ["./fixtures/*"],
-              levels: [["./source"], ["./file"]]
-            }
-          ]
-        }
+        { rules: [{ allowedDependencies: [["./source"], ["./file"]] }] }
       ],
       code: `
         import * as source from "./source";

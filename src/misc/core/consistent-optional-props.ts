@@ -69,7 +69,7 @@ export const consistentOptionalProps = utils.createRule({
   },
   create: (context, typeCheck): RuleListener => {
     const overrides = a.reverse(
-      context.options.overrides.map((override): Matchers & Suboptions => {
+      context.options.overrides.map((override): SuboptionsExtended => {
         const { pattern, propertyPattern } = override;
 
         const matcher = utils.createRegexpMatcher(pattern, true);
@@ -209,7 +209,7 @@ const exclusionTypes = new ReadonlySet([
 
 const exclusionStyles = new ReadonlySet([Style.combined, Style.optional]);
 
-interface Matchers {
+interface SuboptionsExtended extends Suboptions {
   readonly matcher: utils.Matcher;
   readonly properyMatcher: utils.Matcher;
 }
