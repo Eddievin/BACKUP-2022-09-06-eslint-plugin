@@ -446,6 +446,42 @@ utils.testRule(
           }
         }
       ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ sources: [{ _id: "id", source: "source", wildcard: true }] }],
+      code: 'import source from "source"',
+      errors: [
+        {
+          line: 1,
+          messageId: MessageId.wildcardRequired,
+          data: { _id: "id", source: "source" }
+        }
+      ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          sources: [
+            {
+              _id: "id",
+              filesToLint: ["./fixtures/file.ts"],
+              filesToSkip: ["./fixtures/**", "./other/**"],
+              source: "source",
+              wildcard: true
+            }
+          ]
+        }
+      ],
+      code: 'import source from "source"',
+      errors: [
+        {
+          line: 1,
+          messageId: MessageId.wildcardRequired,
+          data: { _id: "id", source: "source" }
+        }
+      ]
     }
   ],
   [
@@ -556,6 +592,38 @@ utils.testRule(
         export { source1 } from "index.source1";
         export * as source2 from "index.source2";
       `
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          sources: [
+            {
+              _id: "id",
+              filesToSkip: ["./fixtures/**"],
+              source: "source",
+              wildcard: true
+            }
+          ]
+        }
+      ],
+      code: 'import source from "source"'
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [
+        {
+          sources: [
+            {
+              _id: "id",
+              filesToLint: ["./other/**"],
+              source: "source",
+              wildcard: true
+            }
+          ]
+        }
+      ],
+      code: 'import source from "source"'
     }
   ]
 );
