@@ -27,6 +27,7 @@
     "add-tags": "php node_modules/@skylib/config/bin/add-tags.php",
     "browserslist": "browserslist",
     "build": "cf ./dist && tsc --project tsconfig-build.json",
+    "build-doc": "cf ./docs && node ./build-doc.js && cpy docs-static/* docs",
     "clear-cache": "cf cache node_modules/.cache",
     "commitlint": "commitlint --edit",
     "commitlint-all": "commitlint --config commitlint-all.config.js --from=",

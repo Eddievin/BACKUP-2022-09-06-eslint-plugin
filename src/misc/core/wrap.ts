@@ -43,6 +43,48 @@ export const wrap = utils.createRule({
   ),
   defaultOptions: { lint: [], skip: [] },
   messages: { [MessageId.customMessage]: "{{message}}" },
+  docs: {
+    description: "Wraps third-party rule.",
+    optionTypes: {
+      lint: "string | string[]",
+      plugin: "string",
+      rule: "string",
+      skip: "string | string[]"
+    },
+    optionDescriptions: {
+      lint: "AST selectors to lint",
+      plugin: "NPM package name",
+      rule: "ESLint rule name",
+      skip: "AST selectors to skip"
+    },
+    failExamples: `
+      /*
+      eslint @skylib/wrap: [
+        error,
+        {
+          plugin: "@typescript-eslint/eslint-plugin",
+          rule: "no-shadow"
+        }
+      ]
+      */
+      const value = 1;
+      enum SampleEnum { value = "value" }
+    `,
+    passExamples: `
+      /*
+      eslint @skylib/wrap: [
+        error,
+        {
+          skip: "TSEnumDeclaration *",
+          plugin: "@typescript-eslint/eslint-plugin",
+          rule: "no-shadow"
+        }
+      ]
+      */
+      const value = 1;
+      enum SampleEnum { value = "value" }
+    `
+  },
   create: (context): RuleListener => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
     const plugin = require(context.options.plugin);

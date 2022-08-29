@@ -2,28 +2,50 @@
 
 # disallow-import
 
-Disallows import.
+Disallows import given sources.
 
 ## eslintrc.js
 
 ```ts
-"@skylib/disallow-import": [
-  "error",
-  {
-    rules: [
-      {
-        allow?: string[],
-        disallow?: string[]
-      },
-      ...
-    ]
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/disallow-import": "error"
   }
-]
+};
 ```
 
 ## Options
 
 | Name | Description |
 | :------ | :------ |
-| `allow` | Allowed sources (minimatch patterns). |
-| `disallow` | Disallowed sources (minimatch patterns). |
+| `Parameter name` | Parameter description. |
+
+
+## Examples of incorrect code
+
+```ts
+/*
+eslint @skylib/disallow-import: [
+  error,
+  {
+    disallow: "source1"
+  }
+]
+*/
+import * as source1 from "source1";
+```
+
+## Examples of correct code
+
+```ts
+/*
+eslint @skylib/disallow-import: [
+  error,
+  {
+    disallow: "source1"
+  }
+]
+*/
+import * as source2 from "source2";
+```

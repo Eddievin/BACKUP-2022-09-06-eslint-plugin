@@ -1,9 +1,9 @@
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-export const arrayAlwaysFalse = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const arrayAlwaysFalse = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: "Always false",
       selector:
@@ -16,4 +16,4 @@ export const arrayAlwaysFalse = utils.wrapRule(
       ]
     }
   ]
-);
+});

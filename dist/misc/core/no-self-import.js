@@ -11,7 +11,21 @@ var MessageId;
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.noSelfImport = utils.createRule({
     name: "no-self-import",
+    vue: true,
     messages: { [MessageId.noSelfImport]: "Self-import is not allowed" },
+    docs: {
+        description: "Disallows self-import.",
+        failExamples: `
+      // filename: file.ts
+      import { a } from "./file";
+      import { b } from "./file.ts";
+    `,
+        passExamples: `
+      // filename: file.ts
+      import { a } from "@/file";
+      import { b } from "@/file.ts";
+    `
+    },
     create: context => {
         const basename = context.stripExtension(node_path_1.default.basename(context.filename));
         return ruleTemplates.source(ctx => {

@@ -16,7 +16,6 @@ utils.testRule(
           <slot v-bind="obj" prop="prop" @click="click"></slot>
           <slot prop="prop" v-bind="obj" @click="click"></slot>
           <slot prop="prop" @click="click" v-bind="obj"></slot>
-
         </template>
       `,
       errors: [{ line: 2, messageId: MessageId.incorrectSortingOrder }]

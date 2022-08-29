@@ -16,7 +16,7 @@ utils.testRule(
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ rules: [{ allowedDependencies: [["./*"], ["./source"]] }] }],
+      options: [{ rules: [{ hierarchy: [["./*"], ["./source"]] }] }],
       code: 'import * as source from "./source";',
       errors: [{ line: 1, messageId: MessageId.disallowedSource }]
     }
@@ -24,14 +24,12 @@ utils.testRule(
   [
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [{ rules: [{ allowedDependencies: [["./*"]] }] }],
+      options: [{ rules: [{ hierarchy: [["./*"]] }] }],
       code: 'import * as source from "./source";'
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        { rules: [{ allowedDependencies: [["./source"], ["./file"]] }] }
-      ],
+      options: [{ rules: [{ hierarchy: [["./source"], ["./file"]] }] }],
       code: 'import * as source from "./source";'
     },
     {
@@ -45,9 +43,7 @@ utils.testRule(
     },
     {
       name: `Test at line ${getCurrentLine().line}`,
-      options: [
-        { rules: [{ allowedDependencies: [["./source"], ["./file"]] }] }
-      ],
+      options: [{ rules: [{ hierarchy: [["./source"], ["./file"]] }] }],
       code: `
         import * as source from "./source";
         import * as parentSource from "../parent-source";

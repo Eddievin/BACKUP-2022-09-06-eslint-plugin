@@ -1,5 +1,5 @@
 import type { ReportDescriptor as BaseReportDescriptor, RuleFix, RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { strings } from "@skylib/functions";
+import type { Rec, strings } from "@skylib/functions";
 export declare enum Casing {
     camelCase = "camelCase",
     kebabCase = "kebab-case",
@@ -30,6 +30,15 @@ export declare enum TypeGroup {
 export interface AllowDisallowPatterns {
     readonly allow: strings | string;
     readonly disallow: strings | string;
+}
+export interface Docs<O extends PropertyKey = never, S extends PropertyKey = never> {
+    readonly description: string;
+    readonly failExamples: string;
+    readonly optionDescriptions?: Rec<O, string>;
+    readonly optionTypes?: Rec<O, string>;
+    readonly passExamples: string;
+    readonly suboptionDescriptions?: Rec<S, string>;
+    readonly suboptionTypes?: Rec<S, string>;
 }
 export declare type FilePattern = AllowDisallowPatterns | strings | string;
 export interface Matcher {

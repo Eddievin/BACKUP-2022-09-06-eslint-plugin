@@ -13,6 +13,19 @@ exports.templateLiteralFormat = utils.createRule({
     fixable: utils.Fixable.code,
     vue: true,
     messages: { [MessageId.invalidFormat]: "Invalid template literal format" },
+    docs: {
+        description: "Ensures consistent padding in template literals.",
+        failExamples: `
+      const x = \`
+          text
+          \`;
+    `,
+        passExamples: `
+      const x = \`
+        text
+      \`;
+    `
+    },
     create: (context) => ({
         TemplateLiteral: node => {
             const lines = functions_1.s.lines(context.getText(node));

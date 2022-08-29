@@ -18,29 +18,80 @@ var MessageId;
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.consistentEmptyLines = (0, functions_1.evaluate)(() => {
     const isEmptyLine = functions_1.is.factory(functions_1.is.enumeration, EmptyLine);
-    const isSuboptions1 = functions_1.is.object.factory({ _id: functions_1.is.string, emptyLine: isEmptyLine, selector: utils.isSelector }, {});
-    const isSuboptions2 = functions_1.is.object.factory({
-        _id: functions_1.is.string,
-        emptyLine: isEmptyLine,
+    const isSuboptions = functions_1.is.object.factory({ _id: functions_1.is.string, emptyLine: isEmptyLine }, {
         next: utils.isSelector,
-        prev: utils.isSelector
-    }, {});
-    const isSuboptions = functions_1.is.or.factory(isSuboptions1, isSuboptions2);
+        prev: utils.isSelector,
+        selector: utils.isSelector
+    });
     return utils.createRule({
         name: "consistent-empty-lines",
         fixable: utils.Fixable.whitespace,
+        vue: true,
         isSuboptions,
         suboptionsKey: "rules",
         messages: {
             [MessageId.addEmptyLine]: "Add empty line before ({{_id}})",
             [MessageId.removeEmptyLine]: "Remove empty line before ({{_id}})"
         },
+        docs: {
+            description: "Ensures consistent empty lines.",
+            suboptionTypes: {
+                _id: "string",
+                emptyLine: '"always" | "any" | "never"',
+                next: "string | string[]",
+                prev: "string | string[]",
+                selector: "string | string[]"
+            },
+            suboptionDescriptions: {
+                _id: "Id",
+                emptyLine: "Requires or disallows empty line",
+                next: "The second of the two adjustent AST selector (AST selector)",
+                prev: "The first of the two adjustent AST elements (AST selector)",
+                selector: "One selector for both adjustent AST elements (AST selector)"
+            },
+            failExamples: `
+        /*
+        eslint @skylib/consistent-empty-lines: [
+          error,
+          {
+            rules: [
+              {
+                _id: "import",
+                emptyLine: "always",
+                selector: "ImportDeclaration"
+              }
+            ]
+          }
+        ]
+        */
+        import x from "source1";
+        import y from "source2";
+      `,
+            passExamples: `
+        /*
+        eslint @skylib/consistent-empty-lines: [
+          error,
+          {
+            rules: [
+              {
+                _id: "import",
+                emptyLine: "never",
+                selector: "ImportDeclaration"
+              }
+            ]
+          }
+        ]
+        */
+        import x from "source1";
+        import y from "source2";
+      `
+        },
         create: (context) => {
             const prevItems = [];
             const nextItems = [];
             return utils.mergeListeners(...context.options.rules.flatMap((rule, index) => {
-                const prev = utils.selector("prev" in rule ? rule.prev : rule.selector);
-                const next = utils.selector("next" in rule ? rule.next : rule.selector);
+                const prev = utils.selector("prev" in rule ? rule.prev : functions_1.as.not.empty(rule.selector));
+                const next = utils.selector("next" in rule ? rule.next : functions_1.as.not.empty(rule.selector));
                 return [
                     {
                         [prev]: (node) => {

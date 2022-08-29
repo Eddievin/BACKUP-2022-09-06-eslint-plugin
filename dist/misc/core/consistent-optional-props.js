@@ -29,6 +29,7 @@ exports.isStyle = functions_1.is.factory(functions_1.is.enumeration, Style);
 exports.isTarget = functions_1.is.factory(functions_1.is.enumeration, Target);
 exports.consistentOptionalProps = utils.createRule({
     name: "consistent-optional-props",
+    vue: false,
     isOptions: functions_1.is.object.factory({ classes: exports.isStyle, interfaces: exports.isStyle }, {}),
     defaultOptions: { classes: Style.combined, interfaces: Style.combined },
     isSuboptions: functions_1.is.object.factory({
@@ -46,6 +47,48 @@ exports.consistentOptionalProps = utils.createRule({
         [MessageId.optionalId]: 'Use "x?: T" style instead ({{_id}})',
         [MessageId.undefined]: 'Use "x: T | undefined" style instead',
         [MessageId.undefinedId]: 'Use "x: T | undefined" style instead ({{_id}})'
+    },
+    docs: {
+        description: `
+      Ensures consistent optional property style:
+      - x?: T | undefined
+      - x?: T
+      - x: T | undefined
+    `,
+        optionTypes: {
+            classes: '"combined" | "optional" | "undefined"',
+            interfaces: '"combined" | "optional" | "undefined"'
+        },
+        optionDescriptions: {
+            classes: "Prefered style for classes",
+            interfaces: "Prefered style for interfaces"
+        },
+        suboptionTypes: {
+            _id: "string",
+            pattern: "string | string[]",
+            propertyPattern: "string | string[]",
+            style: '"combined" | "optional" | "undefined"',
+            target: '"classes" | "interfaces"'
+        },
+        suboptionDescriptions: {
+            _id: "Id",
+            pattern: "Only for selected class/interface names (regular expression)",
+            propertyPattern: "Only for selected property names (regular expression)",
+            style: "Prefered style",
+            target: "Classes or interfaces"
+        },
+        failExamples: `
+      interface I {
+        x?: string;
+        y: string | undefined;
+      }
+    `,
+        passExamples: `
+      interface I {
+        x?: string | undefined;
+        y?: string | undefined;
+      }
+    `
     },
     create: (context, typeCheck) => {
         const overrides = functions_1.a.reverse(context.options.overrides.map((override) => {

@@ -8,6 +8,7 @@ const consistent_filename_1 = require("./consistent-filename");
 const consistent_import_1 = require("./consistent-import");
 const consistent_optional_props_1 = require("./consistent-optional-props");
 const disallow_import_1 = require("./disallow-import");
+const export_matching_filename_only_1 = require("./export-matching-filename-only");
 const match_filename_1 = require("./match-filename");
 const no_expression_empty_lines_1 = require("./no-expression-empty-lines");
 const no_restricted_syntax_1 = require("./no-restricted-syntax");
@@ -34,6 +35,7 @@ exports.core = {
     "consistent-import": consistent_import_1.consistentImport,
     "consistent-optional-props": consistent_optional_props_1.consistentOptionalProps,
     "disallow-import": disallow_import_1.disallowImport,
+    "export-matching-filename-only": export_matching_filename_only_1.exportMatchingFilenameOnly,
     "match-filename": match_filename_1.matchFilename,
     "no-expression-empty-lines": no_expression_empty_lines_1.noExpressionEmptyLines,
     "no-restricted-syntax": no_restricted_syntax_1.noRestrictedSyntax,

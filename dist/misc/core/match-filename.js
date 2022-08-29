@@ -14,6 +14,43 @@ exports.matchFilename = utils.createRule({
     isOptions: functions_1.is.object.factory({ prefix: functions_1.is.string, selector: utils.isSelector, suffix: functions_1.is.string }, { format: utils.isCasing }),
     defaultOptions: { prefix: "", suffix: "" },
     messages: { [MessageId.invalidText]: "Should match file name: {{expected}}" },
+    docs: {
+        description: "Ensures that AST element matches filename.",
+        optionTypes: {
+            format: '"camelCase" | "kebab-case" | "PascalCase"',
+            prefix: "string",
+            selector: "string | string[]",
+            suffix: "string"
+        },
+        optionDescriptions: {
+            format: "Format",
+            prefix: "Prefix",
+            selector: "AST selector",
+            suffix: "Suffix"
+        },
+        failExamples: `
+      /*
+      eslint @skylib/match-filename: [
+        error,
+        {
+          disallow: "source1"
+        }
+      ]
+      */
+      import * as source1 from "source1";
+    `,
+        passExamples: `
+      /*
+      eslint @skylib/match-filename: [
+        error,
+        {
+          disallow: "source1"
+        }
+      ]
+      */
+      import * as source2 from "source2";
+    `
+    },
     create: (context) => {
         const { format, prefix, selector: mixedSelector, suffix } = context.options;
         const selector = utils.selector(mixedSelector);

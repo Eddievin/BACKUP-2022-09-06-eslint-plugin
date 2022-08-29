@@ -17,6 +17,7 @@ var MessageId;
 exports.consistentImport = utils.createRule({
     name: "consistent-import",
     fixable: utils.Fixable.code,
+    vue: true,
     isSuboptions: functions_1.is.object.factory({
         _id: functions_1.is.string,
         altLocalNames: functions_1.is.strings,
@@ -35,6 +36,74 @@ exports.consistentImport = utils.createRule({
         [MessageId.invalidLocalName]: "Expecting local name to be: {{expectedLocalName}} ({{_id}}, source: {{source}})",
         [MessageId.wildcardDisallowed]: "Wildcard import disallowed ({{_id}}, source: {{source}})",
         [MessageId.wildcardRequired]: "Wildcard import required ({{_id}}, source: {{source}})"
+    },
+    docs: {
+        description: "Requires consistent import.",
+        suboptionTypes: {
+            _id: "string",
+            altLocalNames: "string[]",
+            autoImport: "boolean",
+            autoImportSource: "string",
+            localName: "string",
+            source: "string",
+            sourcePattern: "string",
+            wildcard: "boolean"
+        },
+        suboptionDescriptions: {
+            _id: "Id",
+            altLocalNames: "Alternative local names",
+            autoImport: "Enable auto-import",
+            autoImportSource: 'Auto-import source (defaults to "source")',
+            localName: "Local name",
+            source: "Source",
+            sourcePattern: "Soure pattern (minimatch)",
+            wildcard: "Prefer wildcard import"
+        },
+        failExamples: `
+      /*
+      eslint @skylib/consistent-import: [
+        error,
+        {
+          sources: [
+            {
+              _id: "catch-all",
+              source: "**"
+            },
+            {
+              _id: "source2",
+              source: "source2",
+              wildcard: true
+            }
+          ]
+        }
+      ]
+      */
+      import * as source1 from "source1"; // Wildcard import disallowed
+      import { item1 } from "source2"; // Wildcard import required
+      import * as invalidLocalName from "source2"; // Invalid local name
+    `,
+        passExamples: `
+      /*
+      eslint @skylib/consistent-import: [
+        error,
+        {
+          sources: [
+            {
+              _id: "catch-all",
+              source: "**"
+            },
+            {
+              _id: "source2",
+              source: "source2",
+              wildcard: true
+            }
+          ]
+        }
+      ]
+      */
+      import { item1 } from "source1";
+      import * as source2 from "source2";
+    `
     },
     create: (context) => {
         const eol = context.eol;

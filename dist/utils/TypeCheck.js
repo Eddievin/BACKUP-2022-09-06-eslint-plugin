@@ -78,6 +78,7 @@ class TypeCheck {
             value: void 0
         });
         const parser = utils_1.ESLintUtils.getParserServices(context);
+        // eslint-disable-next-line @skylib/max-identifier-blocks -- Wait for @skylib/eslint-plugin update
         const { esTreeNodeToTSNodeMap, program } = parser;
         functions_1.assert.toBeTrue(tsutils.isStrictCompilerOptionEnabled(program.getCompilerOptions(), "strictNullChecks"), 'Expecting "strictNullChecks" compiler option to be enabled');
         this.checker = program.getTypeChecker();
@@ -180,6 +181,7 @@ class TypeCheck {
      * @param type - Type.
      * @returns _True_ if type is an array or a tuple, _false_ otherwise.
      */
+    // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
     isArrayOrTupleType(type) {
         return this.checker.isArrayType(type) || this.checker.isTupleType(type);
     }

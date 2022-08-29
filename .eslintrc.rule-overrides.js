@@ -1,3 +1,5 @@
+/* eslint-disable @skylib/config/eslintrc/no-disable -- Ok */
+
 const { eslint } = require("@skylib/config/api");
 
 const consistentImport = eslint.rules["@skylib/consistent-import"];
@@ -45,6 +47,52 @@ module.exports = {
       "warn",
       { disallow: ["tsutils", "typescript"] }
     ],
+    "@skylib/match-filename/createRule-id": [
+      "warn",
+      {
+        format: "camelCase",
+        selector:
+          "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > Identifier.id"
+      }
+    ],
+    "@skylib/match-filename/createRule-name": [
+      "warn",
+      {
+        format: "kebab-case",
+        selector:
+          "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > CallExpression > ObjectExpression > Property[key.name=name] > Literal.value"
+      }
+    ],
+    "@skylib/match-filename/testRule-name": [
+      "warn",
+      {
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=testRule] > Literal:first-child"
+      }
+    ],
+    "@skylib/match-filename/testRule-rule": [
+      "warn",
+      {
+        format: "kebab-case",
+        selector: "VariableDeclarator[id.name=rule] > .init > Literal.property"
+      }
+    ],
+    "@skylib/match-filename/wrapRule": [
+      "warn",
+      {
+        format: "camelCase",
+        selector:
+          "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
+      }
+    ],
+    "@skylib/no-restricted-syntax/no-skipped-tests": [
+      "warn",
+      {
+        message: "No skipped tests",
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression > Property > Identifier.key[name=only]"
+      }
+    ],
     "@skylib/no-sibling-import": [
       "warn",
       {
@@ -67,10 +115,20 @@ module.exports = {
         ]
       }
     ],
+    "@skylib/require-syntax/createRule-docs": [
+      "warn",
+      {
+        message: 'Expecting "docs"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property > Identifier[name=docs]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule]"
+      }
+    ],
     "@skylib/require-syntax/fix": [
       "warn",
       {
-        message: 'Add "fix" or "utils.sort"',
+        message: 'Expecting "fix" or "utils.sort"',
         selector:
           "Identifier[name=fix], MemberExpression[object.name=utils][property.name=sort]",
         trigger:
@@ -80,17 +138,21 @@ module.exports = {
     "@skylib/require-syntax/isOptions": [
       "warn",
       {
-        message: 'Add "isOptions"',
-        selector: "Identifier[name=isOptions]",
-        trigger: "Identifier[name=defaultOptions]"
+        message: 'Expecting "isOptions"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isOptions]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=/^(?:defaultOptions|optionDescriptions|optionTypes)$/u]"
       }
     ],
     "@skylib/require-syntax/isSuboptions": [
       "warn",
       {
-        message: 'Add "isSuboptions"',
-        selector: "Identifier[name=isSuboptions]",
-        trigger: "Identifier[name=/^(?:defaultSuboptions|suboptionsKey)/u]"
+        message: 'Expecting "isSuboptions"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isSuboptions]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=/^(?:defaultSuboptions|suboptionDescriptions|suboptionTypes|suboptionsKey)/u]"
       }
     ],
     "@skylib/require-syntax/no-restricted-syntax": [
@@ -101,12 +163,54 @@ module.exports = {
         trigger: 'Literal[value="typescript/no-restricted-syntax"]'
       }
     ],
+    "@skylib/require-syntax/optionDescriptions": [
+      "warn",
+      {
+        message: 'Expecting "optionDescriptions"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=optionDescriptions]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isOptions]"
+      }
+    ],
+    "@skylib/require-syntax/optionTypes": [
+      "warn",
+      {
+        message: 'Expecting "optionTypes"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=optionTypes]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isOptions]"
+      }
+    ],
+    "@skylib/require-syntax/suboptionDescriptions": [
+      "warn",
+      {
+        message: 'Expecting "suboptionDescriptions"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=suboptionDescriptions]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isSuboptions]"
+      }
+    ],
+    "@skylib/require-syntax/suboptionTypes": [
+      "warn",
+      {
+        message: 'Expecting "suboptionTypes"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=suboptionTypes]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isSuboptions]"
+      }
+    ],
     "@skylib/require-syntax/suboptionsKey": [
       "warn",
       {
-        message: 'Add "isSuboptions"',
-        selector: "Identifier[name=suboptionsKey]",
-        trigger: "Identifier[name=/^(?:defaultSuboptions|isSuboptions)/u]"
+        message: 'Expecting "isSuboptions"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=suboptionsKey]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=/^(?:defaultSuboptions|isSuboptions)/u]"
       }
     ],
     "@skylib/require-syntax/vue-false": [
@@ -128,43 +232,23 @@ module.exports = {
         trigger:
           "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=vue][value.value=false]"
       }
+    ],
+    "@skylib/require-syntax/wrapRule-docs": [
+      "warn",
+      {
+        message: 'Expecting "docs"',
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=wrapRule] > ObjectExpression > Property > Identifier[name=docs]",
+        trigger:
+          "CallExpression[callee.object.name=utils][callee.property.name=wrapRule]"
+      }
     ]
   },
   overrides: [
-    {
-      files: "./fixtures/**",
-      rules: {
-        // eslint-disable-next-line @skylib/config/eslintrc/no-disable -- Ok
-        "@skylib/consistent-filename": "off"
-      }
-    },
+    { files: "./fixtures/**", rules: { "@skylib/consistent-filename": "off" } },
     {
       files: "./src/**",
       rules: {
-        "@skylib/match-filename/createRule-id": [
-          "warn",
-          {
-            format: "camelCase",
-            selector:
-              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > Identifier.id"
-          }
-        ],
-        "@skylib/match-filename/createRule-name": [
-          "warn",
-          {
-            format: "kebab-case",
-            selector:
-              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > CallExpression > ObjectExpression > Property[key.name=name] > Literal.value"
-          }
-        ],
-        "@skylib/match-filename/wrapRule": [
-          "warn",
-          {
-            format: "camelCase",
-            selector:
-              "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
-          }
-        ],
         "@skylib/no-relative-parent-import": [
           "warn",
           {
@@ -189,7 +273,7 @@ module.exports = {
           {
             overrides: [
               {
-                _id: "utils-createRule",
+                _id: "utils.createRule",
                 customOrder: [
                   "name",
                   "fixable",
@@ -200,10 +284,31 @@ module.exports = {
                   "defaultSuboptions",
                   "suboptionsKey",
                   "messages",
+                  "docs",
                   "create"
                 ],
                 selector:
                   "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression"
+              },
+              {
+                _id: "utils.createRule.docs",
+                customOrder: [
+                  "description",
+                  "optionTypes",
+                  "optionDescriptions",
+                  "suboptionTypes",
+                  "suboptionDescriptions",
+                  "failExamples",
+                  "passExamples"
+                ],
+                selector:
+                  "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=docs] > ObjectExpression"
+              },
+              {
+                _id: "utils.wrapRule",
+                customOrder: ["rule", "options", "docs"],
+                selector:
+                  "CallExpression[callee.object.name=utils][callee.property.name=wrapRule] > ObjectExpression"
               }
             ]
           }
@@ -216,10 +321,7 @@ module.exports = {
         "./src/utils/TypeCheck.internal.ts",
         "./src/utils/TypeCheck.ts"
       ],
-      rules: {
-        // eslint-disable-next-line @skylib/config/eslintrc/no-disable -- Ok
-        "@skylib/disallow-import/typescript": "off"
-      }
+      rules: { "@skylib/disallow-import/typescript": "off" }
     },
     {
       files: [
@@ -249,43 +351,40 @@ module.exports = {
       }
     },
     {
-      files: "./src/utils/compare.ts",
+      files: "./src/skylib-*/**",
       rules: {
-        // eslint-disable-next-line @skylib/config/eslintrc/no-disable -- Ok
-        "@skylib/disallow-import/natural-compare": "off"
+        "@skylib/no-restricted-syntax/createRule-docs": [
+          "warn",
+          {
+            message: 'Unexpected "docs"',
+            selector:
+              "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property > Identifier[name=docs]"
+          }
+        ],
+        "@skylib/no-restricted-syntax/wrapRule-docs": [
+          "warn",
+          {
+            message: 'Unexpected "docs"',
+            selector:
+              "CallExpression[callee.object.name=utils][callee.property.name=wrapRule] > ObjectExpression > Property > Identifier[name=docs]"
+          }
+        ],
+        "@skylib/require-syntax/createRule-docs": "off",
+        "@skylib/require-syntax/wrapRule-docs": "off"
       }
+    },
+    {
+      files: "./src/utils/compare.ts",
+      rules: { "@skylib/disallow-import/natural-compare": "off" }
     },
     {
       files: "./tests/**",
       rules: {
-        "@skylib/match-filename/testRule-name": [
-          "warn",
-          {
-            selector:
-              "CallExpression[callee.object.name=utils][callee.property.name=testRule] > Literal:first-child"
-          }
-        ],
-        "@skylib/match-filename/testRule-rule": [
-          "warn",
-          {
-            format: "kebab-case",
-            selector:
-              "VariableDeclarator[id.name=rule] > .init > Literal.property"
-          }
-        ],
         "@skylib/no-restricted-syntax/no-ast": [
           "warn",
           {
             message: "Prefer string literal",
             selector: "Identifier[name=AST_NODE_TYPES]"
-          }
-        ],
-        "@skylib/no-restricted-syntax/no-skipped-tests": [
-          "warn",
-          {
-            message: "No skipped tests",
-            selector:
-              "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression > Property > Identifier.key[name=only]"
           }
         ],
         "@skylib/sort-keys": [
@@ -403,19 +502,6 @@ module.exports = {
           "warn",
           {
             prefix: "functions/jest/",
-            selector:
-              "VariableDeclarator[id.name=rule] > .init > Literal.property"
-          }
-        ]
-      }
-    },
-    {
-      files: "./tests/skylib-functions/misc/array/**",
-      rules: {
-        "@skylib/match-filename/testRule-rule": [
-          "warn",
-          {
-            prefix: "functions/array/",
             selector:
               "VariableDeclarator[id.name=rule] > .init > Literal.property"
           }

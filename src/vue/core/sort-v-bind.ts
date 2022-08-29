@@ -11,6 +11,19 @@ export const sortVBind = utils.createRule({
   name: "sort-v-bind",
   vue: true,
   messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
+  docs: {
+    description: 'Sorts "v-bind" directive',
+    failExamples: `
+      <template>
+        <slot v-bind="obj" prop="prop" @click="click"></slot>
+      </template>
+    `,
+    passExamples: `
+      <template>
+        <slot prop="prop" v-bind="obj" @click="click"></slot>
+      </template>
+    `
+  },
   create: (context): RuleListener => ({
     VStartTag: (node: AST.VStartTag) => {
       if (node.attributes.length > 1) {

@@ -12,9 +12,40 @@ var MessageId;
 exports.commentSpacing = utils.createRule({
     name: "comment-spacing",
     fixable: utils.Fixable.whitespace,
+    vue: true,
     messages: {
         [MessageId.addEmptyLine]: "Add empty line after comment",
         [MessageId.removeEmptyLine]: "Remove empty line after comment"
+    },
+    docs: {
+        description: "Ensures consistent empty lines around comments.",
+        failExamples: `
+      // Comment
+      function f() {}
+
+      /** Comment */
+      function g() {}
+
+      /*
+      Comment
+      */
+
+      function h() {}
+    `,
+        passExamples: `
+      // Comment
+
+      function f() {}
+
+      /** Comment */
+
+      function g() {}
+
+      /*
+      Comment
+      */
+      function h() {}
+    `
     },
     create: (context) => ({
         ":statement, TSDeclareFunction, TSExportAssignment": (node) => {

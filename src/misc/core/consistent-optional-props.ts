@@ -68,6 +68,48 @@ export const consistentOptionalProps = utils.createRule({
     [MessageId.undefined]: 'Use "x: T | undefined" style instead',
     [MessageId.undefinedId]: 'Use "x: T | undefined" style instead ({{_id}})'
   },
+  docs: {
+    description: `
+      Ensures consistent optional property style:
+      - x?: T | undefined
+      - x?: T
+      - x: T | undefined
+    `,
+    optionTypes: {
+      classes: '"combined" | "optional" | "undefined"',
+      interfaces: '"combined" | "optional" | "undefined"'
+    },
+    optionDescriptions: {
+      classes: "Prefered style for classes",
+      interfaces: "Prefered style for interfaces"
+    },
+    suboptionTypes: {
+      _id: "string",
+      pattern: "string | string[]",
+      propertyPattern: "string | string[]",
+      style: '"combined" | "optional" | "undefined"',
+      target: '"classes" | "interfaces"'
+    },
+    suboptionDescriptions: {
+      _id: "Id",
+      pattern: "Only for selected class/interface names (regular expression)",
+      propertyPattern: "Only for selected property names (regular expression)",
+      style: "Prefered style",
+      target: "Classes or interfaces"
+    },
+    failExamples: `
+      interface I {
+        x?: string;
+        y: string | undefined;
+      }
+    `,
+    passExamples: `
+      interface I {
+        x?: string | undefined;
+        y?: string | undefined;
+      }
+    `
+  },
   create: (context, typeCheck): RuleListener => {
     const overrides = a.reverse(
       context.options.overrides.map((override): SuboptionsExtended => {

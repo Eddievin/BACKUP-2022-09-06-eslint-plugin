@@ -28,6 +28,7 @@ exports.isInterfaceOption = functions_1.is.factory(functions_1.is.enumeration, I
 exports.isInterfaceOptions = functions_1.is.factory(functions_1.is.array.of, exports.isInterfaceOption);
 exports.requireJsdoc = utils.createRule({
     name: "require-jsdoc",
+    vue: false,
     isOptions: functions_1.is.object.factory({
         excludeSelectors: functions_1.is.strings,
         includeSelectors: functions_1.is.strings,
@@ -50,6 +51,32 @@ exports.requireJsdoc = utils.createRule({
         [MessageId.undocumented]: "Missing documentation",
         [MessageId.undocumentedCallSignature]: "Missing documentation for call signature",
         [MessageId.undocumentedConstructSignature]: "Missing documentation for constructor signature"
+    },
+    docs: {
+        description: "Requires JSDoc documentation.",
+        optionTypes: {
+            excludeSelectors: "string[]",
+            includeSelectors: "string[]",
+            interfaces: '"callSignatures" | "constructSignatures" | "interface"',
+            noDefaultSelectors: "boolean",
+            properties: 'Array<"function" | "nonFunction">'
+        },
+        optionDescriptions: {
+            excludeSelectors: "Skip these selectors.",
+            includeSelectors: "Check additional selectors.",
+            interfaces: 'Require documenation for interface ("interface"), call signatures ("callSignatures"), construct signatures ("constructSignatures")',
+            noDefaultSelectors: "Do not check default selectors",
+            properties: 'Require documenation for function properties ("function"), non-function properties ("nonFunction")'
+        },
+        failExamples: `
+      function f(): void {}
+    `,
+        passExamples: `
+      /**
+       * Description.
+       */
+      function f(): void {}
+    `
     },
     create: (context, typeCheck) => {
         const selector = utils.configurableSelector.get(context.options, defaultSelectors);
@@ -124,6 +151,7 @@ exports.requireJsdoc = utils.createRule({
                 else
                     context.report({ messageId: MessageId.undocumented, node });
         }
+        // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
         function lintNodeByTypeSymbol(node) {
             const type = typeCheck.getType(node);
             const symbol = type.getSymbol();

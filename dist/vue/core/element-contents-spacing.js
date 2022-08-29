@@ -17,6 +17,23 @@ exports.elementContentsSpacing = utils.createRule({
         [MessageId.addSpaces]: "Add spaces around double curly",
         [MessageId.removeSpaces]: "Remove spaces around double curly"
     },
+    docs: {
+        description: "Controls spaces around HTML element contents.",
+        failExamples: `
+      <template>
+        <p> single-line contents </p>
+      </template>
+    `,
+        passExamples: `
+      <template>
+        <p>single-line contents</p>
+        <p>
+          multiline contents
+          multiline contents
+        </p>
+      </template>
+    `
+    },
     create: (context) => ({
         VElement: (node) => {
             if (node.children.length) {

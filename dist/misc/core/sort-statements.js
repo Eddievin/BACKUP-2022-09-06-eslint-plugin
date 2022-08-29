@@ -1,35 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sortStatements = exports.isNodeTypes = exports.isNodeType = exports.NodeType = void 0;
+exports.sortStatements = exports.isStatementTypes = exports.isStatementType = exports.StatementType = void 0;
 const tslib_1 = require("tslib");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils = tslib_1.__importStar(require("../../utils"));
 const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
-var NodeType;
-(function (NodeType) {
-    NodeType["ExportAllDeclaration"] = "ExportAllDeclaration";
-    NodeType["ExportDeclaration"] = "ExportDeclaration";
-    NodeType["ExportDefaultDeclaration"] = "ExportDefaultDeclaration";
-    NodeType["ExportFunctionDeclaration"] = "ExportFunctionDeclaration";
-    NodeType["ExportTypeDeclaration"] = "ExportTypeDeclaration";
-    NodeType["ExportUnknown"] = "ExportUnknown";
-    NodeType["FunctionDeclaration"] = "FunctionDeclaration";
-    NodeType["ImportDeclaration"] = "ImportDeclaration";
-    NodeType["JestTest"] = "JestTest";
-    NodeType["TypeDeclaration"] = "TypeDeclaration";
-    NodeType["Unknown"] = "Unknown";
-})(NodeType = exports.NodeType || (exports.NodeType = {}));
-exports.isNodeType = functions_1.is.factory(functions_1.is.enumeration, NodeType);
-exports.isNodeTypes = functions_1.is.factory(functions_1.is.array.of, exports.isNodeType);
+var StatementType;
+(function (StatementType) {
+    StatementType["DeclareGlobal"] = "DeclareGlobal";
+    StatementType["ExportAllDeclaration"] = "ExportAllDeclaration";
+    StatementType["ExportDeclaration"] = "ExportDeclaration";
+    StatementType["ExportDefaultDeclaration"] = "ExportDefaultDeclaration";
+    StatementType["ExportFunctionDeclaration"] = "ExportFunctionDeclaration";
+    StatementType["ExportTypeDeclaration"] = "ExportTypeDeclaration";
+    StatementType["ExportUnknown"] = "ExportUnknown";
+    StatementType["FunctionDeclaration"] = "FunctionDeclaration";
+    StatementType["ImportDeclaration"] = "ImportDeclaration";
+    StatementType["JestTest"] = "JestTest";
+    StatementType["TypeDeclaration"] = "TypeDeclaration";
+    StatementType["Unknown"] = "Unknown";
+})(StatementType = exports.StatementType || (exports.StatementType = {}));
+exports.isStatementType = functions_1.is.factory(functions_1.is.enumeration, StatementType);
+exports.isStatementTypes = functions_1.is.factory(functions_1.is.array.of, exports.isStatementType);
 exports.sortStatements = utils.createRule({
     name: "sort-statements",
     fixable: utils.Fixable.code,
+    vue: true,
     isOptions: functions_1.is.object.factory({
-        blockOrder: exports.isNodeTypes,
-        moduleOrder: exports.isNodeTypes,
-        order: exports.isNodeTypes,
-        programOrder: exports.isNodeTypes
+        blockOrder: exports.isStatementTypes,
+        moduleOrder: exports.isStatementTypes,
+        order: exports.isStatementTypes,
+        programOrder: exports.isStatementTypes
     }, {}),
     defaultOptions: {
         blockOrder: [],
@@ -38,6 +40,65 @@ exports.sortStatements = utils.createRule({
         programOrder: []
     },
     messages: utils.sort.messages,
+    docs: {
+        description: `
+      Sorts statements.
+
+      \`\`\`ts
+      StatementType =
+        | "DeclareGlobal"
+        | "ExportAllDeclaration"
+        | "ExportDeclaration"
+        | "ExportDefaultDeclaration"
+        | "ExportFunctionDeclaration"
+        | "ExportTypeDeclaration"
+        | "ExportUnknown"
+        | "FunctionDeclaration"
+        | "ImportDeclaration"
+        | "JestTest"
+        | "TypeDeclaration"
+        | "Unknown";
+      \`\`\`
+    `,
+        optionTypes: {
+            blockOrder: "StatementType[]",
+            moduleOrder: "StatementType[]",
+            order: "StatementType[]",
+            programOrder: "StatementType[]"
+        },
+        optionDescriptions: {
+            blockOrder: "Order inside block statement",
+            moduleOrder: "Order inside module declaration",
+            order: "Default order",
+            programOrder: "Root statements order"
+        },
+        failExamples: `
+      function f() {}
+      type T1 = number;
+      const x1 = true;
+      const x2 = true;
+      export function g() {}
+      export type T2 = number;
+      export const x3 = true;
+      export const x4 = true;
+      export * from "source";
+      declare global {}
+      import "source";
+    `,
+        passExamples: `
+      import "source";
+      declare global {}
+      export * from "source";
+      export const x1 = true;
+      export const x2 = true;
+      export type T1 = number;
+      export function f() {}
+      const x3 = true;
+      const x4 = true;
+      type T2 = number;
+      function g() {}
+    `
+    },
     create: (context) => {
         const { blockOrder, moduleOrder, order, programOrder } = context.options;
         return {
@@ -60,17 +121,18 @@ exports.sortStatements = utils.createRule({
     }
 });
 const defaultOrder = [
-    NodeType.ImportDeclaration,
-    NodeType.ExportAllDeclaration,
-    NodeType.ExportDeclaration,
-    NodeType.ExportDefaultDeclaration,
-    NodeType.ExportUnknown,
-    NodeType.ExportTypeDeclaration,
-    NodeType.ExportFunctionDeclaration,
-    NodeType.Unknown,
-    NodeType.TypeDeclaration,
-    NodeType.FunctionDeclaration,
-    NodeType.JestTest
+    StatementType.ImportDeclaration,
+    StatementType.DeclareGlobal,
+    StatementType.ExportAllDeclaration,
+    StatementType.ExportDeclaration,
+    StatementType.ExportDefaultDeclaration,
+    StatementType.ExportUnknown,
+    StatementType.ExportTypeDeclaration,
+    StatementType.ExportFunctionDeclaration,
+    StatementType.Unknown,
+    StatementType.TypeDeclaration,
+    StatementType.FunctionDeclaration,
+    StatementType.JestTest
 ];
 const prepareForComparison = (0, functions_1.evaluate)(() => {
     const priority = ":,.";
@@ -85,17 +147,18 @@ const prepareForComparison = (0, functions_1.evaluate)(() => {
     }
 });
 const sortable = {
-    [NodeType.ExportAllDeclaration]: true,
-    [NodeType.ExportDeclaration]: true,
-    [NodeType.ExportDefaultDeclaration]: false,
-    [NodeType.ExportFunctionDeclaration]: true,
-    [NodeType.ExportTypeDeclaration]: true,
-    [NodeType.ExportUnknown]: false,
-    [NodeType.FunctionDeclaration]: true,
-    [NodeType.ImportDeclaration]: false,
-    [NodeType.JestTest]: true,
-    [NodeType.TypeDeclaration]: true,
-    [NodeType.Unknown]: false
+    [StatementType.DeclareGlobal]: true,
+    [StatementType.ExportAllDeclaration]: true,
+    [StatementType.ExportDeclaration]: true,
+    [StatementType.ExportDefaultDeclaration]: false,
+    [StatementType.ExportFunctionDeclaration]: true,
+    [StatementType.ExportTypeDeclaration]: true,
+    [StatementType.ExportUnknown]: false,
+    [StatementType.FunctionDeclaration]: true,
+    [StatementType.ImportDeclaration]: false,
+    [StatementType.JestTest]: true,
+    [StatementType.TypeDeclaration]: true,
+    [StatementType.Unknown]: false
 };
 /**
  * Checks identifier name.
@@ -147,42 +210,47 @@ function getJestTestName(node) {
  */
 function sortingOrder(order) {
     return node => {
+        var _a;
         switch (node.type) {
             case utils_1.AST_NODE_TYPES.ExportAllDeclaration:
-                return buildResult(NodeType.ExportAllDeclaration, `${node.source.value}\u0002${node.exportKind}`);
+                return buildResult(StatementType.ExportAllDeclaration, `${node.source.value}\u0002${node.exportKind}`);
             case utils_1.AST_NODE_TYPES.ExportDefaultDeclaration:
-                return buildResult(NodeType.ExportDefaultDeclaration);
+                return buildResult(StatementType.ExportDefaultDeclaration);
             case utils_1.AST_NODE_TYPES.ExportNamedDeclaration:
                 if (node.declaration)
                     switch (node.declaration.type) {
                         case utils_1.AST_NODE_TYPES.FunctionDeclaration:
                         case utils_1.AST_NODE_TYPES.TSDeclareFunction:
                             functions_1.assert.not.empty(node.declaration.id, "Expecting node ID");
-                            return buildResult(NodeType.ExportFunctionDeclaration, node.declaration.id.name);
+                            return buildResult(StatementType.ExportFunctionDeclaration, node.declaration.id.name);
                         case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
                         case utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration:
-                            return buildResult(NodeType.ExportTypeDeclaration, node.declaration.id.name);
+                            return buildResult(StatementType.ExportTypeDeclaration, node.declaration.id.name);
                         default:
-                            return buildResult(NodeType.ExportUnknown);
+                            return buildResult(StatementType.ExportUnknown);
                     }
-                return buildResult(NodeType.ExportDeclaration, node.source ? `${node.source.value}\u0002${node.exportKind}` : "");
+                return buildResult(StatementType.ExportDeclaration, node.source ? `${node.source.value}\u0002${node.exportKind}` : "");
             case utils_1.AST_NODE_TYPES.ExpressionStatement: {
                 const id = getJestTestName(node);
                 return functions_1.is.not.empty(id)
-                    ? buildResult(NodeType.JestTest, id)
-                    : buildResult(NodeType.Unknown);
+                    ? buildResult(StatementType.JestTest, id)
+                    : buildResult(StatementType.Unknown);
             }
             case utils_1.AST_NODE_TYPES.FunctionDeclaration:
             case utils_1.AST_NODE_TYPES.TSDeclareFunction:
                 functions_1.assert.not.empty(node.id, "Expecting node ID");
-                return buildResult(NodeType.FunctionDeclaration, node.id.name);
+                return buildResult(StatementType.FunctionDeclaration, node.id.name);
             case utils_1.AST_NODE_TYPES.ImportDeclaration:
-                return buildResult(NodeType.ImportDeclaration);
+                return buildResult(StatementType.ImportDeclaration);
             case utils_1.AST_NODE_TYPES.TSInterfaceDeclaration:
             case utils_1.AST_NODE_TYPES.TSTypeAliasDeclaration:
-                return buildResult(NodeType.TypeDeclaration, node.id.name);
+                return buildResult(StatementType.TypeDeclaration, node.id.name);
+            case utils_1.AST_NODE_TYPES.TSModuleDeclaration:
+                return buildResult(((_a = node.global) !== null && _a !== void 0 ? _a : false)
+                    ? StatementType.DeclareGlobal
+                    : StatementType.Unknown);
             default:
-                return buildResult(NodeType.Unknown);
+                return buildResult(StatementType.Unknown);
         }
         function buildResult(type, id = "") {
             const order1 = 1000000 + order.indexOf(type);

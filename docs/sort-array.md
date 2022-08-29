@@ -2,16 +2,37 @@
 
 # sort-array
 
-Sorts selected arrays.
+Sorts arrays.
 
 ## eslintrc.js
 
 ```ts
-"@skylib/sort-array": "error"
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/sort-array": "error"
+  }
+};
 ```
 
-## Configuration comment
+## Options
+
+| Name | Description |
+| :------ | :------ |
+| `Parameter name` | Parameter description. |
+
+
+## Examples of incorrect code
 
 ```ts
-// @skylib/sort-array break
+// @sorted
+const x = [2, 1];
+```
+
+## Examples of correct code
+
+```ts
+const x = [2, 1];
+// @sorted
+const y = [1, 2];
 ```

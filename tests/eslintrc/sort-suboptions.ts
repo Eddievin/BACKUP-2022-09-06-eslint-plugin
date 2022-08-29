@@ -10,32 +10,28 @@ utils.testRule("sort-suboptions", rule, [
     name: `Test at line ${getCurrentLine().line}`,
     code: `
       module.exports = {
-        rules: [
-          {
-            "@skylib/rule": [
-              "warn",
-              {
-                rules: [{ _id: "b" }, { _id: "a" }]
-              }
-            ]
-          }
-        ]
+        rules: {
+          "@skylib/sort-keys": [
+            "warn",
+            {
+              overrides: [{ _id: "b" }, { _id: "a" }]
+            }
+          ]
+        }
       };
     `,
     output: `
       module.exports = {
-        rules: [
-          {
-            "@skylib/rule": [
-              "warn",
-              {
-                rules: [{ _id: "a" }, { _id: "b" }]
-              }
-            ]
-          }
-        ]
+        rules: {
+          "@skylib/sort-keys": [
+            "warn",
+            {
+              overrides: [{ _id: "a" }, { _id: "b" }]
+            }
+          ]
+        }
       };
     `,
-    errors: [{ line: 7, messageId: MessageId.incorrectSortingOrder }]
+    errors: [{ line: 6, messageId: MessageId.incorrectSortingOrder }]
   }
 ]);

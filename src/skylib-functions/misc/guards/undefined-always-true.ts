@@ -1,9 +1,9 @@
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-export const undefinedAlwaysTrue = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const undefinedAlwaysTrue = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: "Always true",
       selector:
@@ -11,4 +11,4 @@ export const undefinedAlwaysTrue = utils.wrapRule(
       typeIs: utils.TypeGroup.undefined
     }
   ]
-);
+});

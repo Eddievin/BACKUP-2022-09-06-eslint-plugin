@@ -8,7 +8,10 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("prefer-arrow-static-method", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    code: "class C { static f() {} }",
+    code: `
+      class C { static f() {} }
+      class D { static f = () => {}; }
+    `,
     errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);

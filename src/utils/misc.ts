@@ -21,6 +21,7 @@ import type {
   Selector
 } from "./types";
 import { Casing, TypeGroup } from "./types";
+import type { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
 import type { Entry, unknowns } from "@skylib/functions";
 import type {
   RuleContext,
@@ -29,7 +30,7 @@ import type {
   RuleModule
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
-import type { TSESTree } from "@typescript-eslint/utils";
+import type { WrapRuleOptions } from "./misc.internal";
 import minimatch from "minimatch";
 
 export const isCasing = is.factory(is.enumeration, Casing);
@@ -208,23 +209,38 @@ export function setCasing(str: string, casing?: Casing): string {
 /**
  * Wraps third-party rule.
  *
- * @param rule - Rule.
- * @param optionsArray - Options.
+ * @param options - Options.
  * @returns Wrapped rule.
  */
 export function wrapRule<M extends string, O extends unknowns>(
-  rule: RuleModule<M, O>,
-  optionsArray: O
+  options: WrapRuleOptions<M, O>
 ): RuleModule<M, O> {
+  const { docs: rawDocs, options: ruleOptions, rule } = options;
+
+  const docs: ESLintUtils.NamedCreateRuleMetaDocs = {
+    recommended: false,
+    requiresTypeChecking: true,
+    ...o.removeUndefinedKeys({
+      ...rawDocs,
+      description: rawDocs
+        ? s.unpadMultiline(rawDocs.description)
+        : "No description.",
+      failExamples: rawDocs
+        ? s.unpadMultiline(rawDocs.failExamples)
+        : undefined,
+      passExamples: rawDocs ? s.unpadMultiline(rawDocs.passExamples) : undefined
+    })
+  };
+
   return {
     ...rule,
     create: context => {
-      const optionsOverridesArray = optionsArray.map((options, index) => {
+      const optionsOverridesArray = ruleOptions.map((opts, index) => {
         const overrides = context.options[index];
 
-        return is.object(options) && is.object(overrides)
-          ? { ...options, ...overrides }
-          : options;
+        return is.object(opts) && is.object(overrides)
+          ? { ...opts, ...overrides }
+          : opts;
       });
 
       return rule.create(
@@ -238,6 +254,7 @@ export function wrapRule<M extends string, O extends unknowns>(
           })
         )
       );
-    }
+    },
+    meta: { ...rule.meta, docs }
   };
 }

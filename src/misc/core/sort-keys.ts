@@ -31,6 +31,35 @@ export const sortKeys = utils.createRule({
     ...utils.sort.messages,
     [MessageId.expectingObject]: "Expecting object ({{_id}})"
   },
+  docs: {
+    description: "Sorts object keys.",
+    suboptionTypes: {
+      _id: "string",
+      customOrder: "string[]",
+      selector: "string | string[]",
+      sendToBottom: "string",
+      sendToTop: "string"
+    },
+    suboptionDescriptions: {
+      _id: "Id",
+      customOrder: "Array elements with custom order",
+      selector: "AST elements to be sorted (AST selector)",
+      sendToBottom: "Array elements that should be sent to bottom",
+      sendToTop: "Array elements that should be sent to top"
+    },
+    failExamples: `
+      export default {
+        b: 1,
+        a: 2
+      }
+    `,
+    passExamples: `
+      export default {
+        a: 1,
+        b: 2
+      }
+    `
+  },
   create: (context): RuleListener => {
     const items: Writable<Items> = [];
 

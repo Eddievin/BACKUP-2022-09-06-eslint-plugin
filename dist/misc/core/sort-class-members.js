@@ -8,9 +8,36 @@ const utils_1 = require("@typescript-eslint/utils");
 exports.sortClassMembers = utils.createRule({
     name: "sort-class-members",
     fixable: utils.Fixable.code,
+    vue: true,
     isOptions: functions_1.is.object.factory({ sortingOrder: functions_1.is.strings }, {}),
     defaultOptions: { sortingOrder: [] },
     messages: utils.sort.messages,
+    docs: {
+        description: `
+      Sorts class members by type and alphabetically inside each type group. Type groups:
+      - Accessibility: "private", "protected", "public"
+      - Accessor type: "get", "set"
+      - Dynamic/static members: "dynamic", "static"
+      - Type: "accessor", "block", "constructor", "field", "get", "method", "set", "signature"
+      - Any combinations, e.g.: "protected-dynamic-accessor"
+    `,
+        optionTypes: { sortingOrder: "string[]" },
+        optionDescriptions: { sortingOrder: "Sorting order" },
+        failExamples: `
+      class SampleClass {
+        z;
+        y;
+        x;
+      }
+    `,
+        passExamples: `
+      class SampleClass {
+        x;
+        y;
+        z;
+      }
+    `
+    },
     create: (context) => {
         const sortingOrders = new functions_1.ReadonlyMap(context.options.sortingOrder.map((name, index) => [name, index]));
         return {

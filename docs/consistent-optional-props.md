@@ -1,24 +1,44 @@
-[ESLint plugin](index.md) / optional-property-style
+[ESLint plugin](index.md) / consistent-optional-props
 
-# optional-property-style
+# consistent-optional-props
 
-Enforces unified style for optional properties.
+Ensures consistent optional property style:
+- x?: T | undefined
+- x?: T
+- x: T | undefined
 
 ## eslintrc.js
 
 ```ts
-"@skylib/optional-property-style": [
-  "error",
-  {
-    classes: "combined" | "optional" | "undefined",
-    interfaces: "combined" | "optional" | "undefined"
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/consistent-optional-props": "error"
   }
-]
+};
 ```
 
 ## Options
 
 | Name | Description |
 | :------ | :------ |
-| `classes` | Optional property's style for classes. |
-| `interfaces` | Optional property's style for interfaces. |
+| `Parameter name` | Parameter description. |
+
+
+## Examples of incorrect code
+
+```ts
+interface I {
+  x?: string;
+  y: string | undefined;
+}
+```
+
+## Examples of correct code
+
+```ts
+interface I {
+  x?: string | undefined;
+  y?: string | undefined;
+}
+```

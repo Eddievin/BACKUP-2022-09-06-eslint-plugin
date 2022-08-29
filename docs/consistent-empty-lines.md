@@ -2,30 +2,64 @@
 
 # consistent-empty-lines
 
-Requires consistent empty lines.
+Ensures consistent empty lines.
 
 ## eslintrc.js
 
 ```ts
-"@skylib/consistent-empty-lines": [
-  "error",
-  {
-    rules: [
-      {
-        emptyLine: "always" | "any" | "never",
-        next: string,
-        prev: string
-      },
-      ...
-    ]
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/consistent-empty-lines": "error"
   }
-]
+};
 ```
 
 ## Options
 
 | Name | Description |
 | :------ | :------ |
-| `emptyLine` | Controls empty line between prev and next nodes. |
-| `next` | AST selector. |
-| `prev` | AST selector. |
+| `Parameter name` | Parameter description. |
+
+
+## Examples of incorrect code
+
+```ts
+/*
+eslint @skylib/consistent-empty-lines: [
+  error,
+  {
+    rules: [
+      {
+        _id: "import",
+        emptyLine: "always",
+        selector: "ImportDeclaration"
+      }
+    ]
+  }
+]
+*/
+import x from "source1";
+import y from "source2";
+```
+
+## Examples of correct code
+
+```ts
+/*
+eslint @skylib/consistent-empty-lines: [
+  error,
+  {
+    rules: [
+      {
+        _id: "import",
+        emptyLine: "never",
+        selector: "ImportDeclaration"
+      }
+    ]
+  }
+]
+*/
+import x from "source1";
+import y from "source2";
+```

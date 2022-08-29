@@ -13,7 +13,12 @@ const create_rule_internal_1 = require("./create-rule.internal");
  * @returns Rule listenter.
  */
 function createRule(options) {
-    const { create, defaultOptions, fixable, messages, vue } = Object.assign({ vue: false }, options);
+    const { create, defaultOptions, docs: rawDocs, fixable, messages, vue } = options;
+    const docs = Object.assign({ recommended: false, requiresTypeChecking: true }, functions_1.o.removeUndefinedKeys(Object.assign(Object.assign({}, rawDocs), { description: rawDocs
+            ? functions_1.s.unpadMultiline(rawDocs.description)
+            : "No description.", failExamples: rawDocs
+            ? functions_1.s.unpadMultiline(rawDocs.failExamples)
+            : undefined, passExamples: rawDocs ? functions_1.s.unpadMultiline(rawDocs.passExamples) : undefined })));
     const ruleCreator = utils_1.ESLintUtils.RuleCreator((name) => `https://ilyub.github.io/eslint-plugin/${name}.html`);
     return ruleCreator({
         create: (rawContext, rawOptions) => {
@@ -37,11 +42,8 @@ function createRule(options) {
             return result;
         },
         defaultOptions: [defaultOptions !== null && defaultOptions !== void 0 ? defaultOptions : {}],
-        meta: Object.assign({ docs: {
-                description: "Rule",
-                recommended: false,
-                requiresTypeChecking: true
-            }, messages, schema: [{}], type: "suggestion" }, functions_1.o.removeUndefinedKeys({ fixable })),
+        meta: Object.assign({ docs,
+            messages, schema: [{}], type: "suggestion" }, functions_1.o.removeUndefinedKeys({ fixable })),
         name: options.name
     });
 }

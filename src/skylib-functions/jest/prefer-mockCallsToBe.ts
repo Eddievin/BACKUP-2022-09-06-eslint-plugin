@@ -4,9 +4,9 @@ import * as utils from "../../utils";
 import { misc } from "../../misc";
 
 // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
-export const preferMockCallsToBe = utils.wrapRule(
-  misc["no-restricted-syntax"],
-  [
+export const preferMockCallsToBe = utils.wrapRule({
+  rule: misc["no-restricted-syntax"],
+  options: [
     {
       message: 'Use "mockCallsToBe" function instead',
       selector: [
@@ -17,4 +17,4 @@ export const preferMockCallsToBe = utils.wrapRule(
       ]
     }
   ]
-);
+});

@@ -11,7 +11,26 @@ var MessageId;
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.exhaustiveSwitch = utils.createRule({
     name: "exhaustive-switch",
+    vue: false,
     messages: { [MessageId.inexhaustiveSwitch]: "Inexhaustive switch" },
+    docs: {
+        description: "Checks exhaustiveness of switch statement.",
+        failExamples: `
+      function f(x: 1 | 2): void {
+        switch (x) {
+          case 1:
+        }
+      }
+    `,
+        passExamples: `
+      function f(x: 1 | 2): void {
+        switch (x) {
+          case 1:
+          case 2:
+        }
+      }
+    `
+    },
     create: (context, typeCheck) => ({
         SwitchStatement: node => {
             if (node.cases.some(switchCase => functions_1.is.null(switchCase.test))) {

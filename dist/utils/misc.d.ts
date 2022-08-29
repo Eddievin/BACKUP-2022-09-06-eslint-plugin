@@ -1,9 +1,10 @@
 import { fn, is } from "@skylib/functions";
 import type { FilePattern, Matcher, RegexpPattern, RuleListeners, Selector } from "./types";
 import { Casing, TypeGroup } from "./types";
+import type { TSESTree } from "@typescript-eslint/utils";
 import type { unknowns } from "@skylib/functions";
 import type { RuleListener, RuleModule } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { TSESTree } from "@typescript-eslint/utils";
+import type { WrapRuleOptions } from "./misc.internal";
 import minimatch from "minimatch";
 export declare const isCasing: is.Guard<Casing>;
 export declare const isStringOrStrings: is.Guard<string | readonly string[]>;
@@ -63,9 +64,8 @@ export declare function setCasing(str: string, casing?: Casing): string;
 /**
  * Wraps third-party rule.
  *
- * @param rule - Rule.
- * @param optionsArray - Options.
+ * @param options - Options.
  * @returns Wrapped rule.
  */
-export declare function wrapRule<M extends string, O extends unknowns>(rule: RuleModule<M, O>, optionsArray: O): RuleModule<M, O>;
+export declare function wrapRule<M extends string, O extends unknowns>(options: WrapRuleOptions<M, O>): RuleModule<M, O>;
 //# sourceMappingURL=misc.d.ts.map

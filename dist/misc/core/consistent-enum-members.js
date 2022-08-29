@@ -12,6 +12,19 @@ exports.consistentEnumMembers = utils.createRule({
     name: "consistent-enum-members",
     vue: true,
     messages: { [MessageId.inconsistentMember]: "Inconsistent enum member" },
+    docs: {
+        description: "Requires value to coincide with key inside enum.",
+        failExamples: `
+      enum Enum {
+        a = "b"
+      }
+    `,
+        passExamples: `
+      enum Enum {
+        a = "a"
+      }
+    `
+    },
     create: (context) => ({
         TSEnumMember: node => {
             if (node.id.type === utils_1.AST_NODE_TYPES.Identifier &&

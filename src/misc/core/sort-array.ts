@@ -39,6 +39,34 @@ export const sortArray = utils.createRule({
     ...utils.sort.messages,
     [MessageId.expectingArray]: "Expecting array"
   },
+  docs: {
+    description: "Sorts arrays.",
+    optionTypes: {
+      customOrder: "string[]",
+      selector: "string | string[]",
+      sendToBottom: "string",
+      sendToTop: "string",
+      sortKey: "string",
+      triggerByComment: "boolean"
+    },
+    optionDescriptions: {
+      customOrder: "Array elements with custom order",
+      selector: "AST elements to be sorted (AST selector)",
+      sendToBottom: "Array elements that should be sent to bottom",
+      sendToTop: "Array elements that should be sent to top",
+      sortKey: "Determines which object key should be used to compare objects",
+      triggerByComment: 'Triggers sorting by "// @sorted" comment'
+    },
+    failExamples: `
+      // @sorted
+      const x = [2, 1];
+    `,
+    passExamples: `
+      const x = [2, 1];
+      // @sorted
+      const y = [1, 2];
+    `
+  },
   create: (context): RuleListener => {
     const {
       selector: mixedSelector,

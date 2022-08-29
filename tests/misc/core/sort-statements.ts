@@ -1,6 +1,6 @@
 import { rules, utils } from "@";
 // eslint-disable-next-line @skylib/no-at-sign-internal-import, @skylib/no-internal-modules -- Ok
-import { NodeType } from "@/misc/core/sort-statements";
+import { StatementType } from "@/misc/core/sort-statements";
 import getCurrentLine from "get-current-line";
 
 const rule = rules["sort-statements"];
@@ -76,10 +76,10 @@ utils.testRule(
       options: [
         {
           programOrder: [
-            NodeType.ImportDeclaration,
-            NodeType.FunctionDeclaration,
-            NodeType.TypeDeclaration,
-            NodeType.Unknown
+            StatementType.ImportDeclaration,
+            StatementType.FunctionDeclaration,
+            StatementType.TypeDeclaration,
+            StatementType.Unknown
           ]
         }
       ],
@@ -104,10 +104,10 @@ utils.testRule(
       options: [
         {
           blockOrder: [
-            NodeType.ImportDeclaration,
-            NodeType.FunctionDeclaration,
-            NodeType.TypeDeclaration,
-            NodeType.Unknown
+            StatementType.ImportDeclaration,
+            StatementType.FunctionDeclaration,
+            StatementType.TypeDeclaration,
+            StatementType.Unknown
           ]
         }
       ],
@@ -136,10 +136,10 @@ utils.testRule(
       options: [
         {
           moduleOrder: [
-            NodeType.ImportDeclaration,
-            NodeType.FunctionDeclaration,
-            NodeType.TypeDeclaration,
-            NodeType.Unknown
+            StatementType.ImportDeclaration,
+            StatementType.FunctionDeclaration,
+            StatementType.TypeDeclaration,
+            StatementType.Unknown
           ]
         }
       ],

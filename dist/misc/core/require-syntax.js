@@ -10,42 +10,85 @@ var MessageId;
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.requireSyntax = utils.createRule({
     name: "require-syntax",
-    fixable: utils.Fixable.code,
     vue: true,
     isOptions: functions_1.is.object.factory({ once: functions_1.is.boolean, selector: utils.isSelector, trigger: utils.isSelector }, { message: functions_1.is.string }),
     defaultOptions: { once: false, trigger: "Program" },
     messages: { [MessageId.customMessage]: "{{message}}" },
+    docs: {
+        description: "Requires script to contain syntax.",
+        optionTypes: {
+            message: "string",
+            once: "boolean",
+            selector: "string | string[]",
+            trigger: "string | string[]"
+        },
+        optionDescriptions: {
+            message: "Custom message",
+            once: "Syntax should be found exactly one time",
+            selector: "AST selector",
+            trigger: "Trigger rule by AST selector"
+        },
+        failExamples: `
+      /*
+      eslint @skylib/require-syntax: [
+        error,
+        {
+          selector: "Identifier[name=x]",
+          trigger: "Identifier[name=y]"
+        }
+      ]
+      */
+      export const y = 1;
+    `,
+        passExamples: `
+      /*
+      eslint @skylib/require-syntax: [
+        error,
+        {
+          selector: "Identifier[name=x]",
+          trigger: "Identifier[name=y]"
+        }
+      ]
+      */
+      export const x = 1;
+      export const y = 1;
+    `
+    },
     create: (context) => {
         const { message, once, selector: mixedSelector, trigger: mixedTrigger } = context.options;
         const selector = utils.selector(mixedSelector);
         const trigger = utils.selector(mixedTrigger);
-        let selectorCount = 0;
-        let triggerCount = 0;
+        let count = 0;
+        const nodes = [];
         functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
         functions_1.assert.toBeTrue(trigger !== "", "Expecting trigger");
         return utils.mergeListeners({
             [selector]: () => {
-                selectorCount++;
+                count++;
             }
         }, {
-            [trigger]: () => {
-                triggerCount++;
+            [trigger]: (node) => {
+                nodes.push(node);
             }
         }, {
             "Program:exit": () => {
-                if (triggerCount) {
-                    if (selectorCount === 0)
+                for (const node of nodes) {
+                    if (count === 0)
                         context.report({
                             data: { message: message !== null && message !== void 0 ? message : `Missing syntax: ${selector}` },
-                            loc: context.locZero,
+                            loc: trigger === "Program"
+                                ? context.locZero
+                                : context.getLoc(node.range),
                             messageId: MessageId.customMessage
                         });
-                    if (selectorCount > 1 && once)
+                    if (count > 1 && once)
                         context.report({
                             data: {
                                 message: message !== null && message !== void 0 ? message : `Require syntax once: ${selector}`
                             },
-                            loc: context.locZero,
+                            loc: trigger === "Program"
+                                ? context.locZero
+                                : context.getLoc(node.range),
                             messageId: MessageId.customMessage
                         });
                 }

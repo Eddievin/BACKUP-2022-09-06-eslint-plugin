@@ -23,6 +23,62 @@ exports.consistentFilename = utils.createRule({
         [MessageId.invalidFilename]: "Expecting file name to be: {{expected}}",
         [MessageId.invalidFilenameId]: "Expecting file name to be: {{expected}} ({{_id}})"
     },
+    docs: {
+        description: "Ensures consistent file name.",
+        optionTypes: { format: '"PascalCase" | "camelCase" |"kebab-case"' },
+        optionDescriptions: { format: "File name format" },
+        suboptionTypes: {
+            _id: "string",
+            format: '"PascalCase" | "camelCase" |"kebab-case"',
+            match: "boolean",
+            selector: "string | string[]"
+        },
+        suboptionDescriptions: {
+            _id: "Id",
+            format: "File name format",
+            match: "File name should match AST element",
+            selector: "AST selector"
+        },
+        failExamples: `
+      // filename: SampleClass.ts
+      /*
+      eslint @skylib/consistent-filename: [
+        error,
+        {
+          overrides: [
+            {
+              _id: "class",
+              format: "kebab-case",
+
+              match: true,
+              selector: "ClassDeclaration > Identifier.id"
+            }
+          ]
+        }
+      ]
+      */
+      class SampleClass {}
+    `,
+        passExamples: `
+      // filename: SampleClass.ts
+      /*
+      eslint @skylib/consistent-filename: [
+        error,
+        {
+          overrides: [
+            {
+              _id: "class",
+              format: "PascalCase",
+              match: true,
+              selector: "ClassDeclaration > Identifier.id"
+            }
+          ]
+        }
+      ]
+      */
+      class SampleClass {}
+    `
+    },
     create: (context) => {
         const items = [];
         return utils.mergeListeners(...context.options.overrides.map((suboptions) => {

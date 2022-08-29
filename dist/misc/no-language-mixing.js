@@ -10,11 +10,25 @@ exports.noLanguageMixing = (0, functions_1.evaluate)(() => {
     const eng = "\\w";
     const international = "[^\\u0000-\\u00FF]";
     const re = `/${eng}${br}${international}|${international}${br}${eng}/u`;
-    return utils.wrapRule(core_1.core["no-restricted-syntax"], [
-        {
-            message: "No language mixing",
-            selector: [`Literal[value=${re}]`, `TemplateLiteral[value.raw=${re}]`]
+    return utils.wrapRule({
+        rule: core_1.core["no-restricted-syntax"],
+        options: [
+            {
+                message: "No language mixing",
+                selector: [`Literal[value=${re}]`, `TemplateLiteral[value.raw=${re}]`]
+            }
+        ],
+        docs: {
+            description: "Disallows langauge mixing.",
+            failExamples: `
+        const x = "xyz123абв";
+      `,
+            passExamples: `
+        const x = "xyz";
+        const y = "123";
+        const z = "абв";
+      `
         }
-    ]);
+    });
 });
 //# sourceMappingURL=no-language-mixing.js.map

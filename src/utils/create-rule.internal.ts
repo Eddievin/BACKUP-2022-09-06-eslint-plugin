@@ -3,6 +3,7 @@ import type * as estree from "estree";
 import type {
   Casing,
   Context,
+  Docs,
   Options,
   SharedSuboptions,
   Suboptions,
@@ -49,6 +50,7 @@ export interface CreateRuleOptions<
   ) => RuleListener;
   readonly defaultOptions?: Readonly<Partial<O>>;
   readonly defaultSuboptions?: Readonly<Partial<S>>;
+  readonly docs?: Docs<keyof O, keyof S>;
   readonly fixable?: "code" | "whitespace";
   readonly isOptions?: is.Guard<O>;
   readonly isSuboptions?: is.Guard<S>;

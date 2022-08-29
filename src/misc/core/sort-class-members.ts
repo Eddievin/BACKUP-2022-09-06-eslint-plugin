@@ -16,6 +16,32 @@ export const sortClassMembers = utils.createRule({
   isOptions: is.object.factory<Options>({ sortingOrder: is.strings }, {}),
   defaultOptions: { sortingOrder: [] },
   messages: utils.sort.messages,
+  docs: {
+    description: `
+      Sorts class members by type and alphabetically inside each type group. Type groups:
+      - Accessibility: "private", "protected", "public"
+      - Accessor type: "get", "set"
+      - Dynamic/static members: "dynamic", "static"
+      - Type: "accessor", "block", "constructor", "field", "get", "method", "set", "signature"
+      - Any combinations, e.g.: "protected-dynamic-accessor"
+    `,
+    optionTypes: { sortingOrder: "string[]" },
+    optionDescriptions: { sortingOrder: "Sorting order" },
+    failExamples: `
+      class SampleClass {
+        z;
+        y;
+        x;
+      }
+    `,
+    passExamples: `
+      class SampleClass {
+        x;
+        y;
+        z;
+      }
+    `
+  },
   create: (context): RuleListener => {
     const sortingOrders = new ReadonlyMap(
       context.options.sortingOrder.map((name, index) => [name, index])

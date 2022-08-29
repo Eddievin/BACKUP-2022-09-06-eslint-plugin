@@ -19,6 +19,36 @@ export const commentSpacing = utils.createRule({
     [MessageId.addEmptyLine]: "Add empty line after comment",
     [MessageId.removeEmptyLine]: "Remove empty line after comment"
   },
+  docs: {
+    description: "Ensures consistent empty lines around comments.",
+    failExamples: `
+      // Comment
+      function f() {}
+
+      /** Comment */
+      function g() {}
+
+      /*
+      Comment
+      */
+
+      function h() {}
+    `,
+    passExamples: `
+      // Comment
+
+      function f() {}
+
+      /** Comment */
+
+      function g() {}
+
+      /*
+      Comment
+      */
+      function h() {}
+    `
+  },
   create: (context): RuleListener => ({
     ":statement, TSDeclareFunction, TSExportAssignment": (
       node: TSESTree.Node

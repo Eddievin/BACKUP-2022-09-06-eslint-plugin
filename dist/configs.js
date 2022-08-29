@@ -32,37 +32,40 @@ exports.configs = {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(skylib_functions_1.skylibFunctions.misc)
     },
-    "functions/jest": {
+    "functions.jest": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(skylib_functions_1.skylibFunctions.jest)
     },
-    "functions/misc": {
+    "functions.misc": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(skylib_functions_1.skylibFunctions.misc)
     },
     "jest": { plugins: ["@skylib/eslint-plugin"], rules: rules(jest_1.jest) },
     "quasar-extension": {
         overrides: [
-            { files: "*.extras", rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.extras) },
+            {
+                files: "*.extras",
+                rules: Object.assign(Object.assign({}, rules(skylib_quasar_extension_1.skylibQuasarExtension.extras)), { "@skylib/typescript/no-empty-interfaces": "off" })
+            },
             { files: "*.vue", rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.vue) },
             { files: "./tests/**", rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.jest) }
         ],
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.misc)
     },
-    "quasar-extension/extras": {
+    "quasar-extension.extras": {
         plugins: ["@skylib/eslint-plugin"],
-        rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.extras)
+        rules: Object.assign(Object.assign({}, rules(skylib_quasar_extension_1.skylibQuasarExtension.extras)), { "@skylib/typescript/no-empty-interfaces": "off" })
     },
-    "quasar-extension/jest": {
+    "quasar-extension.jest": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.jest)
     },
-    "quasar-extension/misc": {
+    "quasar-extension.misc": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.misc)
     },
-    "quasar-extension/vue": {
+    "quasar-extension.vue": {
         plugins: ["@skylib/eslint-plugin"],
         rules: rules(skylib_quasar_extension_1.skylibQuasarExtension.vue)
     },

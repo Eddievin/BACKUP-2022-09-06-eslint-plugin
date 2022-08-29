@@ -13,6 +13,20 @@ export const noInferrableTypes = utils.createRule({
     [MessageId.triviallyInferrableType]:
       "Type can be trivially inferred from initializer"
   },
+  docs: {
+    description: "Reports inferrable types.",
+    failExamples: `
+      function f<T>() {
+        const x: T = {} as T;
+      }
+
+    `,
+    passExamples: `
+      function f<T>() {
+        const x = {} as T;
+      }
+    `
+  },
   create: (context): RuleListener => ({
     VariableDeclarator: node => {
       const { id, init } = node;

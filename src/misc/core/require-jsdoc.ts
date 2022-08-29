@@ -72,6 +72,34 @@ export const requireJsdoc = utils.createRule({
     [MessageId.undocumentedConstructSignature]:
       "Missing documentation for constructor signature"
   },
+  docs: {
+    description: "Requires JSDoc documentation.",
+    optionTypes: {
+      excludeSelectors: "string[]",
+      includeSelectors: "string[]",
+      interfaces: '"callSignatures" | "constructSignatures" | "interface"',
+      noDefaultSelectors: "boolean",
+      properties: 'Array<"function" | "nonFunction">'
+    },
+    optionDescriptions: {
+      excludeSelectors: "Skip these selectors.",
+      includeSelectors: "Check additional selectors.",
+      interfaces:
+        'Require documenation for interface ("interface"), call signatures ("callSignatures"), construct signatures ("constructSignatures")',
+      noDefaultSelectors: "Do not check default selectors",
+      properties:
+        'Require documenation for function properties ("function"), non-function properties ("nonFunction")'
+    },
+    failExamples: `
+      function f(): void {}
+    `,
+    passExamples: `
+      /**
+       * Description.
+       */
+      function f(): void {}
+    `
+  },
   create: (context, typeCheck): RuleListener => {
     const selector = utils.configurableSelector.get(
       context.options,

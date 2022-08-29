@@ -1,9 +1,9 @@
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-export const preferTruncate = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const preferTruncate = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: 'Use "a.truncate" function instead',
       selector:
@@ -11,4 +11,4 @@ export const preferTruncate = utils.wrapRule(
       typeIs: utils.TypeGroup.array
     }
   ]
-);
+});

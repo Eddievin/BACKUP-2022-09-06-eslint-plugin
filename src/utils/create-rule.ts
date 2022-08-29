@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/require-syntax/isOptions -- Ok */
-
 import type {
   ContextOptionsArray,
   CreateRuleOptions,
@@ -11,7 +9,7 @@ import type {
   RuleListener,
   RuleModule
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import { classToInterface, is, o } from "@skylib/functions";
+import { classToInterface, is, o, s } from "@skylib/functions";
 import { ESLintUtils } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { TypeCheck } from "./TypeCheck";
@@ -31,7 +29,29 @@ export function createRule<
 >(
   options: CreateRuleOptions<M, O, S, K>
 ): RuleModule<M, PartialOptionsArray<O, S, K>> {
-  const { create, defaultOptions, fixable, messages, vue } = options;
+  const {
+    create,
+    defaultOptions,
+    docs: rawDocs,
+    fixable,
+    messages,
+    vue
+  } = options;
+
+  const docs: ESLintUtils.NamedCreateRuleMetaDocs = {
+    recommended: false,
+    requiresTypeChecking: true,
+    ...o.removeUndefinedKeys({
+      ...rawDocs,
+      description: rawDocs
+        ? s.unpadMultiline(rawDocs.description)
+        : "No description.",
+      failExamples: rawDocs
+        ? s.unpadMultiline(rawDocs.failExamples)
+        : undefined,
+      passExamples: rawDocs ? s.unpadMultiline(rawDocs.passExamples) : undefined
+    })
+  };
 
   const ruleCreator = ESLintUtils.RuleCreator(
     (name: string) => `https://ilyub.github.io/eslint-plugin/${name}.html`
@@ -79,11 +99,7 @@ export function createRule<
     },
     defaultOptions: [defaultOptions ?? {}],
     meta: {
-      docs: {
-        description: "Rule",
-        recommended: false,
-        requiresTypeChecking: true
-      },
+      docs,
       messages,
       schema: [{}],
       type: "suggestion",

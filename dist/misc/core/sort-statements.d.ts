@@ -1,12 +1,13 @@
 import { is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 export interface Options {
-    readonly blockOrder: NodeTypes;
-    readonly moduleOrder: NodeTypes;
-    readonly order: NodeTypes;
-    readonly programOrder: NodeTypes;
+    readonly blockOrder: StatementTypes;
+    readonly moduleOrder: StatementTypes;
+    readonly order: StatementTypes;
+    readonly programOrder: StatementTypes;
 }
-export declare enum NodeType {
+export declare enum StatementType {
+    DeclareGlobal = "DeclareGlobal",
     ExportAllDeclaration = "ExportAllDeclaration",
     ExportDeclaration = "ExportDeclaration",
     ExportDefaultDeclaration = "ExportDefaultDeclaration",
@@ -19,9 +20,9 @@ export declare enum NodeType {
     TypeDeclaration = "TypeDeclaration",
     Unknown = "Unknown"
 }
-export declare const isNodeType: is.Guard<NodeType>;
-export declare const isNodeTypes: is.Guard<readonly NodeType[]>;
+export declare const isStatementType: is.Guard<StatementType>;
+export declare const isStatementTypes: is.Guard<readonly StatementType[]>;
 export declare const sortStatements: import("@typescript-eslint/utils/dist/ts-eslint/Rule").RuleModule<import("../../utils/sort.internal").MessageId, import("../../utils/create-rule.internal").PartialOptionsArray<Options, object, never>, RuleListener>;
-declare type NodeTypes = readonly NodeType[];
+declare type StatementTypes = readonly StatementType[];
 export {};
 //# sourceMappingURL=sort-statements.d.ts.map

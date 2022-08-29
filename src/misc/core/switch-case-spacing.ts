@@ -18,6 +18,28 @@ export const switchCaseSpacing = utils.createRule({
     [MessageId.addEmptyLine]: "Add empty line before switch case",
     [MessageId.removeEmptyLine]: "Remove empty line before switch case"
   },
+  docs: {
+    description:
+      "Ensures consistent empty lines between switch case statements.",
+    failExamples: `
+      switch (x) {
+        case 1:
+
+        case 2:
+          break;
+        case 3:
+      }
+    `,
+    passExamples: `
+      switch (x) {
+        case 1:
+        case 2:
+          break;
+
+        case 3:
+      }
+    `
+  },
   create: (context): RuleListener => ({
     SwitchStatement: node => {
       for (const [case1, case2] of a.chain(node.cases)) {

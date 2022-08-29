@@ -17,14 +17,14 @@ utils.testRule(
 
         /** Comment */
 
-        function f(): void {}
+        function f() {}
         </script>
       `,
       output: `
         <script lang="ts">
         // Comment
         /** Comment */
-        function f(): void {}
+        function f() {}
         </script>
       `,
       errors: [
@@ -37,29 +37,29 @@ utils.testRule(
       code: `
         // Comment
 
-        function f(): void {}
+        function f() {}
 
         /** Comment */
 
-        function g(): void {}
+        function g() {}
 
         /*
         Comment
         */
-        function h(): void {}
+        function h() {}
       `,
       output: `
         // Comment
-        function f(): void {}
+        function f() {}
 
         /** Comment */
-        function g(): void {}
+        function g() {}
 
         /*
         Comment
         */
 
-        function h(): void {}
+        function h() {}
       `,
       errors: [
         { line: 1, messageId: MessageId.removeEmptyLine },
@@ -75,14 +75,14 @@ utils.testRule(
         /* eslint-disable: rule2 */
 
         /* eslint-disable: rule3 */
-        function f(): void {}
+        function f() {}
       `,
       output: `
         /* eslint-disable: rule1 */
         /* eslint-disable: rule2 */
         /* eslint-disable: rule3 */
 
-        function f(): void {}
+        function f() {}
       `,
       errors: [
         { line: 1, messageId: MessageId.removeEmptyLine },

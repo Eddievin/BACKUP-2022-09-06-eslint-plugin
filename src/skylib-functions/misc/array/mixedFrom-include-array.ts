@@ -3,9 +3,9 @@
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-export const mixedFromIncludeArray = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const mixedFromIncludeArray = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: "Expecting type to include array",
       selector:
@@ -13,4 +13,4 @@ export const mixedFromIncludeArray = utils.wrapRule(
       typeHasNoneOf: [utils.TypeGroup.array]
     }
   ]
-);
+});

@@ -19,6 +19,33 @@ export const noUnsafeObjectAssignment = utils.createRule({
     [MessageId.unsafeReadonlyAssignment]:
       "Unsafe readonly-to-mutable assignment: {{name}}"
   },
+  docs: {
+    description: `
+      Reports unsafe object assignments:
+      - Unsafe optional assignment
+      - Unsafe readonly-to-mutable assignment
+    `,
+    failExamples: `
+      interface ReadonlyObject { readonly value: number; }
+      interface WritableObject { value: number; }
+
+      const x: ReadonlyObject = { value: 1 };
+
+      function f(x: WritableObject) {}
+
+      f(x);
+    `,
+    passExamples: `
+      interface ReadonlyObject { readonly value: number; }
+      interface WritableObject { value: number; }
+
+      const x: WritableObject = { value: 1 };
+
+      function f(x: ReadonlyObject) {}
+
+      f(x);
+    `
+  },
   create: (context, typeCheck): RuleListener => {
     return {
       ArrowFunctionExpression: node => {

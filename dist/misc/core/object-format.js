@@ -19,6 +19,31 @@ exports.objectFormat = utils.createRule({
         [MessageId.preferMultiline]: "Prefer multiline object literal",
         [MessageId.preferSingleLine]: "Prefer single-line object literal"
     },
+    docs: {
+        description: "Ensures multiline or single-line object format.",
+        optionTypes: { maxLineLength: "number", maxObjectSize: "number" },
+        optionDescriptions: {
+            maxLineLength: "Max line length for single-line object",
+            maxObjectSize: "Max object size for single-line object"
+        },
+        failExamples: `
+      const obj1 = {
+        a: 1,
+        b: 2,
+        c: 3
+      };
+      const obj2 = { a: 1, b: 2, c: 3, d: 4 };
+    `,
+        passExamples: `
+      const obj1 = { a: 1, b: 2, c: 3 };
+      const obj2 = {
+        a: 1,
+        b: 2,
+        c: 3,
+        d: 4
+      };
+    `
+    },
     create: (context) => {
         const eol = context.eol;
         const comma = ",";

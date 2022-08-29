@@ -3,10 +3,13 @@
 import * as utils from "../../utils";
 import { misc } from "../../misc";
 
-export const preferDefineFn = utils.wrapRule(misc["no-restricted-syntax"], [
-  {
-    message: 'Use "defineFn" function instead',
-    selector:
-      ":matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator > CallExpression[callee.object.name=o][callee.property.name=assign]"
-  }
-]);
+export const preferDefineFn = utils.wrapRule({
+  rule: misc["no-restricted-syntax"],
+  options: [
+    {
+      message: 'Use "defineFn" function instead',
+      selector:
+        ":matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator > CallExpression[callee.object.name=o][callee.property.name=assign]"
+    }
+  ]
+});

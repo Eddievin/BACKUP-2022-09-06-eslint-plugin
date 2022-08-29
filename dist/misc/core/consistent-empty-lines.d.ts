@@ -1,16 +1,11 @@
 import * as utils from "../../utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
-export declare type Suboptions = Suboptions1 | Suboptions2;
-export interface Suboptions1 {
+export interface Suboptions {
     readonly _id: string;
     readonly emptyLine: EmptyLine;
-    readonly selector: utils.Selector;
-}
-export interface Suboptions2 {
-    readonly _id: string;
-    readonly emptyLine: EmptyLine;
-    readonly next: utils.Selector;
-    readonly prev: utils.Selector;
+    readonly next?: utils.Selector;
+    readonly prev?: utils.Selector;
+    readonly selector?: utils.Selector;
 }
 export declare enum EmptyLine {
     always = "always",

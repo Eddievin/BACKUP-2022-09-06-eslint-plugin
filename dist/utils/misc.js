@@ -130,23 +130,28 @@ exports.setCasing = setCasing;
 /**
  * Wraps third-party rule.
  *
- * @param rule - Rule.
- * @param optionsArray - Options.
+ * @param options - Options.
  * @returns Wrapped rule.
  */
-function wrapRule(rule, optionsArray) {
+function wrapRule(options) {
+    const { docs: rawDocs, options: ruleOptions, rule } = options;
+    const docs = Object.assign({ recommended: false, requiresTypeChecking: true }, functions_1.o.removeUndefinedKeys(Object.assign(Object.assign({}, rawDocs), { description: rawDocs
+            ? functions_1.s.unpadMultiline(rawDocs.description)
+            : "No description.", failExamples: rawDocs
+            ? functions_1.s.unpadMultiline(rawDocs.failExamples)
+            : undefined, passExamples: rawDocs ? functions_1.s.unpadMultiline(rawDocs.passExamples) : undefined })));
     return Object.assign(Object.assign({}, rule), { create: context => {
-            const optionsOverridesArray = optionsArray.map((options, index) => {
+            const optionsOverridesArray = ruleOptions.map((opts, index) => {
                 const overrides = context.options[index];
-                return functions_1.is.object(options) && functions_1.is.object(overrides)
-                    ? Object.assign(Object.assign({}, options), overrides) : options;
+                return functions_1.is.object(opts) && functions_1.is.object(overrides)
+                    ? Object.assign(Object.assign({}, opts), overrides) : opts;
             });
             return rule.create(new Proxy({}, (0, functions_1.wrapProxyHandler)("wrap-rule", functions_1.ProxyHandlerAction.throw, {
                 get: (_target, key) => key === "options"
                     ? optionsOverridesArray
                     : functions_1.reflect.get(context, key)
             })));
-        } });
+        }, meta: Object.assign(Object.assign({}, rule.meta), { docs }) });
 }
 exports.wrapRule = wrapRule;
 //# sourceMappingURL=misc.js.map

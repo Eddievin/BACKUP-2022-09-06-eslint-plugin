@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.noUnsafeObjectAssignment = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
+// eslint-disable-next-line @skylib/disallow-import/typescript -- Ok
 const ts = tslib_1.__importStar(require("typescript"));
 const utils = tslib_1.__importStar(require("../../utils"));
 const utils_1 = require("@typescript-eslint/utils");
@@ -12,9 +13,37 @@ var MessageId;
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.noUnsafeObjectAssignment = utils.createRule({
     name: "no-unsafe-object-assignment",
+    vue: false,
     messages: {
         [MessageId.unsafeOptionalAssignment]: "Unsafe optional assignment: {{name}}",
         [MessageId.unsafeReadonlyAssignment]: "Unsafe readonly-to-mutable assignment: {{name}}"
+    },
+    docs: {
+        description: `
+      Reports unsafe object assignments:
+      - Unsafe optional assignment
+      - Unsafe readonly-to-mutable assignment
+    `,
+        failExamples: `
+      interface ReadonlyObject { readonly value: number; }
+      interface WritableObject { value: number; }
+
+      const x: ReadonlyObject = { value: 1 };
+
+      function f(x: WritableObject) {}
+
+      f(x);
+    `,
+        passExamples: `
+      interface ReadonlyObject { readonly value: number; }
+      interface WritableObject { value: number; }
+
+      const x: WritableObject = { value: 1 };
+
+      function f(x: ReadonlyObject) {}
+
+      f(x);
+    `
     },
     create: (context, typeCheck) => {
         return {

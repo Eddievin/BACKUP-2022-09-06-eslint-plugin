@@ -1,4 +1,4 @@
-import type { Context, SuboptionsArray } from "./types";
+import type { Context, Docs, SuboptionsArray } from "./types";
 import type { ClassToInterface, Rec, unknowns } from "@skylib/functions";
 import type { RuleContext, RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import { is } from "@skylib/functions";
@@ -16,13 +16,14 @@ export interface CreateRuleOptions<M extends string, O extends object, S extends
     readonly create: (context: Context<M, O, S, K>, typeCheck: ClassToInterface<TypeCheck>) => RuleListener;
     readonly defaultOptions?: Readonly<Partial<O>>;
     readonly defaultSuboptions?: Readonly<Partial<S>>;
+    readonly docs?: Docs<keyof O, keyof S>;
     readonly fixable?: "code" | "whitespace";
     readonly isOptions?: is.Guard<O>;
     readonly isSuboptions?: is.Guard<S>;
     readonly messages: Rec<M, string>;
     readonly name: string;
     readonly suboptionsKey?: K;
-    readonly vue?: boolean;
+    readonly vue: boolean;
 }
 export declare type PartialOptions<O extends object, S extends object, K extends string = never> = Partial<O> & {
     readonly [L in K]?: SuboptionsArray<Partial<S>>;

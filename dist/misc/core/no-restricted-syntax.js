@@ -16,6 +16,47 @@ exports.noRestrictedSyntax = utils.createRule({
     isOptions: functions_1.is.object.factory({ ignoreSelector: utils.isSelector, selector: utils.isSelector }, { message: functions_1.is.string, replacement: functions_1.is.string, search: functions_1.is.string }),
     defaultOptions: { ignoreSelector: [] },
     messages: { [MessageId.customMessage]: "{{message}}" },
+    docs: {
+        description: "Disallows restricted syntax.",
+        optionTypes: {
+            ignoreSelector: "string | string[]",
+            message: "string",
+            replacement: "string",
+            search: "string",
+            selector: "string | string[]"
+        },
+        optionDescriptions: {
+            ignoreSelector: "Allowed AST elements (AST selector)",
+            message: "Custom message",
+            replacement: "Replacement",
+            search: "Serch term for replacement (regular expression)",
+            selector: "Disallowed AST elements (AST selector)"
+        },
+        failExamples: `
+      /*
+      eslint @skylib/no-restricted-syntax: [
+        error,
+        {
+          selector: "Identifier",
+          ignoreSelector: "Identifier[name=y]",
+        }
+      ]
+      */
+      const x = 1;
+    `,
+        passExamples: `
+      /*
+      eslint @skylib/no-restricted-syntax: [
+        error,
+        {
+          selector: "Identifier",
+          ignoreSelector: "Identifier[name=y]",
+        }
+      ]
+      */
+      const y = 1;
+    `
+    },
     create: (context) => {
         const { ignoreSelector: mixedIgnoreSelector, message, replacement, search, selector: mixedSelector } = context.options;
         const selector = utils.selector(mixedSelector);

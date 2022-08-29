@@ -7,13 +7,13 @@ import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 
 export interface Options {
-  readonly blockOrder: NodeTypes;
-  readonly moduleOrder: NodeTypes;
-  readonly order: NodeTypes;
-  readonly programOrder: NodeTypes;
+  readonly blockOrder: StatementTypes;
+  readonly moduleOrder: StatementTypes;
+  readonly order: StatementTypes;
+  readonly programOrder: StatementTypes;
 }
 
-export enum NodeType {
+export enum StatementType {
   DeclareGlobal = "DeclareGlobal",
   ExportAllDeclaration = "ExportAllDeclaration",
   ExportDeclaration = "ExportDeclaration",
@@ -28,9 +28,9 @@ export enum NodeType {
   Unknown = "Unknown"
 }
 
-export const isNodeType = is.factory(is.enumeration, NodeType);
+export const isStatementType = is.factory(is.enumeration, StatementType);
 
-export const isNodeTypes = is.factory(is.array.of, isNodeType);
+export const isStatementTypes = is.factory(is.array.of, isStatementType);
 
 export const sortStatements = utils.createRule({
   name: "sort-statements",
@@ -38,10 +38,10 @@ export const sortStatements = utils.createRule({
   vue: true,
   isOptions: is.object.factory<Options>(
     {
-      blockOrder: isNodeTypes,
-      moduleOrder: isNodeTypes,
-      order: isNodeTypes,
-      programOrder: isNodeTypes
+      blockOrder: isStatementTypes,
+      moduleOrder: isStatementTypes,
+      order: isStatementTypes,
+      programOrder: isStatementTypes
     },
     {}
   ),
@@ -52,6 +52,65 @@ export const sortStatements = utils.createRule({
     programOrder: []
   },
   messages: utils.sort.messages,
+  docs: {
+    description: `
+      Sorts statements.
+
+      \`\`\`ts
+      StatementType =
+        | "DeclareGlobal"
+        | "ExportAllDeclaration"
+        | "ExportDeclaration"
+        | "ExportDefaultDeclaration"
+        | "ExportFunctionDeclaration"
+        | "ExportTypeDeclaration"
+        | "ExportUnknown"
+        | "FunctionDeclaration"
+        | "ImportDeclaration"
+        | "JestTest"
+        | "TypeDeclaration"
+        | "Unknown";
+      \`\`\`
+    `,
+    optionTypes: {
+      blockOrder: "StatementType[]",
+      moduleOrder: "StatementType[]",
+      order: "StatementType[]",
+      programOrder: "StatementType[]"
+    },
+    optionDescriptions: {
+      blockOrder: "Order inside block statement",
+      moduleOrder: "Order inside module declaration",
+      order: "Default order",
+      programOrder: "Root statements order"
+    },
+    failExamples: `
+      function f() {}
+      type T1 = number;
+      const x1 = true;
+      const x2 = true;
+      export function g() {}
+      export type T2 = number;
+      export const x3 = true;
+      export const x4 = true;
+      export * from "source";
+      declare global {}
+      import "source";
+    `,
+    passExamples: `
+      import "source";
+      declare global {}
+      export * from "source";
+      export const x1 = true;
+      export const x2 = true;
+      export type T1 = number;
+      export function f() {}
+      const x3 = true;
+      const x4 = true;
+      type T2 = number;
+      function g() {}
+    `
+  },
   create: (context): RuleListener => {
     const { blockOrder, moduleOrder, order, programOrder } = context.options;
 
@@ -81,19 +140,19 @@ export const sortStatements = utils.createRule({
   }
 });
 
-const defaultOrder: NodeTypes = [
-  NodeType.ImportDeclaration,
-  NodeType.DeclareGlobal,
-  NodeType.ExportAllDeclaration,
-  NodeType.ExportDeclaration,
-  NodeType.ExportDefaultDeclaration,
-  NodeType.ExportUnknown,
-  NodeType.ExportTypeDeclaration,
-  NodeType.ExportFunctionDeclaration,
-  NodeType.Unknown,
-  NodeType.TypeDeclaration,
-  NodeType.FunctionDeclaration,
-  NodeType.JestTest
+const defaultOrder: StatementTypes = [
+  StatementType.ImportDeclaration,
+  StatementType.DeclareGlobal,
+  StatementType.ExportAllDeclaration,
+  StatementType.ExportDeclaration,
+  StatementType.ExportDefaultDeclaration,
+  StatementType.ExportUnknown,
+  StatementType.ExportTypeDeclaration,
+  StatementType.ExportFunctionDeclaration,
+  StatementType.Unknown,
+  StatementType.TypeDeclaration,
+  StatementType.FunctionDeclaration,
+  StatementType.JestTest
 ];
 
 const prepareForComparison = evaluate((): PrepareForComparison => {
@@ -117,22 +176,20 @@ const prepareForComparison = evaluate((): PrepareForComparison => {
   }
 });
 
-const sortable: Rec<NodeType, boolean> = {
-  [NodeType.DeclareGlobal]: true,
-  [NodeType.ExportAllDeclaration]: true,
-  [NodeType.ExportDeclaration]: true,
-  [NodeType.ExportDefaultDeclaration]: false,
-  [NodeType.ExportFunctionDeclaration]: true,
-  [NodeType.ExportTypeDeclaration]: true,
-  [NodeType.ExportUnknown]: false,
-  [NodeType.FunctionDeclaration]: true,
-  [NodeType.ImportDeclaration]: false,
-  [NodeType.JestTest]: true,
-  [NodeType.TypeDeclaration]: true,
-  [NodeType.Unknown]: false
+const sortable: Rec<StatementType, boolean> = {
+  [StatementType.DeclareGlobal]: true,
+  [StatementType.ExportAllDeclaration]: true,
+  [StatementType.ExportDeclaration]: true,
+  [StatementType.ExportDefaultDeclaration]: false,
+  [StatementType.ExportFunctionDeclaration]: true,
+  [StatementType.ExportTypeDeclaration]: true,
+  [StatementType.ExportUnknown]: false,
+  [StatementType.FunctionDeclaration]: true,
+  [StatementType.ImportDeclaration]: false,
+  [StatementType.JestTest]: true,
+  [StatementType.TypeDeclaration]: true,
+  [StatementType.Unknown]: false
 };
-
-type NodeTypes = readonly NodeType[];
 
 interface PrepareForComparison {
   /**
@@ -143,6 +200,8 @@ interface PrepareForComparison {
    */
   (str: string): string;
 }
+
+type StatementTypes = readonly StatementType[];
 
 /**
  * Checks identifier name.
@@ -201,17 +260,17 @@ function getJestTestName(node: TSESTree.ExpressionStatement): stringU {
  * @param order - Order.
  * @returns Sorting order function.
  */
-function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
+function sortingOrder(order: StatementTypes): (node: TSESTree.Node) => string {
   return node => {
     switch (node.type) {
       case AST_NODE_TYPES.ExportAllDeclaration:
         return buildResult(
-          NodeType.ExportAllDeclaration,
+          StatementType.ExportAllDeclaration,
           `${node.source.value}\u0002${node.exportKind}`
         );
 
       case AST_NODE_TYPES.ExportDefaultDeclaration:
-        return buildResult(NodeType.ExportDefaultDeclaration);
+        return buildResult(StatementType.ExportDefaultDeclaration);
 
       case AST_NODE_TYPES.ExportNamedDeclaration:
         if (node.declaration)
@@ -221,23 +280,23 @@ function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
               assert.not.empty(node.declaration.id, "Expecting node ID");
 
               return buildResult(
-                NodeType.ExportFunctionDeclaration,
+                StatementType.ExportFunctionDeclaration,
                 node.declaration.id.name
               );
 
             case AST_NODE_TYPES.TSInterfaceDeclaration:
             case AST_NODE_TYPES.TSTypeAliasDeclaration:
               return buildResult(
-                NodeType.ExportTypeDeclaration,
+                StatementType.ExportTypeDeclaration,
                 node.declaration.id.name
               );
 
             default:
-              return buildResult(NodeType.ExportUnknown);
+              return buildResult(StatementType.ExportUnknown);
           }
 
         return buildResult(
-          NodeType.ExportDeclaration,
+          StatementType.ExportDeclaration,
           node.source ? `${node.source.value}\u0002${node.exportKind}` : ""
         );
 
@@ -245,33 +304,35 @@ function sortingOrder(order: NodeTypes): (node: TSESTree.Node) => string {
         const id = getJestTestName(node);
 
         return is.not.empty(id)
-          ? buildResult(NodeType.JestTest, id)
-          : buildResult(NodeType.Unknown);
+          ? buildResult(StatementType.JestTest, id)
+          : buildResult(StatementType.Unknown);
       }
 
       case AST_NODE_TYPES.FunctionDeclaration:
       case AST_NODE_TYPES.TSDeclareFunction:
         assert.not.empty(node.id, "Expecting node ID");
 
-        return buildResult(NodeType.FunctionDeclaration, node.id.name);
+        return buildResult(StatementType.FunctionDeclaration, node.id.name);
 
       case AST_NODE_TYPES.ImportDeclaration:
-        return buildResult(NodeType.ImportDeclaration);
+        return buildResult(StatementType.ImportDeclaration);
 
       case AST_NODE_TYPES.TSInterfaceDeclaration:
       case AST_NODE_TYPES.TSTypeAliasDeclaration:
-        return buildResult(NodeType.TypeDeclaration, node.id.name);
+        return buildResult(StatementType.TypeDeclaration, node.id.name);
 
       case AST_NODE_TYPES.TSModuleDeclaration:
         return buildResult(
-          node.global ?? false ? NodeType.DeclareGlobal : NodeType.Unknown
+          node.global ?? false
+            ? StatementType.DeclareGlobal
+            : StatementType.Unknown
         );
 
       default:
-        return buildResult(NodeType.Unknown);
+        return buildResult(StatementType.Unknown);
     }
 
-    function buildResult(type: NodeType, id = ""): string {
+    function buildResult(type: StatementType, id = ""): string {
       const order1 = 1_000_000 + order.indexOf(type);
 
       const order2 = sortable[type] ? id : "";

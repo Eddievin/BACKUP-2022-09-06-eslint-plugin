@@ -6,7 +6,7 @@ import nodePath from "node:path";
 import type { strings } from "@skylib/functions";
 
 export interface Suboptions {
-  readonly allowedDependencies: stringsArray;
+  readonly hierarchy: stringsArray;
 }
 
 export type stringsArray = readonly strings[];
@@ -18,7 +18,7 @@ export enum MessageId {
 export const isStringsArray = is.factory(is.array.of, is.strings);
 
 export const isSuboptions = is.object.factory<Suboptions>(
-  { allowedDependencies: isStringsArray },
+  { hierarchy: isStringsArray },
   {}
 );
 
@@ -26,13 +26,39 @@ export const noSiblingImport = utils.createRule({
   name: "no-sibling-import",
   vue: true,
   isSuboptions: is.object.factory<Suboptions>(
-    { allowedDependencies: isStringsArray },
+    { hierarchy: isStringsArray },
     {}
   ),
-  defaultSuboptions: { allowedDependencies: [] },
+  defaultSuboptions: { hierarchy: [] },
   suboptionsKey: "rules",
   messages: {
     [MessageId.disallowedSource]: "Import from this source is not allowed"
+  },
+  docs: {
+    description: "Restricts importing siblings.",
+    suboptionTypes: { hierarchy: "string[][]" },
+    suboptionDescriptions: { hierarchy: "Allows some sibling dependencies" },
+    failExamples: `
+      // filename: file.ts
+      import { x } from "./sibling-file";
+    `,
+    passExamples: `
+      // filename: file.ts
+      /*
+      eslint @skylib/no-sibling-import: [
+        error,
+        {
+          rules: [
+            {
+              hierarchy: [["./sibling-file"], ["./file"]]
+            }
+          ]
+        }
+      ]
+      */
+      import { x } from "./sibling-file";
+      import { y } from "./folder";
+    `
   },
   create: context => {
     const path = context.stripExtension(context.filename);
@@ -45,7 +71,7 @@ export const noSiblingImport = utils.createRule({
 
     const matcher = evaluate(() => {
       const rules = context.options.rules.map((rule): SuboptionsExtended => {
-        const matchers = rule.allowedDependencies.map(pattern =>
+        const matchers = rule.hierarchy.map(pattern =>
           utils.createFileMatcher(pattern, false, { dot: true })
         );
 

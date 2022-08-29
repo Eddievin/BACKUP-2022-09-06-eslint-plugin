@@ -7,16 +7,19 @@ const functions_1 = require("@skylib/functions");
 const misc_1 = require("../../misc");
 exports.requireJsdoc = (0, functions_1.evaluate)(() => {
     const prefix = ":matches(ExportNamedDeclaration, Program, TSModuleBlock) > VariableDeclaration > VariableDeclarator[id.typeAnnotation=undefined] > CallExpression[callee.name=defineFn]";
-    return utils.wrapRule(misc_1.misc["require-jsdoc"], [
-        {
-            includeSelectors: [
-                `${prefix} > ArrowFunctionExpression`,
-                `${prefix} > FunctionExpression`,
-                `${prefix} > ObjectExpression > Property > ArrowFunctionExpression`,
-                `${prefix} > ObjectExpression > Property > FunctionExpression`
-            ],
-            noDefaultSelectors: true
-        }
-    ]);
+    return utils.wrapRule({
+        rule: misc_1.misc["require-jsdoc"],
+        options: [
+            {
+                includeSelectors: [
+                    `${prefix} > ArrowFunctionExpression`,
+                    `${prefix} > FunctionExpression`,
+                    `${prefix} > ObjectExpression > Property > ArrowFunctionExpression`,
+                    `${prefix} > ObjectExpression > Property > FunctionExpression`
+                ],
+                noDefaultSelectors: true
+            }
+        ]
+    });
 });
 //# sourceMappingURL=require-jsdoc.js.map

@@ -12,9 +12,31 @@ var MessageId;
 exports.switchCaseSpacing = utils.createRule({
     name: "switch-case-spacing",
     fixable: utils.Fixable.whitespace,
+    vue: true,
     messages: {
         [MessageId.addEmptyLine]: "Add empty line before switch case",
         [MessageId.removeEmptyLine]: "Remove empty line before switch case"
+    },
+    docs: {
+        description: "Ensures consistent empty lines between switch case statements.",
+        failExamples: `
+      switch (x) {
+        case 1:
+
+        case 2:
+          break;
+        case 3:
+      }
+    `,
+        passExamples: `
+      switch (x) {
+        case 1:
+        case 2:
+          break;
+
+        case 3:
+      }
+    `
     },
     create: (context) => ({
         SwitchStatement: node => {

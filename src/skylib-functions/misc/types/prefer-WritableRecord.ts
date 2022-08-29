@@ -3,12 +3,12 @@
 import * as utils from "../../../utils";
 import { misc } from "../../../misc";
 
-export const preferWritableRecord = utils.wrapRule(
-  misc["no-restricted-syntax"],
-  [
+export const preferWritableRecord = utils.wrapRule({
+  rule: misc["no-restricted-syntax"],
+  options: [
     {
       message: 'Use "WritableRecord" type instead',
       selector: "Identifier[name=Record]"
     }
   ]
-);
+});

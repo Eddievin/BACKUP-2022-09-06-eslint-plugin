@@ -11,6 +11,17 @@ export const arrayCallbackReturnType = utils.createRule({
   name: "array-callback-return-type",
   vue: false,
   messages: { [MessageId.invalidType]: "Expecting boolean return type" },
+  docs: {
+    description: "Requires boolean return type in array callbacks.",
+    failExamples: `
+      [1, true].every(x => x);
+    `,
+    passExamples: `
+      [1].every(x => x);
+      [""].every(x => x);
+      [false].every(x => x);
+    `
+  },
   create: (context, typeCheck): RuleListener => ({
     CallExpression: node => {
       const { callee } = node;

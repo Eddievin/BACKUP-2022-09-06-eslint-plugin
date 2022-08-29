@@ -11,10 +11,41 @@ var MessageId;
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.disallowImport = utils.createRule({
     name: "disallow-import",
+    vue: true,
     isOptions: functions_1.is.object.factory({ allow: utils.isStringOrStrings, disallow: utils.isStringOrStrings }, {}),
     defaultOptions: { allow: [], disallow: [] },
     messages: {
         [MessageId.disallowedSource]: "Import from this source is not allowed"
+    },
+    docs: {
+        description: "Disallows import given sources.",
+        optionTypes: { allow: "string | string[]", disallow: "string | string[]" },
+        optionDescriptions: {
+            allow: "Allowed sources (minimatch)",
+            disallow: "Disallowed sources (minimatch)"
+        },
+        failExamples: `
+      /*
+      eslint @skylib/disallow-import: [
+        error,
+        {
+          disallow: "source1"
+        }
+      ]
+      */
+      import * as source1 from "source1";
+    `,
+        passExamples: `
+      /*
+      eslint @skylib/disallow-import: [
+        error,
+        {
+          disallow: "source1"
+        }
+      ]
+      */
+      import * as source2 from "source2";
+    `
     },
     create: context => {
         const matcher = utils.createFileMatcher(context.options, false, {

@@ -1,11 +1,51 @@
-[ESLint plugin](index.md) / class-name
+[ESLint plugin](index.md) / match-filename
 
-# class-name
+# match-filename
 
-Checks that class name matches file name.
+Ensures that AST element matches filename.
 
 ## eslintrc.js
 
 ```ts
-"@skylib/class-name": "error"
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/match-filename": "error"
+  }
+};
+```
+
+## Options
+
+| Name | Description |
+| :------ | :------ |
+| `Parameter name` | Parameter description. |
+
+
+## Examples of incorrect code
+
+```ts
+/*
+eslint @skylib/match-filename: [
+  error,
+  {
+    disallow: "source1"
+  }
+]
+*/
+import * as source1 from "source1";
+```
+
+## Examples of correct code
+
+```ts
+/*
+eslint @skylib/match-filename: [
+  error,
+  {
+    disallow: "source1"
+  }
+]
+*/
+import * as source2 from "source2";
 ```

@@ -2,32 +2,37 @@
 
 # require-jsdoc
 
-Requires JSDoc comments.
+Requires JSDoc documentation.
 
 ## eslintrc.js
 
 ```ts
-"@skylib/require-jsdoc": [
-  "error",
-  {
-    excludeSelectors?: string[],
-    includeSelectors?: string[],
-    interfaces?: Array<"callSignatures" | "constructSignatures" | "interface">,
-    noDefaultSelectors?: string[],
-    properties?: Array<"function" | "nonFunction">
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/require-jsdoc": "error"
   }
-]
+};
 ```
 
 ## Options
 
 | Name | Description |
 | :------ | :------ |
-| `excludeSelectors` | Excludes AST selectors. |
-| `includeSelectors` | Adds AST selectors. |
-| `interfaces.callSignatures` | Require JSDoc comment for call signatures. |
-| `interfaces.constructSignatures` | Require JSDoc comment for constructor signatures. |
-| `interfaces.interface` | Require JSDoc comment for interface. |
-| `noDefaultSelectors` | Do not use default AST selectors. |
-| `properties.function` | Require JSDoc comment for function property. |
-| `properties.nonFunction` | Require JSDoc comment for non-function property. |
+| `Parameter name` | Parameter description. |
+
+
+## Examples of incorrect code
+
+```ts
+function f(): void {}
+```
+
+## Examples of correct code
+
+```ts
+/**
+ * Description.
+ */
+function f(): void {}
+```

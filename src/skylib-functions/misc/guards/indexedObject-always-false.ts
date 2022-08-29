@@ -3,9 +3,9 @@
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-export const indexedObjectAlwaysFalse = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const indexedObjectAlwaysFalse = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: "Always false",
       selector:
@@ -17,4 +17,4 @@ export const indexedObjectAlwaysFalse = utils.wrapRule(
       ]
     }
   ]
-);
+});

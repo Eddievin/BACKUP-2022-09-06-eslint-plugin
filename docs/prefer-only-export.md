@@ -1,11 +1,52 @@
-[ESLint plugin](index.md) / class-only-export
+[ESLint plugin](index.md) / prefer-only-export
 
-# class-only-export
+# prefer-only-export
 
-Checks that class export is the only export.
+Requires only export if given AST element if found.
 
 ## eslintrc.js
 
 ```ts
-"@skylib/class-only-export": "error"
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/prefer-only-export": "error"
+  }
+};
+```
+
+## Options
+
+| Name | Description |
+| :------ | :------ |
+| `Parameter name` | Parameter description. |
+
+
+## Examples of incorrect code
+
+```ts
+/*
+eslint @skylib/prefer-only-export: [
+  error,
+  {
+    selector: "Program > ExportNamedDeclaration > ClassDeclaration"
+  }
+]
+*/
+export class SampleClass {}
+export const x = 1;
+```
+
+## Examples of correct code
+
+```ts
+/*
+eslint @skylib/prefer-only-export: [
+  error,
+  {
+    selector: "Program > ExportNamedDeclaration > ClassDeclaration"
+  }
+]
+*/
+export class SampleClass {}
 ```

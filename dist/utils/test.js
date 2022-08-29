@@ -29,8 +29,6 @@ function testRule(name, rule, invalid, valid = []) {
             ecmaFeatures: { jsx: true },
             ecmaVersion: 2017,
             extraFileExtensions: [".vue"],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Ok
-            // @ts-expect-error
             parser: "@typescript-eslint/parser",
             project: "./tsconfig.json",
             sourceType: "module",

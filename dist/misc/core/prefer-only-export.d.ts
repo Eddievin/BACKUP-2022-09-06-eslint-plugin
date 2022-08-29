@@ -1,7 +1,6 @@
 import * as utils from "../../utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 export interface Options {
-    readonly exportMatchingFilename: boolean;
     readonly selector: utils.Selector;
 }
 export declare enum MessageId {

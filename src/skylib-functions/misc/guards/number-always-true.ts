@@ -1,9 +1,9 @@
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-export const numberAlwaysTrue = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const numberAlwaysTrue = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: "Always true",
       selector:
@@ -11,4 +11,4 @@ export const numberAlwaysTrue = utils.wrapRule(
       typeIs: utils.TypeGroup.number
     }
   ]
-);
+});

@@ -3,9 +3,9 @@
 import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
-export const numStrAlwaysFalse = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const numStrAlwaysFalse = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: "Always false",
       selector:
@@ -18,4 +18,4 @@ export const numStrAlwaysFalse = utils.wrapRule(
       ]
     }
   ]
-);
+});

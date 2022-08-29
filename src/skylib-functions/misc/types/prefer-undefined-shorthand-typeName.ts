@@ -4,9 +4,9 @@ import * as utils from "../../../utils";
 import { misc } from "../../../misc";
 
 // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
-export const preferUndefinedShorthandTypeName = utils.wrapRule(
-  misc["no-restricted-syntax"],
-  [
+export const preferUndefinedShorthandTypeName = utils.wrapRule({
+  rule: misc["no-restricted-syntax"],
+  options: [
     {
       message: 'Use "...U" type instead',
       selector: [
@@ -19,4 +19,4 @@ export const preferUndefinedShorthandTypeName = utils.wrapRule(
       ]
     }
   ]
-);
+});

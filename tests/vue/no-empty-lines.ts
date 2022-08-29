@@ -27,9 +27,9 @@ utils.testRule(
       code: `
         <template>
           <p></p>
-          ...
+          text
 
-          ...
+          text
           <p></p>
         </template>
       `

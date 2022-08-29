@@ -8,25 +8,6 @@ const MessageId = utils.getMessageId(rule);
 utils.testRule("no-restricted-syntax", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
-    options: [{ selector: "VElement[name=p]" }],
-    code: `
-      <template>
-        <p>Text</p>
-      </template>
-    `,
-    errors: [
-      {
-        line: 2,
-        messageId: MessageId.customMessage,
-        data: {
-          _id: "id",
-          message: "This syntax is not allowed: VElement[name=p]"
-        }
-      }
-    ]
-  },
-  {
-    name: `Test at line ${getCurrentLine().line}`,
     options: [{ selector: "Identifier" }],
     code: `
       <script lang="ts">

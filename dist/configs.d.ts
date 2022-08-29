@@ -32,11 +32,11 @@ export declare const configs: {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
-    readonly "functions/jest": {
+    readonly "functions.jest": {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
-    readonly "functions/misc": {
+    readonly "functions.misc": {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
@@ -47,7 +47,9 @@ export declare const configs: {
     readonly "quasar-extension": {
         readonly overrides: readonly [{
             readonly files: "*.extras";
-            readonly rules: object;
+            readonly rules: {
+                readonly "@skylib/typescript/no-empty-interfaces": "off";
+            };
         }, {
             readonly files: "*.vue";
             readonly rules: object;
@@ -58,19 +60,21 @@ export declare const configs: {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
-    readonly "quasar-extension/extras": {
+    readonly "quasar-extension.extras": {
+        readonly plugins: readonly ["@skylib/eslint-plugin"];
+        readonly rules: {
+            readonly "@skylib/typescript/no-empty-interfaces": "off";
+        };
+    };
+    readonly "quasar-extension.jest": {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
-    readonly "quasar-extension/jest": {
+    readonly "quasar-extension.misc": {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };
-    readonly "quasar-extension/misc": {
-        readonly plugins: readonly ["@skylib/eslint-plugin"];
-        readonly rules: object;
-    };
-    readonly "quasar-extension/vue": {
+    readonly "quasar-extension.vue": {
         readonly plugins: readonly ["@skylib/eslint-plugin"];
         readonly rules: object;
     };

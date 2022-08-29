@@ -9,8 +9,8 @@ utils.testRule("no-complex-return-type", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      function f() { return { x: 1 } }
-      function g(): object { return { x: 1 } }
+      function f() { return { x: 1 }; }
+      function g(): object { return { x: 1 }; }
       interface I { (): unknown; }
       class C {
         public constructor() {}

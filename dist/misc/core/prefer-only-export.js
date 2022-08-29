@@ -12,12 +12,41 @@ var MessageId;
 exports.preferOnlyExport = utils.createRule({
     name: "prefer-only-export",
     vue: true,
-    isOptions: functions_1.is.object.factory({ exportMatchingFilename: functions_1.is.boolean, selector: utils.isSelector }, {}),
-    defaultOptions: { exportMatchingFilename: false, selector: [] },
+    isOptions: functions_1.is.object.factory({ selector: utils.isSelector }, {}),
+    defaultOptions: { selector: [] },
     messages: { [MessageId.invalidExport]: "Expecting only export" },
+    docs: {
+        description: "Requires only export if given AST element if found.",
+        optionTypes: { selector: "string | string[]" },
+        optionDescriptions: { selector: "AST selector" },
+        failExamples: `
+      /*
+      eslint @skylib/prefer-only-export: [
+        error,
+        {
+          selector: "Program > ExportNamedDeclaration > ClassDeclaration"
+        }
+      ]
+      */
+      export class SampleClass {}
+      export const x = 1;
+    `,
+        passExamples: `
+      /*
+      eslint @skylib/prefer-only-export: [
+        error,
+        {
+          selector: "Program > ExportNamedDeclaration > ClassDeclaration"
+        }
+      ]
+      */
+      export class SampleClass {}
+    `
+    },
     create: context => {
-        const { exportMatchingFilename, selector: mixedSelector } = context.options;
+        const { selector: mixedSelector } = context.options;
         const selector = utils.selector(mixedSelector);
+        functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
         let activated = false;
         return utils.mergeListeners(selector
             ? (0, functions_1.typedef)({
@@ -27,10 +56,6 @@ exports.preferOnlyExport = utils.createRule({
             })
             : {}, ruleTemplates.export(ctx => {
             const { identifiers, onlyExport } = ctx;
-            if (exportMatchingFilename &&
-                identifiers.some(node => node.name ===
-                    context.identifierFromPath(context.filename, node.name)))
-                activated = true;
             if (activated)
                 if (onlyExport) {
                     // Valid

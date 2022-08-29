@@ -11,6 +11,17 @@ export const onlyExportName = utils.createRule({
   messages: {
     [MessageId.invalidName]: "Only export should match file name: {{expected}}"
   },
+  docs: {
+    description: "Ensures that only export matches filename.",
+    failExamples: `
+      // filename: file.ts
+      export class SampleClass {}
+    `,
+    passExamples: `
+      // filename: SampleClass.ts
+      export class SampleClass {}
+    `
+  },
   create: context =>
     ruleTemplates.export(ctx => {
       if (ctx.onlyExport)

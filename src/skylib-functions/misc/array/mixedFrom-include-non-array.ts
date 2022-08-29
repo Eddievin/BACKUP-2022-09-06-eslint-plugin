@@ -4,9 +4,9 @@ import * as utils from "../../../utils";
 import { typescript } from "../../../typescript";
 
 // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
-export const mixedFromIncludeNonArray = utils.wrapRule(
-  typescript["typescript/no-restricted-syntax"],
-  [
+export const mixedFromIncludeNonArray = utils.wrapRule({
+  rule: typescript["typescript/no-restricted-syntax"],
+  options: [
     {
       message: "Expecting type to include non-array",
       selector:
@@ -21,4 +21,4 @@ export const mixedFromIncludeNonArray = utils.wrapRule(
       ]
     }
   ]
-);
+});

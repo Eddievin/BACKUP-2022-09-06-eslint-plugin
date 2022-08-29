@@ -24,6 +24,46 @@ export const requireSyntax = utils.createRule({
   ),
   defaultOptions: { once: false, trigger: "Program" },
   messages: { [MessageId.customMessage]: "{{message}}" },
+  docs: {
+    description: "Requires script to contain syntax.",
+    optionTypes: {
+      message: "string",
+      once: "boolean",
+      selector: "string | string[]",
+      trigger: "string | string[]"
+    },
+    optionDescriptions: {
+      message: "Custom message",
+      once: "Syntax should be found exactly one time",
+      selector: "AST selector",
+      trigger: "Trigger rule by AST selector"
+    },
+    failExamples: `
+      /*
+      eslint @skylib/require-syntax: [
+        error,
+        {
+          selector: "Identifier[name=x]",
+          trigger: "Identifier[name=y]"
+        }
+      ]
+      */
+      export const y = 1;
+    `,
+    passExamples: `
+      /*
+      eslint @skylib/require-syntax: [
+        error,
+        {
+          selector: "Identifier[name=x]",
+          trigger: "Identifier[name=y]"
+        }
+      ]
+      */
+      export const x = 1;
+      export const y = 1;
+    `
+  },
   create: (context): RuleListener => {
     const {
       message,

@@ -12,14 +12,41 @@ var MessageId;
     MessageId["disallowedSource"] = "disallowedSource";
 })(MessageId = exports.MessageId || (exports.MessageId = {}));
 exports.isStringsArray = functions_1.is.factory(functions_1.is.array.of, functions_1.is.strings);
-exports.isSuboptions = functions_1.is.object.factory({ allow: functions_1.is.boolean, levels: exports.isStringsArray }, {});
+exports.isSuboptions = functions_1.is.object.factory({ hierarchy: exports.isStringsArray }, {});
 exports.noSiblingImport = utils.createRule({
     name: "no-sibling-import",
-    isSuboptions: functions_1.is.object.factory({ allow: functions_1.is.boolean, levels: exports.isStringsArray }, {}),
-    defaultSuboptions: { allow: false, levels: [] },
-    suboptionsKey: "folders",
+    vue: true,
+    isSuboptions: functions_1.is.object.factory({ hierarchy: exports.isStringsArray }, {}),
+    defaultSuboptions: { hierarchy: [] },
+    suboptionsKey: "rules",
     messages: {
         [MessageId.disallowedSource]: "Import from this source is not allowed"
+    },
+    docs: {
+        description: "Restricts importing siblings.",
+        suboptionTypes: { hierarchy: "string[][]" },
+        suboptionDescriptions: { hierarchy: "Allows some sibling dependencies" },
+        failExamples: `
+      // filename: file.ts
+      import { x } from "./sibling-file";
+    `,
+        passExamples: `
+      // filename: file.ts
+      /*
+      eslint @skylib/no-sibling-import: [
+        error,
+        {
+          rules: [
+            {
+              hierarchy: [["./sibling-file"], ["./file"]]
+            }
+          ]
+        }
+      ]
+      */
+      import { x } from "./sibling-file";
+      import { y } from "./folder";
+    `
     },
     create: context => {
         const path = context.stripExtension(context.filename);
@@ -28,15 +55,12 @@ exports.noSiblingImport = utils.createRule({
         if (basename === "index" || basename.startsWith("index."))
             return {};
         const matcher = (0, functions_1.evaluate)(() => {
-            if (context.options.folders.length) {
-                const folder = functions_1.a.last(context.options.folders);
-                if (folder.allow)
-                    return () => true;
-                const index = folder.levels.findIndex(level => utils.createFileMatcher(level, false, { dot: true })(`./${basename}`));
-                if (index > 0)
-                    return utils.createFileMatcher(folder.levels.slice(0, index).flat(), false, { dot: true });
-            }
-            return () => false;
+            const rules = context.options.rules.map((rule) => {
+                const matchers = rule.hierarchy.map(pattern => utils.createFileMatcher(pattern, false, { dot: true }));
+                const index = findLastIndex(matchers, ruleMatcher => ruleMatcher(`./${basename}`));
+                return Object.assign(Object.assign({}, rule), { matcher: str => findLastIndex(matchers, ruleMatcher => ruleMatcher(str)) <= index });
+            });
+            return (str) => rules.some(rule => rule.matcher(str));
         });
         return ruleTemplates.source(ctx => {
             const source = context.stripExtension(ctx.source);
@@ -62,4 +86,17 @@ exports.noSiblingImport = utils.createRule({
         });
     }
 });
+/**
+ * Finds last index.
+ *
+ * @param arr - Array.
+ * @param callback - Callback.
+ * @returns Last matching index.
+ */
+// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+// fixme
+function findLastIndex(arr, callback) {
+    const index = functions_1.a.reverse(arr).findIndex(callback);
+    return index === -1 ? -1 : arr.length - index - 1;
+}
 //# sourceMappingURL=no-sibling-import.js.map

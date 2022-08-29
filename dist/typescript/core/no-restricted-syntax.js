@@ -12,7 +12,7 @@ var MessageId;
 exports.noRestrictedSyntax = utils.createRule({
     name: "no-restricted-syntax",
     fixable: utils.Fixable.code,
-    vue: true,
+    vue: false,
     isOptions: functions_1.is.object.factory({
         checkArrayType: functions_1.is.boolean,
         checkReturnType: functions_1.is.boolean,
@@ -35,6 +35,85 @@ exports.noRestrictedSyntax = utils.createRule({
         ignoreSelector: []
     },
     messages: { [MessageId.customMessage]: "{{message}}" },
+    docs: {
+        description: `
+      Disallows restricted syntax.
+
+      \`\`\`ts
+      type TypeGroup =
+        | "any"
+        | "array"
+        | "boolean"
+        | "complex"
+        | "function"
+        | "never"
+        | "null"
+        | "number"
+        | "object"
+        | "parameter"
+        | "readonly"
+        | "string"
+        | "symbol"
+        | "tuple"
+        | "undefined"
+        | "unknown";
+      \`\`\`
+    `,
+        optionTypes: {
+            checkArrayType: "boolean",
+            checkReturnType: "boolean",
+            ignoreSelector: "string | string[]",
+            message: "string",
+            replacement: "string",
+            search: "string",
+            selector: "string | string[]",
+            typeHas: "TypeGroup",
+            typeHasNoneOf: "TypeGroup[]",
+            typeHasOneOf: "TypeGroup[]",
+            typeIs: "TypeGroup",
+            typeIsNoneOf: "TypeGroup[]",
+            typeIsOneOf: "TypeGroup[]"
+        },
+        optionDescriptions: {
+            checkArrayType: "Check array argument type",
+            checkReturnType: "Check function return type",
+            ignoreSelector: "Allowed AST elements (AST selector)",
+            message: "Custom message",
+            replacement: "Replacement",
+            search: "Serch term for replacement (regular expression)",
+            selector: "Disallowed AST elements (AST selector)",
+            typeHas: "Restrict syntax only if AST element's type includes given type",
+            typeHasNoneOf: "Restrict syntax only if AST element's type includes none of given types",
+            typeHasOneOf: "Restrict syntax only if AST element's type includes one of given types",
+            typeIs: "Restrict syntax only if AST element's type is equal to given type",
+            typeIsNoneOf: "Restrict syntax only if AST element's type is none of given types",
+            typeIsOneOf: "Restrict syntax only if AST element's type is one of given types"
+        },
+        failExamples: `
+      /*
+      eslint @skylib/no-restricted-syntax: [
+        error,
+        {
+          selector: "Identifier",
+          typeIs: "number"
+        }
+      ]
+      */
+      const x = 1;
+    `,
+        passExamples: `
+      /*
+      eslint @skylib/no-restricted-syntax: [
+        error,
+        {
+          selector: "Identifier",
+          typeIs: "number"
+        }
+      ]
+      */
+      const x = "";
+    `
+    },
     create: (context, typeCheck) => {
         const { checkArrayType, checkReturnType, ignoreSelector: mixedIgnoreSelector, message, replacement, search, selector: mixedSelector, typeHas, typeHasNoneOf, typeHasOneOf, typeIs, typeIsNoneOf, typeIsOneOf } = context.options;
         const selector = utils.selector(mixedSelector);

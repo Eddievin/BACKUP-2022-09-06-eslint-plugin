@@ -4,23 +4,16 @@ import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import { a, evaluate, is, s } from "@skylib/functions";
+import { a, as, evaluate, is, s } from "@skylib/functions";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
 
-export type Suboptions = Suboptions1 | Suboptions2;
-
-export interface Suboptions1 {
+export interface Suboptions {
   readonly _id: string;
   readonly emptyLine: EmptyLine;
-  readonly selector: utils.Selector;
-}
-
-export interface Suboptions2 {
-  readonly _id: string;
-  readonly emptyLine: EmptyLine;
-  readonly next: utils.Selector;
-  readonly prev: utils.Selector;
+  readonly next?: utils.Selector;
+  readonly prev?: utils.Selector;
+  readonly selector?: utils.Selector;
 }
 
 export enum EmptyLine {
@@ -37,24 +30,13 @@ export enum MessageId {
 export const consistentEmptyLines = evaluate(() => {
   const isEmptyLine = is.factory(is.enumeration, EmptyLine);
 
-  const isSuboptions1 = is.object.factory<Suboptions1>(
-    { _id: is.string, emptyLine: isEmptyLine, selector: utils.isSelector },
-    {}
-  );
-
-  const isSuboptions2 = is.object.factory<Suboptions2>(
+  const isSuboptions = is.object.factory<Suboptions>(
+    { _id: is.string, emptyLine: isEmptyLine },
     {
-      _id: is.string,
-      emptyLine: isEmptyLine,
       next: utils.isSelector,
-      prev: utils.isSelector
-    },
-    {}
-  );
-
-  const isSuboptions: is.Guard<Suboptions> = is.or.factory(
-    isSuboptions1,
-    isSuboptions2
+      prev: utils.isSelector,
+      selector: utils.isSelector
+    }
   );
 
   return utils.createRule({
@@ -67,6 +49,59 @@ export const consistentEmptyLines = evaluate(() => {
       [MessageId.addEmptyLine]: "Add empty line before ({{_id}})",
       [MessageId.removeEmptyLine]: "Remove empty line before ({{_id}})"
     },
+    docs: {
+      description: "Ensures consistent empty lines.",
+      suboptionTypes: {
+        _id: "string",
+        emptyLine: '"always" | "any" | "never"',
+        next: "string | string[]",
+        prev: "string | string[]",
+        selector: "string | string[]"
+      },
+      suboptionDescriptions: {
+        _id: "Id",
+        emptyLine: "Requires or disallows empty line",
+        next: "The second of the two adjustent AST selector (AST selector)",
+        prev: "The first of the two adjustent AST elements (AST selector)",
+        selector: "One selector for both adjustent AST elements (AST selector)"
+      },
+      failExamples: `
+        /*
+        eslint @skylib/consistent-empty-lines: [
+          error,
+          {
+            rules: [
+              {
+                _id: "import",
+                emptyLine: "always",
+                selector: "ImportDeclaration"
+              }
+            ]
+          }
+        ]
+        */
+        import x from "source1";
+        import y from "source2";
+      `,
+      passExamples: `
+        /*
+        eslint @skylib/consistent-empty-lines: [
+          error,
+          {
+            rules: [
+              {
+                _id: "import",
+                emptyLine: "never",
+                selector: "ImportDeclaration"
+              }
+            ]
+          }
+        ]
+        */
+        import x from "source1";
+        import y from "source2";
+      `
+    },
     create: (context): RuleListener => {
       const prevItems: Writable<Items> = [];
 
@@ -75,11 +110,11 @@ export const consistentEmptyLines = evaluate(() => {
       return utils.mergeListeners(
         ...context.options.rules.flatMap((rule, index): utils.RuleListeners => {
           const prev = utils.selector(
-            "prev" in rule ? rule.prev : rule.selector
+            "prev" in rule ? rule.prev : as.not.empty(rule.selector)
           );
 
           const next = utils.selector(
-            "next" in rule ? rule.next : rule.selector
+            "next" in rule ? rule.next : as.not.empty(rule.selector)
           );
 
           return [

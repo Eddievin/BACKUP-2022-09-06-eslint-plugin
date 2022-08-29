@@ -3,7 +3,7 @@ import type {
   RuleFix,
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
-import type { strings } from "@skylib/functions";
+import type { Rec, strings } from "@skylib/functions";
 
 export enum Casing {
   camelCase = "camelCase",
@@ -42,6 +42,19 @@ export interface AllowDisallowPatterns {
   // fixme
   readonly allow: strings | string;
   readonly disallow: strings | string;
+}
+
+export interface Docs<
+  O extends PropertyKey = never,
+  S extends PropertyKey = never
+> {
+  readonly description: string;
+  readonly failExamples: string;
+  readonly optionDescriptions?: Rec<O, string>;
+  readonly optionTypes?: Rec<O, string>;
+  readonly passExamples: string;
+  readonly suboptionDescriptions?: Rec<S, string>;
+  readonly suboptionTypes?: Rec<S, string>;
 }
 
 // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update

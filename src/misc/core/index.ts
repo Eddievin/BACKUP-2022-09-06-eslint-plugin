@@ -5,6 +5,7 @@ import { consistentFilename } from "./consistent-filename";
 import { consistentImport } from "./consistent-import";
 import { consistentOptionalProps } from "./consistent-optional-props";
 import { disallowImport } from "./disallow-import";
+import { exportMatchingFilenameOnly } from "./export-matching-filename-only";
 import { matchFilename } from "./match-filename";
 import { noExpressionEmptyLines } from "./no-expression-empty-lines";
 import { noRestrictedSyntax } from "./no-restricted-syntax";
@@ -32,6 +33,7 @@ export const core = {
   "consistent-import": consistentImport,
   "consistent-optional-props": consistentOptionalProps,
   "disallow-import": disallowImport,
+  "export-matching-filename-only": exportMatchingFilenameOnly,
   "match-filename": matchFilename,
   "no-expression-empty-lines": noExpressionEmptyLines,
   "no-restricted-syntax": noRestrictedSyntax,

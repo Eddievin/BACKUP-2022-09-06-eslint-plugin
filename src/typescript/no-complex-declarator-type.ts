@@ -1,9 +1,9 @@
 import * as utils from "../utils";
 import { core } from "./core";
 
-export const noComplexDeclaratorType = utils.wrapRule(
-  core["no-restricted-syntax"],
-  [
+export const noComplexDeclaratorType = utils.wrapRule({
+  rule: core["no-restricted-syntax"],
+  options: [
     {
       message: "Avoid complex declarator type",
       selector: [
@@ -15,5 +15,16 @@ export const noComplexDeclaratorType = utils.wrapRule(
       ],
       typeIs: utils.TypeGroup.complex
     }
-  ]
-);
+  ],
+  docs: {
+    description: "Disallow complex declarator types.",
+    failExamples: `
+      const x = { value: 1 };
+    `,
+    passExamples: `
+      const x = { value: 1 } as const;
+
+      const y: object = { value: 1 };
+    `
+  }
+});

@@ -18,6 +18,21 @@ export const sortTopComments = utils.createRule({
     ...utils.sort.messages,
     [MessageId.incorrectSorting]: "Incorrect sorting"
   },
+  docs: {
+    description: "Sorts top comments",
+    failExamples: `
+      // Comment 4
+      // Comment 3
+      /* Comment 2 */
+      /* Comment 1 */
+    `,
+    passExamples: `
+      /* Comment 1 */
+      /* Comment 2 */
+      // Comment 3
+      // Comment 4
+    `
+  },
   create: (context): RuleListener => ({
     "Program:exit": (node: TSESTree.Program) => {
       const texts = context.getComments(node);

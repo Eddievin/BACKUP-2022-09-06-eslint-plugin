@@ -9,14 +9,9 @@ utils.testRule("no-never", rule, [
   {
     name: `Test at line ${getCurrentLine().line}`,
     code: `
-      const x: I = { f: value => {} };
-      interface I {
-        [key: string]: (value: never) => void;
-      }
+      function f(value: "a" & "b") {}
+      function g(value: "a" | "b") {}
     `,
-    errors: [
-      { line: 1, messageId: MessageId.customMessage },
-      { line: 3, messageId: MessageId.customMessage }
-    ]
+    errors: [{ line: 1, messageId: MessageId.customMessage }]
   }
 ]);
