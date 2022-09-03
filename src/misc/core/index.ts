@@ -11,6 +11,7 @@ import { noExpressionEmptyLines } from "./no-expression-empty-lines";
 import { noRestrictedSyntax } from "./no-restricted-syntax";
 import { noSelfImport } from "./no-self-import";
 import { noSiblingImport } from "./no-sibling-import";
+import { noUnnecessaryTemplateLiteral } from "./no-unnecessary-template-literal";
 import { objectFormat } from "./object-format";
 import { onlyExportName } from "./only-export-name";
 import { preferOnlyExport } from "./prefer-only-export";
@@ -39,6 +40,7 @@ export const core = {
   "no-restricted-syntax": noRestrictedSyntax,
   "no-self-import": noSelfImport,
   "no-sibling-import": noSiblingImport,
+  "no-unnecessary-template-literal": noUnnecessaryTemplateLiteral,
   "object-format": objectFormat,
   "only-export-name": onlyExportName,
   "prefer-only-export": preferOnlyExport,
