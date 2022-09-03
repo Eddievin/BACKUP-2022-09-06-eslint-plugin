@@ -88,9 +88,17 @@ module.exports = {
     "@skylib/no-restricted-syntax/description-dot": [
       "warn",
       {
-        message: "Add dot to single-line description",
+        message: "Add dot at the end of description",
         selector:
           "Property[key.name=docs] > ObjectExpression > Property[key.name=description] > Literal.value[value=/[^.]$/u]"
+      }
+    ],
+    "@skylib/no-restricted-syntax/no-message-dot": [
+      "warn",
+      {
+        message: "Remove dot at the end of message",
+        selector:
+          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=messages] > ObjectExpression > Property > Literal.value[value=/\\.$/u]"
       }
     ],
     "@skylib/no-restricted-syntax/no-skipped-tests": [
