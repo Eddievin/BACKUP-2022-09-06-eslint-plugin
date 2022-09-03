@@ -19,7 +19,7 @@ export const sortTopComments = utils.createRule({
     [MessageId.incorrectSorting]: "Incorrect sorting"
   },
   docs: {
-    description: "Sorts top comments",
+    description: "Sorts top comments.",
     failExamples: `
       // Comment 4
       // Comment 3

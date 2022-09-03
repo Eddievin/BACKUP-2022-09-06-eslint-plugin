@@ -85,6 +85,14 @@ module.exports = {
           "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
       }
     ],
+    "@skylib/no-restricted-syntax/description-dot": [
+      "warn",
+      {
+        message: "Add dot to single-line description",
+        selector:
+          "Property[key.name=docs] > ObjectExpression > Property[key.name=description] > Literal.value[value=/[^.]$/u]"
+      }
+    ],
     "@skylib/no-restricted-syntax/no-skipped-tests": [
       "warn",
       {

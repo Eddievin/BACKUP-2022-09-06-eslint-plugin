@@ -6,6 +6,7 @@ module.exports = [
   "@skylib/match-filename/testRule-name",
   "@skylib/match-filename/testRule-rule",
   "@skylib/match-filename/wrapRule",
+  "@skylib/no-restricted-syntax/description-dot",
   "@skylib/no-restricted-syntax/no-ast",
   "@skylib/no-restricted-syntax/no-skipped-tests",
   "@skylib/no-restricted-syntax/vue",
