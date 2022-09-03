@@ -16,7 +16,7 @@ utils.testRule("consistent-suboptions-id", rule, [
             {
               overrides: [
                 { _id: "a-b" },
-                { _id: "a.b" },
+                { _id: "a.b" }
               ]
             }
           ]
