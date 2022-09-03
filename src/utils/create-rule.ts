@@ -35,6 +35,7 @@ export function createRule<
     docs: rawDocs,
     fixable,
     messages,
+    suboptionsKey,
     vue
   } = options;
 
@@ -49,7 +50,10 @@ export function createRule<
       failExamples: rawDocs
         ? s.unpadMultiline(rawDocs.failExamples)
         : undefined,
-      passExamples: rawDocs ? s.unpadMultiline(rawDocs.passExamples) : undefined
+      passExamples: rawDocs
+        ? s.unpadMultiline(rawDocs.passExamples)
+        : undefined,
+      suboptionsKey
     })
   };
 

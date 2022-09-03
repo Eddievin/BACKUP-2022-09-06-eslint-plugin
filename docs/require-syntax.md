@@ -4,23 +4,29 @@
 
 Requires script to contain syntax.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/require-syntax": "error"
+    "@skylib/require-syntax": [
+      "error",
+      {
+        message: string,
+        once: boolean,
+        selector: string | string[],
+        trigger: string | string[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| message | Custom message |
+| once | Syntax should be found exactly one time |
+| selector | AST selector |
+| trigger | Trigger rule by AST selector |
 
 ## Examples of incorrect code
 

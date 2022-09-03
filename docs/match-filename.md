@@ -4,23 +4,29 @@
 
 Ensures that AST element matches filename.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/match-filename": "error"
+    "@skylib/match-filename": [
+      "error",
+      {
+        format: "camelCase" | "kebab-case" | "PascalCase",
+        prefix: string,
+        selector: string | string[],
+        suffix: string
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| format | Format |
+| prefix | Prefix |
+| selector | AST selector |
+| suffix | Suffix |
 
 ## Examples of incorrect code
 

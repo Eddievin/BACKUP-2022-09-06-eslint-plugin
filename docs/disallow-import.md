@@ -4,23 +4,25 @@
 
 Disallows import given sources.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/disallow-import": "error"
+    "@skylib/disallow-import": [
+      "error",
+      {
+        allow: string | string[],
+        disallow: string | string[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| allow | Allowed sources (minimatch) |
+| disallow | Disallowed sources (minimatch) |
 
 ## Examples of incorrect code
 

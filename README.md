@@ -45,6 +45,7 @@ npm install --save-dev @skylib/eslint-plugin
 - [no-unnecessary-as-const](https://ilyub.github.io/eslint-plugin/no-unnecessary-as-const.html)
 - [no-unnecessary-break](https://ilyub.github.io/eslint-plugin/no-unnecessary-break.html)
 - [no-unnecessary-initialization](https://ilyub.github.io/eslint-plugin/no-unnecessary-initialization.html)
+- [no-unnecessary-template-literal](https://ilyub.github.io/eslint-plugin/no-unnecessary-template-literal.html)
 - [object-format](https://ilyub.github.io/eslint-plugin/object-format.html)
 - [only-export-name](https://ilyub.github.io/eslint-plugin/only-export-name.html)
 - [prefer-arrow-function-property](https://ilyub.github.io/eslint-plugin/prefer-arrow-function-property.html)
@@ -64,6 +65,8 @@ npm install --save-dev @skylib/eslint-plugin
 - [switch-case-spacing](https://ilyub.github.io/eslint-plugin/switch-case-spacing.html)
 - [template-literal-format](https://ilyub.github.io/eslint-plugin/template-literal-format.html)
 - [wrap](https://ilyub.github.io/eslint-plugin/wrap.html)
+- [eslintrc/consistent-suboptions-id](https://ilyub.github.io/eslint-plugin/eslintrc/consistent-suboptions-id.html)
+- [eslintrc/no-message-dot](https://ilyub.github.io/eslint-plugin/eslintrc/no-message-dot.html)
 - [eslintrc/no-unnecessary-array](https://ilyub.github.io/eslint-plugin/eslintrc/no-unnecessary-array.html)
 - [eslintrc/sort-array](https://ilyub.github.io/eslint-plugin/eslintrc/sort-array.html)
 - [eslintrc/sort-suboptions](https://ilyub.github.io/eslint-plugin/eslintrc/sort-suboptions.html)
@@ -86,12 +89,12 @@ npm install --save-dev @skylib/eslint-plugin
 - [typescript/no-this-void](https://ilyub.github.io/eslint-plugin/typescript/no-this-void.html)
 - [typescript/no-unsafe-object-assign](https://ilyub.github.io/eslint-plugin/typescript/no-unsafe-object-assign.html)
 - [typescript/no-unsafe-object-assignment](https://ilyub.github.io/eslint-plugin/typescript/no-unsafe-object-assignment.html)
-- [typescript/prefer-ReadonlyMap](https://ilyub.github.io/eslint-plugin/typescript/prefer-ReadonlyMap.html)
-- [typescript/prefer-ReadonlySet](https://ilyub.github.io/eslint-plugin/typescript/prefer-ReadonlySet.html)
 - [typescript/prefer-array-type-alias](https://ilyub.github.io/eslint-plugin/typescript/prefer-array-type-alias.html)
 - [typescript/prefer-enum](https://ilyub.github.io/eslint-plugin/typescript/prefer-enum.html)
 - [typescript/prefer-readonly-array](https://ilyub.github.io/eslint-plugin/typescript/prefer-readonly-array.html)
 - [typescript/prefer-readonly-property](https://ilyub.github.io/eslint-plugin/typescript/prefer-readonly-property.html)
+- [typescript/prefer-ReadonlyMap](https://ilyub.github.io/eslint-plugin/typescript/prefer-ReadonlyMap.html)
+- [typescript/prefer-ReadonlySet](https://ilyub.github.io/eslint-plugin/typescript/prefer-ReadonlySet.html)
 - [typescript/require-prop-type-annotation](https://ilyub.github.io/eslint-plugin/typescript/require-prop-type-annotation.html)
 - [vue/component-name](https://ilyub.github.io/eslint-plugin/vue/component-name.html)
 - [vue/element-contents-spacing](https://ilyub.github.io/eslint-plugin/vue/element-contents-spacing.html)
@@ -105,23 +108,26 @@ npm install --save-dev @skylib/eslint-plugin
 ### eslintrc.js
 
 ```ts
-"@skylib/<rule-id>": [
-  "error",
-  {
-    <sub-options-key>: [
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/<rule-id>": [
+      "error",
       {
-        filesToLint?: string[],
-        filesToSkip?: string[],
-        ...
+        <sub-options-key>: [
+          {
+            filesToLint?: string[],
+            filesToSkip?: string[],
+            ...
+          }
+        ]
       }
     ]
   }
-]
+}
 ```
 
-### Options
-
-| Name | Description |
-| :------ | :------ |
-| `filesToLint` | Files to lint (minimatch patterns). |
-| `filesToSkip` | Files to skip (minimatch patterns). |
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| `filesToLint` | Files to lint (minimatch patterns) | [] |
+| `filesToSkip` | Files to skip (minimatch patterns) | [] |

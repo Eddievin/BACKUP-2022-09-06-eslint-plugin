@@ -4,23 +4,36 @@
 
 Ensures consistent empty lines.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/consistent-empty-lines": "error"
+    "@skylib/consistent-empty-lines": [
+      "error",
+      {
+        rules: [
+          {
+            _id: string,
+            emptyLine: "always" | "any" | "never",
+            next: string | string[],
+            prev: string | string[],
+            selector: string | string[]
+          },
+          ...
+        ]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| rules._id | Id |
+| rules.emptyLine | Requires or disallows empty line |
+| rules.next | The second of the two adjustent AST selector (AST selector) |
+| rules.prev | The first of the two adjustent AST elements (AST selector) |
+| rules.selector | One selector for both adjustent AST elements (AST selector) |
 
 ## Examples of incorrect code
 

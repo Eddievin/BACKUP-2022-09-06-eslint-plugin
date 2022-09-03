@@ -2,9 +2,7 @@
 
 # class-match-filename
 
-Requires class name to match filename
-
-## eslintrc.js
+Requires class name to match filename.
 
 ```ts
 module.exports = {
@@ -14,13 +12,6 @@ module.exports = {
   }
 };
 ```
-
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
 
 ## Examples of incorrect code
 

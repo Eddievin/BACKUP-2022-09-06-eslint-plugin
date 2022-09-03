@@ -24,23 +24,47 @@ type TypeGroup =
   | "unknown";
 ```
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/typescript/no-restricted-syntax": "error"
+    "@skylib/typescript/no-restricted-syntax": [
+      "error",
+      {
+        checkArrayType: boolean,
+        checkReturnType: boolean,
+        ignoreSelector: string | string[],
+        message: string,
+        replacement: string,
+        search: string,
+        selector: string | string[],
+        typeHas: TypeGroup,
+        typeHasNoneOf: TypeGroup[],
+        typeHasOneOf: TypeGroup[],
+        typeIs: TypeGroup,
+        typeIsNoneOf: TypeGroup[],
+        typeIsOneOf: TypeGroup[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| checkArrayType | Check array argument type |
+| checkReturnType | Check function return type |
+| ignoreSelector | Allowed AST elements (AST selector) |
+| message | Custom message |
+| replacement | Replacement |
+| search | Serch term for replacement (regular expression) |
+| selector | Disallowed AST elements (AST selector) |
+| typeHas | Restrict syntax only if AST element's type includes given type |
+| typeHasNoneOf | Restrict syntax only if AST element's type includes none of given types |
+| typeHasOneOf | Restrict syntax only if AST element's type includes one of given types |
+| typeIs | Restrict syntax only if AST element's type is equal to given type |
+| typeIsNoneOf | Restrict syntax only if AST element's type is none of given types |
+| typeIsOneOf | Restrict syntax only if AST element's type is one of given types |
 
 ## Examples of incorrect code
 

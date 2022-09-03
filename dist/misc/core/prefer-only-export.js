@@ -48,21 +48,15 @@ exports.preferOnlyExport = utils.createRule({
         const selector = utils.selector(mixedSelector);
         functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
         let activated = false;
-        return utils.mergeListeners(selector
-            ? (0, functions_1.typedef)({
-                [selector]: () => {
-                    activated = true;
-                }
-            })
-            : {}, ruleTemplates.export(ctx => {
+        return utils.mergeListeners({
+            [selector]: () => {
+                activated = true;
+            }
+        }, ruleTemplates.export(ctx => {
             const { identifiers, onlyExport } = ctx;
-            if (activated)
-                if (onlyExport) {
-                    // Valid
-                }
-                else
-                    for (const node of identifiers)
-                        context.report({ messageId: MessageId.invalidExport, node });
+            if (activated && !onlyExport)
+                for (const node of identifiers)
+                    context.report({ messageId: MessageId.invalidExport, node });
         }));
     }
 });

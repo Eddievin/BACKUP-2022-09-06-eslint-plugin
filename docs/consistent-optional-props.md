@@ -7,23 +7,40 @@ Ensures consistent optional property style:
 - x?: T
 - x: T | undefined
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/consistent-optional-props": "error"
+    "@skylib/consistent-optional-props": [
+      "error",
+      {
+        classes: "combined" | "optional" | "undefined",
+        interfaces: "combined" | "optional" | "undefined",
+        overrides: [
+          {
+            _id: string,
+            pattern: string | string[],
+            propertyPattern: string | string[],
+            style: "combined" | "optional" | "undefined",
+            target: "classes" | "interfaces"
+          },
+          ...
+        ]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| classes | Prefered style for classes |
+| interfaces | Prefered style for interfaces |
+| rules._id | Id |
+| rules.pattern | Only for selected class/interface names (regular expression) |
+| rules.propertyPattern | Only for selected property names (regular expression) |
+| rules.style | Prefered style |
+| rules.target | Classes or interfaces |
 
 ## Examples of incorrect code
 

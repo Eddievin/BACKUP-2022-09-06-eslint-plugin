@@ -4,8 +4,6 @@
 
 Disallows unnecessary "as const".
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
@@ -14,13 +12,6 @@ module.exports = {
   }
 };
 ```
-
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
 
 ## Examples of incorrect code
 

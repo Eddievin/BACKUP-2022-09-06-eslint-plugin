@@ -2,9 +2,7 @@
 
 # class-only-export
 
-Requires class to be only export
-
-## eslintrc.js
+Requires class to be only export.
 
 ```ts
 module.exports = {
@@ -14,13 +12,6 @@ module.exports = {
   }
 };
 ```
-
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
 
 ## Examples of incorrect code
 

@@ -9,23 +9,23 @@ Sorts class members by type and alphabetically inside each type group. Type grou
 - Type: "accessor", "block", "constructor", "field", "get", "method", "set", "signature"
 - Any combinations, e.g.: "protected-dynamic-accessor"
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/sort-class-members": "error"
+    "@skylib/sort-class-members": [
+      "error",
+      {
+        sortingOrder: string[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| sortingOrder | Sorting order |
 
 ## Examples of incorrect code
 

@@ -2,9 +2,7 @@
 
 # sort-top-comments
 
-Sorts top comments
-
-## eslintrc.js
+Sorts top comments.
 
 ```ts
 module.exports = {
@@ -14,13 +12,6 @@ module.exports = {
   }
 };
 ```
-
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
 
 ## Examples of incorrect code
 

@@ -4,23 +4,31 @@
 
 Disallows restricted syntax.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/no-restricted-syntax": "error"
+    "@skylib/no-restricted-syntax": [
+      "error",
+      {
+        ignoreSelector: string | string[],
+        message: string,
+        replacement: string,
+        search: string,
+        selector: string | string[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| ignoreSelector | Allowed AST elements (AST selector) |
+| message | Custom message |
+| replacement | Replacement |
+| search | Serch term for replacement (regular expression) |
+| selector | Disallowed AST elements (AST selector) |
 
 ## Examples of incorrect code
 

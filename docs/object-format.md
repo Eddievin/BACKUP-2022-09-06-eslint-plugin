@@ -4,23 +4,25 @@
 
 Ensures multiline or single-line object format.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/object-format": "error"
+    "@skylib/object-format": [
+      "error",
+      {
+        maxLineLength: number,
+        maxObjectSize: number
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| maxLineLength | Max line length for single-line object |
+| maxObjectSize | Max object size for single-line object |
 
 ## Examples of incorrect code
 

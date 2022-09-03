@@ -14,7 +14,7 @@ exports.sortTopComments = utils.createRule({
     vue: true,
     messages: Object.assign(Object.assign({}, utils.sort.messages), { [MessageId.incorrectSorting]: "Incorrect sorting" }),
     docs: {
-        description: "Sorts top comments",
+        description: "Sorts top comments.",
         failExamples: `
       // Comment 4
       // Comment 3

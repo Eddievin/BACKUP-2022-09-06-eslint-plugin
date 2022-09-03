@@ -4,23 +4,29 @@
 
 Wraps third-party rule.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/wrap": "error"
+    "@skylib/wrap": [
+      "error",
+      {
+        lint: string | string[],
+        plugin: string,
+        rule: string,
+        skip: string | string[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| lint | AST selectors to lint |
+| plugin | NPM package name |
+| rule | ESLint rule name |
+| skip | AST selectors to skip |
 
 ## Examples of incorrect code
 

@@ -13,7 +13,7 @@ exports.classMatchFilename = utils.wrapRule({
         }
     ],
     docs: {
-        description: "Requires class name to match filename",
+        description: "Requires class name to match filename.",
         failExamples: `
       // filename: kebab-case.ts
       export class ClassName {}

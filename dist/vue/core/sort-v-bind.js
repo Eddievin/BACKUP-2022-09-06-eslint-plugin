@@ -13,7 +13,7 @@ exports.sortVBind = utils.createRule({
     vue: true,
     messages: { [MessageId.incorrectSortingOrder]: "Incorrect sorting order" },
     docs: {
-        description: 'Sorts "v-bind" directive',
+        description: 'Sorts "v-bind" directive.',
         failExamples: `
       <template>
         <slot v-bind="obj" prop="prop" @click="click"></slot>

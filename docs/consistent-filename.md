@@ -4,23 +4,36 @@
 
 Ensures consistent file name.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/consistent-filename": "error"
+    "@skylib/consistent-filename": [
+      "error",
+      {
+        format: "PascalCase" | "camelCase" | "kebab-case",
+        overrides: [
+          {
+            _id: string,
+            format: "PascalCase" | "camelCase" | "kebab-case",
+            match: boolean,
+            selector: string | string[]
+          },
+          ...
+        ]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| format | File name format |
+| rules._id | Id |
+| rules.format | File name format |
+| rules.match | File name should match AST element |
+| rules.selector | AST selector |
 
 ## Examples of incorrect code
 

@@ -4,32 +4,16 @@
 
 {{description}}
 
-## eslintrc.js
-
-```ts
-module.exports = {
-  plugins: ["@skylib/eslint-plugin"],
-  rules: {
-    "@skylib/{{name}}": "error"
-  }
-};
-```
-
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+{{config}}
 
 ## Examples of incorrect code
 
 ```ts
-{{fail}}
+{{fail-examples}}
 ```
 
 ## Examples of correct code
 
 ```ts
-{{pass}}
+{{pass-examples}}
 ```

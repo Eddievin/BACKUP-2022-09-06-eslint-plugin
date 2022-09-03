@@ -4,23 +4,23 @@
 
 Requires only export if given AST element if found.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/prefer-only-export": "error"
+    "@skylib/prefer-only-export": [
+      "error",
+      {
+        selector: string | string[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| selector | AST selector |
 
 ## Examples of incorrect code
 

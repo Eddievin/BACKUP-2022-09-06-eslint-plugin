@@ -25,11 +25,11 @@ exports.consistentFilename = utils.createRule({
     },
     docs: {
         description: "Ensures consistent file name.",
-        optionTypes: { format: '"PascalCase" | "camelCase" |"kebab-case"' },
+        optionTypes: { format: '"PascalCase" | "camelCase" | "kebab-case"' },
         optionDescriptions: { format: "File name format" },
         suboptionTypes: {
             _id: "string",
-            format: '"PascalCase" | "camelCase" |"kebab-case"',
+            format: '"PascalCase" | "camelCase" | "kebab-case"',
             match: "boolean",
             selector: "string | string[]"
         },

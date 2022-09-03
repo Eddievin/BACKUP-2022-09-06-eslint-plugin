@@ -28,7 +28,7 @@ exports.exportMatchingFilenameOnly = utils.createRule({
         const { identifiers, onlyExport } = ctx;
         const hasExportMatchingFilename = identifiers.some(node => node.name ===
             context.identifierFromPath(context.filename, node.name));
-        if (hasExportMatchingFilename && onlyExport)
+        if (hasExportMatchingFilename && !onlyExport)
             for (const node of identifiers)
                 context.report({ messageId: MessageId.invalidExport, node });
     }))

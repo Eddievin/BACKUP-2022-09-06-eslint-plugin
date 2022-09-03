@@ -20,23 +20,29 @@ StatementType =
   | "Unknown";
 ```
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/sort-statements": "error"
+    "@skylib/sort-statements": [
+      "error",
+      {
+        blockOrder: StatementType[],
+        moduleOrder: StatementType[],
+        order: StatementType[],
+        programOrder: StatementType[]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| blockOrder | Order inside block statement |
+| moduleOrder | Order inside module declaration |
+| order | Default order |
+| programOrder | Root statements order |
 
 ## Examples of incorrect code
 

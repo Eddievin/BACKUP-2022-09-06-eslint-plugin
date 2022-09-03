@@ -21,23 +21,26 @@ npm install --save-dev @skylib/eslint-plugin
 ### eslintrc.js
 
 ```ts
-"@skylib/<rule-id>": [
-  "error",
-  {
-    <sub-options-key>: [
+module.exports = {
+  plugins: ["@skylib/eslint-plugin"],
+  rules: {
+    "@skylib/<rule-id>": [
+      "error",
       {
-        filesToLint?: string[],
-        filesToSkip?: string[],
-        ...
+        <sub-options-key>: [
+          {
+            filesToLint?: string[],
+            filesToSkip?: string[],
+            ...
+          }
+        ]
       }
     ]
   }
-]
+}
 ```
 
-### Options
-
-| Name | Description |
-| :------ | :------ |
-| `filesToLint` | Files to lint (minimatch patterns). |
-| `filesToSkip` | Files to skip (minimatch patterns). |
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| `filesToLint` | Files to lint (minimatch patterns) | [] |
+| `filesToSkip` | Files to skip (minimatch patterns) | [] |

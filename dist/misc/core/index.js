@@ -14,6 +14,7 @@ const no_expression_empty_lines_1 = require("./no-expression-empty-lines");
 const no_restricted_syntax_1 = require("./no-restricted-syntax");
 const no_self_import_1 = require("./no-self-import");
 const no_sibling_import_1 = require("./no-sibling-import");
+const no_unnecessary_template_literal_1 = require("./no-unnecessary-template-literal");
 const object_format_1 = require("./object-format");
 const only_export_name_1 = require("./only-export-name");
 const prefer_only_export_1 = require("./prefer-only-export");
@@ -41,6 +42,7 @@ exports.core = {
     "no-restricted-syntax": no_restricted_syntax_1.noRestrictedSyntax,
     "no-self-import": no_self_import_1.noSelfImport,
     "no-sibling-import": no_sibling_import_1.noSiblingImport,
+    "no-unnecessary-template-literal": no_unnecessary_template_literal_1.noUnnecessaryTemplateLiteral,
     "object-format": object_format_1.objectFormat,
     "only-export-name": only_export_name_1.onlyExportName,
     "prefer-only-export": prefer_only_export_1.preferOnlyExport,

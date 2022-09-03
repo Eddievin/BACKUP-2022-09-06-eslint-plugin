@@ -4,23 +4,42 @@
 
 Requires consistent import.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/consistent-import": "error"
+    "@skylib/consistent-import": [
+      "error",
+      {
+        sources: [
+          {
+            _id: string,
+            altLocalNames: string[],
+            autoImport: boolean,
+            autoImportSource: string,
+            localName: string,
+            source: string,
+            sourcePattern: string,
+            wildcard: boolean
+          },
+          ...
+        ]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| rules._id | Id |
+| rules.altLocalNames | Alternative local names |
+| rules.autoImport | Enable auto-import |
+| rules.autoImportSource | Auto-import source (defaults to "source") |
+| rules.localName | Local name |
+| rules.source | Source |
+| rules.sourcePattern | Soure pattern (minimatch) |
+| rules.wildcard | Prefer wildcard import |
 
 ## Examples of incorrect code
 

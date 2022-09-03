@@ -4,23 +4,28 @@
 
 Restricts importing siblings.
 
-## eslintrc.js
-
 ```ts
 module.exports = {
   plugins: ["@skylib/eslint-plugin"],
   rules: {
-    "@skylib/no-sibling-import": "error"
+    "@skylib/no-sibling-import": [
+      "error",
+      {
+        rules: [
+          {
+            hierarchy: string[][]
+          },
+          ...
+        ]
+      }
+    ]
   }
 };
 ```
 
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
+| Name | Description | Default value |
+| :----- | :----- | :----- |
+| rules.hierarchy | Allows some sibling dependencies |
 
 ## Examples of incorrect code
 

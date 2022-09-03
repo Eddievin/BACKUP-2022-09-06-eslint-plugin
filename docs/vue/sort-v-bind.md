@@ -2,9 +2,7 @@
 
 # vue/sort-v-bind
 
-Sorts "v-bind" directive
-
-## eslintrc.js
+Sorts "v-bind" directive.
 
 ```ts
 module.exports = {
@@ -14,13 +12,6 @@ module.exports = {
   }
 };
 ```
-
-## Options
-
-| Name | Description |
-| :------ | :------ |
-| `Parameter name` | Parameter description. |
-
 
 ## Examples of incorrect code
 
