@@ -21,7 +21,7 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | format | Format | -|
 | prefix | Prefix | ""|

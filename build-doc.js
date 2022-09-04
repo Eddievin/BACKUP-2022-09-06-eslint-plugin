@@ -125,7 +125,7 @@ const documentedRules = o.sort(
                 ? stringify(defaultSuboptions[option])
                 : "-";
 
-            return `| ${suboptionsKey}.\\<index\\>.${option} | ${description} | ${defVal} |`;
+            return `| ${suboptionsKey}.${option} | ${description} | ${defVal} |`;
           })
           .join("\n")
       : "";

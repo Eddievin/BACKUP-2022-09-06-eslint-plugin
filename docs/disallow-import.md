@@ -19,7 +19,7 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | allow | Allowed sources (minimatch) | []|
 | disallow | Disallowed sources (minimatch) | []|

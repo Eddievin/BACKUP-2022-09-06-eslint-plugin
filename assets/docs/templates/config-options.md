@@ -12,6 +12,6 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 {{options-annotation}}

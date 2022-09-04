@@ -3,9 +3,9 @@
 # consistent-optional-props
 
 Ensures consistent optional property style:
-- Combined syntax ("x?: T \| undefined")
-- Only optional syntax ("x?: T")
-- Only undefined syntax ("x: T \| undefined")
+- Combined syntax: "x?: T \| undefined"
+- Only optional syntax: "x?: T"
+- Only undefined syntax: "x: T \| undefined"
 
 ```ts
 module.exports = {
@@ -32,15 +32,15 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | classes | Prefered style for classes | "combined"|
 | interfaces | Prefered style for interfaces | "combined"|
-| overrides.\<index\>._id | Id | - |
-| overrides.\<index\>.pattern | Only for selected class/interface names (regular expression) | [] |
-| overrides.\<index\>.propertyPattern | Only for selected property names (regular expression) | [] |
-| overrides.\<index\>.style | Prefered style | - |
-| overrides.\<index\>.target | Classes or interfaces | - |
+| overrides._id | Id | - |
+| overrides.pattern | Only for selected class/interface names (regular expression) | [] |
+| overrides.propertyPattern | Only for selected property names (regular expression) | [] |
+| overrides.style | Prefered style | - |
+| overrides.target | Classes or interfaces | - |
 
 ## Examples of incorrect code
 

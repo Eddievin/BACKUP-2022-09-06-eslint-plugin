@@ -127,7 +127,7 @@ module.exports = {
 }
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | `filesToLint` | Files to lint (minimatch patterns) | [] |
 | `filesToSkip` | Files to skip (minimatch patterns) | [] |

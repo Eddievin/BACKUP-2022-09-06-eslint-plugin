@@ -27,13 +27,13 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | format | File name format | "kebab-case"|
-| overrides.\<index\>._id | Id | - |
-| overrides.\<index\>.format | File name format | - |
-| overrides.\<index\>.match | File name should match AST element | false |
-| overrides.\<index\>.selector | AST selector | - |
+| overrides._id | Id | - |
+| overrides.format | File name format | - |
+| overrides.match | File name should match AST element | false |
+| overrides.selector | AST selector | - |
 
 ## Examples of incorrect code
 

@@ -37,7 +37,7 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | blockOrder | Order inside block statement | []|
 | moduleOrder | Order inside module declaration | []|

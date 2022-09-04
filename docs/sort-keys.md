@@ -27,13 +27,13 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
-| overrides.\<index\>._id | Id | - |
-| overrides.\<index\>.customOrder | Array elements with custom order | - |
-| overrides.\<index\>.selector | AST elements to be sorted (AST selector) | - |
-| overrides.\<index\>.sendToBottom | Array elements that should be sent to bottom | - |
-| overrides.\<index\>.sendToTop | Array elements that should be sent to top | - |
+| overrides._id | Id | - |
+| overrides.customOrder | Array elements with custom order | - |
+| overrides.selector | AST elements to be sorted (AST selector) | - |
+| overrides.sendToBottom | Array elements that should be sent to bottom | - |
+| overrides.sendToTop | Array elements that should be sent to top | - |
 
 ## Examples of incorrect code
 

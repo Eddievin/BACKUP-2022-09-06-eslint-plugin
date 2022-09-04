@@ -27,13 +27,13 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
-| rules.\<index\>._id | Id | - |
-| rules.\<index\>.emptyLine | Requires or disallows empty line | - |
-| rules.\<index\>.next | The second of the two adjustent AST selector (AST selector) | - |
-| rules.\<index\>.prev | The first of the two adjustent AST elements (AST selector) | - |
-| rules.\<index\>.selector | One selector for both adjustent AST elements (AST selector) | - |
+| rules._id | Id | - |
+| rules.emptyLine | Requires or disallows empty line | - |
+| rules.next | The second of the two adjustent AST selector (AST selector) | - |
+| rules.prev | The first of the two adjustent AST elements (AST selector) | - |
+| rules.selector | One selector for both adjustent AST elements (AST selector) | - |
 
 ## Examples of incorrect code
 

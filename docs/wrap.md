@@ -21,7 +21,7 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | lint | AST selectors to lint | []|
 | plugin | NPM package name | -|

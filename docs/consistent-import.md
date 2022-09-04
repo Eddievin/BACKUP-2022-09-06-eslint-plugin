@@ -30,16 +30,16 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
-| sources.\<index\>._id | Id | - |
-| sources.\<index\>.altLocalNames | Alternative local names | [] |
-| sources.\<index\>.autoImport | Enable auto-import | false |
-| sources.\<index\>.autoImportSource | Auto-import source (defaults to "source") | - |
-| sources.\<index\>.localName | Local name | - |
-| sources.\<index\>.source | Source | - |
-| sources.\<index\>.sourcePattern | Soure pattern (minimatch) | - |
-| sources.\<index\>.wildcard | Prefer wildcard import | false |
+| sources._id | Id | - |
+| sources.altLocalNames | Alternative local names | [] |
+| sources.autoImport | Enable auto-import | false |
+| sources.autoImportSource | Auto-import source (defaults to "source") | - |
+| sources.localName | Local name | - |
+| sources.source | Source | - |
+| sources.sourcePattern | Soure pattern (minimatch) | - |
+| sources.wildcard | Prefer wildcard import | false |
 
 ## Examples of incorrect code
 

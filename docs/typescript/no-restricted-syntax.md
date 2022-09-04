@@ -50,7 +50,7 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | checkArrayType | Check array argument type | false|
 | checkReturnType | Check function return type | false|

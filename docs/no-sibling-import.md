@@ -23,9 +23,9 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
-| rules.\<index\>.hierarchy | Allows some sibling dependencies | [] |
+| rules.hierarchy | Allows some sibling dependencies | [] |
 
 ## Examples of incorrect code
 

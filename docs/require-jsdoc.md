@@ -22,7 +22,7 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | excludeSelectors | Skip these selectors. | []|
 | includeSelectors | Check additional selectors. | []|

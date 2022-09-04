@@ -21,7 +21,7 @@ module.exports = {
 };
 ```
 
-| Name | Description | Default value |
+| Option | Description | Default |
 | :----- | :----- | :----- |
 | message | Custom message | -|
 | once | Syntax should be found exactly one time | false|
