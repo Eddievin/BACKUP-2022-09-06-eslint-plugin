@@ -34,13 +34,13 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| classes | Prefered style for classes |
-| interfaces | Prefered style for interfaces |
-| rules._id | Id |
-| rules.pattern | Only for selected class/interface names (regular expression) |
-| rules.propertyPattern | Only for selected property names (regular expression) |
-| rules.style | Prefered style |
-| rules.target | Classes or interfaces |
+| classes | Prefered style for classes | "combined"|
+| interfaces | Prefered style for interfaces | "combined"|
+| overrides.\<index\>._id | Id | - |
+| overrides.\<index\>.pattern | Only for selected class/interface names (regular expression) | [] |
+| overrides.\<index\>.propertyPattern | Only for selected property names (regular expression) | [] |
+| overrides.\<index\>.style | Prefered style | - |
+| overrides.\<index\>.target | Classes or interfaces | - |
 
 ## Examples of incorrect code
 

@@ -25,7 +25,7 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| sortingOrder | Sorting order |
+| sortingOrder | Sorting order | []|
 
 ## Examples of incorrect code
 

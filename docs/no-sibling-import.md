@@ -25,7 +25,7 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| rules.hierarchy | Allows some sibling dependencies |
+| rules.\<index\>.hierarchy | Allows some sibling dependencies | [] |
 
 ## Examples of incorrect code
 

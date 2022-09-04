@@ -1,10 +1,8 @@
-const { evaluate, o, s } = require("@skylib/functions");
+const { evaluate, is, o, s } = require("@skylib/functions");
+
+const { stringify: baseStringify } = require("javascript-stringify");
 
 const fs = require("node:fs");
-
-const { rules } =
-  // eslint-disable-next-line @skylib/no-internal-modules -- Ok
-  require("./dist/rules.core.js");
 
 const templates = {
   config: fs
@@ -26,6 +24,10 @@ const templates = {
   index: fs.readFileSync("./assets/docs/templates/index.md").toString().trim(),
   rule: fs.readFileSync("./assets/docs/templates/rule.md").toString().trim()
 };
+
+const { rules } =
+  // eslint-disable-next-line @skylib/no-internal-modules -- Ok
+  require("./dist/rules.core.js");
 
 const documentedRules = o.sort(
   // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
@@ -74,6 +76,8 @@ const documentedRules = o.sort(
 
   for (const [name, rule] of o.entries(documentedRules)) {
     const {
+      defaultOptions,
+      defaultSuboptions,
       description,
       failExamples,
       optionDescriptions,
@@ -94,7 +98,14 @@ const documentedRules = o.sort(
     const optionsAnnotation = optionDescriptions
       ? o
           .entries(optionDescriptions)
-          .map(([option, description]) => `| ${option} | ${description} |`)
+          .map(([option, description]) => {
+            const defVal =
+              defaultOptions && is.not.empty(defaultOptions[option])
+                ? stringify(defaultOptions[option])
+                : "-";
+
+            return `| ${option} | ${description} | ${defVal}|`;
+          })
           .join("\n")
       : "";
 
@@ -108,9 +119,14 @@ const documentedRules = o.sort(
     const suboptionsAnnotation = suboptionDescriptions
       ? o
           .entries(suboptionDescriptions)
-          .map(
-            ([option, description]) => `| rules.${option} | ${description} |`
-          )
+          .map(([option, description]) => {
+            const defVal =
+              defaultSuboptions && is.not.empty(defaultSuboptions[option])
+                ? stringify(defaultSuboptions[option])
+                : "-";
+
+            return `| ${suboptionsKey}.\\<index\\>.${option} | ${description} | ${defVal} |`;
+          })
           .join("\n")
       : "";
 
@@ -144,4 +160,16 @@ const documentedRules = o.sort(
       )
     );
   }
+}
+
+/**
+ * Stringifies value.
+ *
+ * @param value - Value.
+ * @returns String representation.
+ */
+function stringify(value) {
+  if (typeof value === "string") return `"${value.replace(/"/gu, '\\"')}"`;
+
+  return baseStringify(value);
 }

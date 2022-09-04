@@ -23,10 +23,10 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| message | Custom message |
-| once | Syntax should be found exactly one time |
-| selector | AST selector |
-| trigger | Trigger rule by AST selector |
+| message | Custom message | -|
+| once | Syntax should be found exactly one time | false|
+| selector | AST selector | -|
+| trigger | Trigger rule by AST selector | "Program"|
 
 ## Examples of incorrect code
 

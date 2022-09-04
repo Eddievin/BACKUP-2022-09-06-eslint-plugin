@@ -32,6 +32,7 @@ export function createRule<
   const {
     create,
     defaultOptions,
+    defaultSuboptions,
     docs: rawDocs,
     fixable,
     messages,
@@ -44,6 +45,8 @@ export function createRule<
     requiresTypeChecking: true,
     ...o.removeUndefinedKeys({
       ...rawDocs,
+      defaultOptions,
+      defaultSuboptions,
       description: rawDocs
         ? s.unpadMultiline(rawDocs.description)
         : "No description.",

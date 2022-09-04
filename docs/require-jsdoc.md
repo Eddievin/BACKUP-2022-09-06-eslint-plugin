@@ -24,11 +24,11 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| excludeSelectors | Skip these selectors. |
-| includeSelectors | Check additional selectors. |
-| interfaces | Require documenation for interface ("interface"), call signatures ("callSignatures"), construct signatures ("constructSignatures") |
-| noDefaultSelectors | Do not check default selectors |
-| properties | Require documenation for function properties ("function"), non-function properties ("nonFunction") |
+| excludeSelectors | Skip these selectors. | []|
+| includeSelectors | Check additional selectors. | []|
+| interfaces | Require documenation for interface ("interface"), call signatures ("callSignatures"), construct signatures ("constructSignatures") | ['callSignatures','constructSignatures','interface']|
+| noDefaultSelectors | Do not check default selectors | false|
+| properties | Require documenation for function properties ("function"), non-function properties ("nonFunction") | ['function','nonFunction']|
 
 ## Examples of incorrect code
 

@@ -32,14 +32,14 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| rules._id | Id |
-| rules.altLocalNames | Alternative local names |
-| rules.autoImport | Enable auto-import |
-| rules.autoImportSource | Auto-import source (defaults to "source") |
-| rules.localName | Local name |
-| rules.source | Source |
-| rules.sourcePattern | Soure pattern (minimatch) |
-| rules.wildcard | Prefer wildcard import |
+| sources.\<index\>._id | Id | - |
+| sources.\<index\>.altLocalNames | Alternative local names | [] |
+| sources.\<index\>.autoImport | Enable auto-import | false |
+| sources.\<index\>.autoImportSource | Auto-import source (defaults to "source") | - |
+| sources.\<index\>.localName | Local name | - |
+| sources.\<index\>.source | Source | - |
+| sources.\<index\>.sourcePattern | Soure pattern (minimatch) | - |
+| sources.\<index\>.wildcard | Prefer wildcard import | false |
 
 ## Examples of incorrect code
 

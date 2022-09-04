@@ -29,11 +29,11 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| format | File name format |
-| rules._id | Id |
-| rules.format | File name format |
-| rules.match | File name should match AST element |
-| rules.selector | AST selector |
+| format | File name format | "kebab-case"|
+| overrides.\<index\>._id | Id | - |
+| overrides.\<index\>.format | File name format | - |
+| overrides.\<index\>.match | File name should match AST element | false |
+| overrides.\<index\>.selector | AST selector | - |
 
 ## Examples of incorrect code
 

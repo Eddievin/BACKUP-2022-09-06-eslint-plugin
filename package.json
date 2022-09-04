@@ -59,6 +59,7 @@
     "upgrade": "npm run update-package-force && npm run npm:install"
   },
   "dependencies": {
+    "javascript-stringify": "^2.1.0",
     "@skylib/functions": "^4.1.0",
     "@skylib/lodash-commonjs-es": "^1.0.0",
     "@skylib/typescript-types": "^1.0.0",

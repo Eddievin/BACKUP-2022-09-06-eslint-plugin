@@ -23,10 +23,10 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| lint | AST selectors to lint |
-| plugin | NPM package name |
-| rule | ESLint rule name |
-| skip | AST selectors to skip |
+| lint | AST selectors to lint | []|
+| plugin | NPM package name | -|
+| rule | ESLint rule name | -|
+| skip | AST selectors to skip | []|
 
 ## Examples of incorrect code
 

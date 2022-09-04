@@ -13,8 +13,9 @@ const create_rule_internal_1 = require("./create-rule.internal");
  * @returns Rule listenter.
  */
 function createRule(options) {
-    const { create, defaultOptions, docs: rawDocs, fixable, messages, suboptionsKey, vue } = options;
-    const docs = Object.assign({ recommended: false, requiresTypeChecking: true }, functions_1.o.removeUndefinedKeys(Object.assign(Object.assign({}, rawDocs), { description: rawDocs
+    const { create, defaultOptions, defaultSuboptions, docs: rawDocs, fixable, messages, suboptionsKey, vue } = options;
+    const docs = Object.assign({ recommended: false, requiresTypeChecking: true }, functions_1.o.removeUndefinedKeys(Object.assign(Object.assign({}, rawDocs), { defaultOptions,
+        defaultSuboptions, description: rawDocs
             ? functions_1.s.unpadMultiline(rawDocs.description)
             : "No description.", failExamples: rawDocs
             ? functions_1.s.unpadMultiline(rawDocs.failExamples)

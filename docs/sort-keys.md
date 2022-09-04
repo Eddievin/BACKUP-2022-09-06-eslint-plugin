@@ -29,11 +29,11 @@ module.exports = {
 
 | Name | Description | Default value |
 | :----- | :----- | :----- |
-| rules._id | Id |
-| rules.customOrder | Array elements with custom order |
-| rules.selector | AST elements to be sorted (AST selector) |
-| rules.sendToBottom | Array elements that should be sent to bottom |
-| rules.sendToTop | Array elements that should be sent to top |
+| overrides.\<index\>._id | Id | - |
+| overrides.\<index\>.customOrder | Array elements with custom order | - |
+| overrides.\<index\>.selector | AST elements to be sorted (AST selector) | - |
+| overrides.\<index\>.sendToBottom | Array elements that should be sent to bottom | - |
+| overrides.\<index\>.sendToTop | Array elements that should be sent to top | - |
 
 ## Examples of incorrect code
 
