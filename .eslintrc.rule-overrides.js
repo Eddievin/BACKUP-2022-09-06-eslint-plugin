@@ -4,6 +4,17 @@ const { eslint } = require("@skylib/config/api");
 
 const consistentImport = eslint.rules["@skylib/consistent-import"];
 
+const prefixes = {
+  createRule:
+    "CallExpression[callee.object.name=utils][callee.property.name=createRule]",
+  createWrapRule:
+    "CallExpression[callee.object.name=utils][callee.property.name=/^(?:createRule|wrapRule)$/u]",
+  testRule:
+    "CallExpression[callee.object.name=utils][callee.property.name=testRule]",
+  wrapRule:
+    "CallExpression[callee.object.name=utils][callee.property.name=wrapRule]"
+};
+
 module.exports = {
   rules: {
     "@skylib/consistent-import": [
@@ -41,12 +52,10 @@ module.exports = {
     ],
     "@skylib/disallow-import/natural-compare": [
       "warn",
-      { disallow: ["natural-compare"] }
+      { disallow: "natural-compare" }
     ],
-    "@skylib/disallow-import/typescript": [
-      "warn",
-      { disallow: ["tsutils", "typescript"] }
-    ],
+    "@skylib/disallow-import/tsutils": ["warn", { disallow: "tsutils" }],
+    "@skylib/disallow-import/typescript": ["warn", { disallow: "typescript" }],
     "@skylib/match-filename/createRule-id": [
       "warn",
       {
@@ -59,54 +68,45 @@ module.exports = {
       "warn",
       {
         format: "kebab-case",
-        selector:
-          "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=createRule] > CallExpression > ObjectExpression > Property[key.name=name] > Literal.value"
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=name] > Literal.value`
       }
     ],
     "@skylib/match-filename/testRule-name": [
       "warn",
-      {
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=testRule] > Literal:first-child"
-      }
+      { selector: `${prefixes.testRule} > Literal:first-child` }
     ],
     "@skylib/match-filename/testRule-rule": [
       "warn",
       {
         format: "kebab-case",
-        selector: "VariableDeclarator[id.name=rule] > .init > Literal.property"
+        selector:
+          "VariableDeclarator[id.name=rule] > MemberExpression > Literal.property"
       }
     ],
-    "@skylib/match-filename/wrapRule": [
+    "@skylib/no-restricted-syntax/no-sentence-dot": [
       "warn",
       {
-        format: "camelCase",
-        selector:
-          "VariableDeclarator[init.callee.object.name=utils][init.callee.property.name=wrapRule] > Identifier.id"
-      }
-    ],
-    "@skylib/no-restricted-syntax/description-dot": [
-      "warn",
-      {
-        message: "Add dot at the end of description",
-        selector:
-          "Property[key.name=docs] > ObjectExpression > Property[key.name=description] > Literal.value[value=/[^.]$/u]"
-      }
-    ],
-    "@skylib/no-restricted-syntax/no-message-dot": [
-      "warn",
-      {
-        message: "Remove dot at the end of message",
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=messages] > ObjectExpression > Property > Literal.value[value=/\\.$/u]"
+        message: "Remove dot at the end of sentence",
+        selector: [
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=/^(optionDescriptions|optionTypes|suboptionDescriptions|suboptionTypes)$/u] > ObjectExpression > Property > Literal.value[value=/\\.$/u]`,
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=messages] > ObjectExpression > Property > Literal.value[value=/\\.$/u]`
+        ]
       }
     ],
     "@skylib/no-restricted-syntax/no-skipped-tests": [
       "warn",
       {
         message: "No skipped tests",
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression > Property > Identifier.key[name=only]"
+        selector: `${prefixes.testRule} > ArrayExpression > ObjectExpression > Property > Identifier.key[name=only]`
+      }
+    ],
+    "@skylib/no-restricted-syntax/require-sentence-dot": [
+      "warn",
+      {
+        message: "Add dot at the end of sentence",
+        selector: [
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=description] > Literal.value[value=/[^.]$/u]`
+        ]
       }
     ],
     "@skylib/no-sibling-import": [
@@ -131,47 +131,7 @@ module.exports = {
         ]
       }
     ],
-    "@skylib/require-syntax/createRule-docs": [
-      "warn",
-      {
-        message: 'Expecting "docs"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property > Identifier[name=docs]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule]"
-      }
-    ],
-    "@skylib/require-syntax/fix": [
-      "warn",
-      {
-        message: 'Expecting "fix" or "utils.sort"',
-        selector:
-          "Identifier[name=fix], MemberExpression[object.name=utils][property.name=sort]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property > Identifier[name=fixable]"
-      }
-    ],
-    "@skylib/require-syntax/isOptions": [
-      "warn",
-      {
-        message: 'Expecting "isOptions"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isOptions]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=/^(?:defaultOptions|optionDescriptions|optionTypes)$/u]"
-      }
-    ],
-    "@skylib/require-syntax/isSuboptions": [
-      "warn",
-      {
-        message: 'Expecting "isSuboptions"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isSuboptions]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=/^(?:defaultSuboptions|suboptionDescriptions|suboptionTypes|suboptionsKey)/u]"
-      }
-    ],
-    "@skylib/require-syntax/no-restricted-syntax": [
+    "@skylib/require-syntax/no-unnecessary-typescript/no-restricted-syntax": [
       "warn",
       {
         message: 'Use "no-restricted-syntax" instead',
@@ -179,84 +139,102 @@ module.exports = {
         trigger: 'Literal[value="typescript/no-restricted-syntax"]'
       }
     ],
-    "@skylib/require-syntax/optionDescriptions": [
+    "@skylib/require-syntax/require-docs": [
       "warn",
       {
-        message: 'Expecting "optionDescriptions"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=optionDescriptions]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isOptions]"
+        message: 'Add "docs" option',
+        selector: `${prefixes.createWrapRule} > ObjectExpression > Property > Identifier[name=docs]`,
+        trigger: prefixes.createWrapRule
       }
     ],
-    "@skylib/require-syntax/optionTypes": [
+    "@skylib/require-syntax/require-fix": [
       "warn",
       {
-        message: 'Expecting "optionTypes"',
+        message: 'Add "fix" option or "utils.sort"',
         selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=optionTypes]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isOptions]"
+          "Identifier[name=fix], MemberExpression[object.name=utils][property.name=sort]",
+        trigger: `${prefixes.createRule} > ObjectExpression > Property > Identifier[name=fixable]`
       }
     ],
-    "@skylib/require-syntax/suboptionDescriptions": [
+    "@skylib/require-syntax/require-isOptions": [
       "warn",
       {
-        message: 'Expecting "suboptionDescriptions"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=suboptionDescriptions]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isSuboptions]"
+        message: 'Add "isOptions" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=isOptions]`,
+        trigger: [
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=defaultOptions]`,
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=optionDescriptions]`,
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=optionTypes]`
+        ]
       }
     ],
-    "@skylib/require-syntax/suboptionTypes": [
+    "@skylib/require-syntax/require-isSuboptions": [
       "warn",
       {
-        message: 'Expecting "suboptionTypes"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=suboptionTypes]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=isSuboptions]"
+        message: 'Add "isSuboptions" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=isSuboptions]`,
+        trigger: [
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=defaultSuboptions]`,
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=suboptionsKey]`,
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=suboptionDescriptions]`,
+          `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=suboptionTypes]`
+        ]
       }
     ],
-    "@skylib/require-syntax/suboptionsKey": [
+    "@skylib/require-syntax/require-optionDescriptions": [
       "warn",
       {
-        message: 'Expecting "isSuboptions"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=suboptionsKey]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] Identifier[name=/^(?:defaultSuboptions|isSuboptions)/u]"
+        message: 'Add "optionDescriptions" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=optionDescriptions]`,
+        trigger: `${prefixes.createRule} > ObjectExpression > Property[key.name=isOptions]`
       }
     ],
-    "@skylib/require-syntax/vue-false": [
+    "@skylib/require-syntax/require-optionTypes": [
       "warn",
       {
-        message: 'Use "vue = false"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=create] > ArrowFunctionExpression[params.length<=1]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=vue][value.value=true]"
+        message: 'Add "optionTypes" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=optionTypes]`,
+        trigger: `${prefixes.createRule} > ObjectExpression > Property[key.name=isOptions]`
       }
     ],
-    "@skylib/require-syntax/vue-true": [
+    "@skylib/require-syntax/require-suboptionDescriptions": [
       "warn",
       {
-        message: 'Use "vue = true"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=create] > ArrowFunctionExpression[params.length>=2]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=vue][value.value=false]"
+        message: 'Add "suboptionDescriptions" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=suboptionDescriptions]`,
+        trigger: `${prefixes.createRule} > ObjectExpression > Property[key.name=isSuboptions]`
       }
     ],
-    "@skylib/require-syntax/wrapRule-docs": [
+    "@skylib/require-syntax/require-suboptionTypes": [
       "warn",
       {
-        message: 'Expecting "docs"',
-        selector:
-          "CallExpression[callee.object.name=utils][callee.property.name=wrapRule] > ObjectExpression > Property > Identifier[name=docs]",
-        trigger:
-          "CallExpression[callee.object.name=utils][callee.property.name=wrapRule]"
+        message: 'Add "suboptionTypes" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=suboptionTypes]`,
+        trigger: `${prefixes.createRule} > ObjectExpression > Property[key.name=isSuboptions]`
+      }
+    ],
+    "@skylib/require-syntax/require-suboptionsKey": [
+      "warn",
+      {
+        message: 'Add "suboptionsKey" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=suboptionsKey]`,
+        trigger: `${prefixes.createRule} > ObjectExpression > Property[key.name=isSuboptions]`
+      }
+    ],
+    "@skylib/require-syntax/require-vue-false": [
+      "warn",
+      {
+        message: 'Prefer "vue: false" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=create] > ArrowFunctionExpression[params.length<=1]`,
+        trigger: `${prefixes.createRule} > ObjectExpression > Property[key.name=vue][value.value=true]`
+      }
+    ],
+    "@skylib/require-syntax/require-vue-true": [
+      "warn",
+      {
+        message: 'Prefer "vue: true" option',
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=create] > ArrowFunctionExpression[params.length>=2]`,
+        trigger: `${prefixes.createRule} > ObjectExpression > Property[key.name=vue][value.value=false]`
       }
     ]
   },
@@ -303,8 +281,7 @@ module.exports = {
                   "docs",
                   "create"
                 ],
-                selector:
-                  "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression"
+                selector: `${prefixes.createRule} > ObjectExpression`
               },
               {
                 _id: "utils.createRule.docs",
@@ -317,14 +294,12 @@ module.exports = {
                   "failExamples",
                   "passExamples"
                 ],
-                selector:
-                  "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property[key.name=docs] > ObjectExpression"
+                selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression`
               },
               {
                 _id: "utils.wrapRule",
                 customOrder: ["rule", "options", "docs"],
-                selector:
-                  "CallExpression[callee.object.name=utils][callee.property.name=wrapRule] > ObjectExpression"
+                selector: `${prefixes.wrapRule} > ObjectExpression`
               }
             ]
           }
@@ -332,19 +307,7 @@ module.exports = {
       }
     },
     {
-      files: [
-        "./src/dev/typescript.d.ts",
-        "./src/utils/TypeCheck.internal.ts",
-        "./src/utils/TypeCheck.ts"
-      ],
-      rules: { "@skylib/disallow-import/typescript": "off" }
-    },
-    {
-      files: [
-        "./src/misc/core/*",
-        "./src/typescript/core/*",
-        "./src/vue/core/*"
-      ],
+      files: "./src/{misc,typescript,vue}/core/*",
       rules: {
         "@skylib/sort-statements": [
           "warn",
@@ -367,26 +330,32 @@ module.exports = {
       }
     },
     {
+      files: "./src/dev/typescript.d.ts",
+      rules: {
+        "@skylib/disallow-import/tsutils": "off",
+        "@skylib/disallow-import/typescript": "off"
+      }
+    },
+    {
       files: "./src/skylib-*/**",
       rules: {
-        "@skylib/no-restricted-syntax/createRule-docs": [
+        "@skylib/no-restricted-syntax/no-unnecessary-docs": [
           "warn",
           {
-            message: 'Unexpected "docs"',
-            selector:
-              "CallExpression[callee.object.name=utils][callee.property.name=createRule] > ObjectExpression > Property > Identifier[name=docs]"
+            message: 'Remove "docs" option',
+            selector: [
+              `${prefixes.createWrapRule} > ObjectExpression > Property > Identifier[name=docs]`
+            ]
           }
         ],
-        "@skylib/no-restricted-syntax/wrapRule-docs": [
-          "warn",
-          {
-            message: 'Unexpected "docs"',
-            selector:
-              "CallExpression[callee.object.name=utils][callee.property.name=wrapRule] > ObjectExpression > Property > Identifier[name=docs]"
-          }
-        ],
-        "@skylib/require-syntax/createRule-docs": "off",
-        "@skylib/require-syntax/wrapRule-docs": "off"
+        "@skylib/require-syntax/require-docs": "off"
+      }
+    },
+    {
+      files: "./src/utils/TypeCheck.*",
+      rules: {
+        "@skylib/disallow-import/tsutils": "off",
+        "@skylib/disallow-import/typescript": "off"
       }
     },
     {
@@ -419,14 +388,12 @@ module.exports = {
                   "output",
                   "errors"
                 ],
-                selector:
-                  "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression"
+                selector: `${prefixes.testRule} > ArrayExpression > ObjectExpression`
               },
               {
                 _id: "testRule.errors",
                 customOrder: ["line", "endLine", "messageId"],
-                selector:
-                  "CallExpression[callee.object.name=utils][callee.property.name=testRule] > ArrayExpression > ObjectExpression > Property[key.name=errors] > ArrayExpression > ObjectExpression"
+                selector: `${prefixes.testRule} > ArrayExpression > ObjectExpression > Property[key.name=errors] > ArrayExpression > ObjectExpression`
               }
             ]
           }
