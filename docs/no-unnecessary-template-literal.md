@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-unnecessary-template-literal
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-unnecessary-template-literal
 
 # no-unnecessary-template-literal
 

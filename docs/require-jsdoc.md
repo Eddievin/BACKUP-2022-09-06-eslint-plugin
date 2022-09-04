@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / require-jsdoc
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / require-jsdoc
 
 # require-jsdoc
 

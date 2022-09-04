@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / consistent-source-extension
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / consistent-source-extension
 
 # consistent-source-extension
 

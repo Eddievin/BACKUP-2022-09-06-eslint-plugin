@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-negated-conditions
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-negated-conditions
 
 # no-negated-conditions
 

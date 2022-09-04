@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / match-filename
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / match-filename
 
 # match-filename
 

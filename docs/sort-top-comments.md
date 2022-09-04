@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / sort-top-comments
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / sort-top-comments
 
 # sort-top-comments
 

@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-unnecessary-initialization
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-unnecessary-initialization
 
 # no-unnecessary-initialization
 

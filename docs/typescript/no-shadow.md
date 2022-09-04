@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/no-shadow
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/no-shadow
 
 # typescript/no-shadow
 

@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / vue/no-complex-return-type
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / vue/no-complex-return-type
 
 # vue/no-complex-return-type
 

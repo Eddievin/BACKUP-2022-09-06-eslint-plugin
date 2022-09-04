@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-unnecessary-break
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-unnecessary-break
 
 # no-unnecessary-break
 

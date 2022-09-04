@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-internal-modules
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-internal-modules
 
 # no-internal-modules
 

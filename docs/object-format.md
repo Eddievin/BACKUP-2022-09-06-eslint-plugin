@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / object-format
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / object-format
 
 # object-format
 

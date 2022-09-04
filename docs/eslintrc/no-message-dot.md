@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / eslintrc/no-message-dot
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / eslintrc/no-message-dot
 
 # eslintrc/no-message-dot
 

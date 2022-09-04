@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / comment-spacing
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / comment-spacing
 
 # comment-spacing
 

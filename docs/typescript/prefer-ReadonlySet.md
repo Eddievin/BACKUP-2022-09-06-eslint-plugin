@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/prefer-ReadonlySet
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/prefer-ReadonlySet
 
 # typescript/prefer-ReadonlySet
 

@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/prefer-ReadonlyMap
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/prefer-ReadonlyMap
 
 # typescript/prefer-ReadonlyMap
 

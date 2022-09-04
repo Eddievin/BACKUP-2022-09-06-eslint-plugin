@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / eslintrc/consistent-suboptions-id
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / eslintrc/consistent-suboptions-id
 
 # eslintrc/consistent-suboptions-id
 

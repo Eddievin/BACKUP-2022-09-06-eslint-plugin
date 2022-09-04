@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/no-inferrable-types
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/no-inferrable-types
 
 # typescript/no-inferrable-types
 

@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / consistent-optional-props
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / consistent-optional-props
 
 # consistent-optional-props
 

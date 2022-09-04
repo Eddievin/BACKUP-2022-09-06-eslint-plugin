@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/prefer-readonly-property
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/prefer-readonly-property
 
 # typescript/prefer-readonly-property
 

@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-nodejs-modules
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-nodejs-modules
 
 # no-nodejs-modules
 

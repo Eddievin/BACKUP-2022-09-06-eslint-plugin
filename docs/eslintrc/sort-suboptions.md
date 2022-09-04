@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / eslintrc/sort-suboptions
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / eslintrc/sort-suboptions
 
 # eslintrc/sort-suboptions
 

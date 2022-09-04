@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/require-prop-type-annotation
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/require-prop-type-annotation
 
 # typescript/require-prop-type-annotation
 

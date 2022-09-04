@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/consistent-array-type-name
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/consistent-array-type-name
 
 # typescript/consistent-array-type-name
 

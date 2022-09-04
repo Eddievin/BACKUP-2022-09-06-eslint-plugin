@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / consistent-symbol-description
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / consistent-symbol-description
 
 # consistent-symbol-description
 

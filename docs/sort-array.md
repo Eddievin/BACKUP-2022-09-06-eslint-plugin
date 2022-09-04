@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / sort-array
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / sort-array
 
 # sort-array
 

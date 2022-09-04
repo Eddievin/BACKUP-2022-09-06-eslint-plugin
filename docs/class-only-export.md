@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / class-only-export
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / class-only-export
 
 # class-only-export
 

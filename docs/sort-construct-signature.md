@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / sort-construct-signature
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / sort-construct-signature
 
 # sort-construct-signature
 

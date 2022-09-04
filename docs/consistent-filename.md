@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / consistent-filename
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / consistent-filename
 
 # consistent-filename
 

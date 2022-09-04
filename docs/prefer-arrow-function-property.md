@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / prefer-arrow-function-property
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / prefer-arrow-function-property
 
 # prefer-arrow-function-property
 

@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / only-export-name
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / only-export-name
 
 # only-export-name
 

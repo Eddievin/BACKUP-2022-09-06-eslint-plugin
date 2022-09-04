@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / consistent-enum-members
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / consistent-enum-members
 
 # consistent-enum-members
 

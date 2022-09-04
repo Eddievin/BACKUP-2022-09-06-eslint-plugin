@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/no-this-void
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/no-this-void
 
 # typescript/no-this-void
 

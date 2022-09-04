@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / typescript/no-restricted-syntax
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / typescript/no-restricted-syntax
 
 # typescript/no-restricted-syntax
 

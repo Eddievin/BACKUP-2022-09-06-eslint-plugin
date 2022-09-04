@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / jest/prefer-toStrictEqual
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / jest/prefer-toStrictEqual
 
 # jest/prefer-toStrictEqual
 

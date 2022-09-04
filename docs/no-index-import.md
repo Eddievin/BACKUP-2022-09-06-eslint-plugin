@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-index-import
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-index-import
 
 # no-index-import
 

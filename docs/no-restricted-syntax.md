@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-restricted-syntax
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-restricted-syntax
 
 # no-restricted-syntax
 

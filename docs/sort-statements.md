@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / sort-statements
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / sort-statements
 
 # sort-statements
 

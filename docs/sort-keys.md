@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / sort-keys
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / sort-keys
 
 # sort-keys
 

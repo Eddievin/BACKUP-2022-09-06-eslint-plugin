@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / jest/no-toThrow-literal
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / jest/no-toThrow-literal
 
 # jest/no-toThrow-literal
 

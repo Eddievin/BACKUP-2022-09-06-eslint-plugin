@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / vue/no-complex-declarator-type
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / vue/no-complex-declarator-type
 
 # vue/no-complex-declarator-type
 

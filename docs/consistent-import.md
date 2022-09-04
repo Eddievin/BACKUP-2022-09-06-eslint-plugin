@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / consistent-import
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / consistent-import
 
 # consistent-import
 

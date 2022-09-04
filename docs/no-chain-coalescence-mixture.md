@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / no-chain-coalescence-mixture
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / no-chain-coalescence-mixture
 
 # no-chain-coalescence-mixture
 

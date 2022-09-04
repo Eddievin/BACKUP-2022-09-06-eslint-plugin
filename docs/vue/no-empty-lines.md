@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / vue/no-empty-lines
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / vue/no-empty-lines
 
 # vue/no-empty-lines
 

@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / prefer-arrow-static-method
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / prefer-arrow-static-method
 
 # prefer-arrow-static-method
 

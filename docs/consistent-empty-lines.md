@@ -1,4 +1,4 @@
-[ESLint plugin](index.md) / consistent-empty-lines
+[ESLint plugin](https://ilyub.github.io/eslint-plugin/) / consistent-empty-lines
 
 # consistent-empty-lines
 
