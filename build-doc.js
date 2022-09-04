@@ -7,21 +7,24 @@ const { rules } =
   require("./dist/rules.core.js");
 
 const templates = {
-  config: fs.readFileSync("./docs-templates/config.md").toString().trim(),
+  config: fs
+    .readFileSync("./assets/docs/templates/config.md")
+    .toString()
+    .trim(),
   configOptions: fs
-    .readFileSync("./docs-templates/config-options.md")
+    .readFileSync("./assets/docs/templates/config-options.md")
     .toString()
     .trim(),
   configOptionsSuboptions: fs
-    .readFileSync("./docs-templates/config-options-suboptions.md")
+    .readFileSync("./assets/docs/templates/config-options-suboptions.md")
     .toString()
     .trim(),
   configSuboptions: fs
-    .readFileSync("./docs-templates/config-suboptions.md")
+    .readFileSync("./assets/docs/templates/config-suboptions.md")
     .toString()
     .trim(),
-  index: fs.readFileSync("./docs-templates/index.md").toString().trim(),
-  rule: fs.readFileSync("./docs-templates/rule.md").toString().trim()
+  index: fs.readFileSync("./assets/docs/templates/index.md").toString().trim(),
+  rule: fs.readFileSync("./assets/docs/templates/rule.md").toString().trim()
 };
 
 const documentedRules = o.sort(
