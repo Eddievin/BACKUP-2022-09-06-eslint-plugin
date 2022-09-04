@@ -3,9 +3,9 @@
 # consistent-optional-props
 
 Ensures consistent optional property style:
-- Combined syntax ("x?: T | undefined")
+- Combined syntax ("x?: T \| undefined")
 - Only optional syntax ("x?: T")
-- Only undefined syntax ("x: T | undefined")
+- Only undefined syntax ("x: T \| undefined")
 
 ```ts
 module.exports = {
