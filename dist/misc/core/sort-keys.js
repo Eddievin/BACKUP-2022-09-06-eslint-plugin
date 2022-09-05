@@ -4,8 +4,8 @@ exports.sortKeys = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils = tslib_1.__importStar(require("../../utils"));
-const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
+const functions_1 = require("@skylib/functions");
 var MessageId;
 (function (MessageId) {
     MessageId["expectingObject"] = "expectingObject";
@@ -48,13 +48,14 @@ exports.sortKeys = utils.createRule({
     },
     create: (context) => {
         const items = [];
+        const overrides = [];
         return utils.mergeListeners(...context.options.overrides.map((override) => {
             const { _id, selector: mixedSelector } = override;
             const selector = utils.selector(mixedSelector);
             return {
                 [selector]: (node) => {
                     if (node.type === utils_1.AST_NODE_TYPES.ObjectExpression)
-                        items.push({ node, options: Object.assign(Object.assign({}, override), { keyNode }) });
+                        overrides.push({ node, options: Object.assign(Object.assign({}, override), { keyNode }) });
                     else
                         context.report({
                             data: { _id },
@@ -68,7 +69,7 @@ exports.sortKeys = utils.createRule({
                 items.push({ node, options: { keyNode } });
             },
             "Program:exit": () => {
-                for (const item of _.uniqBy(functions_1.a.reverse(items), "node"))
+                for (const item of _.uniqBy([...overrides, ...items], "node"))
                     utils.sort(item.node.properties, context, item.options);
             }
         });

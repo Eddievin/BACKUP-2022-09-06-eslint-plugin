@@ -4,8 +4,8 @@ exports.consistentImport = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const utils = tslib_1.__importStar(require("../../utils"));
-const functions_1 = require("@skylib/functions");
 const utils_1 = require("@typescript-eslint/utils");
+const functions_1 = require("@skylib/functions");
 const minimatch_1 = tslib_1.__importDefault(require("minimatch"));
 var MessageId;
 (function (MessageId) {
@@ -184,7 +184,7 @@ exports.consistentImport = utils.createRule({
                 : localName;
         }
         function findSuboptions(source) {
-            const suboptions = functions_1.a.reverse(context.options.sources).find(candidate => {
+            const suboptions = context.options.sources.find(candidate => {
                 var _a;
                 return (0, minimatch_1.default)(source, (_a = candidate.sourcePattern) !== null && _a !== void 0 ? _a : candidate.source, {
                     dot: true

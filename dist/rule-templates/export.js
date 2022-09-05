@@ -22,6 +22,7 @@ function create(callback) {
             "Program > ExportNamedDeclaration > ClassDeclaration > Identifier.id",
             "Program > ExportNamedDeclaration > ExportSpecifier > Identifier.exported",
             "Program > ExportNamedDeclaration > FunctionDeclaration > Identifier.id",
+            "Program > ExportNamedDeclaration > TSEnumDeclaration > Identifier.id",
             "Program > ExportNamedDeclaration > TSInterfaceDeclaration > Identifier.id",
             "Program > ExportNamedDeclaration > TSModuleDeclaration > Identifier.id",
             "Program > ExportNamedDeclaration > TSTypeAliasDeclaration > Identifier.id",

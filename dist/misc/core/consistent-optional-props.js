@@ -91,12 +91,12 @@ exports.consistentOptionalProps = utils.createRule({
     `
     },
     create: (context, typeCheck) => {
-        const overrides = functions_1.a.reverse(context.options.overrides.map((override) => {
+        const overrides = context.options.overrides.map((override) => {
             const { pattern, propertyPattern } = override;
             const matcher = utils.createRegexpMatcher(pattern, true);
             const properyMatcher = utils.createRegexpMatcher(propertyPattern, true);
             return Object.assign(Object.assign({}, override), { matcher, properyMatcher });
-        }));
+        });
         return {
             ClassDeclaration: lintClass,
             ClassExpression: lintClass,

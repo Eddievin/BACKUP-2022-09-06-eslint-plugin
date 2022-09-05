@@ -20,6 +20,18 @@ utils.testRule(
         { line: 1, messageId: MessageId.invalidExport },
         { line: 2, messageId: MessageId.invalidExport }
       ]
+    },
+    {
+      name: `Test at line ${getCurrentLine().line}`,
+      options: [{ selector: "ClassDeclaration > Identifier.id" }],
+      code: `
+        export class C {}
+        export enum E {}
+      `,
+      errors: [
+        { line: 1, messageId: MessageId.invalidExport },
+        { line: 2, messageId: MessageId.invalidExport }
+      ]
     }
   ],
   [
