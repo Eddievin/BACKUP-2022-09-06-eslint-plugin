@@ -180,7 +180,9 @@ export function nodeText(
  * @returns Selector.
  */
 export function selector(raw: Selector): string {
-  return a.fromMixed(raw).join(", ");
+  const result = a.fromMixed(raw).join(", ");
+
+  return result === "" ? "Unknown" : result;
 }
 
 /**

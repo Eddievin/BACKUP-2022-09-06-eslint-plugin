@@ -1,9 +1,9 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "../../utils";
-import { assert, is, typedef } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
+import { is } from "@skylib/functions";
 
 export interface Options {
   readonly ignoreSelector: utils.Selector;
@@ -81,8 +81,6 @@ export const noRestrictedSyntax = utils.createRule({
 
     const ignoreSelector = utils.selector(mixedIgnoreSelector);
 
-    assert.toBeTrue(selector !== "", "Expecting selector");
-
     const nodes: Writable<utils.TSESTree.Nodes> = [];
 
     const ignoreNodes: Writable<utils.TSESTree.Nodes> = [];
@@ -93,13 +91,11 @@ export const noRestrictedSyntax = utils.createRule({
           nodes.push(node);
         }
       },
-      ignoreSelector
-        ? typedef<RuleListener>({
-            [ignoreSelector]: (node: TSESTree.Node) => {
-              ignoreNodes.push(node);
-            }
-          })
-        : {},
+      {
+        [ignoreSelector]: (node: TSESTree.Node) => {
+          ignoreNodes.push(node);
+        }
+      },
       {
         "Program:exit": () => {
           for (const node of _.difference(nodes, ignoreNodes))

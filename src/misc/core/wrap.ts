@@ -6,7 +6,6 @@ import {
   as,
   is,
   reflect,
-  typedef,
   wrapProxyHandler
 } from "@skylib/functions";
 import type {
@@ -116,20 +115,16 @@ export const wrap = utils.createRule({
           })
         )
       ),
-      lint
-        ? typedef<RuleListener>({
-            [lint]: (node: TSESTree.Node) => {
-              lintIds.push(nodeId(node));
-            }
-          })
-        : {},
-      skip
-        ? typedef<RuleListener>({
-            [skip]: (node: TSESTree.Node) => {
-              skipIds.push(nodeId(node));
-            }
-          })
-        : {},
+      {
+        [lint]: (node: TSESTree.Node) => {
+          lintIds.push(nodeId(node));
+        }
+      },
+      {
+        [skip]: (node: TSESTree.Node) => {
+          skipIds.push(nodeId(node));
+        }
+      },
       {
         "Program:exit": () => {
           const lintMatcher = lintIds.length

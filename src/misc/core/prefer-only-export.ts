@@ -1,6 +1,6 @@
 import * as ruleTemplates from "../../rule-templates";
 import * as utils from "../../utils";
-import { assert, is } from "@skylib/functions";
+import { is } from "@skylib/functions";
 
 export interface Options {
   readonly selector: utils.Selector;
@@ -48,8 +48,6 @@ export const preferOnlyExport = utils.createRule({
     const { selector: mixedSelector } = context.options;
 
     const selector = utils.selector(mixedSelector);
-
-    assert.toBeTrue(selector !== "", "Expecting selector");
 
     let activated = false;
 

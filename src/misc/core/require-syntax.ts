@@ -1,8 +1,8 @@
 import * as utils from "../../utils";
-import { assert, is } from "@skylib/functions";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { Writable } from "@skylib/functions";
+import { is } from "@skylib/functions";
 
 export interface Options {
   readonly message?: string;
@@ -79,9 +79,6 @@ export const requireSyntax = utils.createRule({
     let count = 0;
 
     const nodes: Writable<utils.TSESTree.Nodes> = [];
-
-    assert.toBeTrue(selector !== "", "Expecting selector");
-    assert.toBeTrue(trigger !== "", "Expecting trigger");
 
     return utils.mergeListeners(
       {
