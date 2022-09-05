@@ -112,7 +112,7 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 2, messageId: MessageId.undefinedId, data: { _id: "id2" } },
+        { line: 2, messageId: MessageId.undefinedId, data: { _id: "id1" } },
         { line: 3, messageId: MessageId.undefinedId, data: { _id: "id1" } },
         { line: 6, messageId: MessageId.undefinedId, data: { _id: "id2" } }
       ]
@@ -218,7 +218,7 @@ utils.testRule(
         }
       `,
       errors: [
-        { line: 2, messageId: MessageId.undefinedId, data: { _id: "id2" } },
+        { line: 2, messageId: MessageId.undefinedId, data: { _id: "id1" } },
         { line: 3, messageId: MessageId.undefinedId, data: { _id: "id1" } },
         { line: 6, messageId: MessageId.undefinedId, data: { _id: "id2" } }
       ]

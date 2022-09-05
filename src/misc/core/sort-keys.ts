@@ -1,10 +1,10 @@
 import * as _ from "@skylib/lodash-commonjs-es";
 import * as utils from "../../utils";
 import type { Writable, strings } from "@skylib/functions";
-import { a, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { RuleListener } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { is } from "@skylib/functions";
 
 export interface Suboptions {
   readonly _id: string;
@@ -63,6 +63,8 @@ export const sortKeys = utils.createRule({
   create: (context): RuleListener => {
     const items: Writable<Items> = [];
 
+    const overrides: Writable<Items> = [];
+
     return utils.mergeListeners(
       ...context.options.overrides.map((override): RuleListener => {
         const { _id, selector: mixedSelector } = override;
@@ -72,7 +74,7 @@ export const sortKeys = utils.createRule({
         return {
           [selector]: (node: TSESTree.Node) => {
             if (node.type === AST_NODE_TYPES.ObjectExpression)
-              items.push({ node, options: { ...override, keyNode } });
+              overrides.push({ node, options: { ...override, keyNode } });
             else
               context.report({
                 data: { _id },
@@ -87,7 +89,7 @@ export const sortKeys = utils.createRule({
           items.push({ node, options: { keyNode } });
         },
         "Program:exit": () => {
-          for (const item of _.uniqBy(a.reverse(items), "node"))
+          for (const item of _.uniqBy([...overrides, ...items], "node"))
             utils.sort(item.node.properties, context, item.options);
         }
       }

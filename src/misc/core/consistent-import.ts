@@ -5,9 +5,9 @@ import type {
   RuleListener
 } from "@typescript-eslint/utils/dist/ts-eslint";
 import type { Writable, strings } from "@skylib/functions";
-import { a, is } from "@skylib/functions";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { is } from "@skylib/functions";
 import minimatch from "minimatch";
 
 export interface Suboptions {
@@ -221,7 +221,7 @@ export const consistentImport = utils.createRule({
     }
 
     function findSuboptions(source: string): SuboptionsExtended | undefined {
-      const suboptions = a.reverse(context.options.sources).find(candidate =>
+      const suboptions = context.options.sources.find(candidate =>
         minimatch(source, candidate.sourcePattern ?? candidate.source, {
           dot: true
         })

@@ -398,24 +398,24 @@ utils.testRule(
       options: [
         {
           sources: [
-            { _id: "id1", source: "**", wildcard: true },
+            {
+              _id: "id1",
+              source: "@skylib/eslint-plugin/source1",
+              wildcard: true
+            },
             {
               _id: "id2",
               source: "@skylib/eslint-plugin/fixtures/source2",
               wildcard: true
             },
-            {
-              _id: "id3",
-              source: "@skylib/eslint-plugin/source3",
-              wildcard: true
-            }
+            { _id: "catch-all", source: "**", wildcard: true }
           ]
         }
       ],
       code: `
-        import source1 from "./source1";
+        import source1 from "../source1";
         import source2 from "./source2";
-        import source3 from "../source3";
+        import source3 from "./source3";
       `,
       errors: [
         {
@@ -424,7 +424,7 @@ utils.testRule(
           data: {
             _id: "id1",
             expectedLocalName: "source1",
-            source: "@skylib/eslint-plugin/fixtures/source1"
+            source: "@skylib/eslint-plugin/source1"
           }
         },
         {
@@ -440,9 +440,9 @@ utils.testRule(
           line: 3,
           messageId: MessageId.wildcardRequired,
           data: {
-            _id: "id3",
+            _id: "catch-all",
             expectedLocalName: "source3",
-            source: "@skylib/eslint-plugin/source3"
+            source: "@skylib/eslint-plugin/fixtures/source3"
           }
         }
       ]
