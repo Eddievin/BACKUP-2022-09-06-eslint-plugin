@@ -2,7 +2,7 @@
 
 # class-only-export
 
-Requires class to be only export.
+Requires class to be the only export.
 
 ```ts
 module.exports = {

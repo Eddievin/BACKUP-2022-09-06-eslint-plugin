@@ -16,13 +16,13 @@ module.exports = {
 ## Examples of incorrect code
 
 ```ts
-// filename: kebab-case.ts
+// filename: SomeName.ts
 export class ClassName {}
 ```
 
 ## Examples of correct code
 
 ```ts
-// filename: kebab-case.ts
-export class KebabCase {}
+// filename: ClassName.ts
+export class ClassName {}
 ```

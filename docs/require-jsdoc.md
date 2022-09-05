@@ -24,8 +24,8 @@ module.exports = {
 
 | Option | Description | Default |
 | :----- | :----- | :----- |
-| excludeSelectors | Skip these selectors. | []|
-| includeSelectors | Check additional selectors. | []|
+| excludeSelectors | Skip these selectors | []|
+| includeSelectors | Check additional selectors | []|
 | interfaces | Require documenation for interface ("interface"), call signatures ("callSignatures"), construct signatures ("constructSignatures") | ['callSignatures','constructSignatures','interface']|
 | noDefaultSelectors | Do not check default selectors | false|
 | properties | Require documenation for function properties ("function"), non-function properties ("nonFunction") | ['function','nonFunction']|

@@ -16,7 +16,7 @@ export interface CreateRuleOptions<M extends string, O extends object, S extends
     readonly create: (context: Context<M, O, S, K>, typeCheck: ClassToInterface<TypeCheck>) => RuleListener;
     readonly defaultOptions?: Readonly<Partial<O>>;
     readonly defaultSuboptions?: Readonly<Partial<S>>;
-    readonly docs?: Docs<keyof O, keyof S>;
+    readonly docs: Docs<keyof O, keyof S>;
     readonly fixable?: "code" | "whitespace";
     readonly isOptions?: is.Guard<O>;
     readonly isSuboptions?: is.Guard<S>;

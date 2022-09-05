@@ -2,7 +2,7 @@
 
 # template-literal-format
 
-Ensures consistent padding in template literals.
+Requires consistent padding in template literals.
 
 ```ts
 module.exports = {

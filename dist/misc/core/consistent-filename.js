@@ -24,9 +24,9 @@ exports.consistentFilename = utils.createRule({
         [MessageId.invalidFilenameId]: "Expecting file name to be: {{expected}} ({{_id}})"
     },
     docs: {
-        description: "Ensures consistent file name.",
+        description: "Enforces consistent file name format.",
         optionTypes: { format: '"PascalCase" | "camelCase" | "kebab-case"' },
-        optionDescriptions: { format: "File name format" },
+        optionDescriptions: { format: "Default file name format" },
         suboptionTypes: {
             _id: "string",
             format: '"PascalCase" | "camelCase" | "kebab-case"',
@@ -35,9 +35,9 @@ exports.consistentFilename = utils.createRule({
         },
         suboptionDescriptions: {
             _id: "Id",
-            format: "File name format",
-            match: "File name should match AST element",
-            selector: "AST selector"
+            format: "Overrides default file name format",
+            match: "Apply override only if AST element's text matches file name",
+            selector: "Triggers override when AST element matching AST selector is found"
         },
         failExamples: `
       // filename: SampleClass.ts

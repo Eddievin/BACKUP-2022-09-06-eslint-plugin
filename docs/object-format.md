@@ -2,7 +2,7 @@
 
 # object-format
 
-Ensures multiline or single-line object format.
+Requires multiline or single-line object format.
 
 ```ts
 module.exports = {

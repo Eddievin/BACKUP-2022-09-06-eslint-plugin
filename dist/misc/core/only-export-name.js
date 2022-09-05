@@ -15,7 +15,7 @@ exports.onlyExportName = utils.createRule({
         [MessageId.invalidName]: "Only export should match file name: {{expected}}"
     },
     docs: {
-        description: "Ensures that only export matches filename.",
+        description: "Requires that only export matches filename.",
         failExamples: `
       // filename: file.ts
       export class SampleClass {}

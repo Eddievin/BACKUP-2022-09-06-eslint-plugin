@@ -50,6 +50,7 @@ export interface Matcher {
      */
     (str: string): boolean;
 }
+export declare type Matchers = readonly Matcher[];
 export declare type Options<O extends object, S extends object, K extends string = never> = O & {
     readonly [L in K]: SuboptionsArray<S>;
 };

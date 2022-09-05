@@ -118,20 +118,17 @@ exports.noRestrictedSyntax = utils.createRule({
         const { checkArrayType, checkReturnType, ignoreSelector: mixedIgnoreSelector, message, replacement, search, selector: mixedSelector, typeHas, typeHasNoneOf, typeHasOneOf, typeIs, typeIsNoneOf, typeIsOneOf } = context.options;
         const selector = utils.selector(mixedSelector);
         const ignoreSelector = utils.selector(mixedIgnoreSelector);
-        functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
         const nodes = [];
         const ignoreNodes = [];
         return utils.mergeListeners({
             [selector]: (node) => {
                 nodes.push(node);
             }
-        }, ignoreSelector
-            ? (0, functions_1.typedef)({
-                [ignoreSelector]: (node) => {
-                    ignoreNodes.push(node);
-                }
-            })
-            : {}, {
+        }, {
+            [ignoreSelector]: (node) => {
+                ignoreNodes.push(node);
+            }
+        }, {
             "Program:exit": () => {
                 for (const node of _.difference(nodes, ignoreNodes)) {
                     const types = (0, functions_1.evaluate)(() => {

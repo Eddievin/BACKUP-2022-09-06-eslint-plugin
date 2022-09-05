@@ -1,5 +1,5 @@
 "use strict";
-/* eslint-disable @skylib/require-syntax/fix -- Ok */
+/* eslint-disable @skylib/require-syntax/require-fix -- Ok */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.wrap = exports.MessageId = void 0;
 const tslib_1 = require("tslib");
@@ -79,19 +79,15 @@ exports.wrap = utils.createRule({
                     reports.push(report);
                 }
                 : functions_1.reflect.get(context.rawContext, key)
-        }))), lint
-            ? (0, functions_1.typedef)({
-                [lint]: (node) => {
-                    lintIds.push(nodeId(node));
-                }
-            })
-            : {}, skip
-            ? (0, functions_1.typedef)({
-                [skip]: (node) => {
-                    skipIds.push(nodeId(node));
-                }
-            })
-            : {}, {
+        }))), {
+            [lint]: (node) => {
+                lintIds.push(nodeId(node));
+            }
+        }, {
+            [skip]: (node) => {
+                skipIds.push(nodeId(node));
+            }
+        }, {
             "Program:exit": () => {
                 const lintMatcher = lintIds.length
                     ? (report) => "node" in report && lintIds.includes(nodeId(report.node))

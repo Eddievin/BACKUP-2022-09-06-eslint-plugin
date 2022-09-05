@@ -2,7 +2,7 @@
 
 # only-export-name
 
-Ensures that only export matches filename.
+Requires that only export matches filename.
 
 ```ts
 module.exports = {

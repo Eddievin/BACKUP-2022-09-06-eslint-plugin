@@ -34,7 +34,7 @@ exports.consistentEmptyLines = (0, functions_1.evaluate)(() => {
             [MessageId.removeEmptyLine]: "Remove empty line before ({{_id}})"
         },
         docs: {
-            description: "Ensures consistent empty lines.",
+            description: "Requires consistent empty lines.",
             suboptionTypes: {
                 _id: "string",
                 emptyLine: '"always" | "any" | "never"',

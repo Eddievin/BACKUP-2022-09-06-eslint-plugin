@@ -60,8 +60,6 @@ exports.requireSyntax = utils.createRule({
         const trigger = utils.selector(mixedTrigger);
         let count = 0;
         const nodes = [];
-        functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
-        functions_1.assert.toBeTrue(trigger !== "", "Expecting trigger");
         return utils.mergeListeners({
             [selector]: () => {
                 count++;
@@ -72,26 +70,20 @@ exports.requireSyntax = utils.createRule({
             }
         }, {
             "Program:exit": () => {
-                for (const node of nodes) {
-                    if (count === 0)
+                for (const node of nodes)
+                    if (count === 0 || (count > 1 && once)) {
+                        const defaultMessage = count === 0
+                            ? `Missing syntax: ${selector}`
+                            : `Require syntax once: ${selector}`;
+                        const loc = trigger === "Program"
+                            ? context.locZero
+                            : context.getLoc(node.range);
                         context.report({
-                            data: { message: message !== null && message !== void 0 ? message : `Missing syntax: ${selector}` },
-                            loc: trigger === "Program"
-                                ? context.locZero
-                                : context.getLoc(node.range),
+                            data: { message: message !== null && message !== void 0 ? message : defaultMessage },
+                            loc,
                             messageId: MessageId.customMessage
                         });
-                    if (count > 1 && once)
-                        context.report({
-                            data: {
-                                message: message !== null && message !== void 0 ? message : `Require syntax once: ${selector}`
-                            },
-                            loc: trigger === "Program"
-                                ? context.locZero
-                                : context.getLoc(node.range),
-                            messageId: MessageId.customMessage
-                        });
-                }
+                    }
             }
         });
     }

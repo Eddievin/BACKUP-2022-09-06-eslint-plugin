@@ -2,7 +2,7 @@
 
 # consistent-enum-members
 
-Requires value to coincide with key inside enum.
+Requires consistent key-value pairs inside enums (key should match value).
 
 ```ts
 module.exports = {

@@ -2,7 +2,7 @@
 
 # match-filename
 
-Ensures that AST element matches filename.
+Requires that AST element matches filename.
 
 ```ts
 module.exports = {

@@ -15,13 +15,7 @@ const create_rule_internal_1 = require("./create-rule.internal");
 function createRule(options) {
     const { create, defaultOptions, defaultSuboptions, docs: rawDocs, fixable, messages, suboptionsKey, vue } = options;
     const docs = Object.assign({ recommended: false, requiresTypeChecking: true }, functions_1.o.removeUndefinedKeys(Object.assign(Object.assign({}, rawDocs), { defaultOptions,
-        defaultSuboptions, description: rawDocs
-            ? functions_1.s.unpadMultiline(rawDocs.description)
-            : "No description.", failExamples: rawDocs
-            ? functions_1.s.unpadMultiline(rawDocs.failExamples)
-            : undefined, passExamples: rawDocs
-            ? functions_1.s.unpadMultiline(rawDocs.passExamples)
-            : undefined, suboptionsKey })));
+        defaultSuboptions, description: functions_1.s.unpadMultiline(rawDocs.description), failExamples: functions_1.s.unpadMultiline(rawDocs.failExamples), passExamples: functions_1.s.unpadMultiline(rawDocs.passExamples), suboptionsKey })));
     const ruleCreator = utils_1.ESLintUtils.RuleCreator((name) => `https://ilyub.github.io/eslint-plugin/${name}.html`);
     return ruleCreator({
         create: (rawContext, rawOptions) => {

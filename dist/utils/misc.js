@@ -104,7 +104,8 @@ exports.nodeText = nodeText;
  * @returns Selector.
  */
 function selector(raw) {
-    return functions_1.a.fromMixed(raw).join(", ");
+    const result = functions_1.a.fromMixed(raw).join(", ");
+    return result === "" ? "Unknown" : result;
 }
 exports.selector = selector;
 /**

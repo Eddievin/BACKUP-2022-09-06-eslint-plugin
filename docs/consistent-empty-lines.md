@@ -2,7 +2,7 @@
 
 # consistent-empty-lines
 
-Ensures consistent empty lines.
+Requires consistent empty lines.
 
 ```ts
 module.exports = {

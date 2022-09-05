@@ -2,7 +2,7 @@
 
 # consistent-filename
 
-Ensures consistent file name.
+Enforces consistent file name format.
 
 ```ts
 module.exports = {
@@ -29,11 +29,11 @@ module.exports = {
 
 | Option | Description | Default |
 | :----- | :----- | :----- |
-| format | File name format | "kebab-case"|
+| format | Default file name format | "kebab-case"|
 | overrides._id | Id | - |
-| overrides.format | File name format | - |
-| overrides.match | File name should match AST element | false |
-| overrides.selector | AST selector | - |
+| overrides.format | Overrides default file name format | - |
+| overrides.match | Apply override only if AST element's text matches file name | false |
+| overrides.selector | Triggers override when AST element matching AST selector is found | - |
 
 ## Examples of incorrect code
 

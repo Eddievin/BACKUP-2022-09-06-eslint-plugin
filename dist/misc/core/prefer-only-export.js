@@ -46,7 +46,6 @@ exports.preferOnlyExport = utils.createRule({
     create: context => {
         const { selector: mixedSelector } = context.options;
         const selector = utils.selector(mixedSelector);
-        functions_1.assert.toBeTrue(selector !== "", "Expecting selector");
         let activated = false;
         return utils.mergeListeners({
             [selector]: () => {

@@ -20,7 +20,7 @@ exports.objectFormat = utils.createRule({
         [MessageId.preferSingleLine]: "Prefer single-line object literal"
     },
     docs: {
-        description: "Ensures multiline or single-line object format.",
+        description: "Requires multiline or single-line object format.",
         optionTypes: { maxLineLength: "number", maxObjectSize: "number" },
         optionDescriptions: {
             maxLineLength: "Max line length for single-line object",

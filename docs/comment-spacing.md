@@ -2,7 +2,7 @@
 
 # comment-spacing
 
-Ensures consistent empty lines around comments.
+Requires consistent empty lines around comments.
 
 ```ts
 module.exports = {

@@ -57,8 +57,11 @@ exports.noSiblingImport = utils.createRule({
         const matcher = (0, functions_1.evaluate)(() => {
             const rules = context.options.rules.map((rule) => {
                 const matchers = rule.hierarchy.map(pattern => utils.createFileMatcher(pattern, false, { dot: true }));
-                const index = findLastIndex(matchers, ruleMatcher => ruleMatcher(`./${basename}`));
-                return Object.assign(Object.assign({}, rule), { matcher: str => findLastIndex(matchers, ruleMatcher => ruleMatcher(str)) <= index });
+                const maxIndex = findLastIndex(`./${basename}`, matchers);
+                return Object.assign(Object.assign({}, rule), { matcher: str => {
+                        const index = findLastIndex(str, matchers);
+                        return index !== -1 && maxIndex !== -1 && index <= maxIndex;
+                    } });
             });
             return (str) => rules.some(rule => rule.matcher(str));
         });
@@ -87,6 +90,16 @@ exports.noSiblingImport = utils.createRule({
     }
 });
 /**
+ * Finds index.
+ *
+ * @param str - String.
+ * @param matchers - Matchers.
+ * @returns Index.
+ */
+function findLastIndex(str, matchers) {
+    return findLastIndex2(matchers, matcher => matcher(str));
+}
+/**
  * Finds last index.
  *
  * @param arr - Array.
@@ -95,7 +108,7 @@ exports.noSiblingImport = utils.createRule({
  */
 // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
 // fixme
-function findLastIndex(arr, callback) {
+function findLastIndex2(arr, callback) {
     const index = functions_1.a.reverse(arr).findIndex(callback);
     return index === -1 ? -1 : arr.length - index - 1;
 }
