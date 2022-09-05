@@ -82,8 +82,8 @@ export const requireJsdoc = utils.createRule({
       properties: 'Array<"function" | "nonFunction">'
     },
     optionDescriptions: {
-      excludeSelectors: "Skip these selectors.",
-      includeSelectors: "Check additional selectors.",
+      excludeSelectors: "Skip these selectors",
+      includeSelectors: "Check additional selectors",
       interfaces:
         'Require documenation for interface ("interface"), call signatures ("callSignatures"), construct signatures ("constructSignatures")',
       noDefaultSelectors: "Do not check default selectors",

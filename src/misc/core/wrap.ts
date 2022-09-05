@@ -1,4 +1,4 @@
-/* eslint-disable @skylib/require-syntax/fix -- Ok */
+/* eslint-disable @skylib/require-syntax/require-fix -- Ok */
 
 import * as utils from "../../utils";
 import {
