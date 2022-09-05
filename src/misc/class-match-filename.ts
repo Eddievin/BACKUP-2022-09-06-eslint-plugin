@@ -12,12 +12,12 @@ export const classMatchFilename = utils.wrapRule({
   docs: {
     description: "Requires class name to match filename.",
     failExamples: `
-      // filename: kebab-case.ts
+      // filename: SomeName.ts
       export class ClassName {}
     `,
     passExamples: `
-      // filename: kebab-case.ts
-      export class KebabCase {}
+      // filename: ClassName.ts
+      export class ClassName {}
     `
   }
 });

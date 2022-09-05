@@ -15,7 +15,7 @@ export const templateLiteralFormat = utils.createRule({
   vue: true,
   messages: { [MessageId.invalidFormat]: "Invalid template literal format" },
   docs: {
-    description: "Ensures consistent padding in template literals.",
+    description: "Requires consistent padding in template literals.",
     failExamples: `
       const x = \`
           text

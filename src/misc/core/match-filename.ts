@@ -24,7 +24,7 @@ export const matchFilename = utils.createRule({
   defaultOptions: { prefix: "", suffix: "" },
   messages: { [MessageId.invalidText]: "Should match file name: {{expected}}" },
   docs: {
-    description: "Ensures that AST element matches filename.",
+    description: "Requires that AST element matches filename.",
     optionTypes: {
       format: '"camelCase" | "kebab-case" | "PascalCase"',
       prefix: "string",

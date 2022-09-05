@@ -9,9 +9,10 @@ export enum MessageId {
 export const consistentEnumMembers = utils.createRule({
   name: "consistent-enum-members",
   vue: true,
-  messages: { [MessageId.inconsistentMember]: "Inconsistent enum member" },
+  messages: { [MessageId.inconsistentMember]: "Inconsistent key-value pair" },
   docs: {
-    description: "Requires value to coincide with key inside enum.",
+    description:
+      "Requires consistent key-value pairs inside enums (key should match value).",
     failExamples: `
       enum Enum {
         a = "b"

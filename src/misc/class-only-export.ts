@@ -7,7 +7,7 @@ export const classOnlyExport = utils.wrapRule({
     { selector: "Program > ExportNamedDeclaration > ClassDeclaration" }
   ],
   docs: {
-    description: "Requires class to be only export.",
+    description: "Requires class to be the only export.",
     failExamples: `
       export class SampleClass {}
       export const x = 1;
