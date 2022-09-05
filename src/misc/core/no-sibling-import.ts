@@ -75,14 +75,15 @@ export const noSiblingImport = utils.createRule({
           utils.createFileMatcher(pattern, false, { dot: true })
         );
 
-        const index = findLastIndex(matchers, ruleMatcher =>
-          ruleMatcher(`./${basename}`)
-        );
+        const maxIndex = findLastIndex(`./${basename}`, matchers);
 
         return {
           ...rule,
-          matcher: str =>
-            findLastIndex(matchers, ruleMatcher => ruleMatcher(str)) <= index
+          matcher: str => {
+            const index = findLastIndex(str, matchers);
+
+            return index !== -1 && maxIndex !== -1 && index <= maxIndex;
+          }
         };
       });
 
@@ -137,6 +138,17 @@ interface SuboptionsExtended extends Suboptions {
 }
 
 /**
+ * Finds index.
+ *
+ * @param str - String.
+ * @param matchers - Matchers.
+ * @returns Index.
+ */
+function findLastIndex(str: string, matchers: utils.Matchers): number {
+  return findLastIndex2(matchers, matcher => matcher(str));
+}
+
+/**
  * Finds last index.
  *
  * @param arr - Array.
@@ -145,7 +157,7 @@ interface SuboptionsExtended extends Suboptions {
  */
 // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
 // fixme
-function findLastIndex<T>(arr: readonly T[], callback: Callback<T>): number {
+function findLastIndex2<T>(arr: readonly T[], callback: Callback<T>): number {
   const index = a.reverse(arr).findIndex(callback);
 
   return index === -1 ? -1 : arr.length - index - 1;

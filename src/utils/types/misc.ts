@@ -71,6 +71,8 @@ export interface Matcher {
   (str: string): boolean;
 }
 
+export type Matchers = readonly Matcher[];
+
 export type Options<
   O extends object,
   S extends object,

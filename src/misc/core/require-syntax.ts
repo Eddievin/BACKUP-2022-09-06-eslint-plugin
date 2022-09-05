@@ -96,29 +96,24 @@ export const requireSyntax = utils.createRule({
       },
       {
         "Program:exit": () => {
-          for (const node of nodes) {
-            if (count === 0)
-              context.report({
-                data: { message: message ?? `Missing syntax: ${selector}` },
-                loc:
-                  trigger === "Program"
-                    ? context.locZero
-                    : context.getLoc(node.range),
-                messageId: MessageId.customMessage
-              });
+          for (const node of nodes)
+            if (count === 0 || (count > 1 && once)) {
+              const defaultMessage =
+                count === 0
+                  ? `Missing syntax: ${selector}`
+                  : `Require syntax once: ${selector}`;
 
-            if (count > 1 && once)
+              const loc =
+                trigger === "Program"
+                  ? context.locZero
+                  : context.getLoc(node.range);
+
               context.report({
-                data: {
-                  message: message ?? `Require syntax once: ${selector}`
-                },
-                loc:
-                  trigger === "Program"
-                    ? context.locZero
-                    : context.getLoc(node.range),
+                data: { message: message ?? defaultMessage },
+                loc,
                 messageId: MessageId.customMessage
               });
-          }
+            }
         }
       }
     );

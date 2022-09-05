@@ -47,15 +47,9 @@ export function createRule<
       ...rawDocs,
       defaultOptions,
       defaultSuboptions,
-      description: rawDocs
-        ? s.unpadMultiline(rawDocs.description)
-        : "No description.",
-      failExamples: rawDocs
-        ? s.unpadMultiline(rawDocs.failExamples)
-        : undefined,
-      passExamples: rawDocs
-        ? s.unpadMultiline(rawDocs.passExamples)
-        : undefined,
+      description: s.unpadMultiline(rawDocs.description),
+      failExamples: s.unpadMultiline(rawDocs.failExamples),
+      passExamples: s.unpadMultiline(rawDocs.passExamples),
       suboptionsKey
     })
   };
