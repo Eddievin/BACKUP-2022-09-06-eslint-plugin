@@ -21,7 +21,6 @@ module.exports = {
       "warn",
       {
         sources: [
-          ...consistentImport.sources,
           {
             _id: "rule-templates",
             autoImport: true,
@@ -46,7 +45,8 @@ module.exports = {
             localName: "TSESTree",
             source: "@skylib/eslint-plugin/src/utils/types/TSESTree",
             wildcard: true
-          }
+          },
+          ...consistentImport.sources
         ]
       }
     ],
@@ -104,29 +104,27 @@ module.exports = {
       "warn",
       {
         message: "Add dot at the end of sentence",
-        selector: [
-          `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=description] > Literal.value[value=/[^.]$/u]`
-        ]
+        selector: `${prefixes.createRule} > ObjectExpression > Property[key.name=docs] > ObjectExpression > Property[key.name=description] > Literal.value[value=/[^.]$/u]`
       }
     ],
     "@skylib/no-sibling-import": [
       "warn",
       {
-        folders: [
+        rules: [
           {
             filesToLint: ["./*"],
-            levels: [["./jest.config"], ["./jest.config.fast"]]
+            hierarchy: [["./jest.config"], ["./jest.config.fast"]]
           },
           {
             filesToLint: ["./src/utils/*"],
-            levels: [
+            hierarchy: [
               ["./TypeCheck", "./compare", "./misc"],
               ["./create-rule", "./create-rule.internal", "./sort", "./test"]
             ]
           },
           {
             filesToLint: ["./src/utils/types/*"],
-            levels: [["./misc"], ["./context"]]
+            hierarchy: [["./misc"], ["./context"]]
           }
         ]
       }
@@ -309,6 +307,7 @@ module.exports = {
     {
       files: "./src/{misc,typescript,vue}/core/*",
       rules: {
+        "@skylib/export-matching-filename-only": "off",
         "@skylib/sort-statements": [
           "warn",
           {
@@ -343,9 +342,7 @@ module.exports = {
           "warn",
           {
             message: 'Remove "docs" option',
-            selector: [
-              `${prefixes.createWrapRule} > ObjectExpression > Property > Identifier[name=docs]`
-            ]
+            selector: `${prefixes.createWrapRule} > ObjectExpression > Property > Identifier[name=docs]`
           }
         ],
         "@skylib/require-syntax/require-docs": "off"
