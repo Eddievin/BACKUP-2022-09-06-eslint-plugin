@@ -91,7 +91,9 @@ exports.consistentOptionalProps = utils.createRule({
     `
     },
     create: (context, typeCheck) => {
-        const overrides = context.options.overrides.map((override) => {
+        const overrides = functions_1.a
+            .reverse(context.options.overrides)
+            .map((override) => {
             const { pattern, propertyPattern } = override;
             const matcher = utils.createRegexpMatcher(pattern, true);
             const properyMatcher = utils.createRegexpMatcher(propertyPattern, true);
