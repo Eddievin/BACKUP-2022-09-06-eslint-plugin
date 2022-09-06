@@ -1,4 +1,3 @@
-import { consistentSuboptionsId } from "./consistent-suboptions-id";
 import { noMessageDot } from "./no-message-dot";
 import { noUnnecessaryArray } from "./no-unnecessary-array";
 import { o } from "@skylib/functions";
@@ -7,7 +6,6 @@ import { sortSuboptions } from "./sort-suboptions";
 
 export const eslintrc = o.prefixKeys(
   {
-    "consistent-suboptions-id": consistentSuboptionsId,
     "no-message-dot": noMessageDot,
     "no-unnecessary-array": noUnnecessaryArray,
     "sort-array": sortArray,
