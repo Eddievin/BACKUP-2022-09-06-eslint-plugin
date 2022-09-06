@@ -19,8 +19,6 @@ export const defineFunctionInOneStatement = utils.wrapRule({
       function f() {}
       f.x = 1;
     `,
-    passExamples: `
-      const f = Object.assign(() => {}, { x: 1 });
-    `
+    passExamples: "const f = Object.assign(() => {}, { x: 1 });"
   }
 });

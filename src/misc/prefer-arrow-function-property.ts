@@ -11,11 +11,7 @@ export const preferArrowFunctionProperty = utils.wrapRule({
   ],
   docs: {
     description: "Requires use of arrow functions.",
-    failExamples: `
-      const x = { f: function () {} };
-    `,
-    passExamples: `
-      const x = { f: () => {} };
-    `
+    failExamples: "const x = { f: function () {} };",
+    passExamples: "const x = { f: () => {} };"
   }
 });

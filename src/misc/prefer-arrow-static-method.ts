@@ -11,11 +11,7 @@ export const preferArrowStaticMethod = utils.wrapRule({
   ],
   docs: {
     description: "Requires use of arrow static methods.",
-    failExamples: `
-      class C { static f() {} }
-    `,
-    passExamples: `
-      class C { static f = () => {}; }
-    `
+    failExamples: "class C { static f() {} }",
+    passExamples: "class C { static f = () => {}; }"
   }
 });

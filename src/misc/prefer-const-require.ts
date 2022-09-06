@@ -12,12 +12,7 @@ export const preferConstRequire = utils.wrapRule({
   ],
   docs: {
     description: 'Requires "require()" to be assigned to variable.',
-    failExamples: `
-      function f() { return require("node:path"); }
-    `,
-    passExamples: `
-      const path = require("node:path");
-
-    `
+    failExamples: 'function f() { return require("node:path"); }',
+    passExamples: 'const path = require("node:path");'
   }
 });

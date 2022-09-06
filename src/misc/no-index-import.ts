@@ -6,11 +6,7 @@ export const noIndexImport = utils.wrapRule({
   options: [{ disallow: ["."] }],
   docs: {
     description: 'Disallows "." import.',
-    failExamples: `
-      import x from ".";
-    `,
-    passExamples: `
-      import x from "./folder";
-    `
+    failExamples: 'import x from ".";',
+    passExamples: 'import x from "./folder";'
   }
 });

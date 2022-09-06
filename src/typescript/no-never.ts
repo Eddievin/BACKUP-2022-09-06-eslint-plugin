@@ -12,11 +12,7 @@ export const noNever = utils.wrapRule({
   ],
   docs: {
     description: 'Disallow "never" type.',
-    failExamples: `
-      function f(value: "a" & "b") {}
-    `,
-    passExamples: `
-      function f(value: "a" | "b") {}
-    `
+    failExamples: 'function f(value: "a" & "b") {}',
+    passExamples: 'function f(value: "a" | "b") {}'
   }
 });

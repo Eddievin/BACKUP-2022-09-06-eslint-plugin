@@ -554,9 +554,7 @@ utils.testRule(
           ]
         }
       ],
-      code: `
-        import * as someSource from "@/some-source";
-      `
+      code: 'import * as someSource from "@/some-source";'
     },
     {
       name: `Test at line ${getCurrentLine().line}`,

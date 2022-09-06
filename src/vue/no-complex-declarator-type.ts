@@ -18,9 +18,7 @@ export const noComplexDeclaratorType = utils.wrapRule({
   ],
   docs: {
     description: "Disallow complex declarator types.",
-    failExamples: `
-      const x = { value: 1 };
-    `,
+    failExamples: "const x = { value: 1 };",
     passExamples: `
       const x = { value: 1 } as const;
 

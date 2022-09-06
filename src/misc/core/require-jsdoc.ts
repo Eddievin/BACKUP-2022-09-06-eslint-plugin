@@ -90,9 +90,7 @@ export const requireJsdoc = utils.createRule({
       properties:
         'Require documenation for function properties ("function"), non-function properties ("nonFunction")'
     },
-    failExamples: `
-      function f(): void {}
-    `,
+    failExamples: "function f(): void {}",
     passExamples: `
       /**
        * Description.

@@ -7,11 +7,7 @@ export const noAtSignInternalImport = utils.wrapRule({
   options: [{ disallow: ["@/**"] }],
   docs: {
     description: 'Disallows "@/**" import.',
-    failExamples: `
-      import x from "@/folder";
-    `,
-    passExamples: `
-      import x from "@";
-    `
+    failExamples: 'import x from "@/folder";',
+    passExamples: 'import x from "@";'
   }
 });

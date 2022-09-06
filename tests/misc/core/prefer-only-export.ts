@@ -38,9 +38,7 @@ utils.testRule(
     {
       name: `Test at line ${getCurrentLine().line}`,
       options: [{ selector: "ClassDeclaration > Identifier.id" }],
-      code: `
-        export class C {}
-      `
+      code: "export class C {}"
     }
   ]
 );

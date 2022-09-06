@@ -12,9 +12,7 @@ export const noEmptyInterfaces = utils.wrapRule({
   ],
   docs: {
     description: "Disallow empty interfaces.",
-    failExamples: `
-      interface I {}
-    `,
+    failExamples: "interface I {}",
     passExamples: `
       interface I {
         x: string;

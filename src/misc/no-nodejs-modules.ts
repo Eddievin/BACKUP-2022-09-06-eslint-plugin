@@ -6,11 +6,7 @@ export const noNodejsModules = utils.wrapRule({
   options: [{ disallow: ["node:*"] }],
   docs: {
     description: "Disallows importing NodeJS modules.",
-    failExamples: `
-      import x from "node:fs";
-    `,
-    passExamples: `
-      import x from "fs";
-    `
+    failExamples: 'import x from "node:fs";',
+    passExamples: 'import x from "fs";'
   }
 });

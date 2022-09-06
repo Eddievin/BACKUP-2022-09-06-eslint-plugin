@@ -11,9 +11,7 @@ export const noChainCoalescenceMixture = utils.wrapRule({
   ],
   docs: {
     description: "Disallows mixing of chain and coalescence operators.",
-    failExamples: `
-      x?.y ?? z;
-    `,
+    failExamples: "x?.y ?? z;",
     passExamples: `
       x?.y;
       x ?? y;

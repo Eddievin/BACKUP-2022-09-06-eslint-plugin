@@ -12,12 +12,8 @@ export const noMultiTypeTuples = utils.createRule({
   messages: { [MessageId.multiTypeTuple]: "Multi-type tuples are not allowed" },
   docs: {
     description: "Disallows multi-type tuples.",
-    failExamples: `
-      type T = [string, number];
-    `,
-    passExamples: `
-      type T = [string, string];
-    `
+    failExamples: "type T = [string, number];",
+    passExamples: "type T = [string, string];"
   },
   create: (context): RuleListener => ({
     TSTupleType: node => {

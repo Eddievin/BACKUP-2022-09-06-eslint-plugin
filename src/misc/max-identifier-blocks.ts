@@ -16,12 +16,8 @@ export const maxIdentifierBlocks = evaluate(() => {
     ],
     docs: {
       description: "Restricts identifier complexity.",
-      failExamples: `
-        function firstSecondThirdFourthPart() {}
-      `,
-      passExamples: `
-        function firstSecondThirdPart() {}
-      `
+      failExamples: "function firstSecondThirdFourthPart() {}",
+      passExamples: "function firstSecondThirdPart() {}"
     }
   });
 });

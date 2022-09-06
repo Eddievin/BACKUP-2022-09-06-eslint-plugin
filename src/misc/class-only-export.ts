@@ -12,8 +12,6 @@ export const classOnlyExport = utils.wrapRule({
       export class SampleClass {}
       export const x = 1;
     `,
-    passExamples: `
-      export class SampleClass {}
-    `
+    passExamples: "export class SampleClass {}"
   }
 });

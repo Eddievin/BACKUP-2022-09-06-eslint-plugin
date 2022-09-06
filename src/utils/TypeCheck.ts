@@ -24,7 +24,6 @@ export class TypeCheck {
   public constructor(context: RuleContext<never, unknowns>) {
     const parser = ESLintUtils.getParserServices(context);
 
-    // eslint-disable-next-line @skylib/max-identifier-blocks -- Wait for @skylib/eslint-plugin update
     const { esTreeNodeToTSNodeMap, program } = parser;
 
     assert.toBeTrue(

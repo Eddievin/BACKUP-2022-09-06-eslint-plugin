@@ -16,11 +16,7 @@ export const noRelativeParentImport = utils.wrapRule({
   ],
   docs: {
     description: "Disallows relative parent import.",
-    failExamples: `
-      import x from "../source";
-    `,
-    passExamples: `
-      import x from "./source";
-    `
+    failExamples: 'import x from "../source";',
+    passExamples: 'import x from "./source";'
   }
 });

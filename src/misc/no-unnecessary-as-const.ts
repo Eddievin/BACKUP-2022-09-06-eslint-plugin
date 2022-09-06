@@ -18,8 +18,6 @@ export const noUnnecessaryAsConst = utils.wrapRule({
       const x = {} as const;
       const y: I = { value: 1 } as const;
     `,
-    passExamples: `
-      const x = { value: 1 } as const;
-    `
+    passExamples: "const x = { value: 1 } as const;"
   }
 });
