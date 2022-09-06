@@ -65,7 +65,6 @@ npm install --save-dev @skylib/eslint-plugin
 - [switch-case-spacing](https://ilyub.github.io/eslint-plugin/switch-case-spacing.html)
 - [template-literal-format](https://ilyub.github.io/eslint-plugin/template-literal-format.html)
 - [wrap](https://ilyub.github.io/eslint-plugin/wrap.html)
-- [eslintrc/consistent-suboptions-id](https://ilyub.github.io/eslint-plugin/eslintrc/consistent-suboptions-id.html)
 - [eslintrc/no-message-dot](https://ilyub.github.io/eslint-plugin/eslintrc/no-message-dot.html)
 - [eslintrc/no-unnecessary-array](https://ilyub.github.io/eslint-plugin/eslintrc/no-unnecessary-array.html)
 - [eslintrc/sort-array](https://ilyub.github.io/eslint-plugin/eslintrc/sort-array.html)
