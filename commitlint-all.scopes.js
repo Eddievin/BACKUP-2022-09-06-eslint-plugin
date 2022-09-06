@@ -4,6 +4,7 @@ module.exports = {
     "class-only-export",
     "consistent-enum-member",
     "consistent-group-empty-lines",
+    "consistent-suboptions-id",
     "custom",
     "disallow-by-regexp",
     "disallow-identifier",
