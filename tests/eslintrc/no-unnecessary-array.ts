@@ -11,13 +11,12 @@ utils.testRule("no-unnecessary-array", rule, [
     code: `
       module.exports = {
         overrides: [
-          {
-            files: ["./a"]
-          }
+          { files: ["./a"] },
+          { files: ["./a", "./b"] }
         ]
       };
     `,
-    errors: [{ line: 4, messageId: MessageId.customMessage }]
+    errors: [{ line: 3, messageId: MessageId.customMessage }]
   },
   {
     name: `Test at line ${getCurrentLine().line}`,
@@ -27,14 +26,13 @@ utils.testRule("no-unnecessary-array", rule, [
           {
             "@skylib/rule": [
               "warn",
-              {
-                selector: ["a"]
-              }
+              { selector: ["a"] },
+              { selector: ["a", "b"] }
             ]
           }
         ]
       };
     `,
-    errors: [{ line: 7, messageId: MessageId.customMessage }]
+    errors: [{ line: 6, messageId: MessageId.customMessage }]
   }
 ]);
